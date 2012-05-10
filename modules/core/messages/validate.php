@@ -1,0 +1,27 @@
+<?php defined('SYSPATH') or die('No direct script access.');
+
+return array(
+	'alpha'         => NULL,
+	'alpha_dash'    => NULL,
+	'alpha_numeric' => NULL,
+	'color'         => NULL,
+	'credit_card'   => NULL,
+	'date'          => NULL,
+	'decimal'       => NULL,
+	'digit'         => NULL,
+	'email'         => NULL,
+	'email_domain'  => NULL,
+	'equals'        => NULL,
+	'exact_length'  => NULL,
+	'in_array'      => NULL,
+	'ip'            => NULL,
+	'matches'       => NULL,
+	'min_length'    => NULL,
+	'max_length'    => NULL,
+	'not_empty'     => NULL,
+	'numeric'       => NULL,
+	'phone'         => NULL,
+	'range'         => NULL,
+	'regex'         => NULL,
+	'url'           => NULL,
+);

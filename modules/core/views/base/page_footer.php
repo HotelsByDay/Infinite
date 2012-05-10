@@ -1,0 +1,1 @@
+<?=__('footer_copyright');?>

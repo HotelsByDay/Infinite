@@ -1,0 +1,607 @@
+/* 
+    Document   : custom.css
+    Created on : 16.11.2010, 14:30:39
+    Author     : jirka
+    Description:
+        Purpose of the stylesheet follows.
+*/
+
+/**
+ * Loading kolecko v pravem rohu inputu.
+*/
+.ui-autocomplete-loading, .ui-input-loading { background: white url('../images/progress.indicator.gif') right center no-repeat; }
+.ui-autocomplete-input { background: white url('../images/ui-autocomplete-input2.png') right center no-repeat; }
+
+.validation_error_note {font-weight:bold; color:red;}
+
+/**
+ * Google mapa
+ * + fix pro pripad kdy se mapa inicializuje skryta
+ */
+.formitemadvertaddress .google_map .canvas {height:337px; width:400px}
+.formitemadvertaddress .google_map.hidden {position: absolute; left: -10000px;}
+.formitemadvertforeignaddress .google_map .canvas {height:337px; width:400px}
+.formitemadvertforeignaddress .google_map.hidden {position: absolute; left: +10000px;}
+
+/** Stylovani pro odstavec - Novinka u map - informuje uzivatele o moznosti specifikovat lokalitu rucne na mapce */
+.formitemadvertaddress .news,
+.formitemadvertforeignaddress .news {padding:6px;}
+
+.formitemadvertaddress .news .text,
+.formitemadvertforeignaddress .news .text {margin-top:5px;}
+
+
+#locality_input_switch a {float:left; margin-bottom:0px;}
+#locality_input_switch {margin-bottom:10px;}
+
+#foreign_locality_group.hidden {position:absolute; left:10000px; top:-10000px;}
+#locality_group.hidden {position:absolute; left:10000px; top:-10000px;}
+
+
+.qq-uploader .qq-upload-spinner {display: inline-block; vertical-align:text-bottom; width:16px; height: 16px; background: white url('../images/upload.indicator.gif') no-repeat;}
+/**
+ * Work-around kvuli inicializaci google mapy, ktera je skryta.
+*/
+/* .formitemadvertaddress .google_map
+    position: absolute;
+    left: -10000px;
+}*/
+
+
+#main,.page {background:none; min-width: 1024px;background-color:#ececec;}
+
+#header {background:none;  padding: 15px 2em 1em 20px;background:#56B3E6 url('../images/header-background.png') 0% 0% repeat-x;}
+
+#header h1 {background-image: url('../images/logo-blue.png') 0% 0% repeat-x;}
+
+#nav div.hlist {background:#56B3E6;}
+#main {background-color:#ececec; min-height: 640px; min-width: 1024px;}
+#col1_content {padding: 0px 15px 0px 15px;}
+#col1_content._display_wide {width: 1024px;}
+.filter_container {background-color:white; border-bottom: 1px dotted gray; padding-bottom: 7px;}
+
+#col_full {text-align: center; padding: 15px 15px 0px 15px; width: auto;}
+#col_full .filter_container .filter_content {width: 715px;}
+#col_full #create_new_advert_panel {padding: 10px 0 10px 0; text-align:left;}
+
+form.yform {margin-top:10px;}
+
+.filter_content {padding-left: 20px; text-align: left;}
+.page_margins {background: none;}
+
+a.edit_button,a.remove_button,a.show_button {background: none; margin: auto;width: auto; height: auto;}
+
+#col_full_content {padding-left: 20px; padding-right: 20px; min-width: 1024px; }
+#create_new_advert_panel {}
+/* Formulare */
+.yform, .yform fieldset {background-color: white;}
+.yform fieldset {border: none; border-top: 2px solid #56B3E6; text-align:left}
+.yform fieldset.plain {border:none;}
+.yform fieldset legend {font-size:16px; font-weight: bold; background: #56B3E6; color: white; margin: auto; padding: 0px 50px 0px 50px;text-align: left;}
+.yform fieldset label {font-size: 14px;  color: black; display:block;}
+.yform fieldset .w75 { width: 75%;}
+.yform fieldset .w50 { width: 50%;}
+.yform fieldset .w25 { width: 25%;}
+
+.yform fieldset label {margin-bottom: 2px; font-weight: bold; height: 16px; font-size:12px;}
+.yform fieldset.small_labels label {margin-bottom: 0px; font-weight: normal; height: 15px;}
+.yform fieldset label.ui-button { height: auto;}
+
+.yform fieldset .type-text input,.yform fieldset .type-text textarea,.yform fieldset .type-select select {background-color: white; border: 1px solid black;}
+.yform fieldset strong {font-size: 14px; font-weight: bold;}
+/* pro textareu nefunguje zakladni nastaveni, zde je nahrazeni selectoru - forms.css radek 248*/
+.yform fieldset div textarea:focus,.yform fieldset div textarea:active,.yform fieldset div textarea:hover {background-color: white;border:1px #a66 solid;}
+
+#col1_form #col1_content .type-button input.submit {width: 200px;}
+.form_title .close_button {float:right;font-size:11px; font-weight:normal;color:#eee;}
+.form_title .close_button:hover {color:white;}
+.yform .type-button input.submit {background: #0D7DC1 repeat-x 0% 0%; color: white; font-weight: bold; }
+.yform div.type-button input.submit:focus, .yform div.type-button input.submit:hover, .yform div.type-button input.submit:active {   background:#56b3e6; color:white; font-weight: bold; }
+#form-item-attr-advert_price_text_note {height: 50px;}
+
+/*------------------------------------
+OBJEKT 'RH_SELLER'
+------------------------------------*/
+.is_superseller {background-color:#E88;}
+
+/*------------------------------------
+OBJEKT 'RH_ADVERT'
+------------------------------------*/
+/*#create_new_advert_panel {clear: both} */
+#create_new_advert_panel a._button {margin-right: 5px;} 
+#create_new_advert_panel .ui-button {text-align:left; margin-bottom:3px; }
+
+/*
+.filter_container {padding-right: 20px; padding-left: 20px; }
+.filter_container {text-align: center;  }
+.filter_container .filter_content {width:100%; text-align:left;margin:auto;}
+*/
+
+#main .dataTableWraper {background-color: white; padding-left: 20px; padding-right: 20px; padding-bottom: 2px;}
+#main table.dataTable {border-collapse: collapse; width: 100%; table-layout:fixed; min-width: 698px;}
+#main table.dataTable tbody {background-color: white;}
+#main table.dataTable thead tr {height: 30px;}
+
+
+#main table.dataTable tbody tr td {text-align: left; border-left: 1px dotted #56B3E6; border-bottom: 1px dotted #56B3E6; min-width: 60px;}
+#main table.dataTable tbody tr td.advert_price {text-align: right;}
+#main table.dataTable thead tr th {border-top: 1px #56B3E6 solid; border-bottom: 1px #56B3E6 solid; background-color: #0d7dc1; border-left: none; border-right: none; text-align:center; border-left: 1px dotted #CCC; color:white;}
+#main table.dataTable thead tr th a {color: white}
+#main table.dataTable thead tr th.first,#main table.dataTable tbody tr td.first {border-left: 1px #56B3E6 solid; }
+#main table.dataTable tbody tr.item_selected td {background-color: yellow;}
+
+#main table.dataTable thead tr th.last,#main table.dataTable tbody tr td.last {border-right: 1px #56B3E6 solid; width:60px;}
+#main table.dataTable tbody tr td.last img {padding:2px; height: 16px; width: 16px;}
+#main table.dataTable tbody tr td.last a,#main table.dataTable tbody tr td.last span { height: 20px; width: 20px; text-align: center;}
+#main table.dataTable tbody .internal_hidden_text { position: absolute; padding: 10px; border: 1px solid black; background-color:white;}
+
+#main table.dataTable tbody tr.last td {border-bottom: 1px #56B3E6 solid;}
+
+/* vykresleni sipek - smer razeni sloupce */
+#main table.dataTable thead th a.asc {background: url('../images/sort-asc.png') no-repeat 100% 50%;}
+#main table.dataTable thead th a.desc {background: url('../images/sort-desc.png') no-repeat 100% 50%;}
+#main table.dataTable thead th a {padding-right:15px;}
+#main table.dataTable tr td.control a {text-decoration: none;}
+
+/* Vypis statistik na vypisu inzeratu */
+.advertStat span {cursor:help; border-bottom:1px dashed #888}
+
+.results_info {background: white; padding: 10px 20px 10px 20px; height: 15px;}
+.results_info .results_count {float: left;}
+.results_info .page_size {float:right}
+
+#col1_content h2 {color: white; background-color: #56B3E6; border-bottom: 2px solid black; padding: 10px; margin-bottom: 10px;}
+
+
+/* LOGIN */
+body.login {background:#b6b7bb url("../images/bkg-login.jpg") repeat-x scroll 0 0;}
+body.login #logo-login {margin:auto; padding-bottom: 20px; padding-top: 180px;}
+body.login #loginbox {margin:auto;height:230px;background:url('../images/bkg-loginbox.jpg') center center no-repeat;}
+body.login #loginbox .inner {height:185px;margin:auto;padding-top:25px;width:275px;}
+body.login #loginboxsub {text-align:left;height:100px;margin:auto;width:274px;margin-bottom:200px;}
+body.login #footer {border-top:solid 1px #fff;height:130px;}
+body.login #footer .content p {padding-left:0;text-align:center}
+body.login #footer #fmenu {margin-left:266px;width:694px}
+body.login #err_msg {position:absolute; margin-top:-80px; width:270px; text-align:center; height:25px;color:#CC0000;font-weight:bold;}
+
+.loginbox h1 {color:#abbd25;text-transform:uppercase;font-weight:bold;font-size:24px;text-align:center;margin:0}
+.loginbox .loginbox-pass, .loginbox .loginbox-text {margin-bottom:12px; width:270px;height:39px;background: url('../images/search-input-login.gif') no-repeat scroll 0 0;}
+.loginbox .loginbox-pass .loginbox-input, .loginbox .loginbox-text .loginbox-input {border:none;padding:0;background:none;height:19px;line-height:19px;font-size:14px;color:#9d9d9d;padding:10px 90px 10px 15px;width:165px;z-index:100}
+.loginbox .loginbox-text {margin-top:22px; margin-bottom:20px;}
+.loginbox .loginbox-pass .loginbox-input {width:145px;padding:10px 110px 10px 15px;}
+.loginbox .loginbox-text .loginbox-input {width:240px;padding:10px 15px 10px 15px;}
+.loginbox .loginbox-pass .loginbox-button {margin-top:3px;position:absolute;margin-left:173px;cursor:pointer;z-index:1000;width:95px;height:34px;background:transparent url('../images/search-button-login.gif') 0 0 no-repeat;border:none;}
+.loginbox .loginbox-pass > .loginbox-button.sfhover, .loginbox .loginbox-pass .loginbox-button:hover {background-position:0 -34px;}
+.loginbox .loginbox-remember .loginbox-checkbox {margin-left:0;margin-right:7px}
+.loginboxsub ul {margin:0;list-style:none;}
+.loginboxsub ul li a {padding-left:15px;background:url('../images/bullet2.gif') 0 -14px no-repeat;}
+
+.footer .fmenu li {padding:0 10px;border-left:solid 1px #cbcbce;}
+.footer .fmenu li.first {padding-left:0;border-left:none}
+.footer .fmenu li.rkl {padding-left:0;border-left:none;float:right}
+.footer .fmenu li.rkl a {display:inline}
+.footer .fmenu li a {color:#4a4a4a;}
+.footer .content .image {border-right:solid 1px #cbcbce;padding:8px 15px 0 0;}
+.footer .content p {color:#4a4a4a;padding:5px 0 0 15px;font-size:10px;margin:0}
+.footer .content a {color:#4a4a4a;}
+
+#yfooter {width:100%;height:186px;background:#fff url('../images/bkg-footer.gif') repeat-x scroll 0 0;}
+#footer-content {width:960px;margin:auto;}
+#footer {background:#b6b7bb url("../images/bkg-footer.gif") repeat-x scroll 0 0;clear:both;}
+#fmenu {width:960px;height:20px;line-height:20px;padding-bottom:25px;padding-top:15px;}
+#footer .menu ul {display:block; width:100%; list-style:none}
+#footer .menu ul *, .menu ul {/*cursor:pointer;*/ list-style:none; margin:0; padding:0}
+#footer .menu ul li {float:left; display:block; padding: 0px 10px;}
+#footer .menu ul li a {display:block}
+
+/* MENU - SLIDING DOOR */
+.hlist li {margin: 0px 3px 0px 3px; border: none;}
+.hlist a {font-size: 13px;  background: transparent url('../../yaml/navigation/images/sliding_door/round/right.png') no-repeat right top; }
+
+/* DASHBOARD */
+.tRed {background: white; padding: 5px; }
+.tGray {background-color: white; padding: 5px;}
+.tBlue {background-color: white;}
+.cCustomHome {margin-top: 20px}
+.cCustomHome .cPanel {margin: 0 0 10px 0}
+.cCustomHome table {width: 100%}
+.cCustomHome table td,
+.cCustomHome table th {padding-top:3px; padding-bottom: 3px}
+.cCustomHome table td span {display: block; line-height: 20px}
+.cCustomHome .cCustomButtons {margin-left: 20px;}
+.cCustomHome .cCustomButtons a {width:150px;}
+.cCustomHome .cCustomAccount {margin-left: 20px;}
+.cCustomHome .cCustomContact {padding: 10px;}
+
+.dashboard .dashboard_tabs .ui-tabs-nav li.ui-tabs-selected {background-color: white;}
+.dashboard .dashboard_tabs .ui-tabs-nav ul { border:none;}
+.dashboard .dashboard_tabs .ui-tabs-nav li,.dashboard .dashboard_tabs .ui-tabs-nav {border:1px solid gray;}
+.dashboard .dashboard_tabs .ui-tabs-nav {background-color: #d3d3d3;}
+.dashboard table {border-collapse: collapse;}
+.dashboard table tbody td {border-left: 1px dotted #56B3E6; padding-left: 5px;}
+.dashboard table thead th {border-top: 1px #56B3E6 solid; border-bottom: 1px #56B3E6 solid; background-color: #0d7dc1; border-left: none; border-right: none; text-align:center; border-left: 1px dotted #CCC; color:white; padding-left: 5px;}
+.dashboard table thead th.first,.dashboard table tbody td.first {border-left: 1px #56B3E6 solid;}
+.dashboard table tbody td.last,.dashboard table thead th.last {border-right: 1px #56B3E6 solid; width:45px;}
+.dashboard table tbody tr.last {border-bottom: 1px #56B3E6 solid;}
+.dashboard table tbody tr.last td {border-top: 1px dotted #56B3E6;}
+.dashboard dt.iHeader {background-color: lightGrey; margin-bottom: 5px; padding: 5px;}
+
+/* odsazeni panelu */
+.cCustomHome .marginLeft {margin-left:20px}
+
+/**
+ * Opravuje sirku panelu na dashboardu
+ * @bugfix
+ * @affected   IE6
+ * @valid      yes
+*/
+.ie6 .cCustomHome .cPanel {width:230px}
+.ie6 .cCustomHome .cPanelWide {width:750px}
+.ie6 .cCustomHome .c75r .cPanelWide {width:740px}
+.ie6 .cCustomHome .c25l,
+.ie6 .cCustomHome .c25r
+.ie6 .cCustomHome .c33l,
+.ie6 .cCustomHome .c33r {width:250px}
+.ie6 .cCustomHome .c75l {width:760px}
+.ie6 .cCustomHome .c75r {width:770px}
+.ie6 .cCustomHome .c25r,
+.ie6 .cCustomHome .c75r {float:left}
+.ie6 .cCustomHome .c33l,
+.ie6 .cCustomHome .c33r {float:left}
+
+.cCustomButtons .ui-button {width: auto;}
+
+
+/* TABLE - vypis poctu vysledku */
+.results_count {font-size: 14px;}
+
+/* TABLE - strankovani/pagination */
+.page_size {font-size: 14px;}
+.page_size .selected {font-weight: bold;text-decoration: none;}
+
+/* Customizace poradace RH_ADVERT */
+#main .rh_advert table.dataTable tbody td.last,#main .rh_advert table.dataTable thead th.last {width: 100px;}
+.rh_advert table td.last img {padding:2px; height: 16px; width: 16px;}
+.rh_advert table td.last a,.rh_advert table td.last span { height: 20px; width: 20px; text-align: center;}
+.rh_advert select {width: 100%; padding: 1px;}
+.rh_advert input {width: 150px; padding: 1px;}
+.rh_advert table.dataTable input,.table_actions_help_text input {width: 30px;}
+.rh_advert table.dataTable .first input {width:auto;}
+.rh_advert input._button {width: auto;}
+.rh_advert table .previous_price {color:#999; text-decoration:line-through;}
+.rh_advert table .price_discount {color:#FE8500;}
+.dataTable.rh_advert tr.deleted td {color:#bbb;}
+
+
+.form_col.rh_advert_form {width: 1024px;}
+#col_full.rh_advert .filter_content {width: 900px;}
+/* Customizace pořadače rh_stat_advert_day */
+.rh_stat_advert_day .filter_content input {width: 150px;}
+.rh_stat_advert_day .filter_actions input {width: auto;}
+.rh_stat_advert_day .filter_content select {width: 100%;}
+
+/* Customizace poradace RH_AGENCYBRANCH */
+.rh_agencybranch .filter_content {width: 451px;}
+.form_col.rh_agencybranch_form {width: 1024px;}
+
+/* Customizace poradace RH_SELLER */
+.rh_seller .filter_content {width: 665px;}
+.form_col.rh_seller_form {width: 1024px;}
+/* zruseni fixace skrz tel. cisla */
+#main .rh_seller .dataTableWraper table.dataTable {table-layout: auto;}
+#main .rh_estateagency .dataTableWraper table.dataTable {table-layout: auto;}
+#main .rh_estateagency .dataTableWraper table.dataTable tr.status-0 td {}
+#main .rh_estateagency .dataTableWraper table.dataTable tr.status-1 td {background-color: #EB9200;}
+#main .rh_estateagency .dataTableWraper table.dataTable tr.status-2 td {background-color: #78ff78;}
+#main .rh_estateagency .dataTableWraper table.dataTable tr.status-3 td {background-color: #5cd05c;}
+#main .rh_estateagency .dataTableWraper table.dataTable tr.status-4 td {background-color: #ca0000;}
+#main .rh_estateagency .dataTableWraper table.dataTable tr.status-5 td {background-color: #AF00A6;}
+
+.table-help .ea_status_list {width:auto;}
+.table-help .ea_status_list td {padding:1px 3px;}
+.table-help .ea_status_list tr:hover td {background-color: #ddd;}
+/*#main .rh_estateagency .dataTableWraper table.dataTable tr.status-6 td {background-color: #AF00A6;}*/
+
+#main .rh_agencybranch .dataTableWraper table.dataTable {table-layout: auto;}
+#main .rh_wanted .dataTableWraper table.dataTable {table-layout: auto;}
+#main .rh_advert_interest_message .dataTableWraper table.dataTable {table-layout: auto;}
+#main .rh_advert .dataTableWraper table.dataTable {table-layout: auto;}
+#main .rh_advert .dataTableWraper table.dataTable th.first,#main .rh_advert .dataTableWraper table.dataTable td.first {min-width: 20px; width: 20px;}
+#main .rh_advert .dataTableWraper table.dataTable th.first input,#main .rh_advert .dataTableWraper table.dataTable td.first input {width: 20px;}
+/* Customizace poradace RH_ESTATEAGENCY */
+.rh_estateagency .filter_content {width: 430px;}
+.form_col.rh_estateagency_form {width: 1024px;}
+
+/* Customizace poradace RH_WANTED */
+.rh_wanted .filter_content {width: 650px;}
+.rh_wanted input {width: 130px;}
+.rh_wanted input._button {width: auto;}
+.rh_wanted select {width: 100%}
+.form_col.rh_wanted_form {width:1024px;}
+
+/* Customizace poradace RH_ADVERT_TOPPED */
+.rh_advert_topped input {width: 150px}
+.rh_advert_topped input._button {width: auto;}
+.rh_advert_topped select {width: 100%;}
+.rh_advert_topped .filter_content {width: 750px;}
+.rh_advert_topped table .control a {text-decoration: underline;}
+
+
+.view_list {float:right; margin:0 7px 5px 5px;}
+.view_list .delimiter {color:#aaa; margin:0 2px 0 2px;}
+.view_list .active {font-weight:bold; color:black;}
+.view_list .inactive {font-weight:normal; color:#03C;}
+
+/* Customizace poradace RH_ADVERT_ATTRACTIVE */
+.rh_advert_attractive input {width: 150px;}
+.rh_advert_attractive input._button {width: auto;}
+.rh_advert_attractive select {width: 100%;}
+.rh_advert_attractive .filter_content {width: 480px;}
+rh_advert_attractive table .control a {text-decoration: underline;}
+
+tr.inactive_attractive_slot td, tr.inactive_topped_slot td {color:#999;}
+
+/* JQUERY UI CUSTOMIZACE */
+a._button.mini_button {font-size: 11px; margin: 10px 5px 0px 0px;}
+
+/* Customizace poradace RH_ADVERT_INTEREST_MESSAGE_FORM */
+.form_col.rh_advert_interest_message_form { width:1024px; }
+
+/* Customiace poradace RH_salesinvoice */
+.rh_salesinvoice .filter_content {width: 800px;}
+
+/* Filtry */
+#load_filter_state_dialog {display: none;}
+#load_filter_state_dialog .content .item {border-bottom:1px dotted #bbb; padding-bottom:2px;}
+#load_filter_state_dialog .content .item.to_be_removed {background-color:red;}
+#load_filter_state_dialog .content .item .remove {font-size:11px;margin-left:5px;}
+#load_filter_state_dialog .content .item .remove:hover {color:red;}
+.filter_actions {line-height: 25px;}
+.filter_actions a {color:red;}
+.filter_actions .reset_filter_button {float: left; margin-left: 5px;}
+
+/* TABLE - Pager */
+.pager { background-color: white; text-align: right; font-size: 14px; width: 100%; }
+.pager div {padding: 0px 20px 10px 0px;}
+.pager a {color:red; text-decoration: underline;}
+.pager a.selected {font-weight: bold; text-decoration: none;}
+
+/* TABLE - Page size */
+.page_size a {color: red;}
+
+
+/* Prestylovani formularu na pevnou sirku */
+
+
+.form_col { width: 768px; float:left;}
+#col3_content { width: 256px; float:left;}
+
+.form_col {padding: 0px 10px 0px 20px;}
+#col3_content {padding: 0px 0px 0px 10px;}
+
+/*#col1_form #col1_content label { width: 150px;}
+#col1_form #col1_content input,#col1_form #col1_content textarea,#col1_form #col1_content select { width: 700px;}
+#col1_form #col1_content .type-check input {width: auto; margin-left: 150px;}
+#col1_form #col1_content .columnar .help-text { float: left; margin-left: 150px;}
+#col1_form #col1_content .button_set {margin-left: 150px;}
+#col1_form #col1_content .button_set label {width:100px;}
+#col1_form #col1_content .button_set input {}
+#col1_form #col1_content .help-text {margin-left: 150px; display:block; float:none;}
+#col1_form #col1_content .button,#col1_form #col1_content .counter,#col1_form #col1_content .help {margin-left: 150px;}
+#col1_form #col1_content .button .qq-uploader {display:block; clear:both;}
+*/
+.columnar .type-text label,.columnar .type-select label {float: none; width:auto;}
+.type-check input {width: auto; margin-left: 150px;}
+.columnar .help-text,.columnar fieldset .counter,.yform.columnar fieldset .formitemsinglephoto .button,.yform.columnar .formitemsinglephoto .list { clear: both; display: block; float:left; margin:auto; }
+.button_set label {width:100px;}
+.button_set {float:left;}
+.button_set input {}
+
+.yform .type-text input, .yform .type-text textarea,.yform .type-select select {padding:2px;}
+.rh_seller_form .columnar .type-select label {float: left; width: 100px;}
+.rh_seller_form div.button_set {clear:both;}
+/* photo galerie */
+.photo_thumbnail_wrapper {border: 2px solid #222; padding: 2px;}
+.photo_thumbnail_wrapper:hover {background: none; border: 2px solid #222; padding: 2px;}
+.photo_preview {border: none; float: left; margin: 10px; padding: 2px; height: 230px;}
+.photo_preview:hover {border: none; float: left; margin: 10px; padding: 2px; height: 230px; background-color: #f1f1f1;}
+.photo_preview .photo_thumbnail img,.photo_preview .photo_thumbnail img:hover {max-height:150px; border: none;}
+* html .photo_preview .photo_thumbnail img,* html .photo_preview .photo_thumbnail img:hover {height:150px; width:150px; border: none;}
+.photo_preview .action  {margin: 4px;}
+.photo_preview .action .remove {color: red;}
+
+
+.table-help {background-color: white;padding:20px}
+.table-help table {text-align: left; width: 100%; font-style: italic;}
+.table-help table tr {height: 30px;}
+.table-help h2 {background-color: #56B3E6; border-bottom: 2px solid black; color: white; margin-bottom: 10px;padding: 10px; text-align: left;}
+
+
+#table_actions {background-color: white; text-align: left; padding-left: 20px; padding-top: 5px; padding-bottom: 5px;}
+#table_actions select {width: 300px;}
+#table_actions .table_actions_label {font-weight: bold;}
+
+.global {padding:7px;}
+.global.success {background-color: #7EFF7A; border: 1px dashed green; padding: 5px; margin-bottom:15px;margin-top:15px;}
+div.global.error {background-color: #ffe7db; border: 1px dashed red; margin-bottom:15px;margin-top:15px;}
+div.error {background-color: #ffe7db; border: 1px solid red; margin: 1px;}
+#table_help {margin-top: 10px; background-color: #E88; padding: 5px;}
+
+
+
+
+.canceling_container {text-align:center;}
+.canceling { width:500px; display:inline-block; margin:20px; background-color:white; text-align:left; border:1px solid black;padding: 20px;}
+.rh_advert_topped_create_new_panel {margin-top: 10px;}
+.attractive_advert_action h2,.topped_advert_action h2,.rh_advert_topped_create_new_panel h2, .rh_advert_attractive_create_new_panel h2 {padding: 10px 10px 10px 0px;}
+.attractive_advert_action table,.topped_advert_action table {border-collapse: collapse;}
+.attractive_advert_action table tbody td,.topped_advert_action table tbody td {border-left: 1px dotted #56B3E6; padding-left: 5px;}
+.attractive_advert_action table thead th,.topped_advert_action table thead th {border-top: 1px #56B3E6 solid; border-bottom: 1px #56B3E6 solid; background-color: #0d7dc1; border-left: none; border-right: none; text-align:center; border-left: 1px dotted #CCC; color:white; padding-left: 5px;}
+.attractive_advert_action table thead th.first,.attractive_advert_action table tbody td.first,.topped_advert_action table thead th.first,.topped_advert_action table tbody td.first {border-left: 1px #56B3E6 solid;}
+.attractive_advert_action table tbody td.last,.attractive_advert_action table thead th.last,.topped_advert_action table tbody td.last,.topped_advert_action table thead th.last  {border-right: 1px #56B3E6 solid; width:45px;}
+.attractive_advert_action table tbody tr.last,.topped_advert_action table tbody tr.last {border-bottom: 1px #56B3E6 solid;}
+.attractive_advert_actiontable tbody tr.last td,.topped_advert_actiontable tbody tr.last td {border-top: 1px dotted #56B3E6;}
+
+.attractive_advert_action table.topped_previews,.topped_advert_action table.topped_previews {border:none}
+.attractive_advert_action table.topped_previews tr td ,.topped_advert_action table.topped_previews tr td {vertical-align: top; text-align: center; border:none;}
+.attractive_advert_action table.topped_previews  tr td img,.topped_advert_action table.topped_previews tr td img {border: 1px solid gray;}
+
+.formitemadvertgeneralstat .formitemadvertgeneralstat_tabs .ui-tabs-nav li.ui-tabs-selected {background-color: white;}
+.formitemadvertgeneralstat .formitemadvertgeneralstat_tabs .ui-tabs-nav ul { border:none;}
+.formitemadvertgeneralstat .formitemadvertgeneralstat_tabs .ui-tabs-nav li,.formitemadvertgeneralstat .formitemadvertgeneralstat_tabs .ui-tabs-nav {border:1px solid gray;}
+.formitemadvertgeneralstat .formitemadvertgeneralstat_tabs .ui-tabs-nav {background-color: #d3d3d3;}
+.formitemadvertgeneralstat table {border-collapse: collapse; width: 100%; margin: 20px 0px 20px 0px;}
+.formitemadvertgeneralstat table tbody td {border-left: 1px dotted #56B3E6;border-bottom: 1px dotted #56B3E6; padding-left: 5px;}
+.formitemadvertgeneralstat table thead th {border-top: 1px #56B3E6 solid; border-bottom: 1px #56B3E6 solid; background-color: #0d7dc1; border-left: none; border-right: none; text-align:center; border-left: 1px dotted #CCC; color:white; padding-left: 5px;}
+.formitemadvertgeneralstat table thead th.first,.formitemadvertgeneralstat table tbody td.first {border-left: 1px #56B3E6 solid;}
+.formitemadvertgeneralstat table tbody td.last,.formitemadvertgeneralstat table thead th.last {border-right: 1px #56B3E6 solid; width:45px;}
+.formitemadvertgeneralstat table tbody tr.last {border-bottom: 1px #56B3E6 solid;}
+.formitemadvertgeneralstat table tbody tr.last td {border-top: 1px dotted #56B3E6;}
+
+.formitemadvertdailystat .formitemadvertdailystat_tabs .ui-tabs-nav li.ui-tabs-selected {background-color: white;}
+.formitemadvertdailystat .formitemadvertdailystat_tabs .ui-tabs-nav ul { border:none;}
+.formitemadvertdailystat .formitemadvertdailystat_tabs .ui-tabs-nav li,.formitemadvertdailystat .formitemadvertdailystat_tabs .ui-tabs-nav {border:1px solid gray;}
+.formitemadvertdailystat .formitemadvertdailystat_tabs .ui-tabs-nav {background-color: #d3d3d3;}
+.formitemadvertdailystat table {border-collapse: collapse; width: 100%; margin: 20px 0px 20px 0px;}
+.formitemadvertdailystat table tbody td {border-left: 1px dotted #56B3E6; border-bottom: 1px dotted #56B3E6;padding-left: 5px;}
+.formitemadvertdailystat table thead th {border-top: 1px #56B3E6 solid; border-bottom: 1px #56B3E6 solid; background-color: #0d7dc1; border-left: none; border-right: none; text-align:center; border-left: 1px dotted #CCC; color:white; padding-left: 5px;}
+.formitemadvertdailystat table thead th.first,.formitemadvertdailystat table tbody td.first {border-left: 1px #56B3E6 solid;}
+.formitemadvertdailystat table tbody td.last,.formitemadvertdailystat table thead th.last {border-right: 1px #56B3E6 solid; width:45px;}
+.formitemadvertdailystat table tbody tr.last {border-bottom: 1px #56B3E6 solid;}
+.formitemadvertdailystat table tbody tr.last td {border-top: 1px dotted #56B3E6;}
+
+
+table.Fullcal td.today span.date {color: red; font-size: 16px; font-weight: bold; border-bottom: 1px solid red; border-left: 1px solid red;}
+
+
+.formitemwanteddistrictlist .region_name_label {font-size:11px; font-style: italic;}
+
+.toppedslotcalendar table.advert_params {margin-left:5px;width:100%; cell-spacing:none;}
+.toppedslotcalendar .advert_params td {width:120px; }
+.toppedslotcalendar .advert_params th {border:1px solid #ddd; background-color:#eee; padding:3px; font-weight:normal;}
+.toppedslotcalendar .advert_params td.wide {width:auto;}
+.toppedslotcalendar .advert_params td .param_value {font-weight:bold; margin:5px 3px 3px 3px;}
+.formitemattractiveslotcalendar .date_info,
+.toppedslotcalendar .date_info {font-size:16px;}
+.formitemattractiveslotcalendar .date_info .user_value,
+.toppedslotcalendar .date_info .user_value,
+.formitemattractiveslotcalendar .date_info .date_to,
+.toppedslotcalendar .date_info .date_to {font-weight:bold;}
+
+.toppedslotcalendar .topped_position_select .topped_position_select_option {padding:5px;margin:5px; border:1px dashed #ddd;}
+.toppedslotcalendar .topped_position_select .topped_position_select_option.selected { border:1px solid #357DBE;}
+.toppedslotcalendar .topped_position_select .topped_position_select_option.selected.readonly {width:50%;}
+.toppedslotcalendar .topped_position_select .topped_position_select_option .content  {padding:7px 10px 10px 10px;}
+.toppedslotcalendar .topped_position_select .topped_position_select_option .content .preview {margin-top:7px;}
+
+
+.dataTable.rh_advert .advert_action_state span {margin: 0 2px 0 2px; cursor: help;}
+.dataTable.rh_advert .advert_action_state .empty_box {display:inline-block; width:16px; margin: 0 2px 0 2px;}
+
+.advert_stat_qtip h3 {margin-bottom:10px;}
+.advert_stat_qtip h3 strong {font-size:145%; margin-left:5px;}
+
+.formitemselleruseraccount div.type-check input {margin-left:0px;}
+.formitemselleruseraccount .userroles .description {font-weight:normal;}
+.formitemselleruseraccount .create_new_user_account {margin-top:14px; font-weight:normal; margin-left:10px; font-size:14px;}
+
+
+.action_result {border:1px solid black; background-color:white; text-align:left; }
+.action_result .content {padding:10px 10px 10px 36px;}
+.action_result .error_message {margin:10px 0 0 10px; font-style:italic;}
+.action_result .header {font-size:16px; font-weight:bold; padding:5px 5px 5px 35px; margin:0;}
+.action_result.succesful .header {background: #7EFF7A url('../images/system/info.png') no-repeat 10px 5px ;}
+.action_result.unsuccesful .header {background: #ffe7db url('../images/system/warning.png') no-repeat 10px 5px ;}
+.action_result .advert_name {font-style:italic; font-weight:bold;}
+.action_result ul {margin-bottom:0;}
+.action_result .footer {margin-top:10px; font-size:110%; padding-top:10px; border-top:1px dotted #999;}
+.action_result .footer.plain {border:none; margin-top:0px}
+.action_result .price {float:left}
+.action_result .price .amount{font-weight:bold; }
+.action_result .links {float:right;}
+.action_result .unsuccesful_message_part {background-color: #ffe7db; padding:5px; margin:5px 0;}
+
+#credit_info {float:right; width:auto; padding:5px; color:#777; background-color:white; border:1px solid #666; margin: 10px 0 0 10px;}
+#credit_info .amount {color:black; font-weight:bold; }
+
+#buy_credit {  background-color: #EF701F; border: 1px solid #666;  color: white;  float: right;  font-weight: bold; margin: 10px 0 0 10px;  width: auto; }
+#buy_credit a {padding:5px;display:block;}
+#buy_credit:hover {border:1px solid black;}
+
+#price_list {  background-color: #A6C623; color:white;  border: 1px solid #666;  float: right;  margin: 10px 0 0 10px; width:auto;}
+#price_list a {padding:5px;display:block;}
+#price_list:hover {border:1px solid black;}
+
+
+#credit_order_page .pricelist td.price_type.selected {background:red; color:white;}
+#credit_order_page .pricelist td.price.selected {background: red; color:white;}
+
+#credit_order_page .pricelist td.price strong {font-size:12px;}
+
+#credit_order_page .pricelist table {border-collapse: collapse;border-spacing: 0px; font-size:13px;}
+#credit_order_page .pricelist td,
+#credit_order_page .pricelist th {padding: 4px 10px; border:1px solid #aaa;}
+#credit_order_page .pricelist th b {color:red;}
+#credit_order_page .pricelist p.red {color:red; margin-top:10px;}
+
+#credit_order_page .pricelist tr.selected {background-color:yellow;}
+#credit_order_page .pricelist td.selected {background-color:red; color:white;}
+
+#credit_order_page .pricelist th {background-color:#A4CB5A;}
+#credit_order_page .pricelist td.name {background-color:#C7D29E;  vertical-align:middle;}
+
+#credit_order_page .yform{border:0px none;padding:0px;}
+#credit_order_page .yform .fblock {float:left; width:550px; border:1px dashed #999; margin:0 50px 20px 0; padding:5px;}
+#credit_order_page .yform .fblockr {margin-right:0px;}
+#credit_order_page .yform fieldset {border:0px none; padding:0;margin:0;}
+#credit_order_page .yform .type-button {margin-left:6px; padding:0;}
+/*#credit_order_page .yform{width:450px;}*/
+#credit_order_page .yform label {float:left; width:40%;}
+#credit_order_page .order_succesful {padding:10px; border:1px solid black; width:500px; text-align:left; display:inline-block;}
+#credit_order_page .order_succesful h4{margin-bottom:10px;}
+#credit_order_page .yform .help-text {margin-left:40%;}
+#credit_order_page .yform .custom-type-check {margin:20px 0;}
+#credit_order_page .yform .custom-type-check label {display:inline;float:none;width:auto; text-decoration:underline;}
+#credit_order_page .yform .custom-type-check input {margin:0 15px 0 5px;width:auto;}
+
+.text_content {
+  background: none repeat scroll 0 0 white;
+  margin: 10px;
+  padding: 10px;
+}
+.text_content h3 {border-bottom: 1px dotted #999; margin-bottom:10px; padding-bottom:10px;}
+.text_content p {margin-bottom:15px;}
+
+.attractive_position_status h3 .cancel_position {font-weight:normal; color:red;}
+.attractive_position_status h3 .cancel_position a {font-weight:normal; color:red;}
+.topped_position_status h3 .cancel_position {font-weight:normal; color:red;}
+.topped_position_status h3 .cancel_position a {font-weight:normal; color:red;}
+
+.rh_advert_interest_message .advert_removed {color:#999;}
+.rh_advert_interest_message .advert_code {
+    cursor:help; font-weight:bold; }
+.rh_advert_interest_message .advert_name {color:#666;}
+#main table.dataTable.rh_advert_interest_message tbody tr td {padding-top:10px; padding-bottom:10px;}
+
+
+.formitemsalesinvoicestatus .value{font-size:16px; font-weight:bold; margin-left:20px;}
+.formitemsalesinvoicestatus .payment_info {float:left}
+.formitemsalesinvoicestatus .main {float:left; margin-right:50px;}
+.formitemsalesinvoicestatus .left_to_pay {color:red; margin-top:10px;}
+
+.data_function {margin:5px 0 5px 15px;}
+
+/** PANEL S INFORMACEMI O EXPIRACI UCTU */
+.ExpirationSoon {padding:4px; border:1px dashed #A00; background-color:#FFE7DB;}
+.cCustomAccount ul li {margin-bottom:5px;}
+
+/** ODKAZY NA GENEROVANI PDF */
+#main table.dataTable tr td.control a.download_item {color:blue; text-decoration:underline;display:block;margin-bottom:2px;}
+
+
+.ui-message_window .ui-dialog-titlebar {display:none;}
+
+
+
+
+

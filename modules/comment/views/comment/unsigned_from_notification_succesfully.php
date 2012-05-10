@@ -1,0 +1,1 @@
+<?= __('comment.you_were_succesfully_unsigned_from_notification', array(':preview' => $preview));?>

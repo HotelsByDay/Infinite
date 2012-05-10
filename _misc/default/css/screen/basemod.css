@@ -1,0 +1,150 @@
+/**
+ * "Yet Another Multicolumn Layout" - (X)HTML/CSS framework
+ * (en) stylesheet for screen layout
+ * (de) Stylesheet für das Bildschirm-Layout
+ *
+ * @creator       YAML Builder V1.2.1 (http://builder.yaml.de)
+ * @file          basemod.css
+ * @-yaml-minver  3.3
+ */
+
+@media screen, projection
+{
+  /**
+   * (en) Forcing vertical scrollbars in IE8, Firefox, Webkit & Opera
+   * (de) Erzwingen vertikaler Scrollbalken in IE8, Firefox, Webkit & Opefra
+   *
+   * @workaround
+   * @affected IE8, FF, Webkit, Opera
+   * @css-for all
+   * @valid CSS3
+   */
+
+  body { overflow-y: scroll; }
+
+  /*-------------------------------------------------------------------------*/
+
+  /* (en) Marginal areas & page background */
+  /* (de) Randbereiche & Seitenhintergrund */
+  body {  padding: 0px 0px; }
+
+  /* Layout Alignment | Layout-Ausrichtung */
+  .page_margins { margin: 0 auto; }
+
+  /* Layout Properties | Layout-Eigenschaften */
+  .page_margins { width: auto;  min-width: 960px; max-width: none; background: #fff; }
+  .page { padding: 0px; }
+  #header { position:relative; padding: 45px 2em 1em 20px; color: #000; background:#6b761a url('../images/bkg-top.png') repeat-x 0 0; }
+  #topnav { position:absolute; top:10px; right:10px; text-align:right; color: #eee; background: transparent; }
+  #nav { overflow:hidden; }
+ 
+  div.hlist { background-color: #6b761a }
+  #main { padding:2px 0 ; background: #fff; }
+  #footer { padding: 10px 20px; color:#666; background: #f9f9f9; border-top: 5px #efefef solid; }
+
+  /* (en) navigation: horizontal adjustment | (de) horizontale Ausrichtung  */
+  #nav ul { margin-left: 20px; margin-right: 20px; }
+
+  /*-------------------------------------------------------------------------*/
+
+  /**
+   * (en) Formatting content container
+   * (de) Formatierung der Inhalts-Container
+   *
+   */
+
+  #col1 { float: left; width: 75%}
+  #col2 { display:none}
+  #col3 { width: auto; margin: 0 0 0 75%}
+  #col1_content { padding: 0 10px 0 20px }
+  #col3_content { padding: 0 20px 0 10px }
+  #col_full {width: 100%;}
+
+  /* set column dividers */
+  #col3 { border-left: 1px #ddd solid }
+
+  /*-------------------------------------------------------------------------*/
+
+  /** GLOBALNI CLASSY */
+  .hlist li.fr,
+  .fr {float:right;}
+  .fl {float:left;}
+  .cb {clear:both;}
+
+  #main table.dataTable tbody tr td.tr,
+  .tr {text-align: right;}
+
+  #main table.dataTable tbody tr td.tc,
+  .tc {text-align: center;}
+
+
+
+  body {font-family: Helvetica, Arial, sans-serif; font-size:12px;}
+  h2 {padding:10px;}
+
+  a:visited, a:link, a:hover, a:active {color:#333;}
+
+  /* odkazy v #topnav budou svetle*/
+  #topnav a:visited,
+  #topnav a:link,
+  #topnav a:hover,
+  #topnav a:active {color:inherit;}
+
+
+  /*----------------------------------------
+  JQUERY FIX
+  ------------------------------------------*/
+  .ui-buttonset label {float:left;}
+  .columnar .type-select .ui-buttonset label {width:auto;}
+
+/* ui tlacitka na tabulkovych vypisech */
+#col3 ._button {font-size: 12px;}
+
+  /* Tabulka s daty */
+#main .count_of_results {color: #AAA; margin-bottom: 5px; margin-top: 5px; font-size: 80%;}
+
+#main table.dataTable{font-size:1.2em;border-spacing:0px;width:100%;margin-bottom:4px;}
+#main table.dataTable td.info{background-color:#E9E9E9;text-align:left;color:#444;}
+#main table.dataTable th.info{background-color:#E9E9E9;color:#444;text-align:left;padding-left:4px;padding-right:4px;border-top:1px solid #E9E9E9;border-left:1px solid #E9E9E9;}
+#main table.dataTable th{background-color:#E9E9E9;color:#444;text-align:left;padding-left:4px;padding-right:4px;border-top:1px solid #E9E9E9;border-left:1px solid #E9E9E9;}
+#main table.dataTable tr:hover{background-color:#E9E9E9;}
+#main table.dataTable td{font-size: 12px; border:none ; border-bottom:1px dotted #ccc ;border-left:1px dotted #fff ; padding: 4px;}
+#main table.dataTable td:last-child{border-right:1px solid #E9E9E9;}
+#main table.dataTable tr:last-child td{border-bottom:1px solid #E9E9E9;}
+#main table.dataTable tr.header {font-size: 12px; margin-bottom: 20px;}
+#main table.dataTable tr.th {background-color: #EDF3FE;}
+#main table.dataTable tr.to_be_removed {background-color:red;}
+
+a.edit_button   {width:16px; height:16px; background-image:url('../images/system/edit_action.png'); margin-right:5px;}
+a.show_button   {width:16px; height:16px; background-image:url('../images/system/show_action.png'); margin-right:5px;}
+a.remove_button {width:16px; height:16px; background-image:url('../images/system/remove_action.png');}
+
+
+/* strankovani */
+.pager {float:right; margin-bottom: 20px;}
+.pager .current {background: #E9E9E9; color: #444; font-weight: bold; }
+.pager a {color: #444; text-decoration: none;}
+.pager a:hover {background-color: #E9E9E9; color:black; }
+
+/* filtry */
+.filter_container {background-color: #F0F7BB ; padding-top: 10px; padding-bottom: 5px; font-size: 11px; font-weight: bold; padding-right: 5px;}
+.filter_container label {margin-left: 4px;}
+.filter_container hr {border: none; height: 1px; margin-bottom: 0.75em; margin-top: 0.5em; background-color: #667911;}
+.filter_container .filter_actions {margin-top: 5px;}
+
+
+
+/** FORM ITEM LIST **/
+.formitemlist .itemlist .item.to_be_removed {background-color: red;}
+
+
+/** PREPNUTI UZIVATELE **/
+#switch_user_dialog #switch_user_search_input {width:100%;}
+#switch_user_dialog .user_list ul {list-style:none; padding-left:5px;}
+#switch_user_dialog .user_list ul li {margin-left:0px;}
+
+
+
+
+
+}

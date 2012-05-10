@@ -1,0 +1,378 @@
+/*-----------------------------------------------
+FULLCAL
+-------------------------------------------------*/
+
+body .Full .innercol {padding: 15px 28px 20px 23px;}
+
+table.Fullcal {
+	margin: 15px 0;
+	background: #FFF;
+	width: 100%;
+	}
+
+table.Fullcal th {
+	color: #999;
+	background: #FFF;
+	padding: 1px;
+	font-size: 12px;
+	text-align: center;
+	text-transform: uppercase;
+}
+
+table.Fullcal th.month {
+	font-weight: bold;
+	font-size: 14px;
+	text-align: center;
+	vertical-align: top;
+	text-transform: uppercase;
+	padding: 1px 0 0 0;
+	width: 1%;
+}
+
+body.el table.Fullcal th,
+body.el table.Fullcal th.month {
+  text-transform: none;
+}
+
+table.Fullcal th.month div {
+	background: #333;
+	color: #FFF;
+	padding: 12px 12px;
+}
+
+table.Fullcal td.blank {background: #f5f5f5;}
+
+table.Fullcal td {
+	background: #e5e5e5;
+	vertical-align: top;
+    border:1px solid #cacaca;
+	/* padding: 10px 12px; */
+	color: #999;
+	font-size: 10px;
+	text-align: right;
+	height: 65px;
+	width: 14%;
+}
+
+table.Fullcal td a {
+  font-weight: bold;
+  padding: 0;
+}
+
+table.Fullcal td.weekend {
+  background: #d5d5d5;
+  width: 1%;
+}
+
+table.Fullcal.weekends td, table.Fullcal.weekends td.weekend {width: 14%;}
+
+table.Fullcal td.with {
+	background: #fff;
+	color: #666;
+	border: 1px solid #999;
+	font-weight: normal;
+}
+
+table.Fullcal td span.date {
+    border-left:1px solid #aaa;
+    border-bottom:1px solid #aaa;
+    padding:0 0 2px 2px;
+    margin: 0 0 3px 3px;
+}
+
+table.Fullcal td.with span.date {
+  float: right;
+  color: #000;
+  font-weight: bold;
+}
+
+
+
+table.Fullcal td#today {
+	background: #ffc;
+	color: #333;
+	border: 1px solid #fc0;
+}
+
+table.Fullcal td#today span.date {
+  background: #FC0;
+  color: #FFF;
+  padding: 1px 5px;
+}
+
+
+table.Fullcal ul {
+	padding: 10px 0 0 0;
+	margin: 0;
+	text-align: left;
+}
+
+table.Fullcal li {
+	font-weight: normal;
+	font-size: 10px;
+	line-height: 13px;
+	padding: 0;
+	margin-bottom: 5px;
+    list-style-type: none;
+}
+
+table.Fullcal .year_month_name {
+    text-align: center;
+}
+
+table.Fullcal .year_month_name .previous {
+    float:left;
+    text-transform: none;
+}
+
+table.Fullcal .year_month_name .next {
+    float:right;
+    text-transform: none;
+}
+
+table.Fullcal td.day.disabled {
+    background-color:#eee;
+    border:1px solid #ddd;
+}
+
+table.Fullcal .free_slots {
+    margin:5px 0 0 5px;;
+    float:left;
+    color:#444;
+}
+
+table.Fullcal.select td{
+    border:1px solid #d5d5d5;
+}
+
+table.Fullcal.select td.day.enabled:hover{
+    cursor:pointer;
+    background-color:white;
+    border:1px solid black;
+}
+
+table.Fullcal td.day.active_head {
+    border: 1px solid red;
+	background: #ffc;
+}
+
+table.Fullcal td.day.active_tail {
+    border: 1px solid #fc0;
+	background: #ffc;
+}
+
+
+/*-----------------------------------------------
+FORM
+-------------------------------------------------*/
+.edit_help {background: white; padding:1px; border:1px solid #c0c0c0; margin-top: 10px}
+.edit_help h4 {font-size:120%; margin:0 0 10px 0; background:#c0c0c0; padding:10px;}
+.edit_help .important {font-weight:bold;}
+.edit_help p {margin:0 10px 10px 10px;}
+
+/*-----------------------------------------------
+TABLE
+-------------------------------------------------*/
+#open_panel, #close_panel {float:right;}
+#col1 #open_panel {display:none;}
+#col1 #close_panel {display:block;}
+#col1_full #open_panel {display:block;}
+#col1_full #close_panel {display:none;}
+
+/*-----------------------------------------------
+DIALOG, KTERY SE ZOBRAZI PO KLIKNUTI NA TLACITKO 'A' NA VYPISU NABIDEK
+-------------------------------------------------*/
+.topped_advert_action .or ,
+.attractive_advert_action .or {font-weight:bold; margin:10px 0 10px 0; display:block;}
+.topped_advert_action table ,
+.attractive_advert_action table {width:100%; margin-top:10px; border:1px solid #56B3E6}
+.topped_advert_action table tr th,
+.attractive_advert_action table tr th {border-bottom:1px solid #56B3E6; background-color:light green;}
+.topped_advert_action table tr td,
+.attractive_advert_action table tr td {border-bottom:1px dotted #56B3E6;}
+
+
+/*-----------------------------------------------
+ADVERT
+-------------------------------------------------*/
+
+.attractive_planned {font-weight:bold; color:black;}
+.attractive_active {font-weight: bold; color:red;}
+
+.topped_active {font-weight: bold; color:red;}
+.topped_planned {font-weight: bold; color:black;}
+
+/*-----------------------------------------------
+FORMITEMFILE
+-------------------------------------------------*/
+.photo_preview .cancel_remove {display:none;}
+.photo_preview.to_be_removed .cancel_remove {display:block;}
+.photo_preview.to_be_removed .remove{display:none;}
+.photo_preview.to_be_removed {background-color: #FFBEBE;}
+.photo_preview .photo_thumbnail img {max-height:150px;}
+.photo_preview {height:152px;}
+.photo_preview:hover {border:2px solid #222; background-color:#aaa; height:150px;}
+.photo_preview {float:left; margin:10px; padding:2px; border:2px solid #222;}
+
+.qq-upload-button {line-height:32px;height:32px;background:url("../images/bkg-button.gif") repeat-x scroll 0 0 transparent;border:none;color:#fff;border-radius: 6px; -moz-border-radius: 6px; -webkit-border-radius: 6px;font-weight:bold;text-transform:uppercase;cursor:pointer;font-family:sans-serif;font-size:12px;width:120px;cursor:pointer;text-align:center;}
+.qq-upload-button-hover {background-position:0 -32px;}
+
+.qq-upload-drop-area {width:100%; font-weight:bold; color:black; text-align:center; background-color:#b2f7c8; height:50px; margin-bottom:20px; padding-top:20px;}
+
+.yform.columnar .formitemsinglephoto .button {margin-left:30%;}
+.yform.columnar .formitemsinglephoto .list {margin-left:30%;}
+
+
+/*-----------------------------------------------
+DASHBOARD
+-------------------------------------------------*/
+/** ZALOZKA "DOTAZY UZIVATELU" **/
+.dashboard .dashboard_tabs .advert_interest_messages ul {margin-left:0px; padding-left:0px;margin-top:10px;}
+.dashboard .dashboard_tabs .advert_interest_messages ul li {list-style:none; margin-left:0px;border-bottom:1px dotted #aaa;}
+.dashboard .dashboard_tabs .advert_interest_messages ul .date {font-weight:bold;}
+.dashboard .dashboard_tabs .advert_interest_messages ul .message {color:#888;}
+.dashboard .dashboard_tabs .advert_interest_messages ul .seller {font-style:italic;}
+.dashboard .dashboard_tabs .advert_interest_messages ul .advert {float:right;font-weight:bold;}
+
+/** ZALOZKA POPTAVKY */
+.dashboard .dashboard_tabs .advert_wanted ul {margin-left:0px; padding-left:0px;margin-top:10px;}
+.dashboard .dashboard_tabs .advert_wanted ul li {list-style:none; margin-left:0px;  border-bottom:1px dotted #aaa;}
+.dashboard .dashboard_tabs .advert_wanted ul .date {font-weight:bold;}
+.dashboard .dashboard_tabs .advert_wanted ul .message {color:#888;}
+.dashboard .dashboard_tabs .advert_wanted ul .price {font-style:italic; margin-left:20px;}
+.dashboard .dashboard_tabs .advert_wanted ul .link {float:right;font-weight:bold;}
+
+/** ZALOZKA "DULEZITA UPOZORNENI" **/
+.dashboard .dashboard_tabs .important_notices ul {margin-left:0px; padding-left:0px;margin-top:10px;}
+.dashboard .dashboard_tabs .important_notices ul li {list-style:none; margin-left:0px; margin:10px 0;padding-bottom:10px; border-bottom:1px dotted #aaa;}
+.dashboard .dashboard_tabs .important_notices ul .date {font-weight:bold;}
+.dashboard .dashboard_tabs .important_notices ul .title {font-weight:bold;color:back; font-size:16px; text-decoration:underline;}
+.dashboard .dashboard_tabs .important_notices ul .with_title {font-weight:normal;font-size:12px; color:#999; margin-left:10px; text-decoration:none;}
+.dashboard .dashboard_tabs .important_notices ul .message {color:#555;}
+.dashboard .dashboard_tabs .important_notices ul .message b {color:#333;}
+
+/** PANEL UCET */
+.registration_expired p {margin-bottom:10px;}
+
+/** DIALOG - UPOZORNENI NA BLIZICI SE EXPIRACI */
+#registration_expiration_warning p {margin-top:10px;}
+
+/** PANEL S RYCHLYMI ODKAZY */
+.cCustomButtons .ui-button {text-align:left; width:130px; margin-top:3px; }
+
+/* Custom jQuery tab */
+
+.dashboard .dashboard_tabs .ui-tabs-nav {background-image:none;background:none; border:0px none; border-bottom:1px dotted #aaa;}
+.dashboard .dashboard_tabs .ui-tabs-nav li {background-image:none;background:none; border:0px none; color:black; border-right:1px dotted #aaa;}
+.dashboard .dashboard_tabs .ui-tabs-nav li.ui-tabs-selected {font-size:110%; font-weight:bold;}
+.dashboard .dashboard_tabs .ui-tabs-nav li a {color:black;}
+
+/*-----------------------------------------------
+SWITCH USER
+-------------------------------------------------*/
+#switch_user_dialog .empty_list_message {margin-top:15px;}
+#switch_user_dialog .user_list .content table {border-style:none; margin-left:0px; padding-left:0px; margin-top:15px; width:100%;}
+#switch_user_dialog .user_list .content table th {font-weight:bold;}
+#switch_user_dialog .user_list .content table td {border-style:none; padding:5px; border-bottom:1px dotted #999;}
+#switch_user_dialog .user_list .content table tr.hover:hover {background-color:#eee;}
+
+/*-----------------------------------------------
+GOOGLE MAPA
+-------------------------------------------------*/
+.formitemadvertaddress .invalid_value_note {color:#999; padding-top:5px; clear:both;}
+
+
+/*-----------------------------------------------
+FILTRY
+-------------------------------------------------*/
+.filter_actions {padding-left:5px; padding-right:5px;}
+.reset_filter_button {float:right;}
+
+/*-----------------------------------------------
+FORMITEMATTRACTIVESLOTCALENDAR
+-------------------------------------------------*/
+.formitemattractiveslotcalendar .user_value,
+.formitemattractiveslotcalendar .date_to
+{font-weight:bold;}
+
+
+/*-----------------------------------------------
+QQ UPLOADER
+-------------------------------------------------*/
+.qq_file_item {list-style:none;margin:0;margin-top:8px;float:left;}
+
+.qq_file_item span {margin-right:10px;}
+.qq_file_item .qq-upload-cancel {color:#f00;cursor:pointer;}
+
+
+/*-----------------------------------------------
+DIALOG PRO ZVYRAZNENI
+-------------------------------------------------*/
+.attractive_advert_action .free_slot,
+.topped_advert_action .free_slot {color:red; font-weight:bold;}
+.attractive_advert_action table td,
+.topped_advert_action table td {padding:3px 0;}
+
+/*-----------------------------------------------
+STATISTIKY PRO RK
+-------------------------------------------------*/
+.stat_panel_loading {height:100px; background:url("../images/progress.indicator.gif") no-repeat 50%; background-color:#bbb; }
+
+.rh_advert_interest_message_stat_panel1_table
+
+table.statsTable {border-collapse: collapse; width: 100%; table-layout:fixed; min-width: 698px;}
+table.statsTable tbody {background-color: white;}
+table.statsTable thead tr {height: 30px;}
+
+
+table.statsTable tbody tr td {text-align: left; border-left: 1px dotted #56B3E6; border-bottom: 1px dotted #56B3E6; }
+table.statsTable tbody tr td.advert_price {text-align: right;}
+table.statsTable thead tr th {border-top: 1px #56B3E6 solid; border-bottom: 1px #56B3E6 solid; background-color: #0d7dc1; border-left: none; border-right: none; text-align:center; border-left: 1px dotted #CCC; color:white;}
+table.statsTable thead tr th a {color: white}
+table.statsTable thead tr th.first,#main table.dataTable tbody tr td.first {border-left: 1px #56B3E6 solid; }
+table.statsTable tbody tr.item_selected td {background-color: yellow;}
+
+table.statsTable thead tr th.last,#main table.dataTable tbody tr td.last {border-right: 1px #56B3E6 solid; }
+table.statsTable tbody tr td.last img {padding:2px; height: 16px; width: 16px;}
+table.statsTable tbody tr td.last a,#main table.dataTable tbody tr td.last span { height: 20px; width: 20px; text-align: center;}
+
+table.statsTable tbody tr.last td {border-bottom: 1px #56B3E6 solid;}
+table.statsTable td{font-size: 12px; border:none ; border-bottom:1px dotted #ccc ;border-left:1px dotted #fff ; padding: 4px;}
+table.statsTable th{background-color:#E9E9E9;color:#444;text-align:left;padding-left:4px;padding-right:4px;border-top:1px solid #E9E9E9;border-left:1px solid #E9E9E9;}
+table.statsTable tbody tr td.last {border-right: 1px solid #56B3E6;}
+table.statsTable tr:hover{background-color:#E9E9E9;}
+
+table.statsTable thead th a.asc {background: url('../images/sort-asc.png') no-repeat 100% 50%;}
+table.statsTable thead th a.desc {background: url('../images/sort-desc.png') no-repeat 100% 50%;}
+table.statsTable thead th a {padding-right:15px;}
+
+
+/*-----------------------------------------------
+STAVY FAKTUR
+-------------------------------------------------*/
+.salesinvoice_status_expired,
+.salesinvoice_status_4,
+.salesinvoice_status_3,
+.salesinvoice_status_2,
+.salesinvoice_status_1 {width:82px; padding:4px; text-align:center;}
+/*barevne rozliseni*/
+.salesinvoice_status_4 {background-color:#78ff78;}
+.salesinvoice_status_3,
+.salesinvoice_status_2,
+.salesinvoice_status_1 {background-color:#cacaca;}
+.salesinvoice_status_expired {background-color:#f33f3f;}
+
+
+/*-----------------------------------------------
+PRIZNAK NOVY
+-------------------------------------------------*/
+.new_badge {background-color:red; color:white; margin:0 2px 0 0; padding:0 3px;}
+
+/*-----------------------------------------------
+DIALOG PRO NASTAVENI OBJEDNAVKY JAKO ZAPLACENA
+-------------------------------------------------*/
+#main .rh_salesinvoice table.dataTable tr td.control a.proforma_paied_action_button,
+#main .rh_salesinvoice table.dataTable tr td.control a.invoice_paied_action_button {color:red; font-weight:bold; text-decoration: underline;}
+
+.rh_salesinvoice-setpaieddialog .help {font-style:italic; margin-bottom:10px;}
+.rh_salesinvoice-setpaieddialog input {width:200px;}

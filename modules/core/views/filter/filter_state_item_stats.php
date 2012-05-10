@@ -1,0 +1,1 @@
+(<?= (int)$filter_state->size;?>/<?= (int)$filter_state->delta > 0 ? '+'.$filter_state->delta : $filter_state->delta;?>)

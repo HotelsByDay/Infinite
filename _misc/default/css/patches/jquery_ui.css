@@ -1,0 +1,18 @@
+@charset "UTF-8";
+
+@media screen, projection {
+
+	/* Fix: oprava tlacitka v multitlacitku */
+	.cPanel .cButtonSet .ui-button
+		{margin-right:-0.5em}
+
+	/* Fix: opravuje vysku tlacitka, ktere nesedi mezi verzemi IE */
+	.ui-button {height:2.15em; font-size:100%}
+
+	/* Fix: opravuje vertikalni zarovnani tlacitka, text vedle nej na radku neodskoci a
+	   drzi linii s textem uvnitr tlacitka */
+	.ie7 .ui-button,
+	.ie6 .ui-button,
+	.ie8 .ui-button {vertical-align:middle;}
+
+}

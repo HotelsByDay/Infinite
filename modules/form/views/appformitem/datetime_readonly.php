@@ -1,0 +1,10 @@
+<div  class="appformitemcontainer <?= $css; ?>" name="<?= $attr ?>_item" id="<?= $uid;?>">
+
+<?php if ( ! empty($error_message)): ?>
+<span class="validation_error"><?= $error_message;?></span>
+<?php endif ?>
+
+<label for="<?= $attr ?>_date"><?= $label ?></label>
+<span class="small"><?= $date_value ?></span><span class="input-space">-</span>
+<span class="small"><?= $time_value ?></span>
+</div>
