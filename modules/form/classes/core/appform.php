@@ -190,13 +190,6 @@ class Core_AppForm {
             $this->_config['container_view_name'] = 'form_container_ajax';
         }
 
-
-        //ulozim formularova data se kterymi se bude pracovat
-        $this->_form_data = $form_data;
-
-        //nastavi defaultni parametry ORM modelu, ktere jsou v $form_data
-        $this->setModelDefaults();
-
         //nactu konfiguraci pro tento formular - merguje se s fallback hodnotami
         //udelam to rucne, protoze chci zachovat Kohana_ConfigFile
         foreach ($this->_config as $key => $value)
@@ -205,36 +198,56 @@ class Core_AppForm {
         }
         $this->_config = $config;
 
+        //these values will be used as default
+        $this->_form_data_defaults   = arr::get($form_data, 'defaults', array());
+        //these valus will overwrite whatever arrived from the form
+        $this->_form_data_overwrites = arr::get($form_data, 'overwrite', array());
+
+        //wont be needed anymore
+        unset($form_data['defaults'], $form_data['overwrite']);
+
+        //initialize with the default data
+        if ( ! $this->_model->loaded())
+        {
+            $this->applyFormDataValues($this->_form_data_defaults);
+        }
+
+        //load form data
+        $this->_form_data = arr::merge($this->_form_data, $form_data);
+
+        //vlozi data do ORM modelu anebo do $this->_form_data
+        $this->applyFormDataValues($this->_form_data_overwrites);
+
         //detekce pozadovane akce
         $this->requested_action = arr::getifset($this->_form_data, self::ACTION_KEY, NULL);
 
         //nactu formularove prvky
         $this->loadFormItems();
     }
-
     /**
-     * Do ORM modelu formulare nastavi defaultni hodnoty, ktere mohou byt definovane
-     * v datech pro formular.
+     * Takes the array passed as argument and puts the values either in the ORM model
+     * (for attributes that do not have a Form Item)
+     * or in the $this->_form_data array, which is a data source for the
+     * form items.
+     *
+     * @param $values
      */
-    public function setModelDefaults()
+    public function applyFormDataValues($values)
     {
-        //pokud jsou definovane defaultni hodnoty expclitne, tak budou vlozeny
-        //do modelu - ale pouze pokud se jedna o novy model
-        if ( ! $this->_model->loaded() && empty($this->_form_data))
+        foreach ($values as $attr => $value)
         {
-            $this->_form_data = arr::get($this->_form_data, 'defaults');
-        }
-        //krome polozky 'defaults' ocekavam polozku 'overwrite' kde budou hodnoty, ktere
-        //maji byt do modelu vzdy zapsany
-
-        $overwrite = arr::get($this->_form_data, 'overwrite');
-
-        if ( ! empty($overwrite))
-        {
-            $this->_form_data = arr::merge($this->_form_data, $overwrite);
+            //if there is not Form Item for the attribute, then
+            //the value will be set in the ORM model directly
+            if ( ! isset($this->config['items'][$attr]))
+            {
+                $this->_model->{$attr} = $value;
+            }
+            else
+            {
+                $this->_form_data[$attr] = $value;
+            }
         }
     }
-
     /**
      * Provede zapis do logu a navic prida informace o aktualnim objektu
      * a formularovych datech pro snadnejsi diagnozu problemu.
@@ -539,7 +552,8 @@ class Core_AppForm {
 
         //do ORM modelu vlozim defaultni hodnoty, ktere do nej byly vlozeni
         //pri inicializaci formulare
-        $this->setModelDefaults();
+        $this->applyDefaultValues();
+        $this->applyOverwriteValues();
     }
 
     /**
