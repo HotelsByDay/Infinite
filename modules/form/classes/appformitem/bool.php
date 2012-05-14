@@ -21,7 +21,7 @@ class AppFormItem_Bool extends AppFormItem_Select
      */
     public function getValues() {
         $values = parent::getValues();
-        return array_merge($values, Array('0'=>'Ne', '1'=>'Ano'));
+        return array_merge($values, Array('0'=>__('general.bool_no'), '1'=>__('general.bool_yes')));
     }
     
    
