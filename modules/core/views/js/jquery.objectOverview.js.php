@@ -31,8 +31,9 @@
      * Defaultni hodnoty pro parametry a nastaveni pluginu
      */
     var settings = {
-        submenu_item_selector: '#overview_submenu .submenu_item',
-        subcontent_selector: '#overview_subcontent'
+        submenu_item_selector: '.overview_submenu .submenu_item',
+        subcontent_selector: '.overview_subcontent',
+        use_hash: true
     };
 
     /**
@@ -56,8 +57,8 @@
                 //budu odchytavat kliknuti na polozky submenu
                 $(settings.submenu_item_selector, $_this).click(function(e){
 
-
                     methods._activateSubmenuItem( $_this, $(this) );
+
                     return false;
                 });
 
@@ -89,34 +90,52 @@
 //                    });
 //                });
 
-                //nabinduji udalost hash change aby GUI reagovalo na stisk tlacitka zpet
-                $(window).bind( 'hashchange', function(e) {
-                    //pokud neni nastaven zadny hash,
-                     if (window.location.hash.length == 0) {
+                if ( ! settings.use_hash) {
 
-                        //vybere defaultni polozku submenu a nacte jeji obsah
-                        var $default_item = $(settings.submenu_item_selector + '.default:first', $_this);
+                    //vybere defaultni polozku submenu a nacte jeji obsah
+                    var $default_item = $(settings.submenu_item_selector + '.default:first', $_this);
 
-                        //pokud neni defaultni ani jedna, tak vezme proste prvni
-                        if ($default_item.length == 0) {
-                            $default_item = $(settings.submenu_item_selector + ':first', $_this);
-                        }
-
-                        //pokud je definovana defaultni polozka, tak ji aktivuji - a tedy
-                        //nactu prislusny obsah do subcontent casti
-
-                        if ( $default_item.length != 0 ) {
-
-                            methods._restoreState($_this, $default_item);
-
-                        }
-                    } else {
-                        methods._restoreState($_this);
+                    //pokud neni defaultni ani jedna, tak vezme proste prvni
+                    if ($default_item.length == 0) {
+                        $default_item = $(settings.submenu_item_selector + ':first', $_this);
                     }
-                 });
 
-                 $(window).trigger('hashchange');
-                 
+                    //pokud je definovana defaultni polozka, tak ji aktivuji - a tedy
+                    //nactu prislusny obsah do subcontent casti
+
+                    if ( $default_item.length != 0 ) {
+                        methods._activateSubmenuItem($_this, $default_item);
+                    }
+
+                } else {
+                    //nabinduji udalost hash change aby GUI reagovalo na stisk tlacitka zpet
+                    $(window).bind( 'hashchange', function(e) {
+                        //pokud neni nastaven zadny hash,
+                        if (window.location.hash.length == 0) {
+
+                            //vybere defaultni polozku submenu a nacte jeji obsah
+                            var $default_item = $(settings.submenu_item_selector + '.default:first', $_this);
+
+                            //pokud neni defaultni ani jedna, tak vezme proste prvni
+                            if ($default_item.length == 0) {
+                                $default_item = $(settings.submenu_item_selector + ':first', $_this);
+                            }
+
+                            //pokud je definovana defaultni polozka, tak ji aktivuji - a tedy
+                            //nactu prislusny obsah do subcontent casti
+
+                            if ( $default_item.length != 0 ) {
+                                methods._restoreState($_this, $default_item);
+                            }
+
+                        } else {
+                            methods._restoreState($_this);
+                        }
+                    });
+
+                    $(window).trigger('hashchange');
+                }
+
             });
         },
 
@@ -133,7 +152,15 @@
                 methods._log('Undefined href on submenu item.');
             }
 
-            methods._setState( $_this, name );
+            //nactu si URL na kterou budu posilat pozadavek
+            var settings = methods._getData( $_this, 'settings' );
+
+            if ( ! settings.hash) {
+                console.log('not using hash. loading subcontent...');
+                methods._loadSubcontent($_this, url);
+            } else {
+                methods._setState( $_this, name );
+            }
 
         },
 
@@ -151,7 +178,7 @@
             }
 
             //nactu si jQuery objekt pro subcontent - cast do ktere nahravam novy obsah
-            var $subcontent = $( settings.subcontent_selector );
+            var $subcontent = $( settings.subcontent_selector , $_this );
 
             //zobrazim progress indicator a odesilam pozadavek
             $subcontent.block({
@@ -305,7 +332,3 @@
 
 })( jQuery );
 
-
-$(document).ready(function(){
-    $("#overview_container").objectOverview();
-});

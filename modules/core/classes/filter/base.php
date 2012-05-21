@@ -703,11 +703,11 @@ abstract class Filter_Base
         {
             if (arr::get($this->filter_params, Filter_Base::USER_DELETED_KEY, FALSE))
             {
-                $orm->where($orm->table_name().'.deleted', '=', '1');
+                $orm->where($orm->table_name().'.deleted', 'IS NOT', DB::Expr('NULL'));
             }
             else
             {
-                $orm->where($orm->table_name().'.deleted', '=', '0');
+                $orm->where($orm->table_name().'.deleted', 'IS', DB::Expr('NULL'));
             }
         }
     }

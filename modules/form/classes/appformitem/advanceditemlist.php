@@ -101,7 +101,7 @@ class AppFormItem_AdvancedItemList extends AppFormItem_Base
     {
         if (empty($this->form_data))
         {
-            $rel_models = $this->model->{$this->rel_object_name}->where($this->rel_object_name.'.deleted', '=', '0')
+            $rel_models = $this->model->{$this->rel_object_name}->where($this->rel_object_name.'.deleted', 'IS', DB::Expr('NULL'))
                                                                 ->find_all();
 
             foreach ($rel_models as $rel_model)

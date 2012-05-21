@@ -92,6 +92,9 @@ class ORM extends Kohana_ORM {
      */
     protected $_inherit_permission = '';
 
+
+    protected $_save_performed = FALSE;
+
     
     public static function factory($model, $id = NULL)
     {
@@ -330,7 +333,7 @@ class ORM extends Kohana_ORM {
 
         // Rika zda doslo k volani parent::save()
         // nebo zda nemu ma dojit na konci metody
-        $saved = FALSE;
+        $this->_save_performed = FALSE;
         
         // Logovani zmen - historie
         // Pokud dochazi k editaci a zmenily se nejake hodnoty
@@ -339,7 +342,7 @@ class ORM extends Kohana_ORM {
         {
             // Ulozeni vlastnich zmen a poznamenani ze se ulozilo
             parent::save();
-            $saved = TRUE;
+            $this->_save_performed = TRUE;
             // Pokud se zmeny ulozily, vytvorime zaznamy v LogAction
             if ($this->_saved)
             {
@@ -377,7 +380,7 @@ class ORM extends Kohana_ORM {
                     try
                     {
                         parent::save();
-                        $saved = TRUE;
+                        $this->_save_performed = TRUE;
                     } 
                     catch (Exception $e)
                     {
@@ -397,7 +400,7 @@ class ORM extends Kohana_ORM {
             {
                 // Ulozeni
                 parent::save();
-                $saved = TRUE;
+                $this->_save_performed = TRUE;
             }
             
             // Zalogovani akce
@@ -405,8 +408,13 @@ class ORM extends Kohana_ORM {
         }
 
         // parent::save() pouze meni stav objektu a vzdy vraci $this
-        if ( ! $saved) parent::save();
+        if ( ! $this->_save_performed) parent::save();
         return $this;
+    }
+
+    public function savePerformed()
+    {
+        return $this->_save_performed;
     }
     
     /**
@@ -785,7 +793,7 @@ class ORM extends Kohana_ORM {
         {
             $this->_build(Database::UPDATE);
 
-            $this->_db_builder->set(array('deleted' => 1));
+            $this->_db_builder->set(array('deleted' => date('Y-m-d H:i:s')));
 
             $this->_db_builder->execute($this->_db);
         }
@@ -853,15 +861,15 @@ class ORM extends Kohana_ORM {
 	{
             if ($this->update_on_delete)
             {
-                DB::update($this->_table_name)->set(array('deleted' => 1))
+                DB::update($this->_table_name)->set(array('deleted' => date('Y-m-d H:i:s')))
                                               ->where($this->_primary_key, '=', $id)
                                               ->execute();
             }
             else
             {
-		DB::delete($this->_table_name)
+        		DB::delete($this->_table_name)
                         ->where($this->_primary_key, '=', $id)
-			->execute($this->_db);
+		            	->execute($this->_db);
             }
         }
 
@@ -884,7 +892,7 @@ class ORM extends Kohana_ORM {
 
 	if ( ! empty($id) OR $id === '0')
 	{
-            DB::update($this->_table_name)->set(array('deleted' => 0))
+            DB::update($this->_table_name)->set(array('deleted' => NULL))
                                               ->where($this->_primary_key, '=', $id)
                                               ->execute();
         }
@@ -994,7 +1002,7 @@ class ORM extends Kohana_ORM {
 
         if (array_key_exists('deleted', $this->_object))
         {
-            $this->where($this->table_name().'.deleted', '=', '0');
+            $this->where($this->table_name().'.deleted', 'IS', DB::Expr('NULL'));
         }
 
         return parent::find_all();
@@ -1018,7 +1026,7 @@ class ORM extends Kohana_ORM {
 
         if (array_key_exists('deleted', $this->_object))
         {
-            $this->where($this->table_name().'.deleted', '=', '0');
+            $this->where($this->table_name().'.deleted', 'IS', DB::Expr('NULL'));
         }
 
         $selects = array();
@@ -1589,7 +1597,7 @@ class ORM extends Kohana_ORM {
         //podle planu projde relacni zaznamy a vytvori jejich kopie
         foreach ($plan as $rel_object => $subplan)
         {
-            //"schovam" se vsechny _has_one relace + jejich subplan
+            //"schovam" sem vsechny _has_one relace + jejich subplan
             if (isset($this->_has_one[$rel_object]) && $this->{$rel_object}->loaded())
             {
                 $rel_objects[] = array(
@@ -1597,7 +1605,7 @@ class ORM extends Kohana_ORM {
                     $subplan
                 );
             }
-            //"schovam" se vsechny _has_many relace + jejich subplan
+            //"schovam" sem vsechny _has_many relace + jejich subplan
             else if (isset($this->_has_many[$rel_object]))
             {
                 foreach ($this->{$rel_object}->find_all() as $rel_object_model)
@@ -1753,6 +1761,22 @@ class ORM extends Kohana_ORM {
 			return $this;
 		}
 	}
-    
-    
+
+    /**
+     * Basic helper method to load lang attributes.
+     *
+     * @param $attr
+     * @param $locale
+     */
+    public function getLangAttr($attr, $locale)
+    {
+        //expecting this has_many rel object to contain the language fields values
+        $lang_object = $this->_table_name.'_lang';
+
+        //return its value
+        return $this->{$lang_object}->where('field', '=', $attr)
+            ->where('locale', '=', $locale)
+            ->find()->content;
+    }
+
 } // End ORM

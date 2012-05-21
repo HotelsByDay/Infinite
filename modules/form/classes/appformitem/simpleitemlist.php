@@ -158,7 +158,7 @@ class AppFormItem_SimpleItemList extends AppFormItem_Base
         if (empty($this->form_data))
         {
             $this->rel_models = ORM::factory($this->rel_model_name)->where($this->model->primary_key(), '=', $this->model->pk())
-                                                               ->where('deleted', '=', '0')
+                                                               ->where('deleted', 'IS', DB::Expr('NULL'))
                                                                ->find_all();
 
             $this->form_data = array();

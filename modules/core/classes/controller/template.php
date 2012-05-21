@@ -25,7 +25,7 @@ abstract class Controller_Template extends Controller {
 	 */
 	public function before()
 	{
-		if ($this->auto_render === TRUE)
+		if ($this->auto_render === TRUE && $this->template != NULL)
 		{
 			// Load the template
 			$this->template = View::factory($this->template);

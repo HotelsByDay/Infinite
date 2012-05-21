@@ -1,3 +1,4 @@
+//<script>;
 /*!
  * jQuery blockUI plugin
  * Version 2.38 (29-MAR-2011)

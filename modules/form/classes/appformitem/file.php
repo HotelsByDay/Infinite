@@ -250,7 +250,7 @@ class AppFormItem_File extends AppFormItem_Base
     {
         $models = array();
 
-        foreach ($this->model->{$this->attr}->where('deleted', '=', '0')->find_all() as $model)
+        foreach ($this->model->{$this->attr}->where('deleted', 'IS', DB::Expr('NULL'))->find_all() as $model)
         {
             $models[] = $model;
         }

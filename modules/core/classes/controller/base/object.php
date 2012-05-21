@@ -1142,8 +1142,17 @@ abstract class Controller_Base_Object extends Controller_Layout {
             throw new Kohana_Exception('TODO!');
         }
 
+        //nahodny identifikator (html id atribut), ktery bude pouzit pro inicializaci
+        //objectOverview pluginu na prislusnem div bloku
+        $overview_container_id = rand();
+
         //dale pridam tyto JS soubory, ktere zajistuji zakladni funkce overview stranky
-        Web::instance()->addCustomJSFile(View::factory('js/jquery.objectOverview-as.js'));
+        Web::instance()->addCustomJSFile(View::factory('js/jquery.objectOverview.js'));
+
+        //provede incializaci pluginu objectOverview
+        Web::instance()->addMultipleCustomJSFile(View::factory('js/jquery.objectOverview-init.js', array(
+            'overview_container_id' => $overview_container_id
+        )));
         
         //jQuery.objectDataPanel pro funkcnost panelu, ktere se budou nacitat do obsahove castu
         Web::instance()->addCustomJSFile(View::factory('js/jquery.objectDataPanel.js'));
@@ -1157,6 +1166,10 @@ abstract class Controller_Base_Object extends Controller_Layout {
 
         //do stranky vlozim obsahovou sablonu pro "/overview" vypis
         $this->template->content = $this->_view_overview_content();
+
+        //tohle 'id' se pouziva pro inicializaci prislusneho jquery pluginu na
+        //spravnem elementu ve strance
+        $this->template->content->overview_container_id = $overview_container_id;
 
         //navratovy odkaz na tabulkovy vypis
         $this->template->content->return_link       = Request::instance()->get_retlink();

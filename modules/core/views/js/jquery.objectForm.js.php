@@ -26,11 +26,16 @@
 
         init: function( options ) {
 
-            settings = options;
-
             this.each(function(){
 
                 var $_this = $(this);
+
+                settings = options;
+
+                //ulozim si aktualni nastaveni pluginu
+                methods._setData( $_this , {
+                    settings: settings
+                });
 
                 //vytvorim si kopii defaultnich parametru - ta se pouzije v pripade
                 //ze uzivatel se vrati na stav url kdy je prazdny hash (defaultni stav
@@ -44,6 +49,9 @@
         },
 
         _initForm: function( $_this ) {
+
+            //nactu si URL na kterou budu posilat pozadavek
+            var settings = methods._getData( $_this, 'settings' );
 
             //inicializace close_banner tlacitka v banneru
             $_this.find('.close_banner').click(function(){
@@ -128,6 +136,9 @@
             if ( typeof previous_request !== 'undefined' && previous_request.readyState != 4) {
                 return;
             }
+
+            //nactu si URL na kterou budu posilat pozadavek
+            var settings = methods._getData( $_this, 'settings' );
 
             var jqXHR = $.ajax({
                 type:'POST',
