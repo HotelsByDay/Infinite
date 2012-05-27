@@ -42,7 +42,9 @@ class AppFormItem_AdvancedItemList extends AppFormItem_Base
                                                                $this->config['rel_form'],
                                                                $this->attr,
                                                                array($this->model->primary_key() => $this->model->pk())
-            )
+            ),
+            //bude mozne polozky radit (drag&drop na ".drag_handler")
+            'sortable' => arr::get($this->config, 'sortable', NULL)
         );
 
         //predam parametry sablone
@@ -101,8 +103,15 @@ class AppFormItem_AdvancedItemList extends AppFormItem_Base
     {
         if (empty($this->form_data))
         {
-            $rel_models = $this->model->{$this->rel_object_name}->where($this->rel_object_name.'.deleted', 'IS', DB::Expr('NULL'))
-                                                                ->find_all();
+            $model = $this->model->{$this->rel_object_name}->where($this->rel_object_name.'.deleted', 'IS', DB::Expr('NULL'));
+
+            //aplikace razeni (pokud je v konfiguraci definovan atribut, podle ktereho se ma radit)
+            if (($sequence_field = arr::get($this->config, 'sortable')))
+            {
+                $model->order_by($sequence_field, 'asc');
+            }
+
+            $rel_models = $model->find_all();
 
             foreach ($rel_models as $rel_model)
             {

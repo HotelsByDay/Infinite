@@ -65,6 +65,15 @@
                                 //pridam na konec seznam existujicich prvku itemlistu
                                 $_this.find('.list:first').prepend($item_container);
 
+                                //aktualizuje se poradi prvku
+                                if (options['sortable']) {
+                                    var sortable_sequence_field = options['sortable'];
+                                    var i = 0;
+                                    $_this.find('.list .item').each(function(){
+                                        $(this).find('input[name$="['+sortable_sequence_field+']"]').val(i++);
+                                    });
+                                }
+
                                 //po pridani noveho prvku do stranky si poznacim ze
                                 //na novem prvku jeste nedoslo k zadne zmene - change
                                 //udalosti. V pripade ze uzivatel znovu klikne na
@@ -112,6 +121,23 @@
                     methods._initTemplate($_this, $(this));
                 });
 
+                //ma fungovat serazeni prvku pomoci drag&drop ?
+                if (options['sortable']) {
+                    //inicializace razeni prvku
+                    $(this).find('.list').sortable({
+                        placeholder: "ui-state-highlight",
+                        handle: ".drag_handler",
+                        update: function (event, ui) {
+                            //tento atribut slouzi k ulozeni poradi daneho prvku
+                            var sortable_sequence_field = options['sortable'];
+                            var i = 0;
+                            $_this.find('.list .item').each(function(){
+                                $(this).find('input[name$="['+sortable_sequence_field+']"]').val(i++);
+                            });
+                        }
+                    })
+                    .disableSelection();
+                }
             });
         },
 

@@ -2,13 +2,13 @@
     <span class="add_loader" style="display:none"><?= __('appformitemadvanceditemlist.add_pi');?></span>
     <a href="#" class="add button blue"><?= $add_button_label;?></a>
 
-    <div class="list">
+    <ul class="list">
         <?php foreach ($rel_items as $rel_item): ?>
-        <div class="item">
+        <li class="item">
             <?= (string)$rel_item;?>
-        </div>
+            <div class="clearfix cb"></div>
+        </li>
         <?php endforeach ?>
-       <div class="clearfix cb"></div>
-    </div>
+    </ul>
     <div class="clearfix cb"></div>
 </div>
