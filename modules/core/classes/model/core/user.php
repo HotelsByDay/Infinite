@@ -350,11 +350,11 @@ class Model_Core_User extends Model_Auth_User {
      * ktere plati public=1.
      * @return <type> 
      */
-    public function find_all()
+    public function find_all($deleted_too = FALSE)
     {
         $this->where('public', '=', '1');
 
-        return parent::find_all();
+        return parent::find_all($deleted_too);
     }
 
     /**

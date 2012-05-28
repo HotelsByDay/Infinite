@@ -992,7 +992,7 @@ class ORM extends Kohana_ORM {
      * 'db_select' nad danym modelem.
      * @return <type>
      */
-    public function find_all()
+    public function find_all($deleted_too = FALSE)
     {
         //aplikuje opravneni 'db_select' (a jeho mozny modifikator)
         if ( ! $this->applyUserSelectPermission())
@@ -1000,7 +1000,7 @@ class ORM extends Kohana_ORM {
             throw new Exception_UnauthorisedAction('Unauthorised db action "select (all)" on object "'.$this->_object_name.'".');
         }
 
-        if (array_key_exists('deleted', $this->_object))
+        if ( ! $deleted_too && array_key_exists('deleted', $this->_object))
         {
             $this->where($this->table_name().'.deleted', 'IS', DB::Expr('NULL'));
         }
@@ -1630,6 +1630,8 @@ class ORM extends Kohana_ORM {
         //ze nedoslo ke zmene zadneho atributu, tak by nebyl proveden DB insert
         $this->_changed = array_keys($this->_object);
 
+        $this->_db = Database::instance('live');
+
         //vlastni ulozeni nove kopie do DB
         $this->save();
 
@@ -1648,6 +1650,97 @@ class ORM extends Kohana_ORM {
         }
 
         //vracim nove vytvorenou kopii puvodniho zaznamu
+        return $this;
+    }
+
+    /**
+     * Created a deep "copy" from a different model - loads values of the corresponding
+     * attributes and copies all related models where aliases correspond.
+     * @param ORM $source
+     */
+    public function copyFrom(ORM $source, array $overwrite = array())
+    {
+        //copy all attributes that are in both this and the source model
+        //except for the primary key
+        foreach ($this->_object as $attr => $_)
+        {
+            //skip the primary key
+            if ($attr == $this->_primary_key)
+            {
+                continue;
+            }
+
+            //if the attribute is in source model, copy its value
+            if ($source->hasAttr($attr))
+            {
+                $this->{$attr} = $source->{$attr};
+            }
+        }
+
+        //v poli $overwrite jsou nove hodnoty pro specificke atributy, ktere
+        //maji byt prirazeny nove vytvorenemu zaznamu
+        foreach ($overwrite as $attr => $val)
+        {
+            $this->{$attr} = $val;
+        }
+
+        //ulozeni zaznamu
+        $this->save();
+
+        //relacnim zaznamum bude prirazena tato hodnota - jedna se o vazbu na
+        //tento zaznam
+        $rel_overwrite = array(
+            $this->_primary_key => $this->pk()
+        );
+
+        //make a copy of all has_many relational models
+        foreach ($this->_has_many as $alias => $info)
+        {
+            //if the source model does not have the same aliased relational model skip it
+            if ( ! $source->hasRelAttr($alias))
+            {
+                continue;
+            }
+
+            //this is the target model name
+            $destination_model_name = $info['model'];
+
+            foreach ($source->{$alias}->find_all() as $source_model)
+            {
+                //create a new instance
+                $model = ORM::factory($destination_model_name);
+
+                //recursively call the copyFrom method on it
+                $model->copyFrom($source_model, $rel_overwrite);
+            }
+        }
+
+        //make a copy of all has_one relational models
+        foreach ($this->_has_one as $alias => $info)
+        {
+            //if the source model does not have the same aliased relational model skip it
+            if ( ! $source->hasRelAttr($alias))
+            {
+                continue;
+            }
+
+            //this is the name of the destination model
+            $destination_model_name = $info['model'];
+
+            //if the source model is created
+            $alias_model = $source->{$alias}->find();
+
+            if ($alias_model->loaded())
+            {
+                //create a new instance
+                $model = ORM::factory($destination_model_name);
+
+                //recursively call the copyFrom method on it
+                $model->copyFrom($alias_model, $rel_overwrite);
+            }
+        }
+
+        //keep method chaining
         return $this;
     }
 
