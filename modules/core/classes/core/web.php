@@ -164,7 +164,7 @@ class Core_Web
      * ty soubory, ktere byly zaregistrovany metodou AddMultipleCustomJSFile. Jinak
      * jsou do stranky vlozeny vsechny pozadovane soubory.
      */
-    public function getJSFiles($only_multiple = FALSE) {
+    public function getJSFiles($only_multiple = FALSE, $ai_too = TRUE) {
 
         $profiler_token = NULL;
         // profilovani kontroly JS cache
@@ -189,8 +189,11 @@ class Core_Web
         //vicekrat
         if ( ! $only_multiple)
         {
-            //jako prvni pudou auto included JS soubory
-            $js_include_views = $this->ai_custom_js_views;
+            if ($ai_too)
+            {
+                //jako prvni pudou auto included JS soubory
+                $js_include_views = $this->ai_custom_js_views;
+            }
 
             //pridam vsechny custom zaregistrovane soubory
             foreach ($this->custom_js_views as $key => $val)

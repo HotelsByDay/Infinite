@@ -134,6 +134,9 @@
                             $_this.find('.list .item').each(function(){
                                 $(this).find('input[name$="['+sortable_sequence_field+']"]').val(i++);
                             });
+                            //uzivateli se zobrazi info zprava - porad prvku bude
+                            //zachovano jen kdyz se ulozi formular
+                            $.userInfoMessage("<?= __('form.AppFormItemAdvancedItemlist.order_update.info_message');?>");
                         }
                     })
                     .disableSelection();

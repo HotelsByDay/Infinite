@@ -964,7 +964,7 @@ abstract class Controller_Base_Object extends Controller_Layout {
         //URL na kterou ma formular smerovat]
         $form_action_url = appurl::object_edit_ajax(
                                         $this->controller_name,
-                                        $this->object_name.'_form',
+                                        $form_config->get_group_name(),//$this->object_name.'_form',
                                         $this->model->pk(),
                                         arr::get($this->request_params, 'defaults') //defaultni parametry promitnu do URL.
                                                                                     //Pokud by nastala validacni chyba, tak je

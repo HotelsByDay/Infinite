@@ -1,23 +1,23 @@
-/* Czech initialisation for the jQuery UI date picker plugin. */
-/* Written by Tomas Muller (tomas@tomas-muller.net). */
+/* English/UK initialisation for the jQuery UI date picker plugin. */
+/* Written by Stuart. */
 jQuery(function($){
-	$.datepicker.regional['cs'] = {
-		closeText: 'Zavřít',
-		prevText: '&#x3c;Dříve',
-		nextText: 'Později&#x3e;',
-		currentText: 'Nyní',
-		monthNames: ['leden','únor','březen','duben','květen','červen',
-        'červenec','srpen','září','říjen','listopad','prosinec'],
-		monthNamesShort: ['led','úno','bře','dub','kvě','čer',
-		'čvc','srp','zář','říj','lis','pro'],
-		dayNames: ['neděle', 'pondělí', 'úterý', 'středa', 'čtvrtek', 'pátek', 'sobota'],
-		dayNamesShort: ['ne', 'po', 'út', 'st', 'čt', 'pá', 'so'],
-		dayNamesMin: ['ne','po','út','st','čt','pá','so'],
-		weekHeader: 'Týd',
-		dateFormat: 'dd.mm.yy',
-		firstDay: 1,
-		isRTL: false,
-		showMonthAfterYear: false,
-		yearSuffix: ''};
-	$.datepicker.setDefaults($.datepicker.regional['cs']);
+$.datepicker.regional['en-GB'] = {
+closeText: 'Done',
+prevText: 'Prev',
+nextText: 'Next',
+currentText: 'Today',
+monthNames: ['January','February','March','April','May','June',
+'July','August','September','October','November','December'],
+monthNamesShort: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+dayNames: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
+dayNamesShort: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
+dayNamesMin: ['Su','Mo','Tu','We','Th','Fr','Sa'],
+weekHeader: 'Wk',
+dateFormat: 'dd/mm/yy',
+firstDay: 1,
+isRTL: false,
+showMonthAfterYear: false,
+yearSuffix: ''};
+$.datepicker.setDefaults($.datepicker.regional['en-GB']);
 });

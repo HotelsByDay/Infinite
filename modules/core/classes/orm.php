@@ -1728,7 +1728,7 @@ class ORM extends Kohana_ORM {
             $destination_model_name = $info['model'];
 
             //if the source model is created
-            $alias_model = $source->{$alias}->find();
+            $alias_model = $source->{$alias};
 
             if ($alias_model->loaded())
             {

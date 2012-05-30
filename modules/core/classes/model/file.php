@@ -28,6 +28,25 @@ abstract class Model_File extends ORM
     protected $resize_variants = array();
 
     /**
+     *
+     * @var <array> V tomto poli jsou definovane crop varianty, ktere budou
+     * automaticky po ulozeni vytvoreny (tj. originalni soubor bude ulozen
+     * a pomoci knihovny Image budou vytvoreny kopie sjinou velikosti obrazku.
+     *
+     * Resize varianty se vytvareji v metode createCroppedVariants, ktera je
+     * volana po uspesnem ulozeni modelu.
+     *
+     * Definice ma vypadat napr. takto:
+     *
+     * $crop_variants => array(
+     *  'large' => array(1000, 1000, 5, 5), //vyrez 1000x1000px zacinajici na pixelu [5,5]
+     *  'thumbnail' => array(50, 50, 0, 0), //vyrez 50x50px zacinajici na pixelu [0,0]
+     * )
+     *
+     */
+    protected $crop_variants = array();
+
+    /**
      * Pri odstraneni souboru chci skutecne odstranit zaznam z DB vcetne souboru
      * na disku.
      */
@@ -296,7 +315,7 @@ abstract class Model_File extends ORM
         $target_dir = AppConfig::instance()->get('data_storage', 'system');
 
         //cestu doplnim
-        $target_dir .= '/'.$this->_object_name;
+        $target_dir .= '/'.($this->_db.'-'.$this->_object_name);
 
         $target_dir .= '/'.(int)($this->pk() / $this->folder_count_limit);
 
@@ -372,13 +391,90 @@ abstract class Model_File extends ORM
     }
 
     /**
+     * Vytvorit cropped varianty obrazku podle $cropped_variants atributu.
+     *
+     * Nove vznikle soubory automaticky ulozi "vedle" originalniho souboru.
+     * Cropped varianta ma prefix podle nazvu cropped varianty, pak nasleudje
+     * znak '-' a zbytek nazvu souboru zustava stejny.
+     *
+     * Pokud cropped varianta s danym nazvem jiz existuje (kontroluje pomoci
+     * file_exists), tak nevytvari novou.
+     *
+     */
+    protected function createCroppedVariants()
+    {
+        //nazev souboru na disku
+        $filepath = $this->getFileDiskName();
+
+        //nazev samotneho souboru
+        $filename = basename($filepath);
+
+        //cesta k adresari
+        $filedir  = dirname($filepath);
+
+        //pro kazdou variantu vytvorim dalsi soubor na disku
+        foreach ($this->crop_variants as $variant_name => $variant_setting)
+        {
+            //cilovy nazev souboru ve variante
+            $target_filepath = DOCROOT.$filedir . DIRECTORY_SEPARATOR . $variant_name . '-' . $filename;
+
+            //pokud uz varianta existuje, tak ji nebudu znovu vytvaret
+            if (file_exists($target_filepath))
+            {
+                continue;
+            }
+
+            //pri vytvareni cropped varianty muze dojit k chybam
+            try
+            {
+                //jinak ji vytvorim
+                $image = Image::factory(DOCROOT.$filepath);
+
+                //pokud jsou oba rozmery nedefinovane, tak se crop obrazku neprovede
+                if ( ! empty($variant_setting[0]) && ! empty($variant_setting[1]))
+                {
+                    //provede vlastni crop obrazku
+                    $image->crop(arr::get($variant_setting, 0),
+                        arr::get($variant_setting, 1),
+                        arr::get($variant_setting, 2),
+                        arr::get($variant_setting, 3));
+                }
+
+                //pred ulozenim cropped varianty se vyvola metoda, ktera muze byt
+                //pretizena v dedicich modelech a umozni udelat dalsi modifikace obrazku
+                $this->cropVariant($variant_name, $image);
+
+                //pred vlastni nazev souboru vlozim prefix - nazev crop varianty
+                $image->save($target_filepath);
+            }
+            catch (Exception $e)
+            {
+                //chybu zaloguju a pokracuje se ve vytvareni dalsich crop variant
+                Kohana::$log->add(Kohana::ERROR,
+                    'Unable to create crop variant ":variant_name" with target path ":target_path" due to "'.$e->getMessage().'".',
+                    array(':variant_name' => $variant_name, ':target_path' => $target_filepath));
+            }
+        }
+    }
+
+    /**
      * Tato metoda je vyvolana pred ulozenim kazde resize varianty obrazku.
-     * @param <string> $variant_name Nazev vytvarene resize varianty.s
+     * @param <string> $variant_name Nazev vytvarene resize varianty.
      * @param Image $image
      */
     protected function resizeVariant($variant_name, Image $image)
     {
         
+    }
+
+    /**
+     * Tato metoda je vyvolana pred ulozenim kazde crop varianty obrazku.
+     * @param <string> $variant_name Nazev vytvarene crop varianty.
+     * @param Image $image
+     */
+    protected function cropVariant($variant_name, Image $image)
+    {
+
     }
 
     /**
@@ -481,6 +577,9 @@ abstract class Model_File extends ORM
  		//vytvori se resize varianty dle nataveni modelu
         $this->createResizedVariants();
 
+        //vytvori se cropped varianty dle nastaveni modelu
+        $this->createCroppedVariants();
+
         return $retval;
     }
 
@@ -499,5 +598,19 @@ abstract class Model_File extends ORM
         $this->_copy_source_filepath = DOCROOT.$this->getFileDiskName();
 
         return parent::copy($plan, $overwrite);
+    }
+
+    /**
+     * @param ORM $source
+     * @param array $overwrite
+     * @return ORM
+     * TODO: Dopsat dokumentaci!
+     */
+    public function copyFrom(ORM $source, array $overwrite = array())
+    {
+        //tento souboru bude prirazen nove vytvorene kopii zaznamu
+        $this->_copy_source_filepath = DOCROOT.$source->getFileDiskName();
+
+        return parent::copyFrom($source, $overwrite);
     }
 }

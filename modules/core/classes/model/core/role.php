@@ -23,14 +23,4 @@ class Model_Core_Role extends Model_Auth_Role {
 
         return parent::delete($id, $plan);
     }
-
-    /**
-     * Pri hledani vsech roli chci
-     * @return <type>
-     */
-    public function find_all()
-    {
-        return parent::find_all();
-    }
-    
 } // End Role Model

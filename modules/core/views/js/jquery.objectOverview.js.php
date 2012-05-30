@@ -162,6 +162,10 @@
                 methods._setState( $_this, name );
             }
 
+            //oznaceni aktivni polozky
+            $(settings.submenu_item_selector, $_this).parent('li').removeClass('active');
+            $item.parent('li:first').addClass('active');
+
         },
 
         _loadSubcontent: function( $_this, url ) {
@@ -251,10 +255,6 @@
                 //tato polozka menu ma byt aktivovana
                 $item = $('#submenu_' + active_submenu_item_name);
             }
-            
-            //oznaceni aktivni polozky
-            $(settings.submenu_item_selector, $_this).parent('li').removeClass('active');
-            $item.parent('li:first').addClass('active');
 
             //nacte obsah subcontent casti
             methods._loadSubcontent( $_this, $item.attr('action') );
