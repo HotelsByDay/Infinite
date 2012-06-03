@@ -372,6 +372,24 @@ class AppFormItem_Base
         //definovana v konfiguracnim souboru
         $view->hint = arr::get($this->config, 'hint');
 
+        //do sablony se vlozi rozsirena napoveda, ktera je zobrazena jako
+        //tooltip
+        if (($tooltip = arr::get($this->config, 'tooltip')) != NULL)
+        {
+            $view->tooltip = View::factory('widget/tooltip', array(
+                'tooltip' => $tooltip,
+                //pozice tooltipu k prvku se nacita z konfigurace, pokud neni explicitne
+                //definovana, tak se pouziji defaultni hodnoty
+                'tooltip_position_my' => arr::get($this->config, 'tooltip_position_my', 'left center'),
+                'tooltip_position_at' => arr::get($this->config, 'tooltip_position_at', 'right center')
+            ));
+        }
+        else
+        {
+            //princip Nullable object - v sablone neni potreba kontrola na tuto promennou
+            $view->tooltip = View::factory('null');
+        }
+
         //vlozim ID prvku - s tim pracuje JS (pri inicializaci se prvek selectuje
         //pres #uid)
         $view->uid = $this->uid;

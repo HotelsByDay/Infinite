@@ -4,8 +4,6 @@
         <span class="validation_error" style="color:red;"><?= $error_message; ?></span>
     <?php endif ?>
 
-        
-        
         <style type="text/css">
             /* pro otestovani funkcnosti jquery pluginy */
             div.langitem.warning select {

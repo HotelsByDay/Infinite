@@ -123,6 +123,31 @@
                 }
             }
 
+            //inicializace tooltip napovedy u prvku
+            $_this.find(".tooltip").each(function(){
+
+                //aby se nemuselo opakovane volat $(this)
+                $tooltip_widget = $(this);
+
+                $tooltip_widget.qtip({
+                    content: {
+                        text: $tooltip_widget.find('.content').html()
+                    },
+                    position: {
+                        my: $tooltip_widget.attr('position_my'),
+                        at: $tooltip_widget.attr('position_at')
+                    },
+                    show: {
+                        //vzdy pouze jeden qtip ve strance
+                        solo: true
+                    },
+                    hide: {
+                        //pri mouseleave udalosti na cilovem prvku skryt qtip
+                        target: $(this),
+                        event: 'mouseleave'
+                    }
+                });
+            });
         },
 
         _submitForm: function( $_this, form_data, progress_indicator_message) {
