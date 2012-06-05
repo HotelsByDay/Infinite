@@ -155,8 +155,7 @@
             //nactu si URL na kterou budu posilat pozadavek
             var settings = methods._getData( $_this, 'settings' );
 
-            if ( ! settings.hash) {
-                console.log('not using hash. loading subcontent...');
+            if ( ! settings.use_hash) {
                 methods._loadSubcontent($_this, url);
             } else {
                 methods._setState( $_this, name );
@@ -168,7 +167,7 @@
 
         },
 
-        _loadSubcontent: function( $_this, url ) {
+         _loadSubcontent: function( $_this, url ) {
 
             //nactu si URL na kterou budu posilat pozadavek
             var settings = methods._getData( $_this, 'settings' );
@@ -255,6 +254,13 @@
                 //tato polozka menu ma byt aktivovana
                 $item = $('#submenu_' + active_submenu_item_name);
             }
+
+            //nactu si URL na kterou budu posilat pozadavek
+            var settings = methods._getData( $_this, 'settings' );
+
+            //oznaceni aktivni polozky
+            $(settings.submenu_item_selector, $_this).parent('li').removeClass('active');
+            $item.parent('li:first').addClass('active');
 
             //nacte obsah subcontent casti
             methods._loadSubcontent( $_this, $item.attr('action') );
