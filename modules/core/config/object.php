@@ -5,11 +5,11 @@ return array(
     //obecne akce, ktere lze nad zaznamem vyvolat (bude z /table vypisu nebo z /overview stranky)
     'actions' => array(
         'delete' => array(
-            'label' => 'Odstranit',
-            'message_ok'         => ':count záznamů bylo úspěšně odstraněno.',
-            'message_error'      => 'Při odstraňování těchto záznamů došlo k chybě:',
-            'undo_message_ok'    => ':count záznaml bylo úspěšně obnoveno.',
-            'undo_message_error' => 'Při obnovení :count záznamů došlo k chybě:',
+            'label' => __('object.delete_action'),
+            'message_ok'         => __('object.action.delete.message_ok'),
+            'message_error'      => __('object.action.delete.message_error'),
+            'undo_message_ok'    => __('object.action.delete.undo_message_ok'),
+            'undo_message_error' => __('object.action.delete.undo_message_error'),
             'do'    => function($model) {
                 $model->delete();
             },
