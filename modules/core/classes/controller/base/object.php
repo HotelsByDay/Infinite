@@ -143,7 +143,7 @@ abstract class Controller_Base_Object extends Controller_Layout {
      * V opacnem pripade bude provedena 'undo' varianta akce.
      * @return <bool> 
      */
-    protected function process_action($action_name, $items, $do = TRUE, & $action_result_ref)
+    protected function process_action($action_name, $items, $do = TRUE, & $action_result_ref = NULL)
     {
         //nactu si konfiguracni soubor objektu tohoto kontroleru a vyhledam
         //pozadovanou akci - k tomu pridavam jeste konfiguraci zakladnich systemovych
@@ -198,7 +198,7 @@ abstract class Controller_Base_Object extends Controller_Layout {
         $action_function = $action_config[$type];
 
         //pro kazdou polozku provedu danou akci
-        $item_id_list = explode(',', $items);
+        $item_id_list =  explode(',', $items);
 
         //do tohoto pole budou vlozeny chyby ke kterym dojde pri provadeni akci
         $action_errors = array();
@@ -210,7 +210,7 @@ abstract class Controller_Base_Object extends Controller_Layout {
             //jeste pred provedenim akce si vytvorim preview zaznamu (akce by
             //mohla zaznam klidne odstranit nebo jinym zpusobem pozmenit)
             $preview = $model->preview();
-            
+
             try
             {
                 call_user_func($action_function, $model);
@@ -226,37 +226,41 @@ abstract class Controller_Base_Object extends Controller_Layout {
 
         }
 
-        //na vystup bude vygenerovan panel, ktery obsahuje informaci o
-        //vysledku provedene akce vcetne tlacitka 'Undo' pokud je v konfiguraci
-        //akce
-        $object_action_result = View::factory('object_action_result');
+        //if no reference is passed, then the action result view will not be generated
+        if ($action_result_ref)
+        {
+            //na vystup bude vygenerovan panel, ktery obsahuje informaci o
+            //vysledku provedene akce vcetne tlacitka 'Undo' pokud je v konfiguraci
+            //akce
+            $object_action_result = View::factory('object_action_result');
 
-        //sablone predam chybove hlasky
-        $object_action_result->action_errors = $action_errors;
+            //sablone predam chybove hlasky
+            $object_action_result->action_errors = $action_errors;
 
-        //pocet zaznamu nad kterymi byla akce provedena uspesne
-        $success_count = count($item_id_list) - count($action_errors);
+            //pocet zaznamu nad kterymi byla akce provedena uspesne
+            $success_count = count($item_id_list) - count($action_errors);
 
-        //pocet chyb
-        $error_count = count($action_errors);
+            //pocet chyb
+            $error_count = count($action_errors);
 
-        //jazykove zpravy
-        $prefix = $do ? '' : 'undo_';
-        
-        $message_ok    = arr::get($action_config, $prefix.'message_ok',    'object.item_'.$prefix.'action_message_ok');
-        $message_error = arr::get($action_config, $prefix.'message_error', 'object.item_'.$prefix.'action_message_error');
+            //jazykove zpravy
+            $prefix = $do ? '' : 'undo_';
 
-        //sprava informujici uzivatele o uspechu
-        $object_action_result->success_message = __($message_ok,    array(':count' => $success_count));
-        $object_action_result->error_message   = __($message_error, array(':count' => $error_count));
+            $message_ok    = arr::get($action_config, $prefix.'message_ok',    'object.item_'.$prefix.'action_message_ok');
+            $message_error = arr::get($action_config, $prefix.'message_error', 'object.item_'.$prefix.'action_message_error');
 
-        //vraceni akce umoznim pouze v pripade ze se provadela 'do' akce -
-        //pak se provede 'undo' a zaroven musi byt 'undo' akce definovana
-        $object_action_result->allow_undo = $do && isset($action_config['undo']);
+            //sprava informujici uzivatele o uspechu
+            $object_action_result->success_message = __($message_ok,    array(':count' => $success_count));
+            $object_action_result->error_message   = __($message_error, array(':count' => $error_count));
 
-        //pres referenci takto predam "ven z metody" - navratova hodnota signalizuje zda
-        //probehlo vse OK nez doslo k chybam
-        $action_result_ref = $object_action_result;
+            //vraceni akce umoznim pouze v pripade ze se provadela 'do' akce -
+            //pak se provede 'undo' a zaroven musi byt 'undo' akce definovana
+            $object_action_result->allow_undo = $do && isset($action_config['undo']);
+
+            //pres referenci takto predam "ven z metody" - navratova hodnota signalizuje zda
+            //probehlo vse OK nez doslo k chybam
+            $action_result_ref = $object_action_result;
+        }
 
         //vraci TRUE pokud nedoslo k zadnym chybam
         return empty($action_errors);
