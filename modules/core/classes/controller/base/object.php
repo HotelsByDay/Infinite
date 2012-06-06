@@ -227,7 +227,7 @@ abstract class Controller_Base_Object extends Controller_Layout {
         }
 
         //if no reference is passed, then the action result view will not be generated
-        if ($action_result_ref)
+        if ($action_result_ref != NULL)
         {
             //na vystup bude vygenerovan panel, ktery obsahuje informaci o
             //vysledku provedene akce vcetne tlacitka 'Undo' pokud je v konfiguraci
@@ -348,7 +348,7 @@ abstract class Controller_Base_Object extends Controller_Layout {
         {
             //metoda do teto promenne vlozi sablonu, ktera predstavuje vysledek akce
             //(pres referenci)
-            $action_result_view_ref = NULL;
+            $action_result_view_ref = TRUE;
 
             try
             {
