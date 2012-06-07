@@ -244,7 +244,7 @@ class Kohana_Request {
 	 *
 	 *     $uri = Request::detect_uri();
 	 *
-	 * @return  string  URI of the main request
+	 * @return  string  URI of the main requestapplyUserSelectPermission
 	 * @throws  Kohana_Exception
 	 * @since   3.0.8
 	 */

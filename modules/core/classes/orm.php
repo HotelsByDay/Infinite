@@ -981,7 +981,7 @@ class ORM extends Kohana_ORM {
         //aplikuje opravneni 'db_select' (a jeho mozny modifikator)
         if ( ! $this->applyUserSelectPermission())
         {
-            throw new Exception_UnauthorisedAction('Unauthorised db action "select" on object "'.$this->_object_name.'".');
+            throw new Exception_UnauthorisedAction('Unauthorised db action "select" on object "'.$this->_object_name.'" ('.$this->permissionObjectName().').');
         }
 
         return parent::find($id);
@@ -997,7 +997,7 @@ class ORM extends Kohana_ORM {
         //aplikuje opravneni 'db_select' (a jeho mozny modifikator)
         if ( ! $this->applyUserSelectPermission())
         {
-            throw new Exception_UnauthorisedAction('Unauthorised db action "select (all)" on object "'.$this->_object_name.'".');
+            throw new Exception_UnauthorisedAction('Unauthorised db action "select (all)" on object "'.$this->_object_name.'" ('.$this->permissionObjectName().').');
         }
 
         if ( ! $deleted_too && array_key_exists('deleted', $this->_object))
