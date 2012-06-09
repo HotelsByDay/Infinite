@@ -348,7 +348,7 @@
                 //na to ze musi nejake nabidky vybrat
                 if (selected == '') {
                     //zobrazim zpravu - bude automaticky skryta za 60s
-                    methods._showMessage($_this, "<?= 'Nebyly označeny žádné záznamy.';?>", 60000);
+                    methods._showMessage($_this, "<?= __('filter.no_items_selected');?>", 60000);
                     return false;
                 }
 

@@ -68,6 +68,7 @@ return array(
     'filter.reset_filter_state' => 'Resetovat',
     'filter.confirm_filterstate_remove_1' => 'Opravdu si přejete filtr "',
     'filter.confirm_filterstate_remove_2' => '" odstranit ?',
+    'filter.no_items_selected' => 'Nebyly označeny žádné záznamy.',
     'general.user_saved_filters_panel' => 'Uložené filtry',
     'general.saved_filters_empty' => 'Nemáte uloženy žádné filtry, vyzkoušejte si tuto funkci tak, že vyhledáte záznamy podle Vašich kriterií a následně kliknete na tlačítko "Uložit stav filtru".',
 

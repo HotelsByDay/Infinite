@@ -73,6 +73,7 @@ return array(
     'filter.reset_filter_state' => 'Reset',
     'filter.confirm_filterstate_remove_1' => 'Are you sure you want filter "',
     'filter.confirm_filterstate_remove_2' => '" to be removed ?',
+    'filter.no_items_selected' => 'No items were selected.',
     'general.user_saved_filters_panel' => 'Saved filters',
     'general.saved_filters_empty' => 'Nemáte uloženy žádné filtry, vyzkoušejte si tuto funkci tak, že vyhledáte záznamy podle Vašich kriterií a následně kliknete na tlačítko "Uložit stav filtru".',
 
