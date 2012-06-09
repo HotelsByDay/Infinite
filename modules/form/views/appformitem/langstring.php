@@ -17,10 +17,15 @@
     
     <?php $i=0; foreach ($translates as $locale => $value): $i++; ?>
             <div class="langitem">    
-                
-                <?php if ($i > 1) $final_label = $label.' '.$i; else $final_label = $label; ?>
-                
-                <label for="<?= $attr.'_'.$i ?>"><?= $final_label ?></label>
+
+                <?php if ($label != ''): ?>
+
+                    <?php if ($i > 1) $final_label = $label.' '.$i; else $final_label = $label; ?>
+
+                    <label for="<?= $attr.'_'.$i ?>"><?= $final_label ?></label>
+
+                <?php endif ?>
+
                 <input class="langinput" type="text" id="<?= $attr.'_'.$i ?>" name="<?= $attr ?>[translates][]" value="<?= $value ?>" <?= isset($min_length) ? "minlength=\"$min_length\"" : '' ?> <?= isset($max_length) ? "maxlength=\"$max_length\"" : '' ?> />
                 <?= form::select($attr.'[locales][]', $locales, $locale) ?>
             </div>
