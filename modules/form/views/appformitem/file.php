@@ -20,12 +20,14 @@
         </table>
         <div class="clearfix cb"></div>
     <?php else: ?>
-        <div class="list">
+        <ul class="list">
             <?php foreach ($files as $file): ?>
+            <li class="list_item">
             <?=(string)$file;?>
+            <li class="list_item">
             <?php endforeach ?>
            <div class="clearfix cb"></div>
-        </div>
+        </ul>
         <div class="clearfix cb"></div>
     <?php endif ?>
 

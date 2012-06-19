@@ -103,6 +103,7 @@ class AppFormItem_File extends AppFormItem_Base
         $js_file->multiple_files     = arr::get($this->config, 'multiple_files', TRUE);
         $js_file->params             = arr::get($this->config, 'params', array());
         $js_file->file_count         = arr::get($this->config, 'file_count', 0);
+        $js_file->sortable           = arr::get($this->config, 'sortable', NULL);
 
         //vlozim do stranky
         parent::addInitJS($js_file);

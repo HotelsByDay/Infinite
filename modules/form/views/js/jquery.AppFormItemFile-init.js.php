@@ -86,7 +86,7 @@ $(document).ready(function(){
     }
 
     $("#<?= $uid;?>").each(function(){
-    
+
         $(this).find('.list .item').each(function(){
             appFormItemPhoto_InitItem($(this));
         });
@@ -98,6 +98,26 @@ $(document).ready(function(){
 
         //odkaz na aktualni obal objektu
         var $item = $(this);
+
+    <?php if (isset($sortable) && ! empty($sortable)): ?>
+        //ma fungovat serazeni prvku pomoci drag&drop ?
+        //inicializace razeni prvku
+        $(this).find('.list').sortable({
+            placeholder: "ui-state-highlight",
+            handle: ".drag_handler",
+            update: function (event, ui) {
+                //tento atribut slouzi k ulozeni poradi daneho prvku
+                var i = 0;
+                $item.find('.list .list_item').each(function(){
+                    console.log('input[name$="[<?= $sortable;?>][]"]');
+                    $(this).find('input[name$="[<?= $sortable;?>][]"]').val(i++);
+                });
+                //uzivateli se zobrazi info zprava - porad prvku bude
+                //zachovano jen kdyz se ulozi formular
+                $.userInfoMessage("<?= __('form.AppFormItemAdvancedItemlist.order_update.info_message');?>");
+            }
+        }).disableSelection();
+        <?php endif ?>
 
         var uploader = new qq.FileUploader({
             // pass the dom node (ex. $(selector)[0] for jQuery users)
