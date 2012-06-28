@@ -125,7 +125,7 @@
                 if (options['sortable']) {
                     //inicializace razeni prvku
                     $(this).find('.list').sortable({
-                        placeholder: "ui-state-highlight",
+                        placeholder: "appformitemadvanceditemlist-placeholder",
                         handle: ".drag_handler",
                         update: function (event, ui) {
                             //tento atribut slouzi k ulozeni poradi daneho prvku
