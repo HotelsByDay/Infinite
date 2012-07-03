@@ -1103,6 +1103,9 @@ class Core_AppForm {
         $container_view->model = $this->_model;
         $container_view->loaded_model = $this->_loaded_model;
 
+        //custom css class
+        $container_view->css = arr::get($this->_config, 'css');
+
         //vysledek provedene akce do stranky zobrazim pouze v pripade ze
         //byl vysledek akce neuspesny - pokud byla akce uspesna, tak se
         //uzivateli zobrazi hlaska, ktera jej nebude rusit (melo by to byt
