@@ -292,16 +292,17 @@ abstract class Model_File extends ORM
         }
         
         //vracim nazev souboru na disku
-        return $this->getDirName().DIRECTORY_SEPARATOR.($resize_variant).$this->filename;
+        // 5.7. 2012 Dajc - DIRECTORY_SEPARATOR nahrazen znakem '/' ('\' dela problemy v URL pro jejiz generovani se tato metoda pouziva)
+        return $this->getDirName().'/'.($resize_variant).$this->filename;
     }
 
     /**
      * Metoda vraci relativni URL k danemu souboru.
      * @return <string>
      */
-    public function getURL()
+    public function getURL($resize_variant=NULL)
     {
-        return url::base() . $this->getFileDiskName();
+        return url::base() . $this->getFileDiskName($resize_variant);
     }
 
     /**

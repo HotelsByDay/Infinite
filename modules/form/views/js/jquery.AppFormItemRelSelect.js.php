@@ -193,7 +193,13 @@
                         // mazani hodnot dcerinych prvku jsem vsak nepresunul, abych nezpusobil nechtene vedlejsi efekty
                         if (typeof ui.item.fill !== 'undefined') {
                             for (k in ui.item.fill) {
-                                $('input[name="'+k+'"],textarea[name="'+k+'"],select[name="'+k+'"]').val(ui.item.fill[k]);
+                                // 5.7.2012 - Dajc
+                                // - pridan change trigger nad danym prvkem po zapsani hodnoty do nej - spoleha na to
+                                //   prvek ObjectImageSelect
+                                $('input[name="'+k+'"],textarea[name="'+k+'"],select[name="'+k+'"]').each(function(){
+                                    $(this).val(ui.item.fill[k]);
+                                    $(this).trigger('change');
+                                });
                             }
                         }
 
