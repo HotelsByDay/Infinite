@@ -54,15 +54,17 @@ class AppFormItem_ObjectImageSelector extends AppFormItem_Base
     public function getImages()
     {
         $resize_variant = arr::get($this->config, 'image_resize_variant');
+        $zoomed_resize_variant = arr::get($this->config, 'zoomed_resize_variant', null);
         // precteme obrazky pres relace modelu
         $images = $this->model->{$this->relobject}->{$this->relobject.'_image'}->find_all();
         // Projdeme obrazky a ulozime si potrebne info do pole
         $result = Array();
         foreach ($images as $image) {
             $result[] = Array(
-                'url'     => $image->getUrl($resize_variant),
-                'preview' => $image->preview(),
-                'id'      => $image->pk(),
+                'url'        => $image->getUrl($resize_variant),
+                'zoomed_url' => $image->getUrl($zoomed_resize_variant),
+                'preview'    => $image->preview(),
+                'id'         => $image->pk(),
             );
         }
         return $result;

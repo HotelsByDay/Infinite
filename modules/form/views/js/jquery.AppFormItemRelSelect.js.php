@@ -41,7 +41,10 @@
                 var $name = $('input[name$="[name]"]', $this);
                 // Stejne tak pro value hodnotu - id
                 var $value = $('input[name$="[value]"]', $this);
-                
+
+                // Seznam names prvku ktere byly automaticky vyplneny po zvoleni objektu
+                var filled_input_names = [];
+
                 // Ulozime si aktualni jmeno, abychom mohli detekovat jeho zmenu v inputu
                 $value.data('selected', $name.val());
 
@@ -77,6 +80,20 @@
                                 $('input[name="'+input_value+'"]').val('');
                             }
                         }
+
+                        // Pokud nektere prvky byly auto-filled tak je take smazu
+                        for (i in filled_input_names) {
+                            var name = filled_input_names[i];
+                            // 5.7.2012 - Dajc
+                            // - pridan change trigger nad danym prvkem po zapsani hodnoty do nej - spoleha na to
+                            //   prvek ObjectImageSelect
+                            $('input[name="'+name+'"],textarea[name="'+name+'"],select[name="'+name+'"]').each(function(){
+                                $(this).val('');
+                                $(this).trigger('change');
+                            });
+                        }
+                        filled_input_names = [];
+
                     }
                 });
                 
@@ -197,6 +214,8 @@
                                 // - pridan change trigger nad danym prvkem po zapsani hodnoty do nej - spoleha na to
                                 //   prvek ObjectImageSelect
                                 $('input[name="'+k+'"],textarea[name="'+k+'"],select[name="'+k+'"]').each(function(){
+                                    // Ulozime si info o tom ze prvek byl automaticky vyplnen
+                                    filled_input_names[filled_input_names.length] = k;
                                     $(this).val(ui.item.fill[k]);
                                     $(this).trigger('change');
                                 });

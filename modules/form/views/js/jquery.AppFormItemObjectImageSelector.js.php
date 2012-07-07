@@ -54,7 +54,10 @@
                 var initImagesPreviews = function()
                 {
                     // Inicializujeme click event
-                    $(".image_preview", $images_placeholder).on('click', function() {
+                    $(".image_preview a", $images_placeholder).fancyzoom();
+
+                        /*
+                    on('click', function() {
                         // Odebereme selected class aktualne zvolenemu obrazku
                         $(".image_preview", $images_placeholder).removeClass('selected');
                         // Ulozime id nove zvoleneho obrazku
@@ -62,7 +65,7 @@
                         // Pridame selected class aktulanimu divu - aby uzivatel videl ze je zvoleny
                         $(this).addClass('selected');
                     });
-
+                    */
                     // Pokud zadny preview neni pritomen, zobrazime hlasku
                     if ( ! $(".image_preview", $images_placeholder).length) {
                         $(".no_images", $this).show();
@@ -93,6 +96,8 @@
                         $preview.removeClass('image_preview_template').addClass('image_preview');
                         // Doplnime adresu obrazku
                         $('img', $preview).attr('src', image.url);
+                        // Doplnime adresu zoomed obrazku
+                        $('a', $preview).attr('href', image.zoomed_url);
                         // Jeho popisek
                         $('.preview', $preview).html(image.preview);
                         // Nastavime jeho id do atributu
