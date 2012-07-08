@@ -233,6 +233,9 @@ $(document).ready(function(){
                     //polozku
                     $item.trigger('change');
 
+                    // This is triggered only if file is added into files list
+                    $item.trigger('fileAdded');
+
                     return false;
                 }
             },

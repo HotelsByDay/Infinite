@@ -18,7 +18,10 @@ class AppFormItem_Base
     //kopie formularovych data - prve ma moznost prisoupit k datum jineho prvku
     protected $form_data = NULL;
 
-    //Reference na rodicovsky objekt AppForm.
+    /**
+     * @var AppForm
+     * Reference na rodicovsky objekt AppForm.
+     */
     protected $form = NULL;
 
     //nazev sablony pro GUI prvku

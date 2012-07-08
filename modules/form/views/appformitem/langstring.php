@@ -1,6 +1,6 @@
 <div class="appformitemlangstring appformitemcontainer <?= $css?> " id="<?= $uid;?>">
 
-    <?php if (!empty($error_message)): ?>
+    <?php if ( ! empty($error_message)): ?>
         <span class="validation_error" style="color:red;"><?= $error_message; ?></span>
     <?php endif ?>
 

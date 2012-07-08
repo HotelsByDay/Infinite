@@ -99,4 +99,7 @@ return array(
     'appformitempropertyaddress.longitude' => 'Longitude:',
     'appformitemadvertaddress.show_original_position' => 'Move back to the original position',
 
+    // APP FORM ITEM DATE INTERVAL
+    'appformitem.dateinterval.to_label' => ' - ',
+
 );

@@ -93,6 +93,12 @@ class Controller_File extends Controller_Authentication
             //prisly data na spravny formularovy prvek
             $view->attr = $attr;
 
+            // Sablona se muze pouzivat pro editaci vicejazycnych atributu - musime predat dalsi promenne
+            // - seznam aktivnich locales - zde predame prazdne
+            $view->active_locales = array();
+            // Seznam prekladu vsech vicejazycnych atributu daneho souboru - zatim zadne hodnoty nemame
+            $view->lang = array();
+
             //vlozim na vystup
             $out['file_preview'] = (string)$view;
         }

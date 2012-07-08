@@ -28,6 +28,60 @@ class AppFormItem_File extends AppFormItem_Base
     //hlasky pro validacni chybu 'requried'
     protected $config_group_name = NULL;
 
+    // Tells whether current item should handle more localization variants of some file attributes
+    // if locales list is present in config, then this attr is set to true
+    protected $is_languable = false;
+
+    // List of defined locales - loaded from config
+    protected $locales = array();
+
+    // List of locales keys which will have visible inputs in item template
+    // - this can be defined in config to force some languages to be implicitly shown
+    // - this array is populated with all locales which does have at least one value defined
+    // Strucutre: Array(
+    //              'en' => 'en',
+    //              'cz' => 'cz',
+    //            );
+    protected $active_locales = array();
+
+    // List of localized attributes
+    protected $lang_attrs = array();
+
+    // Name of lang fields view
+    protected $lang_view_name = '';
+
+
+    // Array with all localized attributes values in following form:
+    // Array(
+    //   's' => Array(
+    //      0 => Array(
+    //         'en' => Array(
+    //            'title' => 'some title',
+    //            'description' => 'description',
+    //            ...
+    //         ),
+    //         'cz' => Array(
+    //            'title' => 'nejaky titulek',
+    //         ),
+    //         ...
+    //      ),
+    //      ...
+    //   ),
+    //   'd' => array(),
+    // )
+    // Where "0" is index of the model in (save|delete)_rel_models list, "title" is localized field name (present in $lang_attrs)
+    // and 'en' and 'cz' are keys present in $locaes
+    // This is loaded from request data after form submit or from DB before render
+    protected $lang_values = array(
+        // Because image models are stored in array attrs we need to store their lang values separated too
+        's' => Array(), // values for file models in save_rel_models array
+        'd' => Array(), // values for file models in delete_rel_models array
+    );
+
+
+    // whether info messages should be logged
+    protected $debug = false;
+
     /**
      * Do stranky vlozim potrebne JS soubory.
      */
@@ -45,6 +99,27 @@ class AppFormItem_File extends AppFormItem_Base
         {
             $this->config['_required'] = TRUE;
             unset($this->config['required']);
+        }
+
+        // Check debug mode
+        $this->debug = AppConfig::instance()->debugMode();
+
+        // Find out if localization will be handled
+        $this->is_languable = isset($this->config['locales']);
+
+        // Load locales list and lang attrs list
+        if ($this->is_languable) {
+            $this->locales = (array)$this->config['locales'];
+            $this->lang_attrs = (array)arr::get($this->config, 'lang_attrs');
+            $this->active_locales = (array)arr::get($this->config, 'active_locales');
+            $this->lang_view_name = arr::get($this->config, 'lang_view_name');
+
+            // If no active locale was in config - activate first defined locale
+            if (empty($this->active_locales) and ! empty($this->locales)) {
+                reset($this->locales);
+                $first_locale = key($this->locales);
+                $this->active_locales[$first_locale] = $first_locale;
+            }
         }
 
         //naformatuje vstupni data z formulare do podoby se kterou se s nimi bude lepe pracovat
@@ -107,6 +182,19 @@ class AppFormItem_File extends AppFormItem_Base
 
         //vlozim do stranky
         parent::addInitJS($js_file);
+
+        // If item is languable
+        if ($this->is_languable) {
+            // Add FileLang plugin
+            Web::instance()->addCustomJSFile(View::factory('js/jquery.AppFormItemFileLang.js'));
+            // And init file
+            $lang_init_js = View::factory('js/jquery.AppFormItemFileLang-init.js');
+            $lang_init_js->config = Array(
+                'locales_count' => count($this->locales),
+            );
+            parent::addInitJs($lang_init_js);
+        }
+
     }
 
     /**
@@ -153,6 +241,11 @@ class AppFormItem_File extends AppFormItem_Base
 
         $output = $processed = array();
 
+        // Log info message
+        if ($this->debug) {
+            Kohana::$log->add(Kohana::INFO, json_encode($data));
+        }
+
         foreach (array('d', 'l', 'n') as $key)
         {
             foreach (arr::getifset($data, $key, array()) as $attr => $values)
@@ -162,16 +255,45 @@ class AppFormItem_File extends AppFormItem_Base
                     $processed[$key] = array();
                 }
 
-                foreach ($values as $i => $value)
-                {
-                    if ( ! isset($processed[$key][$i]))
-                    {
-                        $processed[$key][$i] = array();
+                // Lang fields have more complex strucutre so we need to process them differently
+                if ($attr == '_lang') {
+                    // Go through all defined locales
+                    foreach ($this->locales as $locale => $foo_label) {
+                        // Try to get values for given locale
+                        $locale_values = (array)arr::get($values, $locale);
+                        // Go through all defined lang attributes
+                        foreach ($this->lang_attrs as $field) {
+                            // try to get translations for current field and locale
+                            $field_values = (array)arr::get($locale_values, $field);
+                            // field values in given locale for all files
+                            foreach ($field_values as $i => $value) {
+                                if ( ! isset($processed[$key][$i])) {
+                                    $processed[$key][$i] = Array();
+                                }
+                                if ( ! isset($processed[$key][$i]['_lang'])) {
+                                    $processed[$key][$i]['_lang'] = Array();
+                                }
+                                if ( ! isset($processed[$key][$i]['_lang'][$locale])) {
+                                    $processed[$key][$i]['_lang'][$locale] = Array();
+                                }
+                                $processed[$key][$i]['_lang'][$locale][$field] = $value;
+                            }
+                        }
                     }
-                    $processed[$key][$i][$attr] = $value;
+                } else {
+                    // Original algorithm
+                    foreach ($values as $i => $value)
+                    {
+                        if ( ! isset($processed[$key][$i]))
+                        {
+                            $processed[$key][$i] = array();
+                        }
+                        $processed[$key][$i][$attr] = $value;
+                    }
                 }
             }
         }
+
 
         foreach ($processed as $key => $items)
         {
@@ -182,6 +304,12 @@ class AppFormItem_File extends AppFormItem_Base
                 $output[$key][$item_id] = $item;
             }
         }
+
+        // Log info message
+        if ($this->debug) {
+            Kohana::$log->add(Kohana::INFO, 'Processed data: '.json_encode($processed));
+        }
+
 
         return $output;
     }
@@ -239,6 +367,7 @@ class AppFormItem_File extends AppFormItem_Base
     public function clear()
     {
         $this->save_rel_models = $this->delete_rel_models = array();
+        $this->lang_values['s'] = $this->lang_values['d'] = array();
 
         return parent::clear();
     }
@@ -250,10 +379,73 @@ class AppFormItem_File extends AppFormItem_Base
     protected function loadCurrentSavedModels()
     {
         $models = array();
+        // We need to have primary key of models in array which auto-indexes corresponds to $models auto-indexes
+        $pks = array();
 
         foreach ($this->model->{$this->attr}->where('deleted', 'IS', DB::Expr('NULL'))->find_all() as $model)
         {
             $models[] = $model;
+            $pks[] = $model->pk();
+        }
+
+        // Load lang attrs values - if needed
+        if ($this->is_languable and ! empty($this->lang_attrs) and ! empty($pks) and ! empty($this->locales))
+        {
+            // Load all localized values from db with one query
+            $values = ORM::factory($this->model_name.'_lang')
+                // All given fields
+                ->where('field', 'IN', $this->lang_attrs)
+                // For all given locales
+                ->where('locale', 'IN', array_keys($this->locales))
+                // For all found file models
+                ->where($this->model_name.'id', 'IN', $pks)
+                ->find_all();
+
+            // Array used for translating primary key value into model index in $models array
+            $pk2index = array_flip($pks);
+
+            // Log info message
+            if ($this->debug) {
+                Kohana::$log->add(Kohana::INFO, 'pk2index: '.json_encode($pk2index));
+            }
+
+            // Walk through values and store them into local array property
+            foreach ($values as $lang) {
+                // Get current value's model index
+                $index = arr::get($pk2index, $lang->{$this->model_name.'id'}, false);
+
+
+                // Log info message
+                if ($this->debug) {
+                    Kohana::$log->add(Kohana::INFO, 'lang_model.property_imageid: '.$lang->{$this->model_name.'id'});
+                }
+
+                if ($index === false) {
+                    continue;
+                }
+                // Store value
+                // If current model has no record in local property - create empty record
+                if ( ! isset($this->lang_values['s'][$index])) {
+                    $this->lang_values['s'][$index] = Array();
+                }
+                // If current lang attribute has no record in local property - create empty record
+                if ( ! isset($this->lang_values['s'][$index][$lang->locale])) {
+                    $this->lang_values['s'][$index][$lang->locale] = Array();
+                }
+                // Finally store the value for given locale
+                $this->lang_values['s'][$index][$lang->locale][$lang->field] = $lang->content;
+
+                // If current locale is not active - activate it now (we have found value in this localization and we
+                // want items for this locale to be shown in the form)
+                if ( ! isset($this->active_locales[$lang->locale])) {
+                    $this->active_locales[$lang->locale] = $lang->locale;
+                }
+            }
+
+            // Log info message
+            if ($this->debug) {
+                Kohana::$log->add(Kohana::INFO, 'db loaded lang_values: '.json_encode($this->lang_values));
+            }
         }
 
         return $models;
@@ -297,6 +489,8 @@ class AppFormItem_File extends AppFormItem_Base
                 $this->applyModelValues($target_model, $file_data);
 
                 $this->save_rel_models[] = $target_model;
+                // And also store related (by auto-index) lang values
+                $this->lang_values['s'][] = (array)arr::get($file_data, '_lang');
             }
 
             //zpracuji nove soubory
@@ -324,6 +518,8 @@ class AppFormItem_File extends AppFormItem_Base
 
                 //pridam do pole pro soubory urcene k ulozeni
                 $this->save_rel_models[] = $target_model;
+                // And also store related (by auto-index) lang values
+                $this->lang_values['s'][] = (array)arr::get($file_data, '_lang');
             }
             
             //soubory na klici 'd' jsou urceny k odstraneni
@@ -342,8 +538,14 @@ class AppFormItem_File extends AppFormItem_Base
                     }
                     
                     $this->delete_rel_models[] = $model;
+                    // And also store related (by auto-index) lang values
+                    $file_data = (array)arr::get($this->form_data['d'], $model->pk());
+                    $this->lang_values['d'][] = (array)arr::get($file_data, '_lang');
                 }
             }
+
+            // Set active locales based on lang_values
+            $this->loadActiveLocales();
 
 //            //dale k ulozenym souborum pridam jeste ty, ktere jsou jiz v DB
 //            //a nejsou mezi temi, ktere jsou urceny ke smazani
@@ -351,6 +553,19 @@ class AppFormItem_File extends AppFormItem_Base
 //                                        ->where($target_model->primary_key(), 'NOTIN', array_keys((array)$this->form_data['d']))
 //                                        ->where($target_model->primary_key(), 'NOTIN', array_keys((array)$this->form_data['l']))
 //                                        ->find_all();
+        }
+    }
+
+
+    /**
+     * Walks through $this->lang_values and set all found locales as active
+     */
+    public function loadActiveLocales()
+    {
+        foreach (array('s', 'd') as $type) {
+            foreach ((array)$this->lang_values[$type] as $locales) {
+                $this->active_locales = array_merge($this->active_locales, array_combine(array_keys($locales), array_keys($locales)));
+            }
         }
     }
 
@@ -366,12 +581,58 @@ class AppFormItem_File extends AppFormItem_Base
             case AppForm::FORM_EVENT_AFTER_SAVE:
 
                 //modely k ulozeni ulozim
-                foreach ($this->save_rel_models as $rel_model)
+                foreach ($this->save_rel_models as $key => $rel_model)
                 {
                     //nastavim vazbu na model nad kterym stoji tento formular
                     $rel_model->{$this->model->object_name()} = $this->model;
 
                     $rel_model->save();
+
+                    // If item is languable then process lang fields
+                    if ($this->is_languable) {
+                        // Collect all lang field ids which should be kept
+                        $valid_lang_ids = Array();
+                        foreach ((array)arr::get($this->lang_values['s'], $key) as $locale => $fields) {
+                            foreach ((array)$fields as $field => $content) {
+                                // lang content
+                                $content = trim($content);
+                                // Load lang model
+                                $lang_model = ORM::factory($rel_model->object_name().'_lang')
+                                    ->where($rel_model->primary_key(), '=', $rel_model->pk())
+                                    ->where('locale', '=', $locale)
+                                    ->where('field', '=', $field)
+                                    ->find();
+
+                                // If content is empty
+                                if (empty($content)) {
+                                    // translation removal from Db will be processed after foreach
+                                    // Skip futher processing
+                                    continue;
+                                }
+
+                                // Save new translation
+                                $lang_model->content = $content;
+                                // For case we are creating new lang record
+                                $lang_model->{$rel_model->primary_key()} = $rel_model->pk();
+                                $lang_model->locale = $locale;
+                                $lang_model->field = $field;
+                                $lang_model->save();
+                                $valid_lang_ids[] = $lang_model->pk();
+                            }
+                        }
+                        // Remove all lang records for current file which should not be kept
+                        // (if some locale is changed in UI then original locale needn't be present in lang_values at all and we can not detect it)
+                        $del_model = ORM::factory($rel_model->object_name().'_lang')
+                            // Delete only lang records for current file
+                            ->where($rel_model->primary_key(), '=', $rel_model->pk());
+                        // If some records should be kept
+                        if ( ! empty($valid_lang_ids)) {
+                            // Exclude them in delete query
+                            $del_model->where($rel_model->object_name().'_langid', 'NOT IN', $valid_lang_ids);
+                        }
+                        $del_model->delete_all();
+                    }
+
                 }
 
                 //modely k odstraneni odstranim
@@ -444,6 +705,15 @@ class AppFormItem_File extends AppFormItem_Base
         if (($view_name = arr::get($this->config, 'as_table')))
         {
             $view->table_header = View::factory($view_name);
+            // pokud je definovan seznam jazyku pro popisky, predame ho do hlavicky tabulky
+            if ($this->is_languable) {
+                // Set locales list into table header - for select creation
+                $view->table_header->locales = $this->locales;
+                // Set list of active locales - those can be generated as visible
+                $view->table_header->active_locales = $this->active_locales;
+                // Add attr into table header
+                $view->table_header->attr = $this->form->itemAttr($this->attr);
+            }
         }
         else
         {
@@ -462,12 +732,17 @@ class AppFormItem_File extends AppFormItem_Base
                             : $this->config['file_view_name'];
 
         //vsecny ulozene relacni modely vlozim do stranky
-        foreach ($this->save_rel_models as $i => $advertphoto)
+        foreach ($this->save_rel_models as $i => $file_model)
         {
             $view_params = array(
-                'file' => $advertphoto,
+                'file' => $file_model,
                 'attr' => $this->form->itemAttr($this->attr),
-                'error_message' => arr::getifset((array)$error_messages, $i, '')
+                'error_message' => arr::getifset((array)$error_messages, $i, ''),
+                // Set lang attributes values for current file model
+                'lang' => (array)arr::get($this->lang_values['s'], $i),
+                // Set list of active locales - those can be generated as visible
+                'active_locales' => $this->active_locales,
+                'lang_view_name' => $this->lang_view_name,
             );
 
             $files[] = View::factory($item_view_name, $view_params);
@@ -480,7 +755,12 @@ class AppFormItem_File extends AppFormItem_Base
             $view_params = array(
                 'file' => $advertphoto,
                 'attr' => $this->form->itemAttr($this->attr),
-                'error_message' => arr::getifset((array)$error_messages, $i, '')
+                'error_message' => arr::getifset((array)$error_messages, $i, ''),
+                // Set lang attributes values for current file model
+                'lang' => (array)arr::get($this->lang_values['d'], $i),
+                // Set list of active locales - those can be generated as visible
+                'active_locales' => $this->active_locales,
+                'lang_view_name' => $this->lang_view_name,
             );
 
             $files[] = View::factory($item_view_name, $view_params);
@@ -491,6 +771,17 @@ class AppFormItem_File extends AppFormItem_Base
         $view->error_message = arr::get($error_messages, '_');
 
         $view->files = $files;
+
+        // Add lang view into global item view - if file is languable
+        if ($this->is_languable) {
+            // This will be hidden and jQuery plugin will clone this view for each file language
+            $view->lang_view = View::factory($this->lang_view_name)
+                ->set('attr', $this->form->itemAttr($this->attr))
+                // Following values will be replaced in JS
+                ->set('locale', '_LOCALE_')
+                ->set('type_key', '_TYPE_KEY_')
+                ->set('values', Array());
+        }
 
         return $view;
     }
