@@ -14,6 +14,8 @@
             margin: 5px;
             padding: 4px;
             height: 110px;
+        }
+        .image_preview img, .image_preview span.select {
             cursor: pointer;
         }
         .image_preview.selected {
@@ -46,9 +48,11 @@
         <?php foreach ($images as $image): ?>
             <div class="image_preview" image_id="<?= $image['id'] ?>">
                 <div>
-                    <a href="<?= $image['zoomed_url'] ?>"><img src="<?= $image['url'] ?>" /></a>
+                    <a href="<?= $image['zoomed_url'] ?>" class="zoom"><img src="<?= $image['url'] ?>" /></a>
                 </div>
                 <span class="preview"><?= $image['preview'] ?></span>
+                <br />
+                <span class="select"><a href="javascript: ;"><?= __('objectimageselector.select_image') ?></a></span>
             </div>
         <?php endforeach; ?>
     </div>
@@ -58,9 +62,11 @@
 
     <div class="image_preview_template" style="display: none;">
         <div>
-            <a href=""><img src="" /></a>
+            <a href="" class="zoom"><img src="" /></a>
         </div>
         <span class="preview"></span>
+        <br />
+        <span class="select"><a href="javascript: ;"><?= __('objectimageselector.select_image') ?></a></span>
     </div>
 
 
