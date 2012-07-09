@@ -425,12 +425,12 @@ class AppFormItem_Base
         $result = Array();
         // Projdeme vsechny klice ktere prvek obstarava
         foreach ((array)$this->getHandledErrorMessagesKeys() as $key) {
-            if (isset($error_messages[$key])) {
+            if (isset($error_messages[$key]) and is_string($error_messages[$key])) {
                 $result[] = $error_messages[$key];
             }
         }
         // Slepime hlasky do jednoho retezece - kazda bude na samostatnem radku
-        return implode('<br />', $result);
+        return implode('<br />', (array)$result);
     }
 
     /**
