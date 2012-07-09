@@ -1070,7 +1070,7 @@ class Core_AppForm {
     {
         //zakladni sablona formulare, ktera definuje tlacitka ulozit, odstranit apod.
         $container_view = View::factory($this->_config['container_view_name']);
-        
+
         //z konfigurace si nactu sablonu, ktera ma byt pouzita pro vykresleni formulare
         $form_view = View::factory($this->_config['view_name']);
 

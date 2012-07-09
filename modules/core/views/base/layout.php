@@ -59,8 +59,6 @@
     <?= View::factory('/error/unexpected_error_message');?>
 </div>
 
-
-
 <?=$js_files_include;?>
 </body>
 </html>

@@ -562,6 +562,10 @@ class AppFormItem_File extends AppFormItem_Base
      */
     public function loadActiveLocales()
     {
+        if ( ! $this->is_languable) {
+            return;
+        }
+
         foreach (array('s', 'd') as $type) {
             foreach ((array)$this->lang_values[$type] as $locales) {
                 $this->active_locales = array_merge($this->active_locales, array_combine(array_keys($locales), array_keys($locales)));

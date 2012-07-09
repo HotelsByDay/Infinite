@@ -320,7 +320,7 @@
         //Logika pro volani metod
         if ( methods[ method ] ) {
 
-            return methods[ method ].apply( this, arguments );
+            return methods[ method ].apply( $(this), arguments );
 
         } else if ( typeof method === 'object' || ! method ) {
 
