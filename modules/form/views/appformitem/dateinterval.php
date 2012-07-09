@@ -1,6 +1,7 @@
 
 <div  class="appformitemcontainer appformitemdateinterval <?= $css; ?>" name="<?= $attr ?>_item" id="<?= $uid; ?>">
-  <?php if (!empty($error_message)): ?>
+
+  <?php if ( ! empty($error_message)): ?>
     <span class="validation_error"><?= $error_message; ?></span>
   <?php endif ?>
 

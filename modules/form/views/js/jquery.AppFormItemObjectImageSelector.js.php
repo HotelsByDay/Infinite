@@ -53,8 +53,15 @@
                  */
                 var initImagesPreviews = function()
                 {
-                    // Inicializujeme click event
-                    $(".image_preview a.zoom", $images_placeholder).fancyzoom();
+                    // Inicializujeme click event - fancybox
+                    $(".image_preview a.zoom", $images_placeholder).fancybox({
+                        hideOnOverlayClick: true,
+                        hideOnContentClick: true,
+                        speedIn: 200,
+                        speedOut: 10,
+                        titleShow: true,
+                        titlePosition: 'inside'
+                    });
 
                     $(".select a").on('click', function() {
                         // Odebereme selected class aktualne zvolenemu obrazku
@@ -95,8 +102,8 @@
                         $preview.removeClass('image_preview_template').addClass('image_preview');
                         // Doplnime adresu obrazku
                         $('img', $preview).attr('src', image.url);
-                        // Doplnime adresu zoomed obrazku
-                        $('a.zoom', $preview).attr('href', image.zoomed_url);
+                        // Doplnime adresu zoomed obrazku a jeho title
+                        $('a.zoom', $preview).attr('href', image.zoomed_url).attr('title', image.preview);
                         // Jeho popisek
                         $('.preview', $preview).html(image.preview);
                         // Nastavime jeho id do atributu

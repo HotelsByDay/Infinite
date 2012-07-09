@@ -301,9 +301,13 @@ class Core_AppForm {
         //muze nastat kdyz se jeden zaznam edituje na vice nez jednom formulari.
         $foreign_error_messages = $this->_error_messages;
 
-        foreach ($this->_form_items as $attr => $_)
+        foreach ($this->_form_items as $attr => $item)
         {
-            unset($foreign_error_messages[$attr]);
+            // Zjistime jake validacni hlasky si prvek zpracuje a ty odebereme
+            $handled_keys = $item->getHandledErrorMessagesKeys();
+            foreach ($handled_keys as $key) {
+                unset($foreign_error_messages[$key]);
+            }
         }
 
         $this->_action_result_view->error_messages = $foreign_error_messages;

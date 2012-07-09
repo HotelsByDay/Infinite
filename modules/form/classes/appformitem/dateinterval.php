@@ -82,6 +82,16 @@ class AppFormItem_DateInterval extends AppFormItem_Base
     }
 
 
+    /**
+     * Rekneme formulari jake validacni hlasky si prvek zobrazi
+     * @return array|void
+     */
+    public function getHandledErrorMessagesKeys()
+    {
+        return Array($this->from_attr, $this->to_attr);
+    }
+
+
 
     public function Render($render_style = NULL, $error_messages = NULL)
     {

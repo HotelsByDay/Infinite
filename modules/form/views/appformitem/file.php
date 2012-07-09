@@ -1,4 +1,4 @@
-<div class="appformitemfile <?= $css ?>" name="<?= $attr;?>_item" id="<?= $uid;?>">
+<div class="appformitemfile<?= $css ?>" name="<?= $attr;?>_item" id="<?= $uid;?>">
 
     <span class="label"><?=  $label;?></span>
 

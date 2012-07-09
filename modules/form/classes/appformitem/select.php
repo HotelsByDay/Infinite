@@ -7,7 +7,7 @@
  *  !'label' => <string>  ... Label elementu ve formulari
  *  ?'free'  => <bool>    ... Prida polozku '-- nezvoleno --' jako prvni option
  * Parametry zdedene ze SelectDataSource
- *  ?'source_model'      => <string>  ...  Nazev modelu, ze ktereho se ciselnik sestavi. Klicem
+ *  ?'codebook'      => <string>  ...  Nazev modelu, ze ktereho se ciselnik sestavi. Klicem
  *                                        bude PK a hodnotou atribut "value".
  *  ?'source_codebookid' => <int>     ...  ID ciselniku - ten bude automaticky nacten z tabulky
  *                                        definovane v $this->source_codebook_table. Klicem opet
