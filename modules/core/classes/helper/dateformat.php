@@ -12,6 +12,9 @@ class Helper_DateFormat {
      */
     public static function getMysqlDate($user_date, $input_date_format=null)
     {
+        if (empty($user_date)) {
+            return NULL;
+        }
         // If format is not specified then load predefined date format
         if (is_null($input_date_format)) {
             $input_date_format = self::getDateFormat();

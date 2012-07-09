@@ -102,4 +102,7 @@ return array(
     // APP FORM ITEM DATE INTERVAL
     'appformitem.dateinterval.to_label' => ' - ',
 
+    // OBJECT IMAGE SELECTOR
+    'objectimageselector.select_image' => 'Select image',
+
 );

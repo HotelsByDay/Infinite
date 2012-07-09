@@ -337,13 +337,13 @@ class AppFormItem_Base
      */
     public function Render($render_style = NULL, $error_messages = NULL)
     {
-        //nactu pozadovanou sablonu
+        // nactu pozadovanou sablonu
         $view = View::factory($this->getViewName($render_style));
 
-        //doplnim zakladni parametry pro sablonu
+        // doplnim zakladni parametry pro sablonu
         $view->attr  = $this->form->itemAttr($this->attr);
 
-        //label nemusi byt vzdy definovany
+        // label nemusi byt vzdy definovany
         $label = arr::get($this->config, 'label', NULL);
         
         // Pokud label nebyl definovan v configu - vezmeme ho z jazykoveho souboru
@@ -352,11 +352,11 @@ class AppFormItem_Base
             $label = FormItem::getLabel($this->model->table_name(), $this->attr);
         }
 
-        //pokud je prvek required, tak se automaticky prida znacka k labelu
+        // pokud je prvek required, tak se automaticky prida znacka k labelu
         if (((arr::get($this->config, 'required')
-                //nektere prvky pouzivaji spcialne tento atribut aby se vyhly standardnimu zpracovani
-                //a mohli udelat svoje custom (napr. AppFormItemFile)
-                //@TODO: Tohle by asi slo vyresit lepe, ale neni na to ted cas (31.1.2012)
+                // nektere prvky pouzivaji spcialne tento atribut aby se vyhly standardnimu zpracovani
+                // a mohli udelat svoje custom (napr. AppFormItemFile)
+                // @TODO: Tohle by asi slo vyresit lepe, ale neni na to ted cas (31.1.2012)
                 || arr::get($this->config, '_required'))
                 || $this->model->IsRequired($this->attr)) && ! $this->form->is_readonly())
         {
@@ -365,43 +365,72 @@ class AppFormItem_Base
 
         $view->label = $label;
 
-        //precte aktualni hodnotu pro tento prvek z ORM modelu
+        // precte aktualni hodnotu pro tento prvek z ORM modelu
         $view->value = $this->getValue();
 
-        //pokud ma mit prvek specialni css classu, tak ji predam sablone
+        // pokud ma mit prvek specialni css classu, tak ji predam sablone
         $view->css = arr::get($this->config, 'css', '');
 
-        //do sablony bude vlozena textova napoveda k prvku, ktera muze byt
-        //definovana v konfiguracnim souboru
+        // do sablony bude vlozena textova napoveda k prvku, ktera muze byt
+        // definovana v konfiguracnim souboru
         $view->hint = arr::get($this->config, 'hint');
 
-        //do sablony se vlozi rozsirena napoveda, ktera je zobrazena jako
-        //tooltip
+        // do sablony se vlozi rozsirena napoveda, ktera je zobrazena jako
+        // tooltip
         if (($tooltip = arr::get($this->config, 'tooltip')) != NULL)
         {
             $view->tooltip = View::factory('widget/tooltip', array(
                 'tooltip' => $tooltip,
-                //pozice tooltipu k prvku se nacita z konfigurace, pokud neni explicitne
-                //definovana, tak se pouziji defaultni hodnoty
+                // pozice tooltipu k prvku se nacita z konfigurace, pokud neni explicitne
+                // definovana, tak se pouziji defaultni hodnoty
                 'tooltip_position_my' => arr::get($this->config, 'tooltip_position_my', 'left center'),
                 'tooltip_position_at' => arr::get($this->config, 'tooltip_position_at', 'right center')
             ));
         }
         else
         {
-            //princip Nullable object - v sablone neni potreba kontrola na tuto promennou
+            // princip Nullable object - v sablone neni potreba kontrola na tuto promennou
             $view->tooltip = View::factory('null');
         }
 
-        //vlozim ID prvku - s tim pracuje JS (pri inicializaci se prvek selectuje
-        //pres #uid)
+        // vlozim ID prvku - s tim pracuje JS (pri inicializaci se prvek selectuje
+        // pres #uid)
         $view->uid = $this->uid;
 
-        //predam text validacni chyby
-        $view->error_message = arr::get($error_messages, $this->attr, NULL);
+        // predam text validacni chyby
+        $view->error_message = $this->getErrorMessage($error_messages);
 
         //vracim inicializovanou sablonu
         return $view;
+    }
+
+    /**
+     * Vrati klice vsech validacnich error zprav, ktere dany prvek sam zobrazuje
+     * (aby form vedel ze je nemuzi zobrazovat samostatne na zacatku formulare)
+     * @return array
+     */
+    public function getHandledErrorMessagesKeys()
+    {
+        // Implicitne prvek obstarava pouze hlasku na klici odpovidajici nazvu jeho atributu
+        return array($this->attr);
+    }
+
+    /**
+     * Vrati validation error message ktera bude nasledne predana do sablony
+     * @param $error_messages - vsechny error messages aktualniho formulare
+     * @return mixed
+     */
+    protected function getErrorMessage($error_messages)
+    {
+        $result = Array();
+        // Projdeme vsechny klice ktere prvek obstarava
+        foreach ((array)$this->getHandledErrorMessagesKeys() as $key) {
+            if (isset($error_messages[$key])) {
+                $result[] = $error_messages[$key];
+            }
+        }
+        // Slepime hlasky do jednoho retezece - kazda bude na samostatnem radku
+        return implode('<br />', $result);
     }
 
     /**

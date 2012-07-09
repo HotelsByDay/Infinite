@@ -56,9 +56,10 @@
                         $(this).parents('th:first').removeClass('warning');
                     });
                     // Projdeme vsechny selecty a pokud je jejich hodnota v prvku vicekrat, tak je zvyraznime
-                    $selects.each(function(){
+                    $selects.each(function() {
                         // Najdeme vsechny option s aktualnim jazykem, ktere jsou selected
                         var $options = $("table thead select option[value='"+$(this).val()+"']:selected", $this);
+                    //    alert('options length for value '+$(this).val()+' is '.$options.length);
                         // Pokud je jich vice nez 1, nastavime warning class
                         if ($options.length > 1) {
                             $options.each(function(){
@@ -68,8 +69,33 @@
                         }
                     });
 
-                    // Nepotrebujeme pridavat zadne inputy, ale potrebujeme je prejmenovat
+                    // Nepotrebujeme pridavat zadne inputy, ale potrebujeme je mozna prejmenovat
                     fillCellsWithInputs();
+                }
+
+
+                /**
+                 * Odebere z tabulky jazyk ktery je vybran v selectu v zadane bunce
+                 * @param $th
+                 */
+                var removeLang = function($th)
+                {
+                    // Zjistime na jake pozici je bunka v radku
+                    var position = $th.parent().children().index($th);
+
+                    // Projdeme vsechny radky a odstranime bunku na dane pozici
+                    $("table.list tr", $this).each(function(){
+                        $(this).children().eq(position).remove();
+                    });
+
+                    // Zavolame langChanged - aby se odstranila pripadna warning class - pokud se odebiral duplicitni jazyk
+                    langChanged();
+
+                    // Zobrazime odkaz na pridani jazyka
+                    $(".langadd a", $this).show()
+                        // Zobrazime span s hlaskou ze vsechny jazyky jsou pridane
+                        .parent().find('span').hide();
+
                 }
 
 
@@ -139,28 +165,33 @@
 
 
                     });
-
-
                 }
 
-                // Inicializace selectu
+                // Inicializace selectu pro vyber jazyka
                 $("select[name*='[locales]']", $this).on('change', langChanged);
+
+                // inicializace odkazu pro zmenu jazyka
+                $("thead th .cancel", $this).on('click', function() {
+                    removeLang($(this).parents('th:first'));
+                });
 
                 // Change udalost je vyvolana po vlozeni novehou souboru do tabulky
                 $this.on('fileAdded', fillCellsWithInputs);
+
 
                 // Inicializace odkazu pro pridani prekladu
                 $(".langadd a", $this).on('click', function() {
                     // Zjistime, kolik prekladu uz je definovanych
                     var translates_count = $("select[name*='[locales]']", $this).length;
 
-                //    alert('translates count: '+translates_count+ ' locales_count: '+params.locales_count);
                     // Pokud jsou vytvoreny inputy pro vsechny preklady, nedovolime pridat dalsi
                     if (translates_count >= params.locales_count) {
                         return;
                     }
-                    // Naklonujeme PRVNI select pro vyberem jazyka
-                    var $select = $("select[name*='[locales]']:first", $this).clone();
+
+                    // Naklonujeme PRVNI bunku se selectem pro vyber jazyka
+                    var $th = $("select[name*='[locales]']:first", $this).parents('th').clone();
+                    var $select = $th.find('select');
                     // V selectu zvolime prvni option, ktera jeste neni zvolena
                     $select.find('option').each(function(){
                         // Podivame se zda je option zvolena v nejakem selectu
@@ -175,13 +206,26 @@
                         }
                     });
 
-                    // Vytvorime novy th
-                    var $th = $("<th></th>");
-                    // Vlozime do nej inicializovany select
-                    $th.html($select);
+                    // Pridame onChange handler na select
+                    $select.on('change', langChanged);
+
+                    // Pridame on click handler na tlacitko pro vyber jazyka
+                    var $cancel = $('<span></span>').addClass('cancel').on('click', function() {
+                        removeLang($(this).parents('th:first'));
+                    });
+
+                    $th.append($cancel);
+
                     // Vlozime th do hlavicky tabulky (pred posledni sloupec - v nem je jen odkaz "add another language"
                     $("table thead th:last").before($th);
 
+                    // Pokud je zobrazeno tolik prekladu kolik je jazyku
+                    if ($("select[name*='[locales]']", $this).length >= params.locales_count) {
+                        // Skryjeme odkaz na pridani jazyka
+                        $(".langadd a", $this).hide()
+                            // Zobrazime span s hlaskou ze vsechny jazyky jsou pridane
+                            .parent().find('span').show();
+                    }
 
                     // tato funkce projde radky tabulky a naclonuje do patricnych sloupcu prvni bunku pro jazykove hodnoty
                     fillCellsWithInputs();
@@ -191,9 +235,9 @@
 
                 // Pokud je na zacatku ve formulari tolik poli, kolik je jazyku
                 if ($("select[name*='[locales]']", $this).length >= params.locales_count) {
-                    // Skryjeme odkaz
+                    // Skryjeme odkaz na pridani jazyka
                     $(".langadd a", $this).hide()
-                        // Zobrazime span
+                        // Zobrazime span s hlaskou ze vsechny jazyky jsou pridane
                         .parent().find('span').show();
                 }
 

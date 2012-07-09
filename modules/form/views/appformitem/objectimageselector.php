@@ -48,7 +48,7 @@
         <?php foreach ($images as $image): ?>
             <div class="image_preview" image_id="<?= $image['id'] ?>">
                 <div>
-                    <a href="<?= $image['zoomed_url'] ?>" class="zoom"><img src="<?= $image['url'] ?>" /></a>
+                    <a href="<?= $image['zoomed_url'] ?>" class="zoom" title="<?= $image['preview']; ?>"><img src="<?= $image['url'] ?>" /></a>
                 </div>
                 <span class="preview"><?= $image['preview'] ?></span>
                 <br />
@@ -62,7 +62,7 @@
 
     <div class="image_preview_template" style="display: none;">
         <div>
-            <a href="" class="zoom"><img src="" /></a>
+            <a href="" class="zoom" title=""><img src="" /></a>
         </div>
         <span class="preview"></span>
         <br />
