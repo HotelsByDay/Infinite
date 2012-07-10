@@ -220,8 +220,11 @@ class AppFormItem_AdvancedItemList extends AppFormItem_Base
             //nejdrive zkontroluju zda na formulari nedoslo ke smazani zaznamu
             $model = $this->itemlist_model[$id];
 
+            //name of a custom item container view
+            $view_name = arr::get($this->config, 'item_container_view_name', 'item_container');
+
             //pridam do seznamu sablon, ktere reprezentuji relacni polozky
-            $rel_items[] = View::factory('appformitem/advanceditemlist/item_container',array(
+            $rel_items[] = View::factory('appformitem/advanceditemlist/'.$view_name, array(
                 'form'  => $item_form,
                 'model' => $model,
                 'attr'  => $this->attr
