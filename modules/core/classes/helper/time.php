@@ -13,7 +13,7 @@ class Helper_Time
      * bude preveden do casove zony uzivatele.
      * @return <string>
      */
-    static public function toUserTZ($timezone, $format, $datetime = ULL)
+    static public function toUserTZ($timezone, $format, $datetime = NULL)
     {
         //pokud neni datum a cas specifikovan tak se doplni aktualni
         //(v systemove casove zony)

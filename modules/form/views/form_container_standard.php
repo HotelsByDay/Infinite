@@ -6,7 +6,7 @@
 
 <? endif ?>
 
-<form method="POST" action="<?= $form_action_link;?>" <?= isset($banner) ? 'style="display:none;"' : ''; ?>>
+<form method="POST" action="<?= $form_action_link;?>" <?= isset($banner) ? 'style="display:none;"' : ''; ?> css="<?= $css;?>">
 
     <?= $form_view;?>
 

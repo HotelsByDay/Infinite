@@ -1074,7 +1074,7 @@ class Core_AppForm {
     {
         //zakladni sablona formulare, ktera definuje tlacitka ulozit, odstranit apod.
         $container_view = View::factory($this->_config['container_view_name']);
-        
+
         //z konfigurace si nactu sablonu, ktera ma byt pouzita pro vykresleni formulare
         $form_view = View::factory($this->_config['view_name']);
 
@@ -1106,6 +1106,9 @@ class Core_AppForm {
         //reference model zaznamu, se kterym se na formulari pracuje
         $container_view->model = $this->_model;
         $container_view->loaded_model = $this->_loaded_model;
+
+        //custom css class
+        $container_view->css = arr::get($this->_config, 'css');
 
         //vysledek provedene akce do stranky zobrazim pouze v pripade ze
         //byl vysledek akce neuspesny - pokud byla akce uspesna, tak se

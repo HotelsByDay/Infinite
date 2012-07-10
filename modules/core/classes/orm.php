@@ -1675,6 +1675,7 @@ class ORM extends Kohana_ORM {
             {
                 $this->{$attr} = $source->{$attr};
             }
+
         }
 
         //v poli $overwrite jsou nove hodnoty pro specificke atributy, ktere

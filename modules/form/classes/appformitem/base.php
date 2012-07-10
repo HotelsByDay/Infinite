@@ -400,6 +400,11 @@ class AppFormItem_Base
         // predam text validacni chyby
         $view->error_message = $this->getErrorMessage($error_messages);
 
+        //is the field supposed to be editable (the different between RENDER_STYLE_READONLY is
+        //that 'not editable' item is sending its value to the server, while RENDER_STYLE_READONLY is only displaying
+        //the value and its not being submitted back to the server
+        $view->editable = arr::get($this->config, 'editable', TRUE);
+
         //vracim inicializovanou sablonu
         return $view;
     }

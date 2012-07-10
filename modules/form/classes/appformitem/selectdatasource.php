@@ -61,6 +61,19 @@ class AppFormItem_SelectDataSource extends AppFormItem_Base
                 }
                 return Codebook::listing($source_model, NULL, $filter);
             }
+            else if (($source_model = arr::get($this->config, 'relobject', FALSE)))
+            {
+                $model_list = ORM::factory($source_model)->find_all();
+
+                $data = array();
+
+                foreach ($model_list as $model)
+                {
+                    $data[$model->pk()] = $model->preview();
+                }
+
+                return $data;
+            }
         }
 
         // Jinak vratime prazdne pole - hodnoty si pravdepodobne doplni odvozena trida

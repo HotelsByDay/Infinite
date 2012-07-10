@@ -16,7 +16,7 @@
 <div class="langitems">
     
     <?php $i=0; foreach ($translates as $locale => $value): $i++; ?>
-            <div class="langitem">    
+            <div class="langitem group">
 
                 <?php if ($label != ''): ?>
 

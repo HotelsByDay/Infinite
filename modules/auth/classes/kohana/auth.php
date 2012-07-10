@@ -81,6 +81,7 @@ abstract class Kohana_Auth {
 	 * Returns FALSE if no user is currently logged in.
 	 *
 	 * @return  mixed
+     *
 	 */
 	public function get_user()
 	{

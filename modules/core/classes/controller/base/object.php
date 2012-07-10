@@ -901,6 +901,8 @@ abstract class Controller_Base_Object extends Controller_Layout {
      * @param <int> $item_id ID zaznamu, ktery ma byt editovan. Pokud je NULL
      * tak je vygenerovan prazdny formular pro vlozeni noveho zaznamu.
      */
+
+
     public function action_edit($item_id)
     {
         //vyvolani globalni udalosti 'system.action_edit_pre'
@@ -944,8 +946,8 @@ abstract class Controller_Base_Object extends Controller_Layout {
 
         //metoda vraci nazev tridy, ktera implementuje praci s formulari
         //jedna se bud o bazovou tridu AppForm nebo nejakou z ni dedici
-        $form_class_name = $this->_action_edit_form_class_name();
-        
+        $form_class_name = arr::get($form_config, 'class', $this->_action_edit_form_class_name());
+
         //vytvorim si novy objekt formulare
         $form = new $form_class_name($this->model, $form_config, $this->request_params, FALSE);
 
