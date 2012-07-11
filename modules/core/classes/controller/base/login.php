@@ -47,6 +47,7 @@ class Controller_Base_Login extends Controller_Template {
             $remember = (bool)arr::getifset($_POST, 'remember', FALSE);
 
             if (Auth::instance()->login($login, $password, $remember)) {
+
                 //prihlaseni uspesne
                 //pokud je v session ulozena stranka na kterou se uzivatel snazil
                 //dostat pres prihlasenim tak jej na tuto stranku presmeruji
@@ -75,7 +76,7 @@ class Controller_Base_Login extends Controller_Template {
      */
     protected function sendUserAlong()
     {
-        $this->request->redirect(appurl::homepage());
+        return $this->request->redirect(appurl::homepage());
     }
 
 }

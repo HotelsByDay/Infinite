@@ -409,12 +409,12 @@ abstract class Filter_Base
             }
         }
 
-        //inicializacnimu skriptu pro jQuery-objectFilter predam defaultni
-        //systemove parametry vyhledavani
+        // inicializacnimu skriptu pro jQuery-objectFilter predam defaultni
+        // systemove parametry vyhledavani
         $this->jquery_objectFilter_init_params['defaults'] = $default_system_params;
         
-        //pokud je povolena funkcnost pro ukladani filtru, tak nactu ulozene filtry
-        //uzivatele - muze mit i nula ulozenych filtru
+        // pokud je povolena funkcnost pro ukladani filtru, tak nactu ulozene filtry
+        // uzivatele - muze mit i nula ulozenych filtru
         if ($this->user_filters_enabled)
         {
 
