@@ -73,7 +73,6 @@ class AppFormItem_DateInterval extends AppFormItem_Base
      */
     public function setValue($value)
     {
-    //    Kohana::$log->add(Kohana::INFO, 'DateInterval::setvalue called with: '.json_encode($value));
         if (isset($value['from'], $value['to']))
         {
             $this->model->{$this->from_attr} = DateFormat::getMysqlDate($value['from']);

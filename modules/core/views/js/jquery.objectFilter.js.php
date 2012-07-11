@@ -828,7 +828,7 @@
             var jqXHR = $.ajax(request_url, {
                                         type: 'POST',
                                         data: params,
-                                        success: function( response_data ){
+                                        success: function( response_data ) {
 
                                             //pri uspesnem nacteni dat dojde k vymazani
                                             //obsahu ".result_placeholder" - ktery obsahuje
@@ -965,7 +965,7 @@
             });
 
             //vyber velikosti stranky
-            $data_container.find('.page_size_select').change(function(){
+            $data_container.find('.page_size_select').change(function() {
                 //pozadovana page size hodnota prvku
                 var page_size = $(this).val();
                 //do ulozenych parametru vyhledavani ulozim novy page_size
