@@ -12,6 +12,8 @@ class Helper_Time
      * @param <string> $datetime Vstupni cas v casove zone systemu, ktery
      * bude preveden do casove zony uzivatele.
      * @return <string>
+     * @todo JDA 11.7. - I think it would be better to use datetime as first parameter and make format optional with default 'Y-m-d H:i:s'
+     * @todo because it does not really make sense to make input parameter for TRANSFORMING function optional
      */
     static public function toUserTZ($timezone, $format, $datetime = NULL)
     {
@@ -54,6 +56,8 @@ class Helper_Time
      * @param <string> $datetime Vstupni cas v casove zone systemu, ktery
      * bude preveden do casove zony uzivatele.
      * @return <string>
+     * @todo JDA 11.7. - I think it would be better to use datetime as first parameter and make format optional with default 'Y-m-d H:i:s'
+     * @todo because it does not really make sense to make input parameter for TRANSFORMING function optional
      */
     static public function toSystemTZ($timezone, $format, $datetime = NULL)
     {
