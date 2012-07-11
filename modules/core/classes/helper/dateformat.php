@@ -38,7 +38,7 @@ class Helper_DateFormat {
         // Create date from string in given format
         $date = $date->createFromFormat($input_date_format, $user_date);
         // Return string in DB format
-        $date->format('Y-m-d');
+        return $date->format('Y-m-d');
     }
 
     /**
