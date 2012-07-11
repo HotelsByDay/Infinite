@@ -2,7 +2,7 @@
     <?php
         if ( ! isset($tooltip_position_my))
         {
-            $tooltip_position_my = 'left center';
+            $tooltip_position_my = 'left top';
         }
 
         if ( ! isset($tooltip_position_at))
