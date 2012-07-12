@@ -62,7 +62,7 @@ $.widget("ui._dialog", $.ui.dialog, {
                 type:'POST',
                 url:url,
                 data: form_data,
-                success: function(response){
+                success: function(response) {
 
                     //pokud ze serveru prisel novy obsah, tak jej vlozim do formulare
                     if (typeof response['content'] !== 'undefined')
@@ -76,18 +76,23 @@ $.widget("ui._dialog", $.ui.dialog, {
                         //pri uspechu zobrazim pouze informacni hlaseni, ktere nevyzaduje reakci uzivatele
                         if (response['action_status'] == '<?= AppForm::ACTION_RESULT_SUCCESS;?>') {
 
-                                //zobrazi zpravu pro uzivatele
+                                // Result callbacku
+                                var callbackResult;
+
+                                // zobrazi zpravu pro uzivatele
                                 $.userInfoMessage(response['action_result']);
 
-                                //vyvolam callback pokud je definovan - predam mu komplet
-                                //data, ktera prisla od serveru
+                                // vyvolam callback pokud je definovan - predam mu komplet
+                                // data, ktera prisla od serveru
                                 if (typeof action_result_callback !== 'undefined')
                                 {
-                                    action_result_callback(response);
+                                    callbackResult = action_result_callback(response);
                                 }
 
-                                //dialogove okno zavru
-                                _this.close();
+                                // dialogove okno zavru - pokud callback jeho zavreni nezakazal
+                                if (typeof callbackResult.autoClose === 'undefined' || callbackResult.autoClose != false) {
+                                    _this.close();
+                                }
 
                                 
                         } else {
