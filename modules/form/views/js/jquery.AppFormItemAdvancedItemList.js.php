@@ -60,7 +60,7 @@
                             if (typeof response['content'] !== 'undefined')
                             {
                                 //vytvori se novy obalovaci prvek pro novy formular
-                                var $item_container = $( document.createElement('div') ).addClass('item');
+                                var $item_container = $( document.createElement('li') ).addClass('item new');
 
                                 //pridam na konec seznam existujicich prvku itemlistu
                                 $_this.find('.list:first').prepend($item_container);
@@ -91,6 +91,9 @@
                                 });
 
                                 $item_container.html(response['content']);
+
+                                //add inside div with a 'clear' class
+                                $item_container.append( $( document.createElement('div') ).addClass('clearer'));
                             }
 
                             //skryju progress indicator a zobrazim tlacitko pro

@@ -65,8 +65,35 @@ class Validate extends Kohana_Validate {
         //ze zacatku odstranim znak '+'
         $number = preg_replace('/^\+/', '', $number);
 
-	// Check if the number is within range
-	return preg_match('/^[0-9]+$/', $number) && in_array(strlen($number), $lengths);
+	    // Check if the number is within range
+	    return preg_match('/^[0-9]+$/', $number) && in_array(strlen($number), $lengths);
+    }
+
+    /**
+     * This validation rule is less strict then other validation rules for phone numbers.
+     *
+     * It is accepting both Europian and USA number formats.
+     *
+     * It only removes whitespaces and '-' characters and accepts length of the resulting
+     * number to be 7,9,10,11,12.
+     *
+     */
+    public static function phone_global($number, $lengths = NULL)
+    {
+        if ( ! is_array($lengths))
+        {
+            //alowed lengths of numbers
+            $lengths = array(7, 9, 10, 11, 12);
+        }
+
+        //remove white spaces
+        $number = preg_replace('/\s/', '', $number);
+
+        //remove any dashes
+        $number = preg_replace('/\-/', '', $number);
+
+        // Check if the number length is within range
+        return in_array(strlen($number), $lengths);
     }
 
 	/**
