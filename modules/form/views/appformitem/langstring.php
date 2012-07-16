@@ -26,8 +26,12 @@
 
                 <?php endif ?>
 
-                <input class="langinput" type="text" id="<?= $attr.'_'.$i ?>" name="<?= $attr ?>[translates][]" value="<?= $value ?>" <?= isset($min_length) ? "minlength=\"$min_length\"" : '' ?> <?= isset($max_length) ? "maxlength=\"$max_length\"" : '' ?> />
-                <?= form::select($attr.'[locales][]', $locales, $locale) ?>
+                <input class="langinput" type="text" id="<?= $attr.'_'.$i ?>" name="<?= $attr ?>[translates][]" placeholder="<?= arr::get($placeholders, $locale, '');?>" value="<?= $value ?>" <?= isset($min_length) ? "minlength=\"$min_length\"" : '' ?> <?= isset($max_length) ? "maxlength=\"$max_length\"" : '' ?> />
+                <select name="<?= $attr;?>[locales][]">
+                    <?php foreach ($locales as $locale_key => $locale_name): ?>
+                    <option <?= $locale_key == $locale ? 'selected="selected"' : '';?> value="<?= $locale_key;?>" placeholder="<?= arr::get($placeholders, $locale_key, '');?>"><?= $locale_name;?></option>
+                    <?php endforeach ?>
+                </select>
             </div>
     <?php endforeach; ?>
     

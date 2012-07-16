@@ -154,7 +154,6 @@ class AppFormItem_LangString extends AppFormItem_String
      */
     public function check() 
     {
-        
         return parent::check();
     }
     
