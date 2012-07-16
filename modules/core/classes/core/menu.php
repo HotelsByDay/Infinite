@@ -474,6 +474,13 @@ class Core_Menu {
         // Vypada divne kdyz aktivni zalozka ma submenu
         else
         {
+
+            //pokud ma menu polozka submenu, tak dostane speicalni css tridu
+            if ( ! empty($submenu))
+            {
+                $classes[] = 'has_submenu';
+            }
+
             // At je submenu prazdne nebo ne, muzeme ho pridat za odkaz
             $wrapped_submenu = $this->wrapSubmenu($submenu);
 
