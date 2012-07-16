@@ -10,7 +10,7 @@
                     <label for="<?= $attr; ?>-password"><?= $label;?></label>
                 </td>
                 <td>
-                    <input id="<?= $attr; ?>-password" autocomplete="off" type="password" name="<?= $attr; ?>[password]"/>
+                    <input <?php if (isset($placeholder) and ! empty($placeholder)) echo "placeholder=\"$placeholder\""; ?> id="<?= $attr; ?>-password" autocomplete="off"  type="password" name="<?= $attr; ?>[password]"/>
                 </td>
             </tr>
             <tr>
@@ -18,7 +18,7 @@
                     <label for="<?= $attr; ?>-password_confirm"><?= $label_confirm;?></label>
                 </td>
                 <td>
-                    <input id="<?= $attr; ?>-password_confirm" autocomplete="off" type="password" name="<?= $attr; ?>[password_confirm]"/>
+                    <input <?php if (isset($placeholder_confirm) and ! empty($placeholder_confirm)) echo "placeholder=\"$placeholder_confirm\""; ?> id="<?= $attr; ?>-password_confirm" autocomplete="off" type="password" name="<?= $attr; ?>[password_confirm]"/>
                 </td>
             </tr>
             <tr>

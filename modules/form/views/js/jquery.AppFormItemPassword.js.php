@@ -1,6 +1,7 @@
 
+// <script>
 
-(function( $ ){
+(function( $ ) {
 
     /**
      * Nazev pluginu. Pouziva se jako namespace napriklad v metode data().
@@ -26,7 +27,7 @@
                 $.extend( settings, options );
             }
 
-            return this.each(function(){
+            return this.each(function() {
 
                 var $this = $(this);
 
@@ -91,6 +92,61 @@
                 //obsluha pri zmene hodnoty
                 $password.keyup(password_change_handler);
                 $password_confirm.keyup(password_change_handler);
+
+                // If placeholder option is not supported by the browser
+                var test = document.createElement('input');
+                if ( ! ('placeholder' in test)) {
+
+                    // If current item input has a placeholder attr
+                    if (typeof $password.attr('placeholder') != 'undefined') {
+                            // Duplicate password input
+                            var $password2 = $password.clone();
+                            $password2.attr('name', '');
+                            $password2.attr('type', 'text');
+                            $password2.addClass('placeholder');
+
+                            $password.after($password2);
+                            $password.hide();
+                            // Use this explicit placeholder functionality
+                            $password2.on('focus', function() {
+                                    $password2.hide();
+                                    $password.show();
+                                    $password.focus();
+                            });
+                            $password.on('blur', function() {
+                                    if ($password.val() == '') {
+                                        $password.hide();
+                                        $password2.show();
+                                    }
+                            });
+                        }
+
+
+                        // If current confirm password input has placeholder defined
+                        if (typeof $password_confirm.attr('placeholder') != 'undefined') {
+                            // Duplicate password confirm input
+                            var $password_confirm2 = $password_confirm.clone();
+                            $password_confirm2.attr('name', '');
+                            $password_confirm2.attr('type', 'text');
+                            $password_confirm2.addClass('placeholder');
+
+                            $password_confirm.after($password_confirm2);
+                            $password_confirm.hide();
+                            // Use this explicit placeholder functionality
+                            $password_confirm2.on('focus', function() {
+                                $password_confirm2.hide();
+                                $password_confirm.show();
+                                $password_confirm.focus();
+                            });
+                            $password_confirm.on('blur', function() {
+                                if ($password_confirm.val() == '') {
+                                    $password_confirm.hide();
+                                    $password_confirm2.show();
+                                }
+                            });
+                        }
+                    }
+
 
             });
 
