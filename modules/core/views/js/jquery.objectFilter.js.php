@@ -1196,13 +1196,20 @@
         },
 
         // VEREJNE ROZHRANI //
-        refresh: function( $_this ) {
+        refresh: function( useCurrentFilterParams ) {
 
             this.each(function(){
 
                 var $_this = $(this);
 
-                var request_params = methods._getData( $_this , 'request_params');
+                //metoda zorbazi progress indicator a odesle pozadavek na nactenidat
+                var request_params;
+                if (typeof useCurrentFilterParams !== 'undefined' && useCurrentFilterParams === true) {
+                    request_params = methods._getCurrentFilterParams($_this);
+                    methods._setState( $_this, request_params );
+                } else {
+                    request_params = methods._getData( $_this , 'request_params');
+                }
 
                 methods._sendQuery( $_this, request_params);
                 

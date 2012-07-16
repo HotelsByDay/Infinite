@@ -12,30 +12,27 @@
         }
     </style>
 
+                <?php if ($label != ''): ?>
 
-    <div class="langitems">
+                    <?php if ($i > 1) $final_label = $label.' '.$i; else $final_label = $label; ?>
 
-        <?php $i = 0; foreach ($translates as $locale => $value): $i++; ?>
-        <div class="langitem group">
+                    <label for="<?= $attr.'_'.$i ?>"><?= $final_label ?></label>
 
-            <?php if ($label != ''): ?>
+                <?php endif ?>
 
-            <?php if ($i > 1) $final_label = $label . ' ' . $i; else $final_label = $label; ?>
-
-            <label for="<?= $attr . '_' . $i ?>"><?= $final_label ?></label>
-
-            <?php endif ?>
-
-            <input class="langinput" type="text" id="<?= $attr . '_' . $i ?>" name="<?= $attr ?>[translates][]"
-                   value="<?= $value ?>" <?= isset($min_length) ? "minlength=\"$min_length\"" : '' ?> <?= isset($max_length) ? "maxlength=\"$max_length\"" : '' ?> />
-            <?= form::select($attr . '[locales][]', $locales, $locale) ?>
-        </div>
-        <?php endforeach; ?>
-
-    </div>
-
-
-    <div class="langadd">
+                <input class="langinput" type="text" id="<?= $attr.'_'.$i ?>" name="<?= $attr ?>[translates][]" placeholder="<?= arr::get($placeholders, $locale, '');?>" value="<?= $value ?>" <?= isset($min_length) ? "minlength=\"$min_length\"" : '' ?> <?= isset($max_length) ? "maxlength=\"$max_length\"" : '' ?> />
+                <select name="<?= $attr;?>[locales][]">
+                    <?php foreach ($locales as $locale_key => $locale_name): ?>
+                    <option <?= $locale_key == $locale ? 'selected="selected"' : '';?> value="<?= $locale_key;?>" placeholder="<?= arr::get($placeholders, $locale_key, '');?>"><?= $locale_name;?></option>
+                    <?php endforeach ?>
+                </select>
+            </div>
+    <?php endforeach; ?>
+    
+</div>
+      
+        
+        <div class="langadd">
         <span style="display: none;"><?= __('lang.all_translations_added'); ?></span>
         <a href="javascript: ;"><?= __('lang.add_translation'); ?></a>
     </div>

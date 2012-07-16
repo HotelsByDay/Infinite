@@ -4,7 +4,12 @@
  * Tento formularovy prvek slouzi k nastaveni hesla uzivatele.
  *
  * Prvek funguje pouze nad modelem 'user'.
- * 
+ *
+ *
+ * Config parametry tohoto prvku: (? znaci nepovinne, ! znaci povinne)
+ *  ?'label'               => <string>  ... Label elementu ve formulari
+ *  ?'placeholder'         => <string>  ... Polaceholder password inputu - pokud prohlicec nepodporuje html5 pak se pouzije JS
+ *  ?'placeholder_confirm' => <string>  ... Polaceholder password_confirm inputu - pokud prohlicec nepodporuje html5 pak se pouzije JS
  */
 class AppFormItem_Password extends AppFormItem_Base
 {
@@ -136,6 +141,15 @@ class AppFormItem_Password extends AppFormItem_Base
                 || $this->model->IsRequired($this->attr)) && ! $this->form->is_readonly())
         {
             $view->label .= '<span class="required_label">*</span>';
+        }
+
+        // If placeholder is defined - add it into view
+        if (isset($this->config['placeholder']) and ! empty($this->config['placeholder'])) {
+            $view->placeholder = $this->config['placeholder'];
+        }
+        // If placeholder is defined - add it into view
+        if (isset($this->config['placeholder_confirm']) and ! empty($this->config['placeholder_confirm'])) {
+            $view->placeholder_confirm = $this->config['placeholder_confirm'];
         }
 
         return $view;

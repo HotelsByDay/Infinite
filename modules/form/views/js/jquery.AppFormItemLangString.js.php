@@ -35,7 +35,12 @@
 
                 //Pokud prislo nastaveni, tak mergnu s defaultnimi hodnotami
                 var params = $.extend(true, settings, options);
-                
+
+                // Zjistime zda prohlizes podporuje html5 placeholder
+                var test = document.createElement('input');
+                var placeholder_supported = ('placeholder' in test);
+
+
                 /**
                  * Metoda volana pri zmene jazyka (select.onchange)
                  */
@@ -43,7 +48,9 @@
                     // Prislusne Textarey nastavim spravny placeholder podle
                     // zvoleneho jazyka
                     var selected_lang_placeholder = $(this).find('option:selected').attr('placeholder');
-                    $(this).parents('.langitem:first').find('.langinput').attr('placeholder', selected_lang_placeholder);
+                    var $input = $(this).parents('.langitem:first').find('.langinput');
+                    // Nastavime inputu novy placeholder
+                    setPlaceholder($input, selected_lang_placeholder);
                     // Najdeme vsechny selecty
                     var $selects = $("select", $this);
                     // Odebereme globalni warning - ten pozdeji muze kontrolovat AppForm plugin pred odeslanim
@@ -105,8 +112,10 @@
                         if ( ! $selected.length) {
                             // Pokud neni zvolena, pak tuto hodnotu zvolime v nasem selectu
                             $select.val(this.value);
-                            //textarei nastavim prislusny placeholder
-                            $input.attr('placeholder', $(this).attr('placeholder'));
+                            // Textarei nastavim prislusny placeholder
+                            setPlaceholder($input, $(this).attr('placeholder'));
+                            // A inicializujeme ho - pokud neni podporovan html5 placeholder
+                            initPlaceholder($input);
                             // A ukoncime iterovani
                             return false;
                         }
@@ -124,6 +133,62 @@
                     }
 
                 }); // end add_link event
+
+
+                /**
+                 * Nastavi zadanemu inputu zadany placeholder
+                 */
+                var setPlaceholder = function($input, placeholder)
+                {
+                    var old_placeholder = $input.attr('placeholder');
+                    $input.attr('placeholder', placeholder);
+                    // Pokud prohlizec nepodporuje html 5 placeholder atribut
+                    if ( ! placeholder_supported) {
+                        // Pokud hodnota prvku odpovida staremu placeholderu nebo je prazdna
+                        if ($input.val() == old_placeholder || $input.val() == '') {
+                            // Zobrazime novy placeholder
+                            $input.val(placeholder);
+                            $input.addClass('placeholder');
+                        }
+                    }
+                }
+
+                /**
+                 * Inicializuje explicitni placeholder funkcionalitu pokud neni placeholder podporovan prohlizecem
+                 */
+                var initPlaceholder = function($input)
+                {
+                    if ( ! placeholder_supported) {
+                        // Use this explicit placeholder functionality
+                        $input.on('focus', function() {
+                            if ($input.val() == $input.attr('placeholder')) {
+                                $input.val('');
+                                // Remove class (for gray text)
+                                $input.removeClass('placeholder');
+                            }
+                        }).on('blur', function() {
+                                if ($input.val() == '') {
+                                    $input.val($input.attr('placeholder'));
+                                    // Add placeholder class (for gray text)
+                                    $input.addClass('placeholder');
+                                }
+                        });
+
+                        // Pokud je hodnota prvku prazdna, zobrazime placeholder
+                        // - (!) pokud je hodnotou placeholder pak muze byt potreba pridat placeholder class (po reloadu)
+                        if ($input.val() == '' || $input.val() == $input.attr('placeholder')) {
+                            $input.val($input.attr('placeholder'));
+                            $input.addClass('placeholder');
+                        }
+                    }
+                }
+
+                // Pokud prohlizec nepodporuje placeholder atribut, inicializujeme nas placeholder js
+                if ( ! placeholder_supported) {
+                    $(".langitem .langinput", $this).each(function() {
+                        initPlaceholder($(this));
+                    });
+                }
 
 
                 // Pokud je na zacatku ve formulari tolik poli, kolik je jazyku

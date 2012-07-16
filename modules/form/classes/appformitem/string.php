@@ -3,9 +3,10 @@
 /**
  * Formularovy prvek pro vkladani retezcove hodnoty.
  * Config parametry tohoto prvku: (? znaci nepovinne, ! znaci povinne)
- *  !'label'      => <string>  ... Label elementu ve formulari
- *  ?'min_length' => <int>     ... Minimalni delka textu - mozna bude osetreno v jQuery
- *  ?'max_length' => <int>     ... Maximalni delka textu - atribut maxlength je akceptovan prohlizecem
+ *  ?'label'       => <string>  ... Label elementu ve formulari
+ *  ?'placeholder' => <string>  ... Polaceholder daneho inputu - pokud prohlicec nepodporuje html5 pak se pouzije JS
+ *  ?'min_length'  => <int>     ... Minimalni delka textu - mozna bude osetreno v jQuery
+ *  ?'max_length'  => <int>     ... Maximalni delka textu - atribut maxlength je akceptovan prohlizecem
  */
 class AppFormItem_String extends AppFormItem_Base
 {
@@ -17,6 +18,13 @@ class AppFormItem_String extends AppFormItem_Base
      */
     public function init()
     {
+        // If item has placeholder defined - add JS to ensure that placeholder will work in html4 browsers
+        if (isset($this->config['placeholder']) and ! empty($this->config['placeholder'])) {
+            Web::instance()->addCustomJSFile(View::factory('js/jquery.AppFormItemString.js'));
+            $init_js = View::factory('js/jquery.AppFormItemString-init.js');
+            $init_js->config = Array();
+            parent::addInitJS($init_js);
+        }
         return parent::init();
     }
     
@@ -37,7 +45,12 @@ class AppFormItem_String extends AppFormItem_Base
     {
         // Zavolame base Render, ktera vytvori pohled a preda zakladni atributy
         $view = parent::Render($render_style, $error_message);
-        
+
+        // If placeholder is defined - add it into view
+        if (isset($this->config['placeholder']) and ! empty($this->config['placeholder'])) {
+            $view->placeholder = $this->config['placeholder'];
+        }
+
         // Vratime $view
         return $view;
     }
