@@ -121,10 +121,15 @@ class Kohana_Log {
 			$message = strtr($message, $values);
 		}
 
+        // Add miliseconds [2012-07-18][Dajc]
+        $usec = microtime();
+        list($usec, $sec) = explode(' ', $usec);
+        $usec = str_pad(round(1000*$usec), 3, '0', STR_PAD_LEFT);
+
 		// Create a new message and timestamp it
 		$this->_messages[] = array
 		(
-			'time' => Date::formatted_time('now', self::$timestamp, self::$timezone),
+			'time' => Date::formatted_time('now', self::$timestamp, self::$timezone).'.'.$usec,
 			'type' => $type,
 			'body' => $message,
 		);
