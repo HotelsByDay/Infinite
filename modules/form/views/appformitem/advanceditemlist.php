@@ -6,7 +6,6 @@
         <?php foreach ($rel_items as $rel_item): ?>
         <li class="item">
             <?= (string)$rel_item;?>
-            <div class="clearfix cb"></div>
         </li>
         <?php endforeach ?>
     </ul>

@@ -50,6 +50,10 @@
         </noscript>
     </div>
 
+    <?php if (isset($hint) && !empty($hint)): ?>
+    <span class="hint"><?= $hint; ?></span>
+    <?php endif ?>
+
     <?php if (isset($lang_view)): ?>
 
         <div class="clone_lang_view" style="display: none;">

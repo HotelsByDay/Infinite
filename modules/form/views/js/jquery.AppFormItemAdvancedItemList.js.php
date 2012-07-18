@@ -93,7 +93,7 @@
                                 $item_container.html(response['content']);
 
                                 //add inside div with a 'clear' class
-                                $item_container.append( $( document.createElement('div') ).addClass('clearer'));
+                                //$item_container.append( $( document.createElement('div') ).addClass('clearer'));
                             }
 
                             //skryju progress indicator a zobrazim tlacitko pro
