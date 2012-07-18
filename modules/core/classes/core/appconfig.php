@@ -8,9 +8,9 @@ class Core_AppConfig {
      * V teto promenne je ulozeny obsah hlavniho konfiguracniho souboru
      * nacteny z INI souboru.
      */
-    protected $config = array();
+    protected $config = NULL;
 
-    
+
 	private function __construct()
 	{
 
@@ -38,6 +38,7 @@ class Core_AppConfig {
 	}
 
 
+
     /**
      *
      * @param <string> $filename
@@ -49,7 +50,17 @@ class Core_AppConfig {
     {
         //pokusim se nacist hlavni konfiguracni sobuor
         try {
-            $this->config = parse_ini_file($filename, TRUE);
+            // Zusime precist config z cache
+            $cache_key = '_config_file_'.$filename.'.'.filemtime($filename);
+            $this->config = Cache::instance()->get($cache_key);
+
+            // Pokud tam nebyl
+            if ( ! $this->config) {
+                // Parsujeme ini soubor
+                $this->config = parse_ini_file($filename, TRUE);
+                // A ulozime do cache
+                Cache::instance()->set($cache_key, $this->config);
+            }
         } catch (Exception $e) {
             //vyhodim systemovou vyjimku, ktera zajisti zalogovani chyby
             throw new SystemException('Unable to load main config file "'.$filename.'" due to exception: "'.$e->getMessage().'".');

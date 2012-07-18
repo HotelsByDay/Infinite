@@ -19,7 +19,19 @@ abstract class Cache extends Kohana_Cache {
 
     // Pouziva Kohana_Cache
     public static $default = 'file';
-        
+
+
+    /**
+     * Deletes all given keys from cache
+     * @param array $keys
+     */
+    public function deleteKeys(array $keys)
+    {
+        foreach ($keys as $key) {
+            $this->delete($key);
+        }
+    }
+
     
   /**
    * Ulozi binarni soubor do cache v base64 kodovani
