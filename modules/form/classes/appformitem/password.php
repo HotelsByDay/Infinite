@@ -129,8 +129,8 @@ class AppFormItem_Password extends AppFormItem_Base
         // Zavolame base Render, ktera vytvori pohled a preda zakladni atributy
         $view = parent::Render($render_style, $error_message);
 
-        $view->label = __('appformitempassword.password_label');
-        $view->label_confirm = __('appformitempassword.password_confirm_label');
+        $view->label = arr::get($this->config, 'label', __('appformitempassword.password_label'));
+        $view->label_confirm = arr::get($this->config, 'label_confirm',  __('appformitempassword.password_confirm_label'));
 
         //pokud je prvek required, tak se automaticky prida znacka k labelu
         if (((arr::get($this->config, 'required')

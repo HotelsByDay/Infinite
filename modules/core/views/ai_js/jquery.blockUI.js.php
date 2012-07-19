@@ -18,6 +18,8 @@
  * 3) pridana defaultni hodnota parametru 'message'
  * 4) pridan atribut nastaveni themedCSS.minWidth, ktery definuje minimalni sirku
  *    'div' elementu, ktery zobrazuje zpravu uzivateli.
+ * 5) pridan atribut showMessage (default=true). Pokud je false, tak neni zobrazena
+ *  zadna block zprava - ani ta defaultni.
  *
  */
 
@@ -200,12 +202,14 @@ var pageBlock = null;
 var pageBlockEls = [];
 
 function install(el, opts) {
+    console.log(opts);
 	var full = (el == window);
 	var msg = opts && opts.message !== undefined ? '<span class="blockUI_message">' + opts.message + '</span>': undefined;
 	opts = $.extend({}, $.blockUI.defaults, opts || {});
 	opts.overlayCSS = $.extend({}, $.blockUI.defaults.overlayCSS, opts.overlayCSS || {});
 	var css = $.extend({}, $.blockUI.defaults.css, opts.css || {});
 	var themedCSS = $.extend({}, $.blockUI.defaults.themedCSS, opts.themedCSS || {});
+    var showMessage = opts && opts.showMessage !== undefined ? opts.showMessage: true;
 	msg = msg === undefined ? opts.message : msg;
 
 	// remove the current block (if there is one)
@@ -266,7 +270,7 @@ function install(el, opts) {
 	lyr3 = $(s);
 
 	// if we have a message, style it
-	if (msg) {
+	if (msg && showMessage) {
 		if (opts.theme) {
 			lyr3.css(themedCSS);
 			lyr3.addClass('ui-widget-content');
@@ -336,7 +340,7 @@ function install(el, opts) {
 	}
 
 	// show the message
-	if (msg) {
+	if (msg && showMessage) {
 		if (opts.theme)
 			lyr3.find('.ui-widget-content').append(msg);
 		else
@@ -353,13 +357,13 @@ function install(el, opts) {
 		var cb2 = msg ? cb : noOp;
 		if (opts.showOverlay)
 			lyr2._fadeIn(opts.fadeIn, cb1);
-		if (msg)
+		if (msg && showMessage)
 			lyr3._fadeIn(opts.fadeIn, cb2);
 	}
 	else {
 		if (opts.showOverlay)
 			lyr2.show();
-		if (msg)
+		if (msg && showMessage)
 			lyr3.show();
 		if (opts.onBlock)
 			opts.onBlock();

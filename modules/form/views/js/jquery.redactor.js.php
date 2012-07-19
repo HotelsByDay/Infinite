@@ -115,7 +115,7 @@ var RTOOLBAR = {};
 		},
 		dynamicallyLoad: function (url, callback)
 		{
-            //JME: Commented out, <script> will be inserted insied the appformitemcontainer element
+            //JME: Commented out, <script> will be inserted inside the appformitemcontainer element
 			var head = document.getElementsByTagName("head")[0];
 			var script = document.createElement("script");
 			script.src = url;
@@ -443,7 +443,9 @@ var RTOOLBAR = {};
 		},
 		observeAutoResize: function()
 		{
-			this.$editor.css({ 'min-height':this.$el.height()+'px' });
+            //Removed this line, becaue it would cause a scrollbar to appear.
+            //Dont know why exactly, but it seems to be working good in FF, Chrome and Safari.
+			//this.$editor.css({ 'min-height':this.$el.height()+'px' });
 			this.$frame.css({ 'overflow-x':'auto', 'overflow-y':'hidden' });
 			this.$frame.load($.proxy(this.setAutoSize, this));
 			$(this.doc).keyup($.proxy(this.setAutoSize, this));

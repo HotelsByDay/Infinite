@@ -360,7 +360,11 @@ class AppFormItem_Base
                 || arr::get($this->config, '_required'))
                 || $this->model->IsRequired($this->attr)) && ! $this->form->is_readonly())
         {
-            $label .= '<span class="required_label">*</span>';
+            //required znacka '*' nemusi byt vzdy zobrazena
+            if (arr::get($this->config, 'display_required_symbol', TRUE))
+            {
+                $label .= '<span class="required_label">*</span>';
+            }
         }
 
         $view->label = $label;
