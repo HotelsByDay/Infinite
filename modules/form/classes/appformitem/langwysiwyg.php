@@ -18,6 +18,7 @@ class AppFormItem_LangWysiwyg extends AppFormItem_LangString
             // Predame seznam jazyku do pluginu
             //      'locales' => $this->locales,
             'locales_count' => count($this->locales),
+            'mode'          => $this->mode,
         );
 
         $init_js->config = $config;

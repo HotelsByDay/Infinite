@@ -106,6 +106,19 @@ class Core_AppForm {
     //CSS trida, ktera bude prirazena tlacitko pro zavreni formulare bez ulozeni
     const FORM_BUTTON_CLOSE_CSS_CLASS = 'form_button_close';
 
+    // Tato trida je formulari dynamicky pridelena jeho jQuery pluginem
+    const FORM_CSS_CLASS = '__appform';
+
+    // Lang form items 'mode' parameter value
+    const LANG_MASTER = 'master';
+
+    // Lang form items 'mode' parameter value (slave lang item shown languages list is always synchronized
+    // with  master item
+    const LANG_SLAVE = 'slave';
+
+    // Na tomto klici se v postu ajaxem posilaji povolene jazyky z master prvku
+    const ENABLED_LANGUAGES_POST_KEY = 'enabled_languages';
+
     //Model nad kterym formular stoji
     protected $_model = NULL;
 

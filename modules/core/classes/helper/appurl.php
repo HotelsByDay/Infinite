@@ -502,6 +502,17 @@ class Helper_Appurl
 
         return ($absolute_url ? $domain : '') . url::base() . $filedir . '/' . $resize_variant . $filename;
     }
+
+
+    /**
+     * Returns url for MASTER lang item. Item will send ajax requests with enabled languages list to this url.
+     * @static
+     * @param $object_name
+     */
+    static public function languages_syncer_url(Interface_AppFormItemLang_MasterCompatible $model)
+    {
+        return url::base().'synclanguages/set_enabled_languages/'.$model->object_name().'/'.$model->pk();
+    }
 }
 
 ?>

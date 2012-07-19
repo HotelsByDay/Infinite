@@ -26,9 +26,13 @@
 
         init: function( options ) {
 
-            this.each(function(){
+            this.each(function() {
 
                 var $_this = $(this);
+
+                // Pridam formulari jeho css tridu
+                methods._log('objectForm init - adding form className');
+                $_this.addClass('<?= AppForm::FORM_CSS_CLASS ?>');
 
                 settings = options;
 
@@ -314,6 +318,47 @@
             methods._setData( $_this, {
                 request: jqXHR
             });
+        },
+
+        fireEvent: function(foo, eventName, params)
+        {
+            var $this = $(this);
+            methods._log('fireEvent called with enventname: '+eventName);
+            // Get all events subscriptions
+            var data = methods._getData($this, 'subscriptions');
+            // Call all stored callbacks
+            if (typeof data[eventName] != 'undefined') {
+                methods._log('data[eventName] is set');
+                for (var i in data[eventName]) {
+                    methods._log('processing callback');
+                    // Call stored callback with given params
+                    var callback = data[eventName][i];
+                    if (typeof callback == 'function') {
+                        methods._log('callback is a function - calling it');
+                        callback(params);
+                        methods._log('callback has been called');
+                    }
+                }
+            }
+        },
+
+        subscribeEvent: function(foo, eventName, callback)
+        {
+            var $this = $(this);
+            methods._log('subscribeEvent called with enventname: '+eventName);
+            // Get all events subscriptions
+            var data = methods._getData($this, 'subscriptions');
+            if (typeof data == 'undefined') {
+                data = {};
+            }
+            if (typeof data[eventName] == 'undefined') {
+                methods._log('subscribeEvent preparing array for event: '+eventName);
+                data[eventName] = [];
+            }
+            // Add callback into event name subscribers list
+            data[eventName][data[eventName].length] = callback;
+            methods._setData($this, 'subscriptions', data);
+            methods._log('subscribeEvent callback has been added');
         },
 
         /**

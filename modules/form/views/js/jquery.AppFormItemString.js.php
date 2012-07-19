@@ -70,10 +70,10 @@
                 }
 
             });
-            
         }
       
     };
+
 
     $.fn.AppFormItemString = function( method ) {
 

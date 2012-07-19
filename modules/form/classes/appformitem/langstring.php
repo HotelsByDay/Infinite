@@ -33,8 +33,13 @@ class AppFormItem_LangString extends AppFormItem_String
     // - v requestu je vsak vyhodnejsi to mit usporadane jinak
     //   proto se to v metode setValue prevede a ulozi sem
     protected $converted_form_data = Array();
-    
-    
+
+    // Prvek muze byt v rezimu AppForm::LANG_MASTER nebo AppForm::LANG_SLAVE nebo NULL (nezavysly prvek)
+    protected $mode = NULL;
+
+    // Seznam povolenych locale - toto se pouziva jen pokud je prvek slave
+    // - v takovem pripade budou vynucene zobrazeny inputy pro vsechna tato locale a nepujde pridat dalsi
+    protected $enabled_locales = Array();
     /**
      * Precteme si casto potrebne hodnoty z configu do lokalnich atributu
      * a zkontrolujeme zda je v configu vse potrebne
@@ -58,11 +63,40 @@ class AppFormItem_LangString extends AppFormItem_String
             $this->locales[$locale] = __('locale.'.$locale);
         }
 
+
+        // Load item mode
+        $this->mode = arr::get($this->config, 'mode', $this->mode);
+        // If item is slave - load enabled languages from model
+        if ($this->mode == AppForm::LANG_SLAVE) {
+            // Check that model implements needed interface
+            if ( ! ($this->model instanceof Interface_AppFormItemLang_SlaveCompatible)) {
+                throw new Exception(__CLASS__.' can be used in slave mode only if parent model ('.$this->model->object_name().') implements "Interface_AppFormItemLang_SlaveCompatible"');
+            }
+
+            // Read enabled langs list
+            $langs = $this->model->getEnabledLanguagesList();
+            // Fill labels into array
+            foreach ($langs as $key => $foo) {
+                $langs[$key] = arr::get($this->locales, $key);
+            }
+            // Store langs as new locales
+            $this->enabled_locales = $langs;
+        }
+        // If item is master then model needs to implement different interface
+        elseif ($this->mode == AppForm::LANG_MASTER) {
+            // Check that model implements needed interface
+            if ( ! ($this->model instanceof Interface_AppFormItemLang_MasterCompatible)) {
+                throw new Exception(__CLASS__.' can be used in master mode only if parent model ('.$this->model->object_name().') implements "Interface_AppFormItemLang_MasterCompatible"');
+            }
+        }
+
+
+
+
         // Pokud neni nastaven seznam locales, pak nemuzeme pokracovat
         if (empty($this->locales)) {
             throw new Kohana_Exception('AppFormItem_LangString used with empty "locales" parametr value.');
         }
-        
         // Zkusime precist default locale z configu
         $this->default_locale = arr::get($this->config, 'default_locale', $this->default_locale);
         
@@ -100,7 +134,14 @@ class AppFormItem_LangString extends AppFormItem_String
             // Predame seznam jazyku do pluginu
       //      'locales' => $this->locales,
             'locales_count' => count($this->locales),
+            // Master/Slave/none
+            'mode'          => $this->mode,
         );
+
+        // Pokud jsme master, pak pridame url na synchronizaci jazyku
+        if ($this->mode == AppForm::LANG_MASTER) {
+            $config['languages_syncer_url'] = AppUrl::languages_syncer_url($this->model);
+        }
 
         $init_js->config = $config;
         //prida do sablony identifikator tohoto prvku a zajisti vlozeni do stranky
@@ -132,7 +173,12 @@ class AppFormItem_LangString extends AppFormItem_String
             $content = trim($content);
 
             // Pokud je obsah prazdny, pak preskocime - jakoby vubec nebyl
-            if ($content == '') continue;
+            // - ale jen pokud nejde o MASTER/SLAVE prvek - ty mohou ulozit i prazdne retezce
+            //   Master primarne protoze se podle nej urcuji povolene jazyky
+            //   Slave si prazdne preklady uklada aby bylo synchronizovane poradi jeho prekladu podle poradi v mastru
+            if ($content == '' and $this->mode != AppForm::LANG_MASTER and $this->mode != AppForm::LANG_SLAVE) {
+                continue;
+            }
             
             // Pokud jiz mame hodnotu, tak nedovolime zapsat prazdnou
             if (isset($data[$locale]) and empty($content)) continue;
@@ -140,7 +186,11 @@ class AppFormItem_LangString extends AppFormItem_String
             // Ulozime si preklad pro dane locale
             $data[$locale] = $content;
         }
-        
+
+        // Pokud jsme slave, pak dovolime ulozie jen enabled jazyky
+        if ($this->mode == AppForm::LANG_SLAVE) {
+            $data = array_intersect_key($data, $this->enabled_locales);
+        }
         // Osetrime pripad, kdy nekdo v requestu prepise hodnoty - prijmeme jen 
         // ta locale, ktera jsou povolena v configu
         $this->converted_form_data = $data;
@@ -182,8 +232,20 @@ class AppFormItem_LangString extends AppFormItem_String
             // Zapiseme defaultni hodnotu pro prvni locale
             $translates[$this->default_locale] = '';
         }
+
+        // Pokud jsme v rezimu SLAVE pak vzdy zobrazime vsechny enabled jazyky
+        if ($this->mode == AppForm::LANG_SLAVE) {
+            // Add undefined translates and keep result in order of enabled_locales
+            $result = $this->enabled_locales;
+            foreach ($this->enabled_locales as $locale => $foo) {
+                $result[$locale] = arr::get($translates, $locale, '');
+            }
+        } else {
+            $result = $translates;
+        }
+        Kohana::$log->add(Kohana::INFO, 'getTranslates result: '.json_encode($result));
         // Vratime preklady
-        return $translates;
+        return $result;
     }
     
     
@@ -272,7 +334,6 @@ class AppFormItem_LangString extends AppFormItem_String
     }
     
     /**
-     * 
      * Generuje HTML kod formularoveho prvku
      * @return <View>
      */
@@ -286,7 +347,10 @@ class AppFormItem_LangString extends AppFormItem_String
 
         // Predame seznam placeholderu
         $view->placeholders = $this->placeholders;
-        
+
+        // Predame mod prvku
+        $view->mode = $this->mode;
+
         // Predame seznam definovanych prekladu
         $view->translates = $this->getTranslates();
         

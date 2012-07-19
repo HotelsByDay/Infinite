@@ -32,16 +32,20 @@
                 <option <?= $locale_key == $locale ? 'selected="selected"' : '';?> value="<?= $locale_key;?>" placeholder="<?= arr::get($placeholders, $locale_key, '');?>"><?= $locale_name;?></option>
                 <?php endforeach ?>
             </select>
+            <?php if ($mode == AppForm::LANG_MASTER): ?>
+                <a href="javascript:;" class="remove_lang"><?= __('appformitemlang.remove_btn'); ?></a>
+            <? endif; ?>
         </div>
         <?php endforeach; ?>
 
     </div>
 
-
+    <?php if ($mode != AppForm::LANG_SLAVE): ?>
     <div class="langadd">
         <span style="display: none;"><?= __('lang.all_translations_added'); ?></span>
         <a href="javascript: ;"><?= __('lang.add_translation'); ?></a>
     </div>
+    <?php endif; ?>
 
 
 </div>

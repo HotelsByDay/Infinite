@@ -644,6 +644,36 @@ class ORM extends Kohana_ORM {
     {
         return $this->or_where($column, 'LIKE', "%$value%");
     }
+
+
+    /**
+     * Adds NOT IN condition with array emptiness check
+     * @param $column
+     * @param array $values
+     */
+    public function where_not_in($column, array $values)
+    {
+        // this is key part - no error for empty array
+        if (empty($values)) {
+            return $this;
+        }
+        return $this->where($column, 'NOT IN', $values);
+    }
+
+    /**
+     * Adds IN condition with array emptiness check
+     * @param $column
+     * @param array $values
+     * @return mixed
+     */
+    public function where_in($column, array $values)
+    {
+        // If values are empty - no record should be found
+        if (empty($values)) {
+            return $this->where(DB::expr('0'), '=', '1');
+        }
+        return $this->where($column, 'IN', $values);
+    }
      
     
     
@@ -1675,7 +1705,6 @@ class ORM extends Kohana_ORM {
             {
                 $this->{$attr} = $source->{$attr};
             }
-
         }
 
         //v poli $overwrite jsou nove hodnoty pro specificke atributy, ktere

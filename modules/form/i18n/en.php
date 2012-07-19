@@ -105,4 +105,9 @@ return array(
     // OBJECT IMAGE SELECTOR
     'objectimageselector.select_image' => 'Select image',
 
+    // AppFormItemLang
+    'appformitemlang.remove_btn' => 'X',
+
+    'appformitemlang.remove_lang_from_master.confirm' => 'Are you sure you want to remove the language and all translates for it?',
+
 );
