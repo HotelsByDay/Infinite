@@ -4,8 +4,7 @@
         <span class="validation_error" style="color:red;"><?= $error_message; ?></span>
     <?php endif ?>
 
-        
-        
+
         <style type="text/css">
             /* pro otestovani funkcnosti jquery pluginy */
             div.langitem.warning select {
@@ -57,12 +56,13 @@
     <?php endforeach; ?>
     
 </div>
-      
-        
+
+        <?php if ($mode != AppForm::LANG_SLAVE): ?>
         <div class="langadd">
             <span style="display: none;"><?= __('lang.all_translations_added'); ?></span>
             <a href="javascript: ;"><?= __('lang.add_translation'); ?></a>
         </div>
+        <?php endif; ?>
         
         
 </div>

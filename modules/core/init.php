@@ -14,6 +14,15 @@ Route::set('js_error', '<controller>/<action>',
             'action'     => 'js'
         ));
 
+//Url pro nahlaseni JS chyby ke kterym dojde u klienta
+Route::set('form_sync_languages', '<controller>/<action>/<object_name>/<object_id>',
+    array(
+        'controller'  => 'synclanguages',
+        'action'      => 'set_enabled_languages',
+        'object_name' => '[a-zA-Z0-9_-]+',
+        'object_id'   => '[0-9]+',
+));
+
 /**
  * Kohana translation/internationalization function. The PHP function
  * [strtr](http://php.net/strtr) is used for replacing parameters.

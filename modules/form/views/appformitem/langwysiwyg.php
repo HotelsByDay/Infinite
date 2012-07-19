@@ -72,12 +72,13 @@
     <?php endforeach; ?>
     
 </div>
-      
-        
-        <div class="langadd">
-            <span style="display: none;"><?= __('lang.all_translations_added'); ?></span>
-            <a href="javascript: ;"><?= __('lang.add_translation'); ?></a>
-        </div>
-        
+
+
+        <?php if ($mode != AppForm::LANG_SLAVE): ?>
+            <div class="langadd">
+                <span style="display: none;"><?= __('lang.all_translations_added'); ?></span>
+                <a href="javascript: ;"><?= __('lang.add_translation'); ?></a>
+            </div>
+        <?php endif; ?>
         
 </div>
