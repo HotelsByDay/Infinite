@@ -393,6 +393,7 @@
                     _log('removing lang: '+removed_lang);
                     // Pokud jsme master prvek
                     if (params.mode == '<?= AppForm::LANG_MASTER; ?>') {
+                        $item.addClass('to_be_deleted');
                         // vyzadame o potvrzeni akce
                         if (confirm('<?= __('appformitemlang.remove_lang_from_master.confirm'); ?>')) {
                             // Vyvolame ajax pozadavek, ktery zajisti odstraneni prekladu pro tento jazyk z DB
@@ -400,6 +401,8 @@
                             $item.remove();
                             // Zajistime propagovani do slave prvku a na server
                             languagesChanged();
+                        } else {
+                            $item.removeClass('to_be_deleted');
                         }
                     } else {
                         // Vlastni odebrani jazyka - nejsme master, takze neni potreba potvrzovat
