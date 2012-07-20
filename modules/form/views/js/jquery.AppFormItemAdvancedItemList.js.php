@@ -141,8 +141,10 @@
                             //zachovano jen kdyz se ulozi formular
                             $.userInfoMessage("<?= __('form.AppFormItemAdvancedItemlist.order_update.info_message');?>");
                         }
-                    })
-                    .disableSelection();
+                    });
+                    //disable selection only on the dragHandler
+                    //http://forum.jquery.com/topic/jquery-ui-sortable-disableselection-firefox-issue-with-inputs#14737000002175427
+                    $(this).find('.list .item .drag_handler').disableSelection();
                 }
             });
         },
