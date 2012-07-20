@@ -64,42 +64,13 @@ class AppFormItem_LangString extends AppFormItem_String
         }
 
 
-        // Load item mode
-        $this->mode = arr::get($this->config, 'mode', $this->mode);
-        // If item is slave - load enabled languages from model
-        if ($this->mode == AppForm::LANG_SLAVE) {
-            // Check that model implements needed interface
-            if ( ! ($this->model instanceof Interface_AppFormItemLang_SlaveCompatible)) {
-                throw new Exception(__CLASS__.' can be used in slave mode only if parent model ('.$this->model->object_name().') implements "Interface_AppFormItemLang_SlaveCompatible"');
-            }
-
-            // Read enabled langs list
-            $langs = $this->model->getEnabledLanguagesList();
-            // Fill labels into array
-            foreach ($langs as $key => $foo) {
-                $langs[$key] = arr::get($this->locales, $key);
-            }
-            // Store langs as new locales
-            $this->enabled_locales = $langs;
-        }
-        // If item is master then model needs to implement different interface
-        elseif ($this->mode == AppForm::LANG_MASTER) {
-            // Check that model implements needed interface
-            if ( ! ($this->model instanceof Interface_AppFormItemLang_MasterCompatible)) {
-                throw new Exception(__CLASS__.' can be used in master mode only if parent model ('.$this->model->object_name().') implements "Interface_AppFormItemLang_MasterCompatible"');
-            }
-        }
-
-
-
-
         // Pokud neni nastaven seznam locales, pak nemuzeme pokracovat
         if (empty($this->locales)) {
             throw new Kohana_Exception('AppFormItem_LangString used with empty "locales" parametr value.');
         }
         // Zkusime precist default locale z configu
         $this->default_locale = arr::get($this->config, 'default_locale', $this->default_locale);
-        
+
         // Pokud je default_locale prazdne, pak tam nastavime prvni ze seznamu
         if (empty($this->default_locale)) {
             // Precteme prvni locale
@@ -109,6 +80,40 @@ class AppFormItem_LangString extends AppFormItem_String
             // Nastavime default_locale
             $this->default_locale = $first_locale;
         }
+
+
+        // Load item mode
+        $this->mode = arr::get($this->config, 'mode', $this->mode);
+        // If item is slave or master - load enabled languages from model
+        if ($this->mode == AppForm::LANG_SLAVE || $this->mode == AppForm::LANG_MASTER) {
+            // Check that model implements needed interface
+            if ( ! ($this->model instanceof Interface_AppFormItemLang_SlaveCompatible)) {
+                throw new Exception(__CLASS__.' can be used in slave mode only if parent model ('.$this->model->object_name().') implements "Interface_AppFormItemLang_SlaveCompatible"');
+            }
+
+            // Read enabled langs list
+            $langs = $this->model->getEnabledLanguagesList(array($this->default_locale));
+            Kohana::$log->add(Kohana::INFO, __CLASS__.' - enabled languages are: '.implode(', ', $langs).' - '.$this->mode.' mode');
+            // Fill labels into array
+            foreach ($langs as $key => $foo) {
+                $langs[$key] = arr::get($this->locales, $key);
+            }
+            // Store langs as new locales
+            $this->enabled_locales = $langs;
+        }
+
+        // If item is master then model needs to implement different interface
+        if ($this->mode == AppForm::LANG_MASTER) {
+            // Check that model implements needed interface
+            if ( ! ($this->model instanceof Interface_AppFormItemLang_MasterCompatible)) {
+                throw new Exception(__CLASS__.' can be used in master mode only if parent model ('.$this->model->object_name().') implements "Interface_AppFormItemLang_MasterCompatible"');
+            }
+        }
+
+
+
+
+
         
         // Nazev has_many vazby dopocitame automaticky (zavedena konvence pri pouziti tohoto prvku)
         // zaroven udava nazev modelu pro ukladani prekladu
@@ -233,8 +238,8 @@ class AppFormItem_LangString extends AppFormItem_String
             $translates[$this->default_locale] = '';
         }
 
-        // Pokud jsme v rezimu SLAVE pak vzdy zobrazime vsechny enabled jazyky
-        if ($this->mode == AppForm::LANG_SLAVE) {
+        // Pokud jsme v rezimu SLAVE nebo MASTER pak vzdy zobrazime vsechny enabled jazyky
+        if ($this->mode == AppForm::LANG_SLAVE or $this->mode == AppForm::LANG_MASTER) {
             // Add undefined translates and keep result in order of enabled_locales
             $result = $this->enabled_locales;
             foreach ($this->enabled_locales as $locale => $foo) {

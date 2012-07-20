@@ -55,49 +55,51 @@
                     // Prislusne Textarey nastavim spravny placeholder podle
                     // zvoleneho jazyka
                     var changed_select = this;
-                    var selected_lang_placeholder = $(this).find('option:selected').attr('placeholder');
                     var $input = $(this).parents('.langitem:first').find('.langinput');
+
+                    // aktualne zvoleny select
+                    var $select = $(this);
+
+                    // Podivame se zda zvoleny jazyk neni zvolen ve vice selectech
+                    // Najdeme vsechny option s aktualnim jazykem, ktere jsou selected
+                    var $options = $("option[value='"+$select.val()+"']:selected", $this);
+                    // Pokud je jich vice nez 1, pak prvnim problikneme a dalsi prenastavime na prvni nezvolene
+                    if ($options.length > 1) {
+                        var i = 0;
+                        $options.each(function() {
+                            i++;
+                            _log('processing option: '+i+' its value is: '+this.value);
+                            var current_select = this.parentNode;
+                            var $s = $(this).parent();
+                            // Problikneme selectem ve kterem je duplicitni hodnota
+                            if (current_select !== changed_select) {
+                                _log('current_select and changed_select differs');
+                                // Super vytunena animace
+                                $s.css('backgroundColor', 'pink').css('color', 'red');
+                                setTimeout(function(){
+                                    $s.css('backgroundColor', '').css('color', '');
+                                    setTimeout(function(){
+                                        $s.css('backgroundColor', 'pink').css('color', 'red');
+                                        setTimeout(function(){
+                                            $s.css('backgroundColor', '').css('color', '');
+                                        }, 200)
+                                    }, 150);
+                                }, 200);
+                            } else {
+                                _log('current_select and changed_select are equal');
+                                // A v dalsich zvolime prvni nezvoleny jazyk
+                                selectFirstUnusedLanguage($s);
+                            }
+                        });
+                    }
+
+                    // Precteme placeholder pro aktualne zvoleny jazyk
+                    var selected_lang_placeholder = $select.find('option:selected').attr('placeholder');
                     // Nastavime inputu novy placeholder
                     setPlaceholder($input, selected_lang_placeholder);
-                    // Najdeme vsechny selecty
-                    var $selects = $("select", $this);
-                    // Odebereme globalni warning - ten pozdeji muze kontrolovat AppForm plugin pred odeslanim
-                    $this.removeClass('warning');
-                    // Projdeme vsechny selecty a pokud je jejich hodnota v prvku vicekrat, tak je zvyraznime
-                    $selects.each(function() {
-                        // Najdeme vsechny option s aktualnim jazykem, ktere jsou selected
-                        var $options = $("option[value='"+$(this).val()+"']:selected", $this);
-                        // Pokud je jich vice nez 1, pak prvnim problikneme a dalsi prenastavime na prvni nezvolene
-                        if ($options.length > 1) {
-                            var i = 0;
-                            $options.each(function() {
-                                i++;
-                                _log('processing option: '+i+' its value is: '+this.value);
-                                var current_select = this.parentNode;
-                                var $s = $(this).parent();
-                                // Problikneme selectem ve kterem je duplicitni hodnota
-                                if (current_select !== changed_select) {
-                                    _log('current_select and changed_select differs');
-                                    // Super vytunena animace
-                                    $s.css('backgroundColor', 'pink');
-                                    setTimeout(function(){
-                                        $s.css('backgroundColor', '');
-                                        setTimeout(function(){
-                                            $s.css('backgroundColor', 'pink');
-                                            setTimeout(function(){
-                                                $s.css('backgroundColor', '');
-                                            }, 200)
-                                        }, 150);
-                                    }, 200);
-                                } else {
-                                    _log('current_select and changed_select are equal');
-                                    // A v dalsich zvolime prvni nezvoleny jazyk
-                                    selectFirstUnusedLanguage($s);
-                                }
-                            });
-                        }
-                    });
+                    // Vyvolame languages changed udalost - ikdyz ne ve vsech pripadech doslo ke zmene
                     languagesChanged();
+
                 }
 
 
@@ -112,39 +114,67 @@
                     if (typeof languages == 'undefined' || ! languages) {
                         return;
                     }
+                    // Pocitadlo indexu jazyku
+                    var lang_index = 0;
 
                     _log('SLAVE.onEnabledLanguagesChanged called with languages: '+languages.join(', '));
                     // Projdeme vsechny lang item tohoto prvku
                     $('.langitem', $this).each(function() {
                         // Aktualni langitem select
-                        var $s = $('select:first', $(this));
+                        var $s = $('select', $(this));
+                        // Aktualne zpracovavany povoleny jazyk
+                        var lang = languages[lang_index];
+                        // Pokud neni aktualni jazyk povoleny, pak ho odebereme
+                        if ($.inArray($s.val(), languages) == -1) {
 
-                        // Pokud tento jazyk neni v povolenych - pak ho odstranime
-                        // - to musime udelat na zacatku, protoze jazyk mol byt prave odstranen z master pravku
-                        //   a potrebujeme predejit prepnuti vsech dalsich prekladu na jiny jazyk
+                            // Pokud povoleny jazyk na aktualnim indexu neni v prvku pritomen
+                            // pak doslo k prepnuti jazyka - prepneme aktualni select
+                            // - zkusime najit select ve kterem je zvolen aktualne zpracovavany enabled lang
 
-                        // Pozice jazyka v seznamu povolenych
-                        var position = $.inArray($s.val(), languages);
-                        if (position == -1) {
-                            _log('removing lang: '+$s.val());
-                            $(this).remove();
-                            return;
+                            var enabled_lang_defined = $('.langitems select option[value="'+lang+'"]:selected', $this).length;
+
+                            if (enabled_lang_defined) {
+                                // Doslo k odebrani jazyka aktualniho prekladu
+                                // - aktualni preklad neni povolen ale aktualni povoleny jazyk je definovan
+                                // Odebereme jazyk (resi pripad odebrani prostredniho jazyka)
+                                $(this).remove();
+                                return;
+                            } else {
+                                // Aktualni preklad nema povoleny jazyk a aktualni povoleny jazyk nema definovany preklad
+                                // - nejspis doslo k prepnuti jazyka - prepneme select
+                                // - coz je zajisteno dale v if vetvi
+                            }
                         }
-                        // Jazyk je v povolenych - odebereme jazyk ze seznamu povolenych jazyku
+
+                        // Zjistime zda je na indexu nejaky jazyk
+                        if (typeof languages[lang_index] != 'undefined') {
+                            // Pokud ano, pak ho nastavime do aktualniho prvku jako zvoleny
+                            $s.val(lang);
+                            // A zmenime placeholder
+                            var $input = $s.parents('.langitem:first').find('.langinput');
+                            setPlaceholder($input, $s.find('option:selected').attr('placeholder'));
+                            // A inicializujeme ho - pokud neni podporovan html5 placeholder
+                            initPlaceholder($input);
+                            // Zaroven ho nastavime do hidden inputu (disabled select se totiz nativne neposila v postu)
+                            $('input.hidden_locale', $(this)).val(lang);
+                        }
                         else {
-                            languages.splice(position, 1);
+                            // Jazyk jiz neni povolen - odebereme ho
+                            $(this).remove();
                         }
+                        lang_index++;
                     });
                     // Pokud jsme zatim nevycerpali vsechny povolene jazyky, projdeme zbytek a pridame lang items
-                    for (var i in languages) {
-                        var lang = languages[i];
+                    while (typeof languages[lang_index] != 'undefined') {
+                        var lang = languages[lang_index];
                         addLanguage(lang);
+                        lang_index++;
                     }
                 }
 
                 var _log = function(msg) {
                     if (typeof console != 'undefined' && console.log) {
-                     //   console.log(msg);
+                    //    console.log(msg);
                     }
                 }
 
@@ -219,6 +249,7 @@
                     if (typeof locale !== 'undefined' && locale) {
                     //    _log('locale is defined and its value is:'+locale);
                         $select.val(locale);
+                        // tento input je pritomen jen ve SLAVE prvku
                         $select.siblings('input.hidden_locale').val(locale);
                     } else {
                         // Jinak v selectu zvolime prvni nepouzity jazyk
@@ -287,12 +318,6 @@
                             // Slave ma hodnotu v hidden inputu
                             if (params.mode == '<?= AppForm::LANG_SLAVE; ?>') {
                                 $select.siblings('input.hidden_locale').val(this.value);
-                            } else if (params.mode == '<?= AppForm::LANG_MASTER; ?>') {
-                                // Masterovi musime select enablovat a nastavit mu name
-                                var $hidden = $select.siblings('input.hidden_locale');
-                                $select.attr('name', $hidden.attr('name'));
-                                $select.attr('disabled', false);
-                                $hidden.remove();
                             }
                             // A ukoncime iterovani
                             return false;
@@ -415,7 +440,6 @@
                 if (params.mode != '<?= AppForm::LANG_SLAVE ?>') {
                     // Inicializace selectu
                     $("select", $this).on('change', langChanged);
-
                     // Inicializace add odkazu
                     initAddLink();
                 }
@@ -428,9 +452,8 @@
                 }
 
 
-
-                if (params.mode == '<?= AppForm::LANG_SLAVE ?>' || params.mode == '<?= AppForm::LANG_MASTER ?>') {
-                    // V techto rezimu uzivatel nemuze rucne menit nastaveni jazyku ktere jsou jiz ulozeny v db
+                if (params.mode == '<?= AppForm::LANG_SLAVE ?>') {
+                    // V tomto rezimu uzivatel nemuze rucne menit nastaveni jazyku ktere jsou jiz ulozeny v db
                     $(".langitems select", $this).each(function(){
                         // Current select
                         var $s = $(this);

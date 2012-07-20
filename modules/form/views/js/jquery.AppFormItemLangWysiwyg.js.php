@@ -71,6 +71,7 @@
                 }
 
 
+
                 /**
                  * SLAVE - Tato funkce je zavolana v pripade ze prvek je slave a master prvek
                  * zmenil seznam povolenych jazyku
@@ -82,35 +83,59 @@
                     if (typeof languages == 'undefined' || ! languages) {
                         return;
                     }
+                    // Pocitadlo indexu jazyku
+                    var lang_index = 0;
 
                     _log('SLAVE.onEnabledLanguagesChanged called with languages: '+languages.join(', '));
                     // Projdeme vsechny lang item tohoto prvku
                     $('.langitems .langitem', $this).each(function() {
                         // Aktualni langitem select
-                        var $s = $('select:first', $(this));
+                        var $s = $('select', $(this));
+                        // Aktualne zpracovavany povoleny jazyk
+                        var lang = languages[lang_index];
+                        // Pokud neni aktualni jazyk povoleny, pak ho odebereme
+                        if ($.inArray($s.val(), languages) == -1) {
 
-                        // Pokud tento jazyk neni v povolenych - pak ho odstranime
-                        // - to musime udelat na zacatku, protoze jazyk mol byt prave odstranen z master pravku
-                        //   a potrebujeme predejit prepnuti vsech dalsich prekladu na jiny jazyk
+                            // Pokud povoleny jazyk na aktualnim indexu neni v prvku pritomen
+                            // pak doslo k prepnuti jazyka - prepneme aktualni select
+                            // - zkusime najit select ve kterem je zvolen aktualne zpracovavany enabled lang
 
-                        // Pozice jazyka v seznamu povolenych
-                        var position = $.inArray($s.val(), languages);
-                        if (position == -1) {
-                            _log('removing lang: '+$s.val());
+                            var enabled_lang_defined = $('.langitems select option[value="'+lang+'"]:selected', $this).length;
+
+                            if (enabled_lang_defined) {
+                                // Doslo k odebrani jazyka aktualniho prekladu
+                                // - aktualni preklad neni povolen ale aktualni povoleny jazyk je definovan
+                                // Odebereme jazyk (resi pripad odebrani prostredniho jazyka)
+                                $(this).remove();
+                                return;
+                            } else {
+                                // Aktualni preklad nema povoleny jazyk a aktualni povoleny jazyk nema definovany preklad
+                                // - nejspis doslo k prepnuti jazyka - prepneme select
+                                // - coz je zajisteno dale v if vetvi
+                            }
+                        }
+
+                        // Zjistime zda je na indexu nejaky jazyk
+                        if (typeof languages[lang_index] != 'undefined') {
+                            // Pokud ano, pak ho nastavime do aktualniho prvku jako zvoleny
+                            $s.val(lang);
+                            // Zaroven ho nastavime do hidden inputu (disabled select se totiz nativne neposila v postu)
+                            $('input.hidden_locale', $(this)).val(lang);
+                        }
+                        else {
+                            // Jazyk jiz neni povolen - odebereme ho
                             $(this).remove();
                         }
-                        // Jazyk je v povolenych - odebereme jazyk ze seznamu povolenych jazyku
-                        else {
-                            _log('enabled lang: '+$s.val());
-                            languages.splice(position, 1);
-                        }
+                        lang_index++;
                     });
                     // Pokud jsme zatim nevycerpali vsechny povolene jazyky, projdeme zbytek a pridame lang items
-                    for (var i in languages) {
-                        var lang = languages[i];
+                    while (typeof languages[lang_index] != 'undefined') {
+                        var lang = languages[lang_index];
                         addLanguage(lang);
+                        lang_index++;
                     }
                 }
+
 
                 var _log = function(msg) {
                     if (typeof console != 'undefined' && console.log) {
@@ -308,11 +333,7 @@
                                 $hidden.remove();
                             }
                             _log('before $input id in langString');
-                            var $input = $select.parents('.langitem:first').find('textarea');
-                            // Textarei nastavim prislusny placeholder
-                            setPlaceholder($input, $(this).attr('placeholder'));
-                            // A inicializujeme ho - pokud neni podporovan html5 placeholder
-                            initPlaceholder($input);
+
                             // A ukoncime iterovani
                             return false;
                         }

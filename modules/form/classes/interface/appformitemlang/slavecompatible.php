@@ -12,8 +12,9 @@ interface Interface_AppFormItemLang_SlaveCompatible {
      *   'de' => 'de',
      * );
      * @abstract
+     * @param array defaults - array of defaults languages
      * @return array
      */
-    public function getEnabledLanguagesList();
+    public function getEnabledLanguagesList($defaults=array());
 
 }
