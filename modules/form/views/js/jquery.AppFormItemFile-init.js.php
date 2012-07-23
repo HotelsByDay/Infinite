@@ -1,7 +1,7 @@
 //<script>
 $(document).ready(function(){
 
-    function appFormItemPhoto_InitItem($photo) {
+    function appFormItemPhoto_InitItem($photo, $item, $form) {
 
         //inicializace fancyboxu
         if ($photo.find('a.fancybox').length != 0) {
@@ -42,6 +42,9 @@ $(document).ready(function(){
                     //odstranim soubor ze stranky
                     $photo.remove();
 
+                    //the layout and dmensions of this form item may have changed
+                    $form.objectForm('fireEvent', 'itemLayoutChanged', $item);
+
                     //a ajax uz neni treba provadet
                     return false;
                 }
@@ -71,6 +74,9 @@ $(document).ready(function(){
 
                         //soubor byl uspesne odstranen - smazu jej ze stranky
                         $photo.remove();
+
+                        //the layout and dmensions of this form item may have changed
+                        $form.objectForm('fireEvent', 'itemLayoutChanged', $item);
                     }
                     
                 });
@@ -87,17 +93,20 @@ $(document).ready(function(){
 
     $("#<?= $uid;?>").each(function(){
 
+        //odkaz na aktualni obal objektu
+        var $item = $(this);
+
+        //reference na rodicovsky formular
+        var $form = $item.parents(".<?= AppForm::FORM_CSS_CLASS ?>:first");
+
         $(this).find('.list .item').each(function(){
-            appFormItemPhoto_InitItem($(this));
+            appFormItemPhoto_InitItem($(this), $item, $form);
         });
 
         //pokud se v prvku nenachazi tlacitko pro upload, tak se dale nic neprovadi
         if ($(".button", $(this)).length == 0) {
             return;
         }
-
-        //odkaz na aktualni obal objektu
-        var $item = $(this);
 
     <?php if (isset($sortable) && ! empty($sortable)): ?>
         //ma fungovat serazeni prvku pomoci drag&drop ?
@@ -219,10 +228,8 @@ $(document).ready(function(){
 
                     <?php endif ?>
 
-
-
                     //provede inicizalizaci zakladnich prvku na polozce
-                    appFormItemPhoto_InitItem($uploaded_file_preview);
+                    appFormItemPhoto_InitItem($uploaded_file_preview, $item, $form);
 
                     $item.find('.list').append($uploaded_file_preview);
 
@@ -235,9 +242,10 @@ $(document).ready(function(){
 
                     // This is triggered only if file is added into files list
                     $item.trigger('fileAdded');
-
-                    return false;
                 }
+
+                //the layout and dmensions of this form item may have changed
+                $form.objectForm('fireEvent', 'itemLayoutChanged', $item);
             },
             onCancel: function(id, fileName){
 

@@ -52,10 +52,73 @@
             });
         },
 
+        /**
+         * Zapina v vypina stickyness panelu s tlacitky formulare
+         * @param $_this
+         * @param toggle
+         * @private
+         */
+        _toggleControlPanelSticky: function( $_this , toggle ) {
+            if (toggle) {
+                var current_left  = $_this.find(".form_control_panel_wrapper").offset().left;
+                var current_width = $_this.find(".form_control_panel_wrapper").width();
+
+                $_this.find(".form_control_panel_wrapper").addClass('sticky')
+                                                          .find('.form_control_panel_content')
+                                                          .css('left', current_left)
+                                                          .css('width', current_width);
+            } else {
+                $_this.find(".form_control_panel_wrapper").removeClass('sticky')
+                                                          .find('.form_control_panel_content')
+                                                          .css('left', '')
+                                                          .css('width', '');
+            }
+        },
+
+        /**
+         * Provadi inicializaci formulare.
+         * @param $_this
+         * @private
+         */
         _initForm: function( $_this ) {
 
             //nactu si URL na kterou budu posilat pozadavek
             var settings = methods._getData( $_this, 'settings' );
+
+            //inicializace floating panelu s tlacitky formulare
+            if (typeof settings['float_control'] !== 'undefined' && settings['float_control'] === true) {
+
+                //interval between checking the scroll position
+                $.waypoints.settings.scrollThrottle = 30;
+                $_this.find(".form_control_panel").waypoint(function(event, direction) {
+                    methods._toggleControlPanelSticky($_this, direction == 'up');
+
+                    event.stopPropagation();
+
+                    },{offset: 'bottom-in-view'});
+
+                //pokud neni panel s tlacitky po inicializaci formulare viditelny, tak bude prepnut na sticky
+                var below_window_bottom = ! (($_this.find('.form_control_panel').parent().offset().top) < ($(window).scrollTop() + $(window).height()));
+
+                if (below_window_bottom) {
+                    methods._toggleControlPanelSticky($_this, true);
+                }
+            }
+
+            //inicializace funkce autosave - pri detekci 'change' na urovni formulare
+            //dojde automaticky k ulozeni
+            if (typeof settings['autosave'] !== 'undefined' && settings['autosave'] !== false) {
+                $_this.change(function(){
+                    //prectu aktualni formularova data
+                    var form_data = $_this.find('form').serialize();3
+
+                    //pripojim identifikaci stisknuteho formularoveho tlacitka
+                    form_data += '&<?= Core_AppForm::ACTION_KEY;?>=<?= Core_AppForm::ACTION_SAVE;?>';
+
+                    //odeslani formulare
+                    methods._submitForm($_this, form_data, (typeof settings['autosave'] === 'string' ? settings['autosave'] : "<?= __('form_action_button.update_ptitle');?>"));
+                });
+            }
 
             //inicializace close_banner tlacitka v banneru
             $_this.find('.close_banner').click(function(){
@@ -338,6 +401,16 @@
                         callback(params);
                         methods._log('callback has been called');
                     }
+                }
+            }
+
+            if (eventName == 'itemLayoutChanged') {
+                console.log('itemLayoutChanged');
+                //if layout of any item has changed, then the layout and dimensions of the entire form
+                //may have changed and therefore we need to recalculate all waypoints - the waypoint
+                //are for example used for the float_control option
+                if (typeof $.waypoints !== 'undefined') {
+                    $.waypoints("refresh");
                 }
             }
         },

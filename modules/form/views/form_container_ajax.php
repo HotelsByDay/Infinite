@@ -18,21 +18,25 @@
             
     <?= $form_view;?>
 
-    <div class="cb hr"></div>
+    <div class="form_control_panel_wrapper">
+        <div class="form_control_panel">
+            <div class="form_control_panel_content">
+                <div class="cb hr"></div>
+                <div class="fl">
+                    <?php foreach (arr::getifset($form_buttons, 'l', array()) as $params): ?>
+                    <?= form::button($params[0], $params[1], arr::get($params, 2));?>
+                    <?php endforeach ?>
+                </div>
 
-    <div class="fl">
-    <?php foreach (arr::getifset($form_buttons, 'l', array()) as $params): ?>
-        <?= form::button($params[0], $params[1], arr::get($params, 2));?>
-    <?php endforeach ?>
+                <div class="fr">
+                    <?php foreach (arr::getifset($form_buttons, 'r', array()) as $params): ?>
+                    <?= form::button($params[0], $params[1], arr::get($params, 2));?>
+                    <?php endforeach ?>
+                </div>
+                <br class="clear"/>
+            </div>
+
+        </div>
     </div>
-
-    <div class="fr">
-    <?php foreach (arr::getifset($form_buttons, 'r', array()) as $params): ?>
-        <?= form::button($params[0], $params[1], arr::get($params, 2));?>
-    <?php endforeach ?>
-    </div>
-
-    <br class="clear"/>
 
 </form>
-

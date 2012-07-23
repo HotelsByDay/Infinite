@@ -298,6 +298,10 @@
                         addLanguage() ;
                         // Focus do prave pridaneho inputu
                         $('.langitem:last', $this).find('.langinput:first').focus();
+
+                        //fire a form event - the layout of the form has changed
+                        $form.objectForm('fireEvent', 'itemLayoutChanged', $this);
+
                     }); // end add_link event
                 }
 
@@ -421,6 +425,9 @@
                     if ($('.langitem', $this).length <= 1) {
                         $('.remove_lang', $this).hide();
                     }
+
+                    //fire a form event - the layout of the form has changed
+                    $form.objectForm('fireEvent', 'itemLayoutChanged', $this);
                 }
 
 

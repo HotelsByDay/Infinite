@@ -10,6 +10,8 @@
 	Usage: $('#content').redactor();	
 */
 
+//<script>
+
 var RTOOLBAR = {};
 
 (function($){
@@ -258,6 +260,15 @@ var RTOOLBAR = {};
 				this.observeScroll();
 				$(document).scroll($.proxy(this.observeScroll, this));
 			}
+
+            //the Redactor plugin loads up asynchronously - the waypoints plugin must be refreshed now
+            //if it is used, because the position of form control panel (save, close buttons) might have
+            //changed after the Redactor initialization - the wysiwyg editor might have different
+            //dimensions that the underlying textarea
+            if (typeof $.waypoints !== 'undefined') {
+                console.log('redactor firing waypoints refresh');
+                $.waypoints("refresh");
+            }
 		},
 		shortcuts: function()
 		{

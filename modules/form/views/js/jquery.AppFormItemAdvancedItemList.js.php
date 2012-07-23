@@ -27,6 +27,9 @@
 
                 var $_this = $(this);
 
+                //reference na rodicovsky formular
+                var $form = $_this.parents(".<?= AppForm::FORM_CSS_CLASS ?>:first");
+
                 //tlacitko pro pridani noveho zaznamu
                 $_this.find(".add").click(function(){
 
@@ -92,8 +95,8 @@
 
                                 $item_container.html(response['content']);
 
-                                //add inside div with a 'clear' class
-                                //$item_container.append( $( document.createElement('div') ).addClass('clearer'));
+                                //the layout and dmensions of this form item may have changed
+                                $form.objectForm('fireEvent', 'itemLayoutChanged', $_this);
                             }
 
                             //skryju progress indicator a zobrazim tlacitko pro
@@ -151,6 +154,9 @@
 
         _initTemplate: function($_this, $item_container) {
 
+            //reference na rodicovsky formular
+            var $form = $_this.parents(".<?= AppForm::FORM_CSS_CLASS ?>:first");
+
             //pri kliknuti na tlacitko odstranit
             $item_container.find('.delete').click(function(){
 
@@ -163,6 +169,9 @@
                     if ($(this).attr('href') == '') {
 
                         $item_container.remove();
+
+                        //the layout and dmensions of this form item may have changed
+                        $form.objectForm('fireEvent', 'itemLayoutChanged', $_this);
 
                     } else {
 
@@ -191,11 +200,13 @@
 
                                 //soubor byl uspesne odstranen - smazu jej ze stranky
                                 $item_container.remove();
+
+                                //the layout and dmensions of this form item may have changed
+                                $form.objectForm('fireEvent', 'itemLayoutChanged', $_this);
                             }
 
                         });
                     }
-
 
                     //timto bude prvek oznacen k odstraneni
 //                    $template.find('input.type').val('d');

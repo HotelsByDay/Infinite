@@ -1070,6 +1070,7 @@ abstract class Controller_Base_Object extends Controller_Layout {
 
         //do sablony vlozim pouze ty soubory, ktere mohou byt vlozeny vicekrat
         $script_include_tag = Web::instance()->getJSFiles(TRUE);
+        $script_include_tag.= '<script type="text/javascript">$(document).ready(function(){if(typeof $.waypoints !== "undefined"){$.waypoints("refresh");}});</script>';
 
         //pokud je definovana v konfiguraci volba pro presmerovani po uspesnem
         //prvedeni fomrularo akce tak bude do dat pro klienta pridana i cilova URL
