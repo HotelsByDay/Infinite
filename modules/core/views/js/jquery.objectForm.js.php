@@ -34,7 +34,7 @@
                 methods._log('objectForm init - adding form className');
                 $_this.addClass('<?= AppForm::FORM_CSS_CLASS ?>');
 
-                settings = options;
+                settings = options || {};
 
                 //ulozim si aktualni nastaveni pluginu
                 methods._setData( $_this , {
@@ -83,7 +83,7 @@
         _initForm: function( $_this ) {
 
             //nactu si URL na kterou budu posilat pozadavek
-            var settings = methods._getData( $_this, 'settings' );
+            var settings = methods._getData( $_this, 'settings' )
 
             //inicializace floating panelu s tlacitky formulare
             if (typeof settings['float_control'] !== 'undefined' && settings['float_control'] === true) {
