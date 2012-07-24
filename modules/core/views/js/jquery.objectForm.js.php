@@ -85,6 +85,9 @@
             //nactu si URL na kterou budu posilat pozadavek
             var settings = methods._getData( $_this, 'settings' )
 
+            if (typeof $.waypoint !== 'undefined') {
+                $_this.find(".form_control_panel").waypoint('destroy');
+            }
             //inicializace floating panelu s tlacitky formulare
             if (typeof settings['float_control'] !== 'undefined' && settings['float_control'] === true) {
 
