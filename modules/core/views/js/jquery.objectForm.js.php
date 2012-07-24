@@ -388,9 +388,9 @@
             var $this = $(this);
             methods._log('fireEvent called with enventname: '+eventName);
             // Get all events subscriptions
-            var data = methods._getData($this, 'subscriptions');
+            var data = methods._getData($this, 'subscriptions') || {};
             // Call all stored callbacks
-            if (typeof data[eventName] != 'undefined') {
+            if (typeof data[eventName] !== 'undefined') {
                 methods._log('data[eventName] is set');
                 for (var i in data[eventName]) {
                     methods._log('processing callback');
@@ -405,7 +405,6 @@
             }
 
             if (eventName == 'itemLayoutChanged') {
-                console.log('itemLayoutChanged');
                 //if layout of any item has changed, then the layout and dimensions of the entire form
                 //may have changed and therefore we need to recalculate all waypoints - the waypoint
                 //are for example used for the float_control option
