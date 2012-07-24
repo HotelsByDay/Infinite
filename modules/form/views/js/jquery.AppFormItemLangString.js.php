@@ -193,8 +193,8 @@
                             languages[languages.length] = $(this).val();
                         });
 
-                        // Vyvolame na formulari udalost "zmena jazyku"
-                        $form.objectForm('fireEvent', 'languagesChanged', languages);
+                        //fire a form event - the layout of the form has changed
+                        $form.objectForm('fireEvent', 'itemLayoutChanged', $this);
 
                         // Provedeme ajaxovou synchronizaci DB na serveru
                         _log('ajax request url: '+params.languages_syncer_url);
@@ -204,6 +204,9 @@
                             data: {'<?= AppForm::ENABLED_LANGUAGES_POST_KEY ?>' : languages},
                             success: function(r) {
                                 _log('DB has been synchronized...');
+
+                                // Vyvolame na formulari udalost "zmena jazyku"
+                                $form.objectForm('fireEvent', 'languagesChanged', languages);
                             }
                         })
                     }
@@ -298,9 +301,6 @@
                         addLanguage() ;
                         // Focus do prave pridaneho inputu
                         $('.langitem:last', $this).find('.langinput:first').focus();
-
-                        //fire a form event - the layout of the form has changed
-                        $form.objectForm('fireEvent', 'itemLayoutChanged', $this);
 
                     }); // end add_link event
                 }
