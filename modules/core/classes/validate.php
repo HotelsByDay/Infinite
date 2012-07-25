@@ -97,6 +97,10 @@ class Validate extends Kohana_Validate {
         //remove any dashes
         $number = preg_replace('/\-/', '', $number);
 
+        //remove any brackets
+        $number = preg_replace('/\(/', '', $number);
+        $number = preg_replace('/\)/', '', $number);
+
         // Check if the number length is within range
         return in_array(strlen($number), $lengths);
     }
