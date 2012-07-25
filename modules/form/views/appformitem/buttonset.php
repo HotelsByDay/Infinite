@@ -13,4 +13,8 @@
 
 <?php endforeach; ?>
 
+    <?php if (isset($hint) && !empty($hint)): ?>
+    <span class="hint"><?= $hint; ?></span>
+    <?php endif ?>
+
 </div>
