@@ -85,7 +85,23 @@ abstract class Kohana_Auth {
 	 */
 	public function get_user()
 	{
-            return $this->_session->get($this->_config['session_key'], FALSE);;
+        $ret = $this->_session->get($this->_config['session_key'], FALSE);
+
+        if ( ! $ret) {
+
+            $this->_login_in_progress = TRUE;
+
+            $user = ORM::factory('user');
+
+            $this->_login_in_progress = FALSE;
+
+            return $user;
+
+        } else {
+
+            return $ret;
+
+        }
 	}
 
 	/**

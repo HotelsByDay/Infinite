@@ -65,6 +65,10 @@ class Controller_Base_Login extends Controller_Template {
 
                 //predam hodnotu parametru 'remember'
                 $this->template->remember = $remember;
+
+                //bude zobrazen odkaz pro pristup na stranku k resetovani hesla
+                //a stranka bude uzivateli pristupna
+                Session::instance()->set('show_reset_password_option', '1');
             }
         }
     }

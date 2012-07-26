@@ -196,7 +196,13 @@ $(document).ready(function(){
 
                 <?php if ($file_count != 0): ?>
                 if ($item.find('.list .item:not(.removed)').length >= <?= $file_count;?>) {
-                    this.showMessage("<?= __('appformitemfile.maximum_allowed_file_count_is', array(':count' => $file_count));?>");
+
+                    if (<?= $file_count;?> == 1) {
+                        this.showMessage("<?= __('appformitemfile.maximum_allowed_file_count_is_one');?>");
+                    } else {
+                        this.showMessage("<?= __('appformitemfile.maximum_allowed_file_count_is', array(':count' => $file_count));?>");
+                    }
+
                     return false;
                 }
                 <?php endif ?>

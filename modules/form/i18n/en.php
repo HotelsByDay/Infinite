@@ -57,6 +57,7 @@ return array(
 
     //APP FORM FILE
     'appformitemfile.maximum_allowed_file_count_is' => 'There can be :count files at most.',
+    'appformitemfile.maximum_allowed_file_count_is_one' => 'Only one file is permitted.',
     'appformitemfile.confirm_file_delete' => 'Are you sure you want to delete this file?',
     'appformitemfile.cannot_delete' => 'An error occurred while deleting the file. The file was not removed.',
     'appformitemfile.delete_ptitle' => 'Deleting file...',
@@ -66,7 +67,7 @@ return array(
     'appformitemadvanceditemlist.add_pi' => 'Loading new item...',
     'appformitemadvancedselect.delete_label' => 'Delete item',
 
-    'valumsUpload.drop_files_here_to_upload' => 'Drop files here to add them as attachements.',
+    'valumsUpload.drop_files_here_to_upload' => 'Drop files here',
     'valumsUpload.upload_file' => 'Upload',
     'valumsUpload.cancel_upload' => 'cancel',
     'valumsUpload.error_invalid_extension' => 'Invalid file type.',
