@@ -287,6 +287,15 @@ class Core_AppForm {
      */
     protected function setActionResult($action, $result = NULL, $message = NULL)
     {
+        //pokud je exlicitne definovano v konfiguraci ze se nema zobrazovat vysledek akce,
+        //tak se do dane promenne vlozi prazdna hodnota
+        if ( ! arr::get($this->_config, 'display_action_result', TRUE))
+        {
+            $this->_action_result_view = NULL;
+
+            return;
+        }
+
         //ulozim si vysledek akce
         $this->action_result_status = $result;
 
