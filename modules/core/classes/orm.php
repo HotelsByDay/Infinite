@@ -1006,12 +1006,17 @@ class ORM extends Kohana_ORM {
      * @param <type> $id
      * @return <type> 
      */
-    public function find($id = NULL)
+    public function find($id = NULL, $deleted_too = FALSE)
     {
         //aplikuje opravneni 'db_select' (a jeho mozny modifikator)
         if ( ! $this->applyUserSelectPermission())
         {
             throw new Exception_UnauthorisedAction('Unauthorised db action "select" on object "'.$this->_object_name.'" ('.$this->permissionObjectName().').');
+        }
+
+        if ( ! $deleted_too && array_key_exists('deleted', $this->_object))
+        {
+            $this->where($this->table_name().'.deleted', 'IS', DB::Expr('NULL'));
         }
 
         return parent::find($id);

@@ -287,6 +287,15 @@ class Core_AppForm {
      */
     protected function setActionResult($action, $result = NULL, $message = NULL)
     {
+        //pokud je exlicitne definovano v konfiguraci ze se nema zobrazovat vysledek akce,
+        //tak se do dane promenne vlozi prazdna hodnota
+        if ( ! arr::get($this->_config, 'display_action_result', TRUE))
+        {
+            $this->_action_result_view = NULL;
+
+            return;
+        }
+
         //ulozim si vysledek akce
         $this->action_result_status = $result;
 
@@ -508,6 +517,10 @@ class Core_AppForm {
         //definovat co ma byt zobrazeno uzivateli
         $special_message = NULL;
 
+        //definuje zda bude nastavena hlaska, ktera informuje o vysledku
+        //provedene akce
+        $show_action_result = TRUE;
+
         //ocekavam ze pri ukladani muze dojit k problemu:
         // - neuspesna validace
         // - vyjimka pri ulozeni
@@ -515,6 +528,25 @@ class Core_AppForm {
         try
         {
             $this->requested_action_result = $this->runAction($requested_action);
+        }
+        catch (Exception_ModelDataValidationFailed $e)
+        {
+            //v konfiguraci muze byt nastaveno ze se nema zobrazovat
+            //obecna chybova hlaska informujici o validacni chybe nekde ve formulari
+            if ( ! arr::get($this->_config, 'display_general_validation_error', TRUE))
+            {
+                $show_action_result = FALSE;
+            }
+            else
+            {
+                //nastavim vysledek akce
+                $this->requested_action_result = self::ACTION_RESULT_FAILED;
+
+                //vyjimka definuje chybovou zpravu, ktera bude uzivateli zobrazena
+                //namisto standardni zpravy, ktera je definovana uspechem nebo neuspechem
+                //jedne ze zakladnich akci (napr. CHYBA pri UKLADANI, CHYBA pri MAZANI)
+                $special_message = $e->getUserMessage();
+            }
         }
         //vyjimka, ktera muze byt "zobrazena" na formulari
         catch (Exception_FormAction $e)
@@ -538,10 +570,13 @@ class Core_AppForm {
             $this->requested_action_result = self::ACTION_RESULT_FAILED;
         }
 
-        //nedoslo k zadne vyjimce, zajistim zobrazeni vysledku akce na formulari
-        $this->setActionResult($this->requested_action,
-                               $this->requested_action_result,
-                               $special_message);
+        if ($show_action_result)
+        {
+            //nedoslo k zadne vyjimce, zajistim zobrazeni vysledku akce na formulari
+            $this->setActionResult($this->requested_action,
+                $this->requested_action_result,
+                $special_message);
+        }
 
         //pokud ma byt formular resetovan po uspesnem provedeni akce, tak se
         //zde nahraje prazdny ORM model namisto aktualniho (ulozeneho)
