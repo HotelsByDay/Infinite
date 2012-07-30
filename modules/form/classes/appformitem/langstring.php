@@ -133,12 +133,21 @@ class AppFormItem_LangString extends AppFormItem_String
         Web::instance()->addCustomJSFile(View::factory('js/jquery.AppFormItemLangString.js'));
         // A jeho inicializaci
         $init_js = View::factory('js/jquery.AppFormItemLangString-init.js');
-        
+
+
         // Poskladame config prvku
+        // - maximalni pocet prekladu
+        $locales_count = count($this->locales);
+
+        // Pokud je prvek master, pak muse byt maximalni pocet prekladu zadan v configu
+        if ($this->mode != AppForm::LANG_SLAVE) {
+            $locales_count = arr::get($this->config, 'locales_limit', $locales_count);
+        }
+
         $config = Array(
             // Predame seznam jazyku do pluginu
       //      'locales' => $this->locales,
-            'locales_count' => count($this->locales),
+            'locales_count' => $locales_count,
             // Master/Slave/none
             'mode'          => $this->mode,
         );
