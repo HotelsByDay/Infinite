@@ -140,7 +140,7 @@ class AppFormItem_LangString extends AppFormItem_String
         $locales_count = count($this->locales);
 
         // Pokud je prvek master, pak muse byt maximalni pocet prekladu zadan v configu
-        if ($this->mode == AppForm::LANG_MASTER) {
+        if ($this->mode != AppForm::LANG_SLAVE) {
             $locales_count = arr::get($this->config, 'locales_limit', $locales_count);
         }
 
