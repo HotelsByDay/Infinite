@@ -404,8 +404,11 @@
 
             $item.find('textarea').redactor({
                 path: '<?= url::base();?>redactor/',
-                autoresize: true,
-                toolbar: 'mini',
+                autoresize: false,
+                resize: false,
+                // See http://redactorjs.com/docs/toolbar/
+                buttons: ['formatting', '|', 'bold', 'italic', '|',
+                    'unorderedlist', 'orderedlist', 'outdent', 'indent', '|', 'link'],
                 focus: false
             });
         }
