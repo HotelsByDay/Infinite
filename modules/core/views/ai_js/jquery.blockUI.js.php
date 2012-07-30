@@ -202,7 +202,6 @@ var pageBlock = null;
 var pageBlockEls = [];
 
 function install(el, opts) {
-    console.log(opts);
 	var full = (el == window);
 	var msg = opts && opts.message !== undefined ? '<span class="blockUI_message">' + opts.message + '</span>': undefined;
 	opts = $.extend({}, $.blockUI.defaults, opts || {});
