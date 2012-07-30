@@ -51,6 +51,11 @@ class AppFormItem_String extends AppFormItem_Base
             $view->placeholder = $this->config['placeholder'];
         }
 
+        // If field_prefix is defined
+        if (isset($this->config['field_prefix'])) {
+            $view->field_prefix = $this->config['field_prefix'];
+        }
+
         // Vratime $view
         return $view;
     }

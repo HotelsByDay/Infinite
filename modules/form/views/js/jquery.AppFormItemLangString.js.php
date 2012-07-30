@@ -301,8 +301,15 @@
                         addLanguage() ;
                         // Focus do prave pridaneho inputu
                         $('.langitem:last', $this).find('.langinput:first').focus();
-
                     }); // end add_link event
+
+                    // Pokud je ve maximalni pocet prekladu, pak skryjeme odkaz na pridani dalsiho
+                    if ($(".langitem", $this).length >= settings.locales_count) {
+                        // Skryjeme odkaz
+                        $(".langadd a", $this).hide()
+                            // Zobrazime span s info hlaskou
+                            .parent().find('span').show();
+                    }
                 }
 
                 /**
