@@ -97,6 +97,12 @@ class Validate extends Kohana_Validate {
         //remove any dashes
         $number = preg_replace('/\-/', '', $number);
 
+        //remove any leading '+'
+        $number = ltrim($number, '+');
+
+        //remove any leading zero's
+        $number = ltrim($number, '0');
+
         //remove any brackets
         $number = preg_replace('/\(/', '', $number);
         $number = preg_replace('/\)/', '', $number);

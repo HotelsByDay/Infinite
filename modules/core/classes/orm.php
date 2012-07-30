@@ -162,7 +162,6 @@ class ORM extends Kohana_ORM {
                 $this->log_original_data[$column] = $this->_object[$fk];
             }
         }
-        
         /**
          * Pokud klic odpovida nazvu databazoveho sloupce a nastavuje se stejna
          * hodnota, ktera uz je ulozena, pak toto nastaveni chceme ignorovat
@@ -172,7 +171,7 @@ class ORM extends Kohana_ORM {
         // Nastavuje se DB sloupec? 
         if (isset($this->_table_columns[$column])) {
             // Pokud je puvodni hodnota shodna s nastavovanou
-            if ($this->{$column} == $value) {
+            if ((string)($this->{$column}) === (string)$value) {
                 return; // Neni treba nastavovat ji znova
             }
         }
@@ -185,7 +184,6 @@ class ORM extends Kohana_ORM {
                 return; // Nechceme aby se zmenilo _changed
             }
         }
-
         // Pokud jsme se dostali az sem, ma se provest standardni nastaveni
         // Nyni se originalni set zavola vzdy
         parent::__set($column, $value);
@@ -301,7 +299,7 @@ class ORM extends Kohana_ORM {
      * pozadovane ciselne rady.
      */
     public function save() 
-    {   
+    {
         //metoda nastavuje defaultni hodnoty nekterych systemovych sloupecku
         //jako napriklad 'userid' nebo 'created', ktere byvaji ve vsech standardnich
         //tabulkach pro ulozeni uzivatelskych dat (napr. v ciselnikovych tabulkach nejsou)
