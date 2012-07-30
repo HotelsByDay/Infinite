@@ -223,7 +223,7 @@ var RTOOLBAR = {};
 					// new line p
 					if (key == 13 && !e.shiftKey && !e.ctrlKey && !e.metaKey) return this.formatNewLine(e);
 				}
-				//console.log(e);
+
 				this.syncCode();
 
 			}, this));
@@ -266,7 +266,6 @@ var RTOOLBAR = {};
             //changed after the Redactor initialization - the wysiwyg editor might have different
             //dimensions that the underlying textarea
             if (typeof $.waypoints !== 'undefined') {
-                console.log('redactor firing waypoints refresh');
                 $.waypoints("refresh");
             }
 		},

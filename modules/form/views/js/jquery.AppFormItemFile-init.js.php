@@ -118,7 +118,6 @@ $(document).ready(function(){
                 //tento atribut slouzi k ulozeni poradi daneho prvku
                 var i = 0;
                 $item.find('.list .list_item').each(function(){
-                    console.log('input[name$="[<?= $sortable;?>][]"]');
                     $(this).find('input[name$="[<?= $sortable;?>][]"]').val(i++);
                 });
                 //uzivateli se zobrazi info zprava - porad prvku bude
