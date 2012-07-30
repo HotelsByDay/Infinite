@@ -171,7 +171,7 @@ class ORM extends Kohana_ORM {
         // Nastavuje se DB sloupec? 
         if (isset($this->_table_columns[$column])) {
             // Pokud je puvodni hodnota shodna s nastavovanou
-            if ((string)($this->{$column}) === (string)$value) {
+            if ($this->{$column} === $value) {
                 return; // Neni treba nastavovat ji znova
             }
         }

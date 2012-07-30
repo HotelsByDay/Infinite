@@ -32,7 +32,10 @@ class AppFormItem_LangString extends AppFormItem_String
     // - to je potreba ve zde ulozenem tvaru predat do sablony, zaroven je to vyhodnejsi pro ukladani
     // - v requestu je vsak vyhodnejsi to mit usporadane jinak
     //   proto se to v metode setValue prevede a ulozi sem
-    protected $converted_form_data = Array();
+    protected $virtual_value = Array();
+
+    // Zda v setValue metode byla nalezena prazdna hodnota (nedefinovany text prekladu)
+    protected $empty_value_found = false;
 
     // Prvek muze byt v rezimu AppForm::LANG_MASTER nebo AppForm::LANG_SLAVE nebo NULL (nezavysly prvek)
     protected $mode = NULL;
@@ -111,10 +114,6 @@ class AppFormItem_LangString extends AppFormItem_String
         }
 
 
-
-
-
-        
         // Nazev has_many vazby dopocitame automaticky (zavedena konvence pri pouziti tohoto prvku)
         // zaroven udava nazev modelu pro ukladani prekladu
         $this->lang_model = $this->model->object_name().'_lang';
@@ -174,7 +173,7 @@ class AppFormItem_LangString extends AppFormItem_String
         // Prevedeme $value (form_data) z tvaru dvou poli na jedno asociativni pole
         $translates = (array)arr::get($value, 'translates');
         
-        // Toto ulozime do $this->converted_form_data
+        // Toto ulozime do $this->virtual_value
         $data = Array();
         
         // Ulozime preklady - projdeme hodnoty ze SELECT items
@@ -187,15 +186,15 @@ class AppFormItem_LangString extends AppFormItem_String
             $content = trim($content);
 
             // Pokud je obsah prazdny, pak preskocime - jakoby vubec nebyl
-            // - ale jen pokud nejde o MASTER/SLAVE prvek - ty mohou ulozit i prazdne retezce
-            //   Master primarne protoze se podle nej urcuji povolene jazyky
-            //   Slave si prazdne preklady uklada aby bylo synchronizovane poradi jeho prekladu podle poradi v mastru
-            if ($content == '' and $this->mode != AppForm::LANG_MASTER and $this->mode != AppForm::LANG_SLAVE) {
+            if ($content == '') {
+                $this->empty_value_found = true;
                 continue;
             }
             
             // Pokud jiz mame hodnotu, tak nedovolime zapsat prazdnou
-            if (isset($data[$locale]) and empty($content)) continue;
+            if (isset($data[$locale]) and empty($content)) {
+                continue;
+            }
 
             // Ulozime si preklad pro dane locale
             $data[$locale] = $content;
@@ -207,17 +206,20 @@ class AppFormItem_LangString extends AppFormItem_String
         }
         // Osetrime pripad, kdy nekdo v requestu prepise hodnoty - prijmeme jen 
         // ta locale, ktera jsou povolena v configu
-        $this->converted_form_data = $data;
+        $this->virtual_value = $data;
     }
     
     
     
     /**
-     * Validace - ze zadne locale neni omylem vybrano dvakrat
+     * Validace - v priade ze je prvek nastaven jako required pak musi byt uvedeny hodnoty pro vsechna localse
      * @return type 
      */
     public function check() 
     {
+        if (isset($this->config['required']) and $this->config['required'] and $this->empty_value_found) {
+            return __($this->model->object_name().'.validation.'.$this->attr.'.incomplete');
+        }
         return parent::check();
     }
     
@@ -233,7 +235,7 @@ class AppFormItem_LangString extends AppFormItem_String
     {
         // Pokud mame form_data (form byl odeslan a ted se prvek bude renderovat po validacni chybe)
         if ( ! empty($this->form_data)) {
-            $translates = $this->converted_form_data;
+            $translates = $this->virtual_value;
         }
         else {
             // Jinak precteme preklady z DB
@@ -304,7 +306,7 @@ class AppFormItem_LangString extends AppFormItem_String
             case AppForm::FORM_EVENT_AFTER_SAVE:
                 
                 // Data prijata z formulare upravena na asociativni tvar
-                $form_data = $this->converted_form_data;
+                $form_data = $this->virtual_value;
                 
                 // Projdeme zaznamy v DB a aktualizujeme je nebo je smazeme
                 $db_translates = $this->getDbTranslates(false);
@@ -329,7 +331,7 @@ class AppFormItem_LangString extends AppFormItem_String
                     }
                 }
                 
-                Kohana::$log->add(Kohana::ALERT, json_encode($form_data).' - '.json_encode($this->converted_form_data));
+                Kohana::$log->add(Kohana::ALERT, json_encode($form_data).' - '.json_encode($this->virtual_value));
                 
                 // Projdeme zaznamy co zustaly ve $form_data a pridame je do DB
                 foreach ($form_data as $locale => $content)
