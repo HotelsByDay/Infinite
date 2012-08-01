@@ -846,7 +846,7 @@ class Kohana_Request {
 	public function redirect($url = '', $code = 302)
 	{
 
-            $url = preg_replace('#^'.url::base().'#', '', $url);
+        $url = preg_replace('#^'.url::base().'#', '', $url);
 
 		if (strpos($url, '://') === FALSE)
 		{

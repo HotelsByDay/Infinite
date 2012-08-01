@@ -58,7 +58,7 @@ $.widget("ui._dialog", $.ui.dialog, {
             _this.blockUI({message: $(this).attr('ptitle')});
 
             //formular odeslu na URL odkud jsem ho nacetl
-            $.ajax({
+            $._ajax({
                 type:'POST',
                 url:url,
                 data: form_data,
@@ -179,7 +179,7 @@ $.widget("ui._dialog", $.ui.dialog, {
         //zpristupneni uvnitr callbacku ve funkci getJSON
         var _this = this;
         //nacteni obsahu
-        $.ajax({
+        $._ajax({
             type:'POST',
             url:url,
             data: options,

@@ -58,7 +58,7 @@
                 };
             }
 
-            var jqXHR = $.ajax({
+            var jqXHR = $._ajax({
                 type: 'POST',
                 url: action_url,
                 data: params,

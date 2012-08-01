@@ -1,3 +1,4 @@
+// <script>
 $.confirm = function(message){
     return confirm(message);
 }
@@ -182,7 +183,73 @@ $.showTipHelp = function($element, helpid) {
     $(document).qtip('show');
 }
 
-$(document).ready(function(){
+$(document).ready(function() {
     $(".jq-datepicker").datepicker({ dateFormat: 'd.m.yy' });
 });
 
+
+// ajax function overload
+// - redirect support added
+$._ajax = function(arg1, arg2)
+{
+    // Get original success callback
+    if (typeof (arg1) === 'object') {
+        var originalCallback = arg1.success;
+    } else if (typeof (arg2) === 'object') {
+        var originalCallback = arg2.success;
+    }
+
+    // Put it into new callback and process potential redirect
+    var newCallback = function(data, status, jqXHR) {
+        // If redirect should be executed
+        if (typeof data !== 'undefined' && typeof data.redirect_to === 'string') {
+            window.location.href = data.redirect_to;
+            return;
+        }
+
+        if (typeof originalCallback === 'function') {
+            originalCallback(data, status, jqXHR);
+        }
+    }
+
+    // Change arguments callback
+    if (typeof (arg1) === 'object') {
+        arg1.success = newCallback;
+    } else if (typeof (arg2) === 'object') {
+        arg2.success = newCallback;
+    }
+    $.ajax(arg1, arg2);
+}
+
+// getJSON function overload
+// - redirect support added
+$._getJSON = function(arg0, arg1, arg2)
+{
+    // Get original success callback
+    if (typeof (arg1) === 'function') {
+        var originalCallback = arg1;
+    } else if (typeof (arg2) === 'function') {
+        var originalCallback = arg2;
+    }
+
+    // Put it into new callback and process potential redirect
+    var newCallback = function(data, status, jqXHR) {
+        // If redirect should be executed
+        if (typeof data !== 'undefined' && typeof data.redirect_to === 'string') {
+            window.location.href = data.redirect_to;
+            return;
+        }
+
+        if (typeof originalCallback === 'function') {
+            originalCallback(data, status, jqXHR);
+        }
+    }
+
+    // Change arguments callback
+    if (typeof (arg1) === 'function') {
+        arg1 = newCallback;
+    } else if (typeof (arg2) === 'function') {
+        arg2 = newCallback;
+    }
+    $.getJSON(arg0, arg1, arg2);
+}

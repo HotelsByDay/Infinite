@@ -568,7 +568,7 @@
             }
 
             //udelam si ajax object pro poslani post pozadavku
-            var jqXHR = $.ajax(settings.dataUrl, {
+            var jqXHR = $._ajax(settings.dataUrl, {
                                         type: 'POST',
                                         data: params,
                                         success: function( data ){

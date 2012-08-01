@@ -163,7 +163,7 @@
 
                         // Provedeme ajaxovou synchronizaci DB na serveru
                         _log('ajax request url: '+params.languages_syncer_url);
-                        $.ajax({
+                        $._ajax({
                             url: params.languages_syncer_url,
                             type: 'POST',
                             data: {'<?= AppForm::ENABLED_LANGUAGES_POST_KEY ?>' : languages},
@@ -401,7 +401,7 @@
         }, // end init
 
         _initWysiwyg: function($item) {
-
+            var $this = $(this);
             $item.find('textarea').redactor({
                 path: '<?= url::base();?>redactor/',
                 autoresize: false,
@@ -409,7 +409,14 @@
                 // See http://redactorjs.com/docs/toolbar/
                 buttons: ['formatting', '|', 'bold', 'italic', '|',
                     'unorderedlist', 'orderedlist', 'outdent', 'indent', '|', 'link'],
-                focus: false
+                focus: false,
+                callback: function() {
+                    // Find parent form
+                    var $form = $this.parents(".<?= AppForm::FORM_CSS_CLASS ?>:first");
+
+                    // Fire a form event - the layout of the form has changed
+                    $form.objectForm('fireEvent', 'itemLayoutChanged', $this);
+                }
             });
         }
 

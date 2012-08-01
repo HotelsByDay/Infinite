@@ -189,7 +189,7 @@
             });
 
             //udelam si ajax object pro poslani post pozadavku
-            jqXHR = $.ajax( url, {
+            jqXHR = $._ajax( url, {
                                         type: 'POST',
                                         data: {},
                                         success: function( response_data , textStatus, jqXHR){

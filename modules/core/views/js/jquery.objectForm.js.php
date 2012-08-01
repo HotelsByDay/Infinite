@@ -235,7 +235,7 @@
             //nactu si URL na kterou budu posilat pozadavek
             var settings = methods._getData( $_this, 'settings' );
 
-            var jqXHR = $.ajax({
+            var jqXHR = $._ajax({
                 type:'POST',
                 url:$_this.find('form').attr('action'),
                 data: form_data,
@@ -341,7 +341,7 @@
                 return;
             }
 
-            var jqXHR = $.ajax({
+            var jqXHR = $._ajax({
                 type:'POST',
                 url:$_this.find('form').attr('action'),
                 data: {_id: item_id},

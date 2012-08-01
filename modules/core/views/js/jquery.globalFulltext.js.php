@@ -65,7 +65,7 @@
                     message: "<?= __('general.loading_table_data');?>"
                 });
 
-                var jqXHR = $.ajax({
+                var jqXHR = $._ajax({
                                 url: "<?= appurl::fulltext_search_data();?>",
                                 data: parameters,
                                 success: function(data){

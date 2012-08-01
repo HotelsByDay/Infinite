@@ -8,6 +8,10 @@ Copyright (c) 2009-2012, Imperavi Ltd.
 License: http://redactorjs.com/license/
 
 Usage: $('#content').redactor();
+
+@JDA changes made in this file
+$.ajax was replaced with $._ajax
+
 */
 // <script>
 if (typeof RELANG === 'undefined')
@@ -887,7 +891,7 @@ delete(this.dropdowns[i]);
 },
 handler: function()
 {
-$.ajax({
+$._ajax({
 url: this.opts.handler,
 type: 'POST',
 data: 'redactor=' + escape(encodeURIComponent(this.getCode())),
@@ -3279,7 +3283,7 @@ if (this.uploadOptions.success)
 					var fd = new FormData();
 					fd.append('file', file);
 
-					$.ajax({
+					$._ajax({
 						dataType: 'html',
 						url: this.opts.url,
 						data: fd,

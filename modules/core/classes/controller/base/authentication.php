@@ -50,7 +50,16 @@ abstract class Controller_Base_Authentication extends Controller {
         //do sessny si ulozim adresu na kterou se snazil pristoupit
         //abych ho mohl po uspesnem prihlaseni na tuto adresu presmerovat
         //toto je zajisteno v login controlleru
-        Session::instance()->set('requested_url', Request::detect_uri());
+        // Pokud jde o ajaxovy pozadavek, tak ulozime referrer
+        if (Request::$is_ajax) {
+            // @todo - overit ze toto bude vzdy fungovat spravne
+            $url = Request::$referrer;
+        } else {
+            // Jinak ulozime pozadovanou url
+            $url = Request::detect_uri();
+        }
+        Session::instance()->set('requested_url', $url);
+        Session::instance()->set('flash_msg', __('system.automatic_logout'));
         //dochazi k presmerovani na login stranku
         $this->request->redirect(Appurl::login_page());
     }
