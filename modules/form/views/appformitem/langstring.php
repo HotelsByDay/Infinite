@@ -20,7 +20,7 @@
 
             <?php if ($label != ''): ?>
 
-            <?php if ($i > 1) $final_label = $label.' '.$i; else $final_label = $label; ?>
+            <?php if ($i > 1) $final_label = $label/*.' '.$i*/; else $final_label = $label; ?>
 
             <label for="<?= $attr.'_'.$i ?>"><?= $final_label ?></label>
 

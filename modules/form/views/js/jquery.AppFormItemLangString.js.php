@@ -234,7 +234,7 @@
                     var position = translates_count+1;
                     // Upravime jeho label
                     var $label = $translate.find('label');
-                    if ($label.length != 0) {
+                    if ($label.text().length != 0) {
                         // Pridame mu poradove cislo do labelu
                         $label.html($label.html() + ' ' + position);
                         // Upravime jeho "for" atribut
