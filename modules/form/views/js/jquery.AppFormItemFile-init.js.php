@@ -122,7 +122,7 @@ $(document).ready(function(){
                 });
                 //uzivateli se zobrazi info zprava - porad prvku bude
                 //zachovano jen kdyz se ulozi formular
-                $.userInfoMessage("<?= __('form.AppFormItemAdvancedItemlist.order_update.info_message');?>");
+                $.userInfoMessage("<?= __('form.AppFormItemFile.order_update.info_message');?>");
             }
         }).disableSelection();
         <?php endif ?>

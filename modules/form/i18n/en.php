@@ -79,7 +79,8 @@ return array(
 
     //APP FORM ADVANCED ITEM LIST
     'appformitemadvanceditemlist.cannot_add_new_there_is_empty_item' => 'Another item can be added only after filling the last added item.',
-    'form.AppFormItemAdvancedItemlist.order_update.info_message' => 'Click \"Apply changes\" at the bottom of the form to apply new order of menu items.',
+    'form.AppFormItemAdvancedItemlist.order_update.info_message' => 'Click \"Apply changes\" at the bottom of the form to apply new order of items.',
+    'form.AppFormItemFile.order_update.info_message' => 'Click \"Apply changes\" at the bottom of the form to apply new order of images.',
 
     'appformitem_datetime.format_error' => 'The date format is invalid.',
 
