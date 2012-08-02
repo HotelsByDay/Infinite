@@ -379,6 +379,9 @@ class AppFormItem_Base
         // definovana v konfiguracnim souboru
         $view->hint = arr::get($this->config, 'hint');
 
+        //html atribut autocompete
+        $view->html_autocomplete = arr::get($this->config, 'html_autocomplete');
+
         // do sablony se vlozi rozsirena napoveda, ktera je zobrazena jako
         // tooltip
         if (($tooltip = arr::get($this->config, 'tooltip')) != NULL)
