@@ -25,8 +25,6 @@ class Helper_Languages {
     }
 
 
-
-
     /**
      * Vrati seznam povolenych jazyku pro zadany model
      * @static
