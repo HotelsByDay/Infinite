@@ -825,7 +825,7 @@
             });
 
             //udelam si ajax object pro poslani post pozadavku
-            var jqXHR = $.ajax(request_url, {
+            var jqXHR = $._ajax(request_url, {
                                         type: 'POST',
                                         data: params,
                                         success: function( response_data ) {

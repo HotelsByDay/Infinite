@@ -182,7 +182,7 @@
                                 _ps:settings._ps
                             };
                                                 
-                        $.ajax({
+                        $._ajax({
                             // Sestaveni URL adresy na poradac prislusneho objektu
                             url: settings.data_url,
                             dataType: "json",

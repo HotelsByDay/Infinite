@@ -104,7 +104,7 @@
                             pom_data['preview'] = preview;
                         }
 
-                        $.ajax({
+                        $._ajax({
                             // Sestaveni URL adresy na poradac prislusneho objektu
                             url: url,
                             dataType: "json",

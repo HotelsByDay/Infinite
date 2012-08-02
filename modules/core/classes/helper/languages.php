@@ -11,8 +11,8 @@ class Helper_Languages {
      */
     public static function setEnabledLanguages(ORM $model, array $languages)
     {
-        $reltype = $model->object_name();
-        $relid = $model->pk();
+        $reltype = $model->reltype();
+        $relid = $model->relid();
         // Zkusime najit nastaveni
         $setting = ORM::factory('Object_Language')->where('reltype', '=', $reltype)
             ->where('relid', '=', $relid)
@@ -32,8 +32,8 @@ class Helper_Languages {
      */
     public static function getEnabledLanguages(ORM $model, array $defaults=array())
     {
-        $reltype = $model->object_name();
-        $relid = $model->pk();
+        $reltype = $model->reltype();
+        $relid = $model->relid();
         // Zkusime najit nastaveni
         $setting = ORM::factory('Object_Language')->where('reltype', '=', $reltype)
             ->where('relid', '=', $relid)

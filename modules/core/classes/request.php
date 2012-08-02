@@ -80,6 +80,35 @@ class Request extends Kohana_Request {
         return $request_data;
     }
 
+    /**
+     *
+     * @param string $url
+     * @param int $code
+     */
+    public function redirect($url = '', $code = 302)
+    {
+
+        if (Request::$is_ajax) {
+            // Set the response status
+            $this->status = 200;
+
+            // Set the content-type header
+            $this->headers['Content-Type'] = 'application/json';
+
+            // Prepare response
+            $response = array('redirect_to' => $url);
+
+            // Send headers
+            $this->send_headers();
+
+            // Send response body (json object)
+            echo json_encode($response);
+
+            // Stop execution
+            exit;
+        }
+        return parent::redirect($url, $code);
+    }
 
 
 }

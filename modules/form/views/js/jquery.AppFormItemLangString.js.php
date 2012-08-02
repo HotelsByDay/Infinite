@@ -198,7 +198,7 @@
 
                         // Provedeme ajaxovou synchronizaci DB na serveru
                         _log('ajax request url: '+params.languages_syncer_url);
-                        $.ajax({
+                        $._ajax({
                             url: params.languages_syncer_url,
                             type: 'POST',
                             data: {'<?= AppForm::ENABLED_LANGUAGES_POST_KEY ?>' : languages},

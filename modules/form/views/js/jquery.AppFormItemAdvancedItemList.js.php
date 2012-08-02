@@ -54,7 +54,7 @@
                     $add_loader.show();
 
                     //do obalovaciho divu si nactu ajaxem formular
-                    $.ajax({
+                    $._ajax({
                         type:'POST',
                         url:options['new_item_url'],
                         success: function(response){

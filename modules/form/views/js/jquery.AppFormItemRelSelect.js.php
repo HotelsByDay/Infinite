@@ -171,7 +171,7 @@
 
                         pom_data['_q'] = request.term;
                                                 
-                        $.ajax({
+                        $._ajax({
                             // Sestaveni URL adresy na poradac prislusneho objektu
                             url: settings.data_url,
                             dataType: "json",

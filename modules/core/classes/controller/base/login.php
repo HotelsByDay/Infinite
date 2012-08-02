@@ -55,6 +55,11 @@ class Controller_Base_Login extends Controller_Template {
                     $this->request->redirect($requested_url);
                     return;
                 }
+
+                //odstrani se klic ze session, ktery rika ze uzivatel provedl
+                //alespon jeden neuspesny pokud o prihlaseni a je mu dovoleno
+                //pristoupit na stranku pro resetovani hesla
+                Session::instance()->delete('show_reset_password_option');
                 //presmerovani uzivatele do systemu
                 $this->sendUserAlong();
 
@@ -71,6 +76,7 @@ class Controller_Base_Login extends Controller_Template {
                 Session::instance()->set('show_reset_password_option', '1');
             }
         }
+        $this->template->flash_msg = Session::instance()->get_once('flash_msg', null);
     }
 
     /**
