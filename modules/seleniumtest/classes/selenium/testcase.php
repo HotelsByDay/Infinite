@@ -5,6 +5,9 @@
  */
 class Selenium_TestCase extends PHPUnit_Framework_TestCase
 {
+    /**
+     * @var WebDriver_Driver
+     */
     protected $driver;
 
     public function setUp() {
@@ -47,6 +50,24 @@ class Selenium_TestCase extends PHPUnit_Framework_TestCase
             return parent::__call($name, $arguments);
         }
     }
+
+
+    /**
+     * This may be placed directly in Driver but this way we can replace driver without worrying about this method.
+     * @param $locator
+     * @param int $max_wait_seconds
+     */
+    public function get_element_wait($locator, $max_wait_seconds = 5)
+    {
+        $stop_time = time()+$max_wait_seconds;
+        $present = false;
+        while ($stop_time >= time() and ! $present) {
+            $present = $this->driver->is_element_present($locator);
+        }
+        // Element is present yet or timeout has exceeded
+        return $this->driver->get_element($locator);
+    }
+
 
     public function tearDown() {
         if ($this->driver) {
