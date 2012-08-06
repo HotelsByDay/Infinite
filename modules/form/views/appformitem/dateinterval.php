@@ -6,9 +6,9 @@
   <?php endif ?>
 
     <label for="<?= $attr ?>_from"><?= $label ?></label>
-    <input type="text" id="<?= $attr ?>_from" name="<?= $attr ?>[from]" value="<?= $value['from'] ?>" class="date_picker" readonly="readonly" />
+    <input type="text" id="<?= $attr ?>_from" name="<?= $attr ?>[from]" value="<?= htmlspecialchars($value['from']) ?>" class="date_picker" readonly="readonly" />
     <span><?= __('appformitem.dateinterval.to_label') ?></span>
-    <input type="text" id="<?= $attr ?>_to" name="<?= $attr ?>[to]" value="<?= $value['to'] ?>" class="date_picker" readonly="readonly" />
+    <input type="text" id="<?= $attr ?>_to" name="<?= $attr ?>[to]" value="<?= htmlspecialchars($value['to']) ?>" class="date_picker" readonly="readonly" />
 
   <?php if (isset($hint) && !empty($hint)): ?>
     <span class="hint"><?= $hint; ?></span>
