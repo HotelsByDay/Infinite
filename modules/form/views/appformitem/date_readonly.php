@@ -5,5 +5,5 @@
   <?php endif ?>
 
     <label for="<?= $attr ?>"><?= $label ?></label>
-    <input type="text" id="<?= $attr ?>" readonly="readonly" value="<?= $value ?>" />
+    <input type="text" id="<?= $attr ?>" readonly="readonly" value="<?= htmlspecialchars($value) ?>" />
 </div>

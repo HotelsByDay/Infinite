@@ -19,7 +19,7 @@
                     
             <span class="value"><?= arr::get($locales, $locale);?></span>
 
-            <textarea class="langinput" id="<?= $attr.'_'.$i ?>" readonly="readonly"><?= $value ?></textarea>
+            <textarea class="langinput" id="<?= $attr.'_'.$i ?>" readonly="readonly"><?= htmlspecialchars($value) ?></textarea>
         </div>
         <?php endforeach; ?>
 

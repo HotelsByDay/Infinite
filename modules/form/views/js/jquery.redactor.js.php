@@ -9,8 +9,9 @@ License: http://redactorjs.com/license/
 
 Usage: $('#content').redactor();
 
-@JDA changes made in this file
+===== @JDA changes made in this file =====
 $.ajax was replaced with $._ajax
+[2715:2719] - inserted links urls are converted to absolute (http prefix is added if needed)
 
 */
 // <script>
@@ -2706,26 +2707,31 @@ this.modalInit(RLANG.link, 'link', 460, handler, endCallback);
 },
 insertLink: function()
 {
-var tab_selected = $('#redactor_tab_selected').val();
-var link = '', text = '';
+    var tab_selected = $('#redactor_tab_selected').val();
+    var link = '', text = '';
 
-if (tab_selected === '1') // url
-{
-link = $('#redactor_link_url').val();
-text = $('#redactor_link_url_text').val();
-}
-else if (tab_selected === '2') // mailto
-{
-link = 'mailto:' + $('#redactor_link_mailto').val();
-text = $('#redactor_link_mailto_text').val();
-}
-else if (tab_selected === '3') // anchor
-{
-link = '#' + $('#redactor_link_anchor').val();
-text = $('#redactor_link_anchor_text').val();
-}
+    if (tab_selected === '1') // url
+    {
+        link = $('#redactor_link_url').val();
+        // If link is not absolute
+        if ( ! link.match(/^(http:\/\/|https:\/\/).*/)) {
+            // Make it absolute
+            link = 'http://'+link;
+        }
+        text = $('#redactor_link_url_text').val();
+    }
+    else if (tab_selected === '2') // mailto
+    {
+        link = 'mailto:' + $('#redactor_link_mailto').val();
+        text = $('#redactor_link_mailto_text').val();
+    }
+    else if (tab_selected === '3') // anchor
+    {
+        link = '#' + $('#redactor_link_anchor').val();
+        text = $('#redactor_link_anchor_text').val();
+    }
 
-this._insertLink('<a href="' + link + '">' +  text + '</a> ', $.trim(text), link);
+    this._insertLink('<a href="' + link + '">' +  text + '</a> ', $.trim(text), link);
 
 },
 _insertLink: function(a, text, link)

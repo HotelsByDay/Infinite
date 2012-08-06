@@ -15,7 +15,7 @@
             <label for="<?= $attr.'_'.$i ?>"><?= $final_label ?></label>
             <span class="value"><?= arr::get($locales, $locale);?></span>
 
-            <input class="langinput" type="text" id="<?= $attr.'_'.$i ?>" readonly="readonly" value="<?= $value ?>" />
+            <input class="langinput" type="text" id="<?= $attr.'_'.$i ?>" readonly="readonly" value="<?= htmlspecialchars($value) ?>" />
         </div>
         <?php endforeach; ?>
 

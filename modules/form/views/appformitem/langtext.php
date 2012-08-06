@@ -51,7 +51,7 @@
                     <?php endforeach ?>
                 </select>
                 
-                <textarea class="langinput" id="<?= $attr.'_'.$i ?>" placeholder="<?= arr::get($placeholders, $locale, '');?>" name="<?= $attr ?>[translates][]" <?= isset($min_length) ? "minlength=\"$min_length\"" : '' ?> <?= isset($max_length) ? "maxlength=\"$max_length\"" : '' ?>><?= $value ?></textarea>
+                <textarea class="langinput" id="<?= $attr.'_'.$i ?>" placeholder="<?= arr::get($placeholders, $locale, '');?>" name="<?= $attr ?>[translates][]" <?= isset($min_length) ? "minlength=\"$min_length\"" : '' ?> <?= isset($max_length) ? "maxlength=\"$max_length\"" : '' ?>><?= htmlspecialchars($value) ?></textarea>
             </div>
     <?php endforeach; ?>
     
