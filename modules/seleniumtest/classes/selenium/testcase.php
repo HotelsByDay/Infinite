@@ -68,6 +68,10 @@ class Selenium_TestCase extends PHPUnit_Framework_TestCase
         return $this->driver->get_element($locator);
     }
 
+    public function scroll_top()
+    {
+        $this->driver->execute_js_sync('$(window).scrollTop(0)');
+    }
 
     public function tearDown() {
         if ($this->driver) {

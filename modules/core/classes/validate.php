@@ -107,8 +107,8 @@ class Validate extends Kohana_Validate {
         $number = preg_replace('/\(/', '', $number);
         $number = preg_replace('/\)/', '', $number);
 
-        // Check if the number length is within range
-        return in_array(strlen($number), $lengths);
+        // Check if the number length is within range and that it contains only digits
+        return (in_array(strlen($number), $lengths) and self::digit($number, true));
     }
 
 
