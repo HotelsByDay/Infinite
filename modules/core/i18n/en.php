@@ -13,6 +13,7 @@ return array(
     'error.500.title' => 'Unexpected error occured.',
     'error.500.message' => 'Pleaase contact our support at <a href="mailto:support@infinite.cz">support@infinite.cz</a>.',
 
+    'system.automatic_logout' => 'You have been automatically logged out due to being inactive.',
 
     //ZAKLADNI POPISKY
     'jquery-ui._dialog.message_window_ok_button_label' => 'Close',
