@@ -568,7 +568,9 @@ class AppFormItem_File extends AppFormItem_Base
 
         foreach (array('s', 'd') as $type) {
             foreach ((array)$this->lang_values[$type] as $locales) {
-                $this->active_locales = array_merge($this->active_locales, array_combine(array_keys($locales), array_keys($locales)));
+                if (is_array($locales) and ! empty($locales)) {
+                    $this->active_locales = array_merge($this->active_locales, array_combine(array_keys($locales), array_keys($locales)));
+                }
             }
         }
     }
@@ -777,7 +779,7 @@ class AppFormItem_File extends AppFormItem_Base
         $view->files = $files;
 
         // Add lang view into global item view - if file is languable
-        if ($this->is_languable) {
+        if ($this->is_languable and ! empty($this->lang_view_name)) {
             // This will be hidden and jQuery plugin will clone this view for each file language
             $view->lang_view = View::factory($this->lang_view_name)
                 ->set('attr', $this->form->itemAttr($this->attr))
