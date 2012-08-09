@@ -167,7 +167,6 @@
 
                 var initPlaceholders = function()
                 {
-                    console.log('iniplaceholders called');
                     // Pokud prohlizec podporuje placeholder atribut, pak nic delat nemusime
                     var test = document.createElement('input');
                     var placeholder_supported = ('placeholder' in test);
@@ -178,10 +177,8 @@
                     // Projdeme vsechny lang inputy
                     $('input[name*="[_lang]"]', $this).each(function(){
                         var $input = $(this);
-                        console.log('input found');
                         // Pokud maji nastaven placeholder
                         if ($input.attr('placeholder') !== 'undefined' && $input.attr('placeholder')) {
-                            console.log('placeholder is defined: '+$input.attr('placeholder'));
                             // Odebereme predchozi event handler
                             $input.off('focus.placeholder').off('blur.placeholder');
 
