@@ -50,6 +50,9 @@ class AppFormItem_File extends AppFormItem_Base
     // Name of lang fields view
     protected $lang_view_name = '';
 
+    // Lang items mode (null / slave)
+    protected $mode = null;
+
 
     // Array with all localized attributes values in following form:
     // Array(
@@ -95,6 +98,9 @@ class AppFormItem_File extends AppFormItem_Base
         //zakladni zpracovani konfigurace
         parent::__construct($attr, $config, $model, $loaded_model, $form_data, $form);
 
+        // precteme mode prvku - pokud je
+        $this->mode = arr::get($this->config, 'mode', $this->config);
+
         if (arr::get($this->config, 'required'))
         {
             $this->config['_required'] = TRUE;
@@ -109,18 +115,24 @@ class AppFormItem_File extends AppFormItem_Base
 
         // Load locales list and lang attrs list
         if ($this->is_languable) {
-            $this->locales = (array)$this->config['locales'];
-            $this->lang_attrs = (array)arr::get($this->config, 'lang_attrs');
-            $this->active_locales = (array)arr::get($this->config, 'active_locales');
-            $this->lang_view_name = arr::get($this->config, 'lang_view_name');
+            // Tenhle mode ma smysl jen s custom sablonou ktera si podle active_locales generuje inputy
+            if ($this->mode == AppForm::LANG_SLAVE) {
+                $this->locales = $this->active_locales = $this->model->getEnabledLanguagesList();
+            } else {
+                $this->locales = (array)$this->config['locales'];
+                $this->active_locales = (array)arr::get($this->config, 'active_locales');
 
-            // If no active locale was in config - activate first defined locale
-            if (empty($this->active_locales) and ! empty($this->locales)) {
-                reset($this->locales);
-                $first_locale = key($this->locales);
-                $this->active_locales[$first_locale] = $first_locale;
+                // If no active locale was in config - activate first defined locale
+                if (empty($this->active_locales) and ! empty($this->locales)) {
+                    reset($this->locales);
+                    $first_locale = key($this->locales);
+                    $this->active_locales[$first_locale] = $first_locale;
+                }
             }
+            $this->lang_attrs = (array)arr::get($this->config, 'lang_attrs');
+            $this->lang_view_name = arr::get($this->config, 'lang_view_name');
         }
+
 
         //naformatuje vstupni data z formulare do podoby se kterou se s nimi bude lepe pracovat
         $this->form_data = $this->formatInputData($this->form_data);
@@ -128,7 +140,9 @@ class AppFormItem_File extends AppFormItem_Base
         //URL na kterou se budou odesilat soubory k uploadu - ocekavam definici
         //konfiguracniho klice kde je definice prvku - odtud ziska definici povolenych
         //Mime typu, relacni model a dalsi
-        $js_config['action_url'] = appurl::upload_file_action($config->get_group_name().'.items.'.$attr);
+        // - pokud je prvek languable, tak upload controlleru predame seznam active jazyku - podle nich se muze generovat preview
+        $get_params = ($this->is_languable) ? array('active_locales' => $this->active_locales) : array();
+        $js_config['action_url'] = appurl::upload_file_action($config->get_group_name().'.items.'.$attr, $get_params);
 
         //nazev relacniho modelu se kterym se bude pracovat
         $this->model_name = $this->config['model'];

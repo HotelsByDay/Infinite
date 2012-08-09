@@ -456,9 +456,9 @@ class Helper_Appurl
      * @param <string> $form_config_item
      * @param <string> $file_view
      */
-    static public function upload_file_action($config_key)
+    static public function upload_file_action($config_key, $get_params=array())
     {
-        return appurl::object_action('file', 'upload', $config_key);
+        return appurl::object_action('file', 'upload', $config_key, $get_params);
     }
 
     /**

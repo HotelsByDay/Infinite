@@ -45,8 +45,8 @@
                 var langChanged = function() {
                     // Prislusne Textarey nastavim spravny placeholder podle
                     // zvoleneho jazyka
-                   // var selected_lang_placeholder = $(this).find('option:selected').attr('placeholder');
-                   // $(this).parents('.langitem:first').find('.langinput').attr('placeholder', selected_lang_placeholder);
+                //    var selected_lang_placeholder = $(this).find('option:selected').attr('placeholder');
+                //    $(this).parents('.langitem:first').find('.langinput').attr('placeholder', selected_lang_placeholder);
                     // Najdeme vsechny selecty
                     var $selects = $("table thead select", $this);
                     // Odebereme globalni warning - ten pozdeji muze kontrolovat AppForm plugin pred odeslanim
@@ -159,11 +159,54 @@
                                 $(this).attr('name', new_name);
                             });
 
-
                             position++;
                         });
 
+                    });
+                }
 
+                var initPlaceholders = function()
+                {
+                    console.log('iniplaceholders called');
+                    // Pokud prohlizec podporuje placeholder atribut, pak nic delat nemusime
+                    var test = document.createElement('input');
+                    var placeholder_supported = ('placeholder' in test);
+                    if (placeholder_supported) {
+                        return;
+                    }
+
+                    // Projdeme vsechny lang inputy
+                    $('input[name*="[_lang]"]', $this).each(function(){
+                        var $input = $(this);
+                        console.log('input found');
+                        // Pokud maji nastaven placeholder
+                        if ($input.attr('placeholder') !== 'undefined' && $input.attr('placeholder')) {
+                            console.log('placeholder is defined: '+$input.attr('placeholder'));
+                            // Odebereme predchozi event handler
+                            $input.off('focus.placeholder').off('blur.placeholder');
+
+                            // Use this explicit placeholder functionality
+                            $input.on('focus.placeholder', function() {
+                                if ($input.val() == $input.attr('placeholder')) {
+                                    $input.val('');
+                                    // Remove class (for gray text)
+                                    $input.removeClass('placeholder');
+                                }
+                            }).on('blur.placeholder', function() {
+                                    if ($input.val() == '') {
+                                        $input.val($input.attr('placeholder'));
+                                        // Add placeholder class (for gray text)
+                                        $input.addClass('placeholder');
+                                    }
+                                });
+
+                            // Pokud je hodnota prvku prazdna, zobrazime placeholder
+                            // - (!) pokud je hodnotou placeholder pak muze byt potreba pridat placeholder class (po reloadu)
+                            if ($input.val() == '' || $input.val() == $input.attr('placeholder')) {
+                                $input.val($input.attr('placeholder'));
+                                $input.addClass('placeholder').css('backgroundColor', 'red');
+                            }
+                        }
                     });
                 }
 
@@ -176,7 +219,14 @@
                 });
 
                 // Change udalost je vyvolana po vlozeni novehou souboru do tabulky
-                $this.on('fileAdded', fillCellsWithInputs);
+                $this.on('fileAdded', function(event){
+                    fillCellsWithInputs(event);
+                    initPlaceholders();
+                });
+
+                initPlaceholders();
+
+
 
 
                 // Inicializace odkazu pro pridani prekladu

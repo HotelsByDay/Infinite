@@ -95,7 +95,7 @@ class Controller_File extends Controller_Authentication
 
             // Sablona se muze pouzivat pro editaci vicejazycnych atributu - musime predat dalsi promenne
             // - seznam aktivnich locales - zde predame prazdne
-            $view->active_locales = array();
+            $view->active_locales = (array)arr::get($this->request->get_data(), 'active_locales', array());
             // Seznam prekladu vsech vicejazycnych atributu daneho souboru - zatim zadne hodnoty nemame
             $view->lang = array();
 
