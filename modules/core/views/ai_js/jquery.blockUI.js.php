@@ -20,7 +20,8 @@
  *    'div' elementu, ktery zobrazuje zpravu uzivateli.
  * 5) pridan atribut showMessage (default=true). Pokud je false, tak neni zobrazena
  *  zadna block zprava - ani ta defaultni.
- *
+ * 6) pridan vypocet pozice zpravy aby vzdy byla vertikalne uprostred viditelne casti formulare
+ *    [starts with "var offset_top = $par.offset().top;"]
  */
 
 ;(function($) {
@@ -109,7 +110,7 @@ $.blockUI.defaults = {
 		width:	'30%',
 		top:	'40%',
 		left:	'35%',
-                minWidth: '150px'
+        minWidth: '150px'
 	},
 
 	// styles for the overlay
@@ -387,6 +388,41 @@ function install(el, opts) {
 		}, opts.timeout);
 		$(el).data('blockUI.timeout', to);
 	}
+
+    // Count new position of the message - in the center of visible view-port
+    var offset_top = $par.offset().top;
+    var height = lyr2.height();
+    var scroll_top = $(window).scrollTop();
+    var screen_height = $(window).height();
+    var message_height = lyr3.height();
+
+    // Top position of form in current viewport
+    var margin_top = offset_top - scroll_top;
+    if (margin_top < 0) {
+        margin_top = 0;
+    }
+
+    // How much of the form is above screen top (top
+    var form_overflow_top = (scroll_top > offset_top) ? scroll_top - offset_top : 0;
+
+    // Bottom position in current viewport
+    var screen_bottom = scroll_top + screen_height;
+    var form_bottom = offset_top + height;
+    // If form ends befor viewport ends then we need to know diff of this values
+    var margin_bottom = (screen_bottom > form_bottom) ? screen_bottom - form_bottom : 0;
+
+    // Visible height of the form (maximum is screen height and we need to subtract top and bottom screen "margins")
+    var visible_height = screen_height - margin_top - margin_bottom;
+
+    // Top position of the message in the form (in 2/5 of visible part of the form)
+    var message_top = Math.round(form_overflow_top + visible_height / 2 - message_height / 2);
+
+//    console.log('offset_top: '+offset_top+', height: '+height+', scroll_top: '+scroll_top+', message_top: '+message_top+', visible_height: '+visible_height);
+    // Force absolute message position
+    lyr3.css('top', message_top+'px').css('position', 'absolute');
+
+
+
 };
 
 // remove the block
