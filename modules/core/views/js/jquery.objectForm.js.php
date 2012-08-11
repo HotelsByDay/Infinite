@@ -48,6 +48,14 @@
 
                 //inicializace funkci formulare
                 methods._initForm($_this);
+
+                // Inicializace event listeneru
+                $('input[type="text"], input[type="password"], textarea', $_this).bind('keyup', function(event){
+                    methods.fireEvent($_this, 'changing', event);
+                });
+                $_this.bind('change', function(event){
+                    methods.fireEvent($_this, 'change', event);
+                });
                 
             });
         },
@@ -113,7 +121,7 @@
             if (typeof settings['autosave'] !== 'undefined' && settings['autosave'] !== false) {
                 $_this.change(function(){
                     //prectu aktualni formularova data
-                    var form_data = $_this.find('form').serialize();3
+                    var form_data = $_this.find('form').serialize();
 
                     //pripojim identifikaci stisknuteho formularoveho tlacitka
                     form_data += '&<?= Core_AppForm::ACTION_KEY;?>=<?= Core_AppForm::ACTION_SAVE;?>';
@@ -489,7 +497,7 @@
 
         _log: function( text ) {
             if ( typeof console !== 'undefined') {
-            //    console.log( text );
+                console.log( text );
             }
         }
 

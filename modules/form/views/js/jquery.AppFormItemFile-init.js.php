@@ -44,6 +44,8 @@ $(document).ready(function(){
 
                     //the layout and dmensions of this form item may have changed
                     $form.objectForm('fireEvent', 'itemLayoutChanged', $item);
+                    //item has been changed (form values has been changed)
+                    $form.objectForm('fireEvent', 'change', $_this);
 
                     //a ajax uz neni treba provadet
                     return false;
@@ -77,6 +79,8 @@ $(document).ready(function(){
 
                         //the layout and dmensions of this form item may have changed
                         $form.objectForm('fireEvent', 'itemLayoutChanged', $item);
+                        //item has been changed (form values has been changed)
+                        $form.objectForm('fireEvent', 'change', $_this);
                     }
                     
                 });

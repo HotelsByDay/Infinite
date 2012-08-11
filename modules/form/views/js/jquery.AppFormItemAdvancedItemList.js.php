@@ -97,6 +97,8 @@
 
                                 //the layout and dmensions of this form item may have changed
                                 $form.objectForm('fireEvent', 'itemLayoutChanged', $_this);
+                                //item has been changed (form values has been changed)
+                                $form.objectForm('fireEvent', 'change', $_this);
                             }
 
                             //skryju progress indicator a zobrazim tlacitko pro
@@ -172,6 +174,8 @@
 
                         //the layout and dmensions of this form item may have changed
                         $form.objectForm('fireEvent', 'itemLayoutChanged', $_this);
+                        //item has been changed (form values has been changed)
+                        $form.objectForm('fireEvent', 'change', $_this);
 
                     } else {
 
@@ -203,6 +207,8 @@
 
                                 //the layout and dmensions of this form item may have changed
                                 $form.objectForm('fireEvent', 'itemLayoutChanged', $_this);
+                                //item has been changed (form values has been changed)
+                                $form.objectForm('fireEvent', 'change', $_this);
                             }
 
                         });
