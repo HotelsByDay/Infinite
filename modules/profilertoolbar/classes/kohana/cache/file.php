@@ -123,7 +123,6 @@ class Kohana_Cache_File extends Cache implements Kohana_Cache_GarbageCollect {
 	 */
 	public function get($id, $default = NULL)
 	{
-
 		$filename = Cache_File::filename($this->_sanitize_id($id));
 		$directory = $this->_resolve_directory($filename);
 
@@ -341,7 +340,8 @@ class Kohana_Cache_File extends Cache implements Kohana_Cache_GarbageCollect {
 				try
 				{
 					// Handle ignore files
-					if (in_array($file->getFilename(), $this->config('ignore_on_delete')))
+                    // [2012-08-14][JDA] - config() is not defined in KO 3.0
+					if (in_array($file->getFilename(), Array())) // $this->config('ignore_on_delete')))
 					{
 						$delete = FALSE;
 					}
@@ -361,8 +361,12 @@ class Kohana_Cache_File extends Cache implements Kohana_Cache_GarbageCollect {
 					}
 
 					// If the delete flag is set delete file
-					if ($delete === TRUE)
-						return unlink($file->getRealPath());
+					if ($delete === TRUE) {
+                        $path = $file->getRealPath();
+                    // @COMMENT[2012-08-13][JDA] - this unlink() triggered following error:
+                    // ErrorException [ 8 ] [ -> /apphub.com/admin/login ]: Trying to get property of non-object ~ MODPATH\profilertoolbar\classes\kohana\profilertoolbar.php [ 49 ] (Callstack: n/a)
+						return unlink($path);
+                    }
 					else
 						return FALSE;
 				}
