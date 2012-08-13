@@ -45,7 +45,8 @@ class Kohana_ProfilerToolbar {
    * @static
    * @return void
    */
-  private static function collectData(){
+  private static function collectData() {
+    if (empty(Request::$current)) return;
     if(Route::name(Request::current()->route) == self::$_data_collect_current_route) return;
     self::$DATA_APP_TIME    = self::getAppTime();
     self::$DATA_APP_MEMORY  = self::getAppMemory();
@@ -377,7 +378,9 @@ class Kohana_ProfilerToolbar {
    * @param null $lifetime
    * @return void
    */
-  public static function cacheLog($action,$instalce,$id,$lifetime = null){
+  public static function cacheLog($action,$instalce,$id,$lifetime = null) {
+
+      die('not gona happen');
     if(!in_array($action,array('get','set','del'))) return;
     self::$_CACHE['data'][$instalce]['data'][] = array(
       'action'=>$action,
