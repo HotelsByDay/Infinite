@@ -148,9 +148,8 @@ class Kohana_Cache_File extends Cache implements Kohana_Cache_GarbageCollect {
 
         // for ProfilerToolbar
                 $a = array_search($this,Cache::$instances);
-                die(__FILE__.':'.__LINE__);
+                $lifetime = $data->expiry - $file->getMTime();
         ProfilerToolbar::cacheLog('get', $a, $id, $lifetime);
-                die('not gona happen');
         // /for ProfilerToolbar
 
                 // Test the expiry

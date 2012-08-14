@@ -379,8 +379,6 @@ class Kohana_ProfilerToolbar {
    * @return void
    */
   public static function cacheLog($action,$instalce,$id,$lifetime = null) {
-
-      die('not gona happen');
     if(!in_array($action,array('get','set','del'))) return;
     self::$_CACHE['data'][$instalce]['data'][] = array(
       'action'=>$action,

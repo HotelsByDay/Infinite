@@ -142,5 +142,5 @@
     </div>
   </div>
 
-<?php ProfilerToolbar::render(true);?>
+<?php /* ProfilerToolbar::render(true); */ ?>
 <?php endif;?>

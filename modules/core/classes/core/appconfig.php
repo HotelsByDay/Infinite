@@ -63,7 +63,7 @@ class Core_AppConfig {
             }
         } catch (Exception $e) {
             //vyhodim systemovou vyjimku, ktera zajisti zalogovani chyby
-            throw new SystemException('Unable to load main config file "'.$filename.'" due to exception: "'.$e->getMessage().'".');
+            throw new AppException('Unable to load main config file "'.$filename.'" due to exception: "'.$e->getMessage().'".');
         }
     }
 
