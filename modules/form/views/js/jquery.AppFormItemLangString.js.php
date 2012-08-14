@@ -196,7 +196,7 @@
                         //fire a form event - the layout of the form has changed
                         $form.objectForm('fireEvent', 'itemLayoutChanged', $this);
                         //item has been changed (form values has been changed)
-                        $form.objectForm('fireEvent', 'change', $_this);
+                        $form.objectForm('fireEvent', 'change', $this);
 
                         // Provedeme ajaxovou synchronizaci DB na serveru
                         _log('ajax request url: '+params.languages_syncer_url);
@@ -210,7 +210,7 @@
                                 // Vyvolame na formulari udalost "zmena jazyku"
                                 $form.objectForm('fireEvent', 'languagesChanged', languages);
                                 //item has been changed (form values has been changed)
-                                $form.objectForm('fireEvent', 'change', $_this);
+                                $form.objectForm('fireEvent', 'change', $this);
                             }
                         })
                     }
@@ -440,7 +440,7 @@
                     //fire a form event - the layout of the form has changed
                     $form.objectForm('fireEvent', 'itemLayoutChanged', $this);
                     //item has been changed (form values has been changed)
-                    $form.objectForm('fireEvent', 'change', $_this);
+                    $form.objectForm('fireEvent', 'change', $this);
                 }
 
 
