@@ -43,9 +43,9 @@ return array(
     'appformitempassword.password_confirm_label' => 'Confirm password:',
     
     'appformitempassword.pwd_strength_level_1_message' => 'Password is too short.',
-    'appformitempassword.pwd_strength_level_2_message' => 'Password strength is weak.',
-    'appformitempassword.pwd_strength_level_3_message' => 'Password strength is average.',
-    'appformitempassword.pwd_strength_level_4_message' => 'Password strength is strong.',
+    'appformitempassword.pwd_strength_level_2_message' => 'Password is weak.',
+    'appformitempassword.pwd_strength_level_3_message' => 'Password is average.',
+    'appformitempassword.pwd_strength_level_4_message' => 'Password is strong.',
     'appformitempassword.passwords_dont_match_message' => 'Passwords do not match.',
 
     //APP FORM ITEM SERIENUMBER
