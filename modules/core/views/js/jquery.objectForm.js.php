@@ -56,7 +56,21 @@
                 $_this.bind('change', function(event){
                     methods.fireEvent($_this, 'change', event);
                 });
-                
+
+                //inicializace funkce autosave - pri detekci 'change' na urovni formulare
+                //dojde automaticky k ulozeni
+                if (typeof settings['autosave'] !== 'undefined' && settings['autosave'] !== false) {
+                    $_this.change(function(){
+                        //prectu aktualni formularova data
+                        var form_data = $_this.find('form').serialize();
+
+                        //pripojim identifikaci stisknuteho formularoveho tlacitka
+                        form_data += '&<?= Core_AppForm::ACTION_KEY;?>=<?= Core_AppForm::ACTION_SAVE;?>';
+
+                        //odeslani formulare
+                        methods._submitForm($_this, form_data, (typeof settings['autosave'] === 'string' ? settings['autosave'] : "<?= __('form_action_button.update_ptitle');?>"));
+                    });
+                }
             });
         },
 
@@ -114,21 +128,6 @@
                 if (below_window_bottom) {
                     methods._toggleControlPanelSticky($_this, true);
                 }
-            }
-
-            //inicializace funkce autosave - pri detekci 'change' na urovni formulare
-            //dojde automaticky k ulozeni
-            if (typeof settings['autosave'] !== 'undefined' && settings['autosave'] !== false) {
-                $_this.change(function(){
-                    //prectu aktualni formularova data
-                    var form_data = $_this.find('form').serialize();
-
-                    //pripojim identifikaci stisknuteho formularoveho tlacitka
-                    form_data += '&<?= Core_AppForm::ACTION_KEY;?>=<?= Core_AppForm::ACTION_SAVE;?>';
-
-                    //odeslani formulare
-                    methods._submitForm($_this, form_data, (typeof settings['autosave'] === 'string' ? settings['autosave'] : "<?= __('form_action_button.update_ptitle');?>"));
-                });
             }
 
             //inicializace close_banner tlacitka v banneru
