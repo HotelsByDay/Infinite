@@ -105,9 +105,35 @@ class Request extends Kohana_Request {
             echo json_encode($response);
 
             // Stop execution
+            if (Kohana::$environment !== Kohana::TESTING) {
+                exit;
+            } else {
+                return;
+            }
+        }
+
+        // Parent behavior
+        $url = preg_replace('#^'.url::base().'#', '', $url);
+
+        if (strpos($url, '://') === FALSE)
+        {
+            // Make the URI into a URL
+            $url = URL::site($url, TRUE);
+        }
+
+        // Set the response status
+        $this->status = $code;
+
+        // Set the location header
+        $this->headers['Location'] = $url;
+
+        // Send headers
+        $this->send_headers();
+
+        // Stop execution
+        if (Kohana::$environment !== Kohana::TESTING) {
             exit;
         }
-        return parent::redirect($url, $code);
     }
 
 

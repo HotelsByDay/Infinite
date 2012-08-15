@@ -4,7 +4,7 @@
 
 <?= $banner ;?>
 
-<? endif ?>
+<?php endif ?>
 
 <form method="POST" action="<?= $form_action_link;?>" <?= isset($banner) ? 'style="display:none;"' : ''; ?>>
 
