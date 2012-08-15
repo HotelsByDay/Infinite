@@ -59,7 +59,7 @@ class Controller_File extends Controller_Authentication
         $file_view_name = $config['file_view_name'];
 
         //nactu si nazev adresare pro docasne uploadovane soubory
-        $temp_dir = AppConfig::instance()->get('temp_dir', 'system');
+        $temp_dir = DOCROOT.AppConfig::instance()->get('temp_dir', 'system');
 
         //vytvorim si instanci ciloveho modelu pro soubor
         $target_file = ORM::factory($target_model);
@@ -122,7 +122,7 @@ class Controller_File extends Controller_Authentication
         }
 
         //vystup
-        echo json_encode($out, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP );
+        $this->request->response = json_encode($out, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP );
     }
 
     /**
@@ -158,6 +158,6 @@ class Controller_File extends Controller_Authentication
         }
 
         //vystup
-        echo json_encode($out, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP );
+        $this->request->response = json_encode($out, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP );
     }
 }

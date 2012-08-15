@@ -98,7 +98,7 @@ class Upload_FileUploader
             $file_name .= rand(10, 99);
         }
         //mam nazev souboru, ktery tam jeste neexistuje
-        $filepath = DOCROOT.$temp_dir . '/' . $file_name . '.' . $file_ext;
+        $filepath = $temp_dir . '/' . $file_name . '.' . $file_ext;
 
         //pokus o zapis na disk
         if ($this->file->save($filepath))

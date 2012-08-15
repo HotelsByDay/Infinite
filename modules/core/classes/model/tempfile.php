@@ -32,7 +32,7 @@ class Model_TempFile extends Model_File {
         //soubory jsou ulozene v temp adresari
         $temp_dir = AppConfig::instance()->get('temp_dir', 'system');
 
-        return $temp_dir;
+        return (Kohana::$environment === Kohana::TESTING) ? DOCROOT.$temp_dir : $temp_dir;
     }
 
    /**

@@ -87,7 +87,6 @@ class Request extends Kohana_Request {
      */
     public function redirect($url = '', $code = 302)
     {
-
         if (Request::$is_ajax) {
             // Set the response status
             $this->status = 200;

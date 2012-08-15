@@ -322,7 +322,9 @@ abstract class Model_File extends ORM
 
         $target_dir .= '/'.$this->pk();
 
-        return $target_dir;
+        // Tohle je pouzito zaroven pro generovani URl, takze nemuzeme docroot pridat vzdy
+        // @todo - udelat samostatnou metodu pro ziskani URL souboru
+        return (Kohana::$environment === Kohana::TESTING) ? DOCROOT.$target_dir : $target_dir;
     }
 
     /**

@@ -14,7 +14,8 @@ class Upload_Driver_Form {
      */
     function save($path)
     {
-        if( ! move_uploaded_file($_FILES['file']['tmp_name'], $path))
+        $copy_fce = (Kohana::$environment === Kohana::PRODUCTION) ? 'move_uploaded_file' : 'copy';
+        if( ! $copy_fce($_FILES['file']['tmp_name'], $path))
         {
             return false;
         }
