@@ -10,6 +10,15 @@ class AppFormItem_BoolCheckbox extends AppFormItem_Base
 {
 
     protected $view_name = 'appformitem/boolcheckbox';
-    
+
+
+    /**
+     * Zkontroluje form_data a pripadne vyvola zapis do modelu
+     * pro zmenu chovani v odvozenych tridach je urcena metoda setValue
+     */
+    protected function assignValue()
+    {
+        $this->setValue((bool)$this->form_data);
+    }
 
 }
