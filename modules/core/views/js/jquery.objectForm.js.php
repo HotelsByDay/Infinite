@@ -30,6 +30,8 @@
 
                 var $_this = $(this);
 
+                var autosaveTimer = false;
+
                 // Pridam formulari jeho css tridu
                 methods._log('objectForm init - adding form className');
                 $_this.addClass('<?= AppForm::FORM_CSS_CLASS ?>');
@@ -60,7 +62,7 @@
                 //inicializace funkce autosave - pri detekci 'change' na urovni formulare
                 //dojde automaticky k ulozeni
                 if (typeof settings['autosave'] !== 'undefined' && settings['autosave'] !== false) {
-                    $_this.change(function(){
+                    $_this.change(function() {
                         //prectu aktualni formularova data
                         var form_data = $_this.find('form').serialize();
 
@@ -69,6 +71,28 @@
 
                         //odeslani formulare
                         methods._submitForm($_this, form_data, (typeof settings['autosave'] === 'string' ? settings['autosave'] : "<?= __('form_action_button.update_ptitle');?>"));
+                    });
+                }
+
+                //inicializace funkce autosave - pri detekci 'change' na urovni formulare
+                //dojde automaticky k ulozeni
+                if (typeof settings['autosave_delay'] !== 'undefined' && settings['autosave_delay'] !== false) {
+                    $_this.change(function() {
+                        //prectu aktualni formularova data
+                        var form_data = $_this.find('form').serialize();
+
+                        //pripojim identifikaci stisknuteho formularoveho tlacitka
+                        form_data += '&<?= Core_AppForm::ACTION_KEY;?>=<?= Core_AppForm::ACTION_SAVE;?>';
+
+                        // Pokud je timeout jiz nastaven - zrusieme ho
+                        if (autosaveTimer !== false) {
+                            clearTimeout(autosaveTimer);
+                            autosaveTimer = false;
+                        }
+                        // nastavime novy timeout
+                        autosaveTimer = setTimeout(function(){
+                            methods._submitForm($_this, form_data, (typeof settings['autosave'] === 'string' ? settings['autosave'] : "<?= __('form_action_button.update_ptitle');?>"));
+                        }, settings['autosave_delay']);
                     });
                 }
             });
