@@ -21,7 +21,6 @@ class AppFormItem_SimpleColorPicker extends AppFormItem_String
         // tohle potrebuje jQuery plugin prvku
         $config = Array('uid' => $this->uid);
         $this->addInitJS(View::factory('js/jquery.AppFormItemSimpleColorPicker-init.js')->set('config', $config));
-
     }
     
 
