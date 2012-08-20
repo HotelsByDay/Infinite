@@ -53,10 +53,10 @@
 
                 // Inicializace event listeneru
                 $('input[type="text"], input[type="password"], textarea', $_this).bind('keyup', function(event){
-                    methods.fireEvent($_this, 'changing', event);
+                    $_this.objectForm('fireEvent', 'changing', event);
                 });
                 $_this.bind('change', function(event){
-                    methods.fireEvent($_this, 'change', event);
+                    $_this.objectForm('fireEvent', 'change', event);
                 });
 
                 //inicializace funkce autosave - pri detekci 'change' na urovni formulare
@@ -253,6 +253,9 @@
 
         _submitForm: function( $_this, form_data, progress_indicator_message) {
 
+            // Vypalime beforeSave event
+            $_this.objectForm('fireEvent', 'beforeSave');
+
             //zablokuju UI
             $_this.block({message:progress_indicator_message});
 
@@ -417,12 +420,14 @@
             });
         },
 
-        fireEvent: function(foo, eventName, params)
+        fireEvent: function($_this, eventName, params)
         {
             var $this = $(this);
+            methods._log('fireEvent - Appform id is: '+$this.attr('id'));
             methods._log('fireEvent called with enventname: '+eventName);
             // Get all events subscriptions
             var data = methods._getData($this, 'subscriptions') || {};
+            methods._log('typeof data['+eventName+']: ' + typeof data[eventName]);
             // Call all stored callbacks
             if (typeof data[eventName] !== 'undefined') {
                 methods._log('data[eventName] is set');
@@ -451,6 +456,7 @@
         subscribeEvent: function(foo, eventName, callback)
         {
             var $this = $(this);
+            methods._log('subscribeEvent - Appform id is: '+$this.attr('id'));
             methods._log('subscribeEvent called with enventname: '+eventName);
             // Get all events subscriptions
             var data = methods._getData($this, 'subscriptions');
@@ -520,7 +526,7 @@
 
         _log: function( text ) {
             if ( typeof console !== 'undefined') {
-                console.log( text );
+            //    console.log( text );
             }
         }
 

@@ -128,10 +128,23 @@
                     $end_input.val(gradient[1]).trigger('change');
                 }
 
-                // @todo - uncomment after getting working farbtastic version
+                // Inicializujeme color-pickery
                 $color_input.miniColors();
                 $start_input.miniColors();
                 $end_input.miniColors();
+
+                var beforeFormSave = function(params)
+                {
+                        $color_input.miniColors('destroy');
+                        $start_input.miniColors('destroy');
+                        $end_input.miniColors('destroy');
+                }
+                // A zajistime jejich odebrani pred odeslanim formulare
+                console.log('subscribing appForm event beforeSave');
+                $this.parents('.<?= AppForm::FORM_CSS_CLASS ?>:first').objectForm('subscribeEvent', 'beforeSave', beforeFormSave);
+
+
+
 
                 $slider.slider({
                     value: $slider_input.val(),
