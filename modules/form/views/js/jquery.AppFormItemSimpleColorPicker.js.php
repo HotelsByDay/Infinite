@@ -19,7 +19,6 @@
              * Defaultni hodnoty pro parametry a nastaveni pluginu
              */
             var settings = {
-                uid: ''
             };
             
             /**
@@ -34,7 +33,7 @@
                 var $this = $(this);
 
                 // @todo - uncomment after getting working farbtastic version
-                // $('.color_picker_div', $this).farbtastic('#'+settings.uid+'_input');
+                $('input[type="text"]', $this).miniColors();
 
 
             });

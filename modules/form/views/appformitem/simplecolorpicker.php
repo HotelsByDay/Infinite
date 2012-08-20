@@ -5,7 +5,6 @@
 
     <label for="<?= $uid ?>_input"><?= $label ?></label>
     <input type="text" id="<?= $uid ?>_input" name="<?= $attr ?>" value="<?= htmlspecialchars($value) ?>" />
-    <div class="color_picker_div"></div>
 
   <?php if (isset($hint) && !empty($hint)): ?>
     <span class="hint"><?= $hint; ?></span>

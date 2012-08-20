@@ -129,7 +129,9 @@
                 }
 
                 // @todo - uncomment after getting working farbtastic version
-                // $('.color_picker_div', $this).farbtastic('#'+settings.uid+'_input');
+                $color_input.miniColors();
+                $start_input.miniColors();
+                $end_input.miniColors();
 
                 $slider.slider({
                     value: $slider_input.val(),
