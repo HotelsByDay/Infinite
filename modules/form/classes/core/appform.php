@@ -203,8 +203,8 @@ class Core_AppForm {
             $this->_config['container_view_name'] = 'form_container_ajax';
         }
 
-        //nactu konfiguraci pro tento formular - merguje se s fallback hodnotami
-        //udelam to rucne, protoze chci zachovat Kohana_ConfigFile
+        // nactu konfiguraci pro tento formular - merguje se s fallback hodnotami
+        // udelam to rucne, protoze chci zachovat Kohana_ConfigFile
         foreach ($this->_config as $key => $value)
         {
             $config->set($key, $value);

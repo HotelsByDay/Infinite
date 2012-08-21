@@ -515,7 +515,7 @@ class ORM extends Kohana_ORM {
         //@TODO - je toto potreba kdyz je nastaveni defaultnicho hodnot implementovano
         //v metode clear ?
         if ( ! $this->loaded())
-	{
+	    {
             foreach ($this->getDefaults($this->getDefaultsModificators()) as $column => $value)
             {
                 $this->_changed[] = $column;
