@@ -8,8 +8,6 @@
     <div class="slider"></div>
 
 
-
-
   <?php if (isset($hint) && !empty($hint)): ?>
     <span class="hint"><?= $hint; ?></span>
   <?php endif ?>

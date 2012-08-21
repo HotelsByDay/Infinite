@@ -117,74 +117,86 @@
                  * Volano po zmene hodnoty slideru
                  * @param value
                  */
-                var sliderChanged  = function(value)
+                var updateGradient  = function()
                 {
+                    // Precteme hodnotu slideru
+                    var value = $slider.slider('value');
                     // Spocteme novy gradient
                     var gradient = computeGradient($color_input.val(), value);
                     // Ulozime hodnotu slideru do hindden inputu
                     $slider_input.val(value);
-                    // Nastavime start/end barvy
-                    $start_input.val(gradient[0]).trigger('change');
-                    $end_input.val(gradient[1]).trigger('change');
+                    // zavolame keyup - to vyvola objectForm.changing a zaroven miniColors setColorFromInput
+                    $start_input.val(gradient[0]).trigger('keyup');
+                    $end_input.val(gradient[1]).trigger('keyup');
+                    // aktualizujeme barvu slider handle
+                    var $handle = $slider.find('.ui-slider-handle');
+                    $handle.css('backgroundImage', 'none').css('backgroundColor', $color_input.val());
                 }
 
-                // Inicializujeme color-pickery
-                $color_input.miniColors();
-                $start_input.miniColors();
-                $end_input.miniColors();
+                // Inicializujeme color-picker hlavni barvy
+                $color_input.miniColors({
+                    change: function(hex, rgb) {
+                        // Aktualizujeme gradient - musime predat hodnotu slideru
+                        // - hodnota nove barvy se precte primo z $color_input
+                        updateGradient();
+                    },
+                    open: function(hex, rgb) {
+                        // @todo - refaktorizovat - prepsat na $end_input.trigger('changing');
+                        $this.parents('.<?= AppForm::FORM_CSS_CLASS ?>:first').objectForm('fireEvent', 'changing');
+                    }
+                });
 
+                // Pri zmene primo v inputu (uzivatel zapsal a opusti input)
+                $color_input.change(function() {
+                    updateGradient();
+                });
+
+                // A color pickery koncovych barev gradientu
+                $start_input.miniColors({
+                    change: function(hex, rgb) {
+                        // @todo - refaktorizovat - prepsat na $end_input.trigger('changing');
+                        $this.parents('.<?= AppForm::FORM_CSS_CLASS ?>:first').objectForm('fireEvent', 'changing');
+                    },
+                    open: function(hex, rgb) {
+                        // @todo - refaktorizovat - prepsat na $end_input.trigger('changing');
+                        $this.parents('.<?= AppForm::FORM_CSS_CLASS ?>:first').objectForm('fireEvent', 'changing');
+                    }
+                });
+                $end_input.miniColors({
+                    change: function(hex, rgb) {
+                        // @todo - refaktorizovat - prepsat na $end_input.trigger('changing');
+                        $this.parents('.<?= AppForm::FORM_CSS_CLASS ?>:first').objectForm('fireEvent', 'changing');
+                    },
+                    open: function(hex, rgb) {
+                        // @todo - refaktorizovat - prepsat na $end_input.trigger('changing');
+                        $this.parents('.<?= AppForm::FORM_CSS_CLASS ?>:first').objectForm('fireEvent', 'changing');
+                    }
+                });
+
+
+                // Pred ulozenim formulare musime zrusit vsechny color-pickery - mohou mit v BODY absolutne pozicovany div
+                // ktereho bychom se pak nezbavili
                 var beforeFormSave = function(params)
                 {
-                        $color_input.miniColors('destroy');
-                        $start_input.miniColors('destroy');
-                        $end_input.miniColors('destroy');
+                    $color_input.miniColors('destroy');
+                    $start_input.miniColors('destroy');
+                    $end_input.miniColors('destroy');
                 }
-                // A zajistime jejich odebrani pred odeslanim formulare
-                console.log('subscribing appForm event beforeSave');
                 $this.parents('.<?= AppForm::FORM_CSS_CLASS ?>:first').objectForm('subscribeEvent', 'beforeSave', beforeFormSave);
 
 
 
-
+                // Inicializace gradient slideru
                 $slider.slider({
                     value: $slider_input.val(),
-                    slide: function(event, ui) {
-                        sliderChanged(ui.value);
-                    },
-                    change: function(event, ui) {
-                        sliderChanged(ui.value);
-                    }
+                    slide: updateGradient,
+                    change: updateGradient
                 });
 
 
-                /**
-                 * Doslo ke zmene barvy v color-pick inputu
-                 * @param event
-                 */
-                var colorChanged = function($input)
-                {
-                    var color = $input.val();
-                    // Nastavime barvu pozadi
-                    $input.css('backgroundColor', color);
-                    // A barvu pisma - aby bylo kontrastni s pozadim
-                    if (grayValue(color) > 127) {
-                        $input.css('color', 'black');
-                    } else {
-                        $input.css('color', 'white');
-                    }
-                }
 
-                $color_input.change(function(){
-                    colorChanged($(this));
-                    var $handle = $slider.find('.ui-slider-handle');
-                    $handle.css('backgroundImage', 'none').css('backgroundColor', $color_input.val());
 
-                });
-                $start_input.change(function(){colorChanged($(this))});
-                $end_input.change(function(){colorChanged($(this))});
-                colorChanged($color_input);
-                colorChanged($start_input);
-                colorChanged($end_input);
+
                 $slider.find('.ui-slider-handle').css('backgroundImage', 'none').css('backgroundColor', $color_input.val());
 
             });

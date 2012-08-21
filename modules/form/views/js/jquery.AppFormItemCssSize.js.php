@@ -38,67 +38,19 @@
                 var $slider = $('.slider', $this);
 
 
-                /**
-                 * Volano po zmene hodnoty slideru
-                 * @param value
-                 */
-                var sliderChanged = function(value)
-                {
-                    setValue(value);
-                    $this.trigger('change');
-                }
-
-                // Pokud se ma zobrazovat slider, pak ho inicializujeme
-                if (settings.show_slider) {
-                    var value = $input.val();
-                    if ( ! value) {
-                        value = 0;
-                    }
-                    $slider.slider({
-                        value: value,
-                        min: settings.min,
-                        max: settings.max,
-                        slide: function(event, ui) {
-                            sliderChanged(ui.value);
-                        },
-                        change: function(event, ui) {
-                            sliderChanged(ui.value);
-                        }
-                    });
-                }
-
-
-                /**
-                 * Doslo ke zmene hodnoty v inputu
-                 * @param event
-                 */
-                var valueChanged = function($input)
-                {
-                    // Zkontrolujeme ze value je v <min, max> intervalu
-                    var value = parseInt($input.val());
-                    var units = false; // pouziji se vychozi jednotky
-                    if (value > settings.max) {
-                        value = max;
-                    }
-                    if (value < settings.min) {
-                        value = min;
-                    }
-
-                    // Nastavime do inputu validni hodnotu
-                    setValue(value, units);
-                }
-
                 // Nastavi hodnotu do value inputu
                 var setValue = function(value, units)
                 {
+                    console.log('setting value: '+value);
                     // Pokud nejsou uvedeny jednotky - pouzijeme ty co jsou v inputu ted
                     if (typeof units === 'undefined' || units === false) {
-                        units = $input.val().replace(/^[0-9]*/, '');
+                        units = $input.val().replace(/^[0-9.]*/, '');
                     }
+                    console.log('units: '+units);
 
                     // Zkontrolujeme ze uvedene jednotky jsou povolene
-                    var re = '([1-9][0-9]+(' + settings.enabled_units.join('|') + ')|0)';
-                 //   alert(re);
+                    var re = '^([0-9]*\.?[0-9]+(' + settings.enabled_units.join('|') + ')|0)$';
+                    //   alert(re);
                     re = new RegExp(re);
                     if ( ! re.test($input.val())) {
                         if (settings.enabled_units.length) {
@@ -116,14 +68,70 @@
                     $input.val(value + units);
                     // Aktualizujeme slider
                     if (settings.show_slider && $slider.slider('value') != value) {
+                        if (value == '') {
+                            value = 0;
+                        }
                         $slider.slider('value', value);
                     }
                 }
 
 
-                $input.change(function(){valueChanged($(this))});
+                /**
+                 * Volano po zmene hodnoty slideru
+                 * @param value
+                 */
+                var sliderChanged = function(value)
+                {
+                    setValue(value);
+                }
 
 
+                // Pokud se ma zobrazovat slider, pak ho inicializujeme
+                if (settings.show_slider) {
+                    var val = $input.val().replace(/[^0-9.]*$/, '');
+                    if ( ! val) {
+                        val = 0;
+                    }
+                    $slider.slider({
+                        min: parseInt(settings.min),
+                        max: parseInt(settings.max),
+                        step: parseFloat(settings.step),
+                        value: parseFloat(val),
+                        slide: function(event, ui) {
+                            sliderChanged(ui.value);
+                            // @todo - refaktorizovat - prepsat na $end_input.trigger('changing');
+                            $this.parents('.<?= AppForm::FORM_CSS_CLASS ?>:first').objectForm('fireEvent', 'changing');
+                        },
+                        change: function(event, ui) {
+                            sliderChanged(ui.value);
+                            // @todo - refaktorizovat - prepsat na $end_input.trigger('change');
+                            $this.parents('.<?= AppForm::FORM_CSS_CLASS ?>:first').objectForm('fireEvent', 'change');
+                        }
+                    });
+                }
+
+
+                /**
+                 * Doslo ke zmene hodnoty v inputu
+                 * - osetrime ze nova hodnota bude v <min, max> intervalu
+                 * @param event
+                 */
+                var valueChanged = function()
+                {
+                    // Zkontrolujeme ze value je v <min, max> intervalu
+                    var value = $input.val().replace(/[^0-9.]*$/, '');
+                    value = isNaN(value) ? 0 : parseFloat(value);
+                    if (value > settings.max) {
+                        value = settings.max;
+                    }
+                    if (value < settings.min) {
+                        value = settings.min;
+                    }
+                    // Nastavime do inputu validni hodnotu
+                    setValue(value);
+                }
+
+                $input.change(valueChanged);
             });
             
         }

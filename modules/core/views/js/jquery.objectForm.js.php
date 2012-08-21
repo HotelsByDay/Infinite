@@ -51,14 +51,6 @@
                 //inicializace funkci formulare
                 methods._initForm($_this);
 
-                // Inicializace event listeneru
-                $('input[type="text"], input[type="password"], textarea', $_this).bind('keyup', function(event){
-                    $_this.objectForm('fireEvent', 'changing', event);
-                });
-                $_this.bind('change', function(event){
-                    $_this.objectForm('fireEvent', 'change', event);
-                });
-
                 //inicializace funkce autosave - pri detekci 'change' na urovni formulare
                 //dojde automaticky k ulozeni
                 if (typeof settings['autosave'] !== 'undefined' && settings['autosave'] !== false) {
@@ -77,7 +69,7 @@
                 //inicializace funkce autosave - pri detekci 'change' na urovni formulare
                 //dojde automaticky k ulozeni
                 if (typeof settings['autosave_delay'] !== 'undefined' && settings['autosave_delay'] !== false) {
-                    $_this.change(function() {
+                    var processAutosave = function() {
                         //prectu aktualni formularova data
                         var form_data = $_this.find('form').serialize();
 
@@ -93,7 +85,12 @@
                         autosaveTimer = setTimeout(function(){
                             methods._submitForm($_this, form_data, (typeof settings['autosave'] === 'string' ? settings['autosave'] : "<?= __('form_action_button.update_ptitle');?>"));
                         }, settings['autosave_delay']);
-                    });
+                    };
+
+                    // Autosave timer se musi spustit/zrusit na change i changing udalost
+                    $_this.change(processAutosave);
+                    $_this.objectForm('subscribeEvent', 'changing', processAutosave);
+
                 }
             });
         },
@@ -129,7 +126,16 @@
         _initForm: function( $_this ) {
 
             //nactu si URL na kterou budu posilat pozadavek
-            var settings = methods._getData( $_this, 'settings' )
+            var settings = methods._getData( $_this, 'settings' );
+
+            // Inicializace event listeneru
+            $('input[type="text"], input[type="password"], textarea', $_this).bind('keyup', function(event){
+                $_this.objectForm('fireEvent', 'changing', event);
+            });
+            $_this.bind('change', function(event){
+                $_this.objectForm('fireEvent', 'change', event);
+            });
+
 
             if (typeof $.waypoint !== 'undefined') {
                 $_this.find(".form_control_panel").waypoint('destroy');

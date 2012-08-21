@@ -33,13 +33,19 @@
                 var $this = $(this);
 
                 // @todo - uncomment after getting working farbtastic version
-                $('input[type="text"]', $this).miniColors();
-
+                $('input[type="text"]', $this).miniColors({
+                    change: function(hex, rgb) {
+                        // @todo - refaktorizovat - prepsat na $end_input.trigger('changing');
+                        $this.parents('.<?= AppForm::FORM_CSS_CLASS ?>:first').objectForm('fireEvent', 'changing');
+                    },
+                    open: function(hex, rgb) {
+                        // @todo - refaktorizovat - prepsat na $end_input.trigger('changing');
+                        $this.parents('.<?= AppForm::FORM_CSS_CLASS ?>:first').objectForm('fireEvent', 'changing');
+                    }
+                });
 
             });
-            
         }
-      
     };
 
     $.fn.AppFormItemSimpleColorPicker = function( method ) {
