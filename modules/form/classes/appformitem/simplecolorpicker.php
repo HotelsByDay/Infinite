@@ -22,7 +22,25 @@ class AppFormItem_SimpleColorPicker extends AppFormItem_String
         $config = Array('uid' => $this->uid);
         $this->addInitJS(View::factory('js/jquery.AppFormItemSimpleColorPicker-init.js')->set('config', $config));
     }
-    
+
+
+    /**
+     * Convert all values to upper case
+     * @param $value
+     */
+    public function setValue($value)
+    {
+        return parent::setValue(strtoupper($value));
+    }
+
+    /**
+     * Convert all values to upper case
+     * @param $value
+     */
+    public function getValue()
+    {
+        return strtoupper(parent::getValue());
+    }
 
 
 }

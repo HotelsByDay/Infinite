@@ -43,10 +43,10 @@ class AppFormItem_GradientColorPicker extends AppFormItem_Base
             $slider = 50;
         }
         return Array(
-            'color' => $this->model->{$this->attr.'_color'},
+            'color' => strtoupper($this->model->{$this->attr.'_color'}),
             'slider' => $slider,
-            'start' => $this->model->{$this->attr.'_start'},
-            'end' => $this->model->{$this->attr.'_end'},
+            'start' => strtoupper($this->model->{$this->attr.'_start'}),
+            'end' => strtoupper($this->model->{$this->attr.'_end'}),
         );
     }
 
@@ -57,12 +57,11 @@ class AppFormItem_GradientColorPicker extends AppFormItem_Base
     public function setValue($value)
     {
         $value = (array)$value;
-        $this->model->{$this->attr.'_color'} = arr::get($value, 'color');
+        $this->model->{$this->attr.'_color'} = strtoupper((string)arr::get($value, 'color'));
         $this->model->{$this->attr.'_slider'} = arr::get($value, 'slider');
-        $this->model->{$this->attr.'_start'} = arr::get($value, 'start');
-        $this->model->{$this->attr.'_end'} = arr::get($value, 'end');
+        $this->model->{$this->attr.'_start'} = strtoupper((string)arr::get($value, 'start'));
+        $this->model->{$this->attr.'_end'} = strtoupper((string)arr::get($value, 'end'));
     }
-
 
     
 

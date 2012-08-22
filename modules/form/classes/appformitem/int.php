@@ -37,7 +37,7 @@ class AppFormItem_Int extends AppFormItem_String
         if (isset($this->config['min']) and $value < $this->config['min']) {
             $value = $this->config['min'];
         }
-        if (isset($this->config['max']) and $value < $this->config['max']) {
+        if (isset($this->config['max']) and $value > $this->config['max']) {
             $value = $this->config['max'];
         }
         

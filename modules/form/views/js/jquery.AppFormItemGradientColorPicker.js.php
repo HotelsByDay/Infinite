@@ -93,7 +93,7 @@
                         start = "#" + red_end + "" + green_end + "" + blue_end + "";
                         end = "#" + red_start + "" + green_start + "" + blue_start + "";
                     }
-                    return [start, end];
+                    return [start.toUpperCase(), end.toUpperCase()];
                 }
                 var grayValue = function( color ) {
                     var color_arr = color.split( "" );

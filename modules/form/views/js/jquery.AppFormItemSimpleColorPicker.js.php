@@ -7,14 +7,13 @@
      */
     var plugin_name_space = 'AppFormItemSimpleColorPicker';
 
-
     /**
      * Metody pro tento plugin.
      */
     var methods = {
         
         init: function( options ) {
-            
+
             /**
              * Defaultni hodnoty pro parametry a nastaveni pluginu
              */
@@ -32,8 +31,9 @@
                  * okolo form item */
                 var $this = $(this);
 
+                var $input = $('input[type="text"]', $this);
                 // @todo - uncomment after getting working farbtastic version
-                $('input[type="text"]', $this).miniColors({
+                $input.miniColors({
                     change: function(hex, rgb) {
                         // @todo - refaktorizovat - prepsat na $end_input.trigger('changing');
                         $this.parents('.<?= AppForm::FORM_CSS_CLASS ?>:first').objectForm('fireEvent', 'changing');
@@ -43,6 +43,7 @@
                         $this.parents('.<?= AppForm::FORM_CSS_CLASS ?>:first').objectForm('fireEvent', 'changing');
                     }
                 });
+
 
             });
         }

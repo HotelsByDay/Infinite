@@ -105,7 +105,7 @@
                         change: function(event, ui) {
                             sliderChanged(ui.value);
                             // @todo - refaktorizovat - prepsat na $end_input.trigger('change');
-                            $this.parents('.<?= AppForm::FORM_CSS_CLASS ?>:first').objectForm('fireEvent', 'change');
+                            $this.trigger('change');
                         }
                     });
                 }
@@ -120,7 +120,11 @@
                 {
                     // Zkontrolujeme ze value je v <min, max> intervalu
                     var value = $input.val().replace(/[^0-9.]*$/, '');
-                    value = isNaN(value) ? 0 : parseFloat(value);
+                    if (isNaN(value*1)) {
+                        value = 0;
+                    } else {
+                        value = parseFloat(value*1);
+                    }
                     if (value > settings.max) {
                         value = settings.max;
                     }

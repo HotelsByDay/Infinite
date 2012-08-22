@@ -43,6 +43,9 @@ class AppFormItem_CssSize extends AppFormItem_String
      */
     public function setValue($value)
     {
+        if ($this->attr == 'global_active_shadow_x') {
+            Kohana::$log->add(Kohana::INFO, 'Global active shadow value: "'.$value.'"');
+        }
         // prevedeme hodnotu na validni format
         $units_re = implode('|', $this->config['enabled_units']);
         if ( ! preg_match('/(^[0-9]*\.?[0-9]+).*?('.$units_re.').*$/', $this->form_data, $matches)) {
@@ -51,6 +54,10 @@ class AppFormItem_CssSize extends AppFormItem_String
         } else {
             $value = $matches[1].$matches[2];
         }
+        if ($this->attr == 'global_active_shadow_x') {
+            Kohana::$log->add(Kohana::INFO, 'Global active shadow validated value: "'.$value.'"');
+        }
+
         parent::setValue($value);
     }
 
