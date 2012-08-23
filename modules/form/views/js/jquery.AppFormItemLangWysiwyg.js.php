@@ -365,8 +365,16 @@
                     };
                     if (params.images_upload) {
                         redactor_settings.imageUpload = params.images_upload;
-                        redactor_settings.buttons[redactor_settings.buttons.length] = 'image';
+                        redactor_settings.buttons.push('image');
                     }
+
+                    //options to align text
+                    redactor_settings.buttons.push('|');
+                    redactor_settings.buttons.push('alignleft');
+                    redactor_settings.buttons.push('aligncenter');
+                    redactor_settings.buttons.push('alignright');
+
+
                     $item.find('textarea').redactor(redactor_settings);
                 }
 

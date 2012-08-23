@@ -23,5 +23,11 @@ $(document).ready(function(){
         settings.buttons[redactor_settings.buttons.length] = 'image';
     }
 
+    //options to align text
+    redactor_settings.buttons.push('|');
+    redactor_settings.buttons.push('alignleft');
+    redactor_settings.buttons.push('aligncenter');
+    redactor_settings.buttons.push('alignright');
+
     $("#<?= $uid;?> textarea").redactor(settings);
 });
