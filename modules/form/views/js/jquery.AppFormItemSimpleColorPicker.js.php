@@ -37,10 +37,6 @@
                     change: function(hex, rgb) {
                         // @todo - refaktorizovat - prepsat na $end_input.trigger('changing');
                         $this.parents('.<?= AppForm::FORM_CSS_CLASS ?>:first').objectForm('fireEvent', 'changing');
-                    },
-                    open: function(hex, rgb) {
-                        // @todo - refaktorizovat - prepsat na $end_input.trigger('changing');
-                        $this.parents('.<?= AppForm::FORM_CSS_CLASS ?>:first').objectForm('fireEvent', 'changing');
                     }
                 });
 
