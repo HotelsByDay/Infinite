@@ -195,7 +195,7 @@ class Controller_File extends Controller_Authentication
             $target_file->initByTempFile($temp_file);
 
             // A zaroven cilovy model ulozim
-            $target_file->save();
+        //    $target_file->save();
 
             /*
             //ted je potreba na vystup vlozit pozadovanou reprezentaci souboru
@@ -218,6 +218,7 @@ class Controller_File extends Controller_Authentication
             $out['file_preview'] = (string)$view;
             */
             $out['filelink'] = $target_file->getUrl();
+            $out['tempfileid'] = $temp_file->pk();
 
         }
             //uzivatelska chyba - prekrocen max limit na velikost souboru,
@@ -235,7 +236,7 @@ class Controller_File extends Controller_Authentication
         {
             $out['error'] = __('upload.error_message', array(
                 ':message'  => $e->getMessage(),
-                ':filename' => $file->getName()
+                ':filename' => $file->getName(),
             ));
         }
 

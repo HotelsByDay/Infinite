@@ -59,8 +59,6 @@ class AppFormItem_LangWysiwyg extends AppFormItem_LangString
      */
     public function processFormEvent($type, $data)
     {
-        parent::processFormEvent($type, $data);
-
         switch($type)
         {
             //volano po uspesne ulozeni zaznamu
@@ -68,8 +66,7 @@ class AppFormItem_LangWysiwyg extends AppFormItem_LangString
 
                 // Data prijata z formulare upravena na asociativni tvar
                 // - v parentu je jiz zajisteno jejich ulozeni do DB
-                //   zde pouze zkontrolujeme zda jsou v textu odkazovany vsechny obrazky co mame v DB
-                //   ty co odkazovany nejsou z DB smazeme
+                //   zde pouze zajistime preulozeni temp obrazku (prave pridanych pres wysiwyg)
                 $form_data = $this->virtual_value;
 
                 // Odkazovane url
@@ -86,7 +83,6 @@ class AppFormItem_LangWysiwyg extends AppFormItem_LangString
                     // Pridame pole nalezenych URL v danem prekladu do celkoveho pole
                     $used_urls = array_merge($used_urls, $matches[1]);
                 }
-
 
             //    Kohana::$log->add(Kohana::INFO, 'used_urls for '.$this->attr.': '.json_encode($used_urls));
 
@@ -108,8 +104,51 @@ class AppFormItem_LangWysiwyg extends AppFormItem_LangString
                     }
                 }
 
+                // Projdeme texty z jednotlivych editoru a ulozime temp obrazky a nahradime src
+                foreach ($form_data as $locale => $content)
+                {
+                    // Najdeme vsechny SRC obrazku z ukladaneho textu
+                    preg_match_all('@<img.*? src="(.*?)".*? data-tempfileid="(.*?)"@', $content, $matches);
+
+                //    Kohana::$log->add(Kohana::INFO, 'matches[1] for '.$this->attr.'.'.$locale.': '.json_encode($matches[1]));
+
+                    // Pridame pole nalezenych (tempfileid => src)
+                    foreach ($matches[1] as $key => $src) {
+                        $tempfileid = $matches[2][$key];
+
+                        // Vytvorime tempfile model
+                        $tempfile = ORM::factory('TempFile', $tempfileid);
+
+                        // Vytvorime model obrazku
+                        $img = ORM::factory('wysiwyg_image');
+                        // Nastavime vazby
+                        $img->reltype = $reltype;
+                        $img->relid = $relid;
+                        // Nacteme z temp modelu
+                        $img->initByTempFile($tempfile);
+                        // Ulozime
+                        $img->save();
+
+                        $replace_from = array(
+                            // replace temp src with new one
+                            'src="'.$src.'"',
+                            // remove tempid
+                            'data-tempfileid="'.$tempfileid.'"',
+                        );
+                        $replace_to = array(
+                            'src="'.$img->getUrl().'"',
+                            '',
+                        );
+
+                        // Nahradime ve virtual_value danou temp src za novou
+                        $this->virtual_value[$locale] = str_replace($replace_from, $replace_to, $content);
+                    }
+                }
                 break;
         }
+
+        // Az ted chceme ulozit virtual_value do DB
+        parent::processFormEvent($type, $data);
     }
 
 

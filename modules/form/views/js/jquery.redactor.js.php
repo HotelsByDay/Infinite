@@ -1,4 +1,4 @@
-/* <script>
+/*
 Redactor v8.0
 Updated: August 8, 2012
 
@@ -10,8 +10,12 @@ License: http://redactorjs.com/license/
 Usage: $('#content').redactor();
 
 ===== @JDA changes made in this file =====
+
 $.ajax was replaced with $._ajax
 [2715:2719] - inserted links urls are converted to absolute (http prefix is added if needed)
+@custom change tempfileid added
+
+<script>
 */
 
 // selection
@@ -2348,48 +2352,49 @@ this._imageSet('<img alt="" src="' + $(e.target).attr('rel') + '" />', true);
 },
 imageUploadCallbackLink: function()
 {
-if ($('#redactor_file_link').val() !== '')
-{
-var data = '<img src="' + $('#redactor_file_link').val() + '" />';
-this._imageSet(data, true);
-}
-else
-{
-this.modalClose();
-}
+    if ($('#redactor_file_link').val() !== '')
+    {
+        var data = '<img src="' + $('#redactor_file_link').val() + '" />';
+        this._imageSet(data, true);
+    }
+    else
+    {
+        this.modalClose();
+    }
 },
 imageUploadCallback: function(data)
 {
-this._imageSet(data);
+    this._imageSet(data);
 },
 _imageSet: function(json, link)
 {
-this.restoreSelection();
+    this.restoreSelection();
 
-if (json !== false)
-{
-var html = '', data = '';
-if (link !== true)
-{
-data = $.parseJSON(json);
-html = '<p><img src="' + data.filelink + '" /></p>';
-}
-else
-{
-html = json;
-}
+    if (json !== false)
+    {
+        var html = '', data = '';
+        if (link !== true)
+        {
+            data = $.parseJSON(json);
+            // @custom change tempfileid added
+            html = '<p><img src="' + data.filelink + '" data-tempfileid="' + data.tempfileid + '" /></p>';
+        }
+        else
+        {
+            html = json;
+        }
 
-this.execCommand('inserthtml', html);
+        this.execCommand('inserthtml', html);
 
-// upload image callback
-if (link !== true && typeof this.opts.imageUploadCallback === 'function')
-{
-this.opts.imageUploadCallback(this, data);
-}
-}
+        // upload image callback
+        if (link !== true && typeof this.opts.imageUploadCallback === 'function')
+        {
+            this.opts.imageUploadCallback(this, data);
+        }
+    }
 
-this.modalClose();
-this.observeImages();
+    this.modalClose();
+    this.observeImages();
 },
 
 // INSERT LINK
