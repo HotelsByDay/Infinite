@@ -52,6 +52,15 @@
                 //handler ktery pouziju pri zmene hodnoty jednoho ze dvou poli pro zmenu hesla
                 var password_change_handler = function() {
 
+                    //odeberu vsechny classy, ktere informovaly o predchozi urovni hesla
+                    $password_strength_info.removeClass('level1 level2 level3 level4');
+
+                    //pokud jsou obe pole prazdne tak nebudou zobrazeny zadne hlasky
+                    if ($password.val().length == 0 && $password_confirm.val().length == 0) {
+                        $password_strength_info.hide();
+                        $passwords_dont_match_message.hide();
+                        return;
+                    }
 
                     if ($password.val() != $password_confirm.val()) {
                         $passwords_dont_match_message.show();
@@ -62,9 +71,6 @@
                         
                         //ziskam silu hesla
                         var pwd_level = methods._passwordStrength($this, $password.val());
-
-                        //odeberu vsechny classy, ktere informovaly o predchozi urovni hesla
-                        $password_strength_info.removeClass('level1 level2 level3 level4');
 
                         //nastavim css tridu podle nove urovne
                         $password_strength_info.addClass('level' + pwd_level);
