@@ -23,7 +23,8 @@
                 // Mode prvku - Master / Slave / null
                 mode: null,
                 // Pokud je prvek master, pak po zmene nastaveni jazyku posle ajaxovy pozadavek na tuto url
-                languages_syncer_url: ''
+                languages_syncer_url: '',
+                images_upload: false
             };
             
             /**
@@ -42,7 +43,7 @@
 
                 //Pokud prislo nastaveni, tak mergnu s defaultnimi hodnotami
                 var params = $.extend(true, settings, options);
-                
+
                 /**
                  * Metoda volana pri zmene jazyka (select.onchange)
                  */
@@ -245,7 +246,7 @@
                     $(".langitems", $this).append($translate);
 
                     //inicializace wysiwyg editoru
-                    methods._initWysiwyg($translate);
+                    initWysiwyg($translate);
 
                     // Pokud je posledni, skryjeme odkaz a zobrazime span s informaci
                     if (translates_count+1 >= params.locales_count) {
@@ -345,10 +346,35 @@
                 }
 
 
+                var initWysiwyg = function($item) {
+                    var redactor_settings = {
+                        path: '<?= url::base();?>redactor/',
+                        autoresize: false,
+                        resize: false,
+                        // See http://redactorjs.com/docs/toolbar/
+                        buttons: ['formatting', '|', 'bold', 'italic', '|',
+                            'unorderedlist', 'orderedlist', 'outdent', 'indent', '|', 'link'],
+                        focus: false,
+                        callback: function() {
+                            // Find parent form
+                            var $form = $this.parents(".<?= AppForm::FORM_CSS_CLASS ?>:first");
+
+                            // Fire a form event - the layout of the form has changed
+                            $form.objectForm('fireEvent', 'itemLayoutChanged', $this);
+                        }
+                    };
+                    if (params.images_upload) {
+                        redactor_settings.imageUpload = params.images_upload;
+                        redactor_settings.buttons[redactor_settings.buttons.length] = 'image';
+                    }
+                    $item.find('textarea').redactor(redactor_settings);
+                }
+
+
 
                 // initializace wysiwyg editoru pro jiz definovane lang varianty
                 $this.find('.langitems .langitem').each(function(){
-                    methods._initWysiwyg($(this));
+                    initWysiwyg($(this));
                 });
 
 
@@ -397,28 +423,8 @@
                 }
             
             }); // end each
-            
-        }, // end init
 
-        _initWysiwyg: function($item) {
-            var $this = $(this);
-            $item.find('textarea').redactor({
-                path: '<?= url::base();?>redactor/',
-                autoresize: false,
-                resize: false,
-                // See http://redactorjs.com/docs/toolbar/
-                buttons: ['formatting', '|', 'bold', 'italic', '|',
-                    'unorderedlist', 'orderedlist', 'outdent', 'indent', '|', 'link'],
-                focus: false,
-                callback: function() {
-                    // Find parent form
-                    var $form = $this.parents(".<?= AppForm::FORM_CSS_CLASS ?>:first");
-
-                    // Fire a form event - the layout of the form has changed
-                    $form.objectForm('fireEvent', 'itemLayoutChanged', $this);
-                }
-            });
-        }
+        } // end init
 
     };
 

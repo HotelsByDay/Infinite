@@ -461,6 +461,18 @@ class Helper_Appurl
         return appurl::object_action('file', 'upload', $config_key, $get_params);
     }
 
+
+    /**
+     * Generuje URL, ktera slouzi k nahrani souboru do systemu (s tim ze soubor se primo
+     * ulozi do ciloveho modelu a neni ho treba ukladat pozdeji)
+     * @param <string> $form_config_item
+     * @param <string> $file_view
+     */
+    static public function directupload_file_action($config_key, $get_params=array())
+    {
+        return appurl::object_action('file', 'direct_upload', $config_key, $get_params);
+    }
+
     /**
      * Generuje URL, ktera slouzi k odstraneni libovolneho souboru. Pouziva
      * se v AppFormItemFile - kde pri kliknuti na tacitko Odstranit je volana

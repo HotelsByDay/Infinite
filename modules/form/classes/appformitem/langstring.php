@@ -331,7 +331,7 @@ class AppFormItem_LangString extends AppFormItem_String
                     }
                 }
                 
-                Kohana::$log->add(Kohana::ALERT, json_encode($form_data).' - '.json_encode($this->virtual_value));
+            //    Kohana::$log->add(Kohana::ALERT, json_encode($form_data).' - '.json_encode($this->virtual_value));
                 
                 // Projdeme zaznamy co zustaly ve $form_data a pridame je do DB
                 foreach ($form_data as $locale => $content)

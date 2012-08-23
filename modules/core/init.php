@@ -24,6 +24,17 @@ Route::set('form_sync_languages', '<controller>/<action>/<object_name>/<object_i
 ));
 
 /**
+ * Upload souboru
+ * Napr.: "/upload/file/advert.photo/advert_photo_preview"
+ */
+Route::set('direct_upload_file', '<controller>/<action>/<config_key>',
+    array(
+        'controller'     => 'file',
+        'action'         => 'direct_upload',
+        'config_key'     => '[.a-z_]+'
+    ));
+
+/**
  * Kohana translation/internationalization function. The PHP function
  * [strtr](http://php.net/strtr) is used for replacing parameters.
  *
