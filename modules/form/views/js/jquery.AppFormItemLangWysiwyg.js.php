@@ -352,7 +352,7 @@
                         autoresize: false,
                         resize: false,
                         // See http://redactorjs.com/docs/toolbar/
-                        buttons: ['formatting', '|', 'bold', 'italic', '|',
+                        buttons: ['formatting', '|', 'bold', 'italic', '|','fontcolor','|',
                             'unorderedlist', 'orderedlist', 'outdent', 'indent', '|', 'link'],
                         focus: false,
                         callback: function() {
