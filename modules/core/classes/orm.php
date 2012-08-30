@@ -877,10 +877,10 @@ class ORM extends Kohana_ORM {
         }
 
         if ($id === NULL)
-	{
+	    {
             // Use the the primary key value
             $id = $this->pk();
-	}
+	    }
 
         // Zalogovani akce, jeste pred vlastnim ulozenim
         LogAction::instance()->runEvent($this, 'delete');

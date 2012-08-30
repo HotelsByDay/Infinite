@@ -696,7 +696,7 @@
                 }
                 //mezi parametry vyhledavani pridam atribut a smer razeni a
                 //dale resetuji index stranky - zobrazi se prvni stranka
-                methods._updateState( $_this, {_ob: ob, _obd: obd, _pi:1} );
+                methods._updateQuery( $_this, {_ob: ob, _obd: obd, _pi:1} );
                 return false;
             });
 

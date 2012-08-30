@@ -24,9 +24,9 @@ class AppFormItem_DateInterval extends AppFormItem_Base
     public function __construct($attr, $config, Kohana_ORM $model, ORM_Proxy $loaded_model, $form_data, $form)
     {
         parent::__construct($attr, $config, $model, $loaded_model, $form_data, $form);
+        $this->from_attr = arr::get($this->config, 'from_attr', $this->from_attr);
+        $this->to_attr = arr::get($this->config, 'to_attr', $this->to_attr);
 
-        $this->from_attr = arr::get($config, 'from_attr', $this->from_attr);
-        $this->to_attr = arr::get($config, 'to_attr', $this->to_attr);
     }
 
 
