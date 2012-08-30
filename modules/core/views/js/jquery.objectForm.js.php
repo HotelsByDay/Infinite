@@ -158,6 +158,17 @@
                 if (below_window_bottom) {
                     methods._toggleControlPanelSticky($_this, true);
                 }
+
+                //na window resize se musim pozice a sirka floating panleu spocitat znovu
+                $(window).resize(function() {
+                    if ($_this.find(".form_control_panel_wrapper").hasClass('sticky')) {
+                        //toggle vypnu , tim ziska svoji originalni pozici a sirku
+                        //a potom znovu inicializuju - floating panel dostane
+                        //levou pozici a sirku podle aktualniho stavu formulare
+                        methods._toggleControlPanelSticky($_this, false);
+                        methods._toggleControlPanelSticky($_this, true);
+                    }
+                });
             }
 
             //inicializace close_banner tlacitka v banneru

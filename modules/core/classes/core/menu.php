@@ -247,7 +247,7 @@ class Core_Menu {
 
                 if ( ! empty($active_submenu_item))
                 {
-                    return '<a href="#" class="active_submenu">'.$label.$this->label_separator.'<span class"active">'.arr::get($active_submenu_item, 'label').'</span></a>';
+                    return '<a href="#" class="active_submenu">'.$label.$this->label_separator.'<span class="active">'.arr::get($active_submenu_item, 'label').'</span></a>';
                 }
                 else
                 {

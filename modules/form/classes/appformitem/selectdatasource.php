@@ -79,8 +79,25 @@ class AppFormItem_SelectDataSource extends AppFormItem_Base
         // Jinak vratime prazdne pole - hodnoty si pravdepodobne doplni odvozena trida
         return Array();
     }
-    
-    
+
+    /**
+     * Tato metoda slouzi k prekladu nazvu jednotlivych hodnot(polozek)
+     * selectu. Kazda polozka muze mit custom nadefinovany preklad v konfiguraci.
+     * Napr. u AppFormItemBoolSet je mozne prejmenovat ano/ne/nevybrano polozky.
+     * @param array $values
+     */
+    protected function translateValues(array $values)
+    {
+        foreach ((array)arr::get($this->config, 'value_translation') as $key => $new_label)
+        {
+            if (isset($values[$key]))
+            {
+                $values[$key] = $new_label;
+            }
+        }
+
+        return $values;
+    }
     
     /*
      *  protected function getValues() 

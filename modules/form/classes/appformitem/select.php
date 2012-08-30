@@ -90,7 +90,14 @@ class AppFormItem_Select extends AppFormItem_SelectDataSource
     public function Render($render_style=NULL, $error_message=NULL) 
     {
         $view = parent::Render($render_style, $error_message);
-        $view->values = $this->getValues();
+
+        //get standard set of values
+        $values = $this->getValues();
+
+        //configuration may define translation for specific values
+        $translated_values = $this->translateValues($values);
+
+        $view->values = $translated_values;
         return $view;
     }
     
