@@ -34,8 +34,8 @@
                  * okolo form item */
                 var $this = $(this);
 
-                var $from_input = $("input[name$='[from]']");
-                var $to_input = $("input[name$='[to]']");
+                var $from_input = $("input[name$='[from]'].date_picker");
+                var $to_input = $("input[name$='[to]'].date_picker");
 
                 // Pokud prislo nastaveni, tak mergnu s defaultnimi hodnotami
                 var params = $.extend(true, settings, options );
