@@ -1,5 +1,5 @@
 //<script>
-(function( $ ){
+(function( $ ) {
 
     /**
      * Nazev pluginu. Pouziva se jako namespace napriklad v metode data().
@@ -11,6 +11,7 @@
      * Defaultni hodnoty pro parametry a nastaveni pluginu
      */
     var settings = {
+        enabled_languages: {}
     };
 
     /**
@@ -92,6 +93,7 @@
                     $_this.objectForm('subscribeEvent', 'changing', processAutosave);
 
                 }
+
             });
         },
 
@@ -266,6 +268,93 @@
                     }
                 });
             });
+
+    // ================================= Lang Switching panels =======================================
+
+
+            var active_language = null;
+
+            var getDefaultActiveLanguage = function()
+            {
+                // @todo - load value from cookie or return first enabled language code
+                return 'en';
+            }
+
+
+            /**
+             * EventHandler called after lang switch button is clicked
+             * @param event
+             */
+            var switchButtonClicked = function(event)
+            {
+                // clicked button
+                var $button = $(this);
+                // Trigger activeLocaleChanged event
+                // - this can be detected in special lang items
+                // - this is detected here to switch language in all form panels
+                $button.trigger('activeLocaleChanged', $button.attr('data-locale'));
+            }
+
+            /**
+             * (Re)populate languages switching panel
+             * @param $switch
+             */
+            var setSwitchLanguages = function($switch, enabled_languages)
+            {
+                var $list = $switch.find('ul');
+                $list.html('');
+                for (var locale in enabled_languages) {
+                    var label = enabled_languages[locale];
+                    var $item = $(document.createElement('li'));
+                    $item
+                        .html('<a href="javascript: ;"><span>' + label + '</span></a>')
+                        .addClass('locale_' + locale)
+                        .attr('data-locale', locale)
+                        .bind('click', switchButtonClicked)
+                        ;
+                    $list.append($item);
+                }
+            }
+
+
+            var setSwitchActiveLanguage = function($switch, active_locale)
+            {
+                $switch.find('li').removeClass('active');
+                $switch.find('li.locale_'+active_locale).addClass('active');
+            }
+
+
+
+            // Get all alng switching panel from the form
+            var $lang_switch_panels = $_this.find('.lang_switch');
+
+            active_language = getDefaultActiveLanguage();
+
+            // Init panels with languages from settings
+            $lang_switch_panels.each(function(){
+                var $switch = $(this);
+                setSwitchLanguages($switch, settings.enabled_languages);
+                setSwitchActiveLanguage($switch, active_language);
+            });
+
+
+            // If active locale is changed via any of lang switch panels this event is triggered
+            $_this.bind('activeLocaleChanged', function(event, active_locale) {
+                $lang_switch_panels.each(function() {
+                    setSwitchActiveLanguage($(this), active_locale);
+                });
+            });
+
+            // If enabled locales are changed - we need to regenerate all switches
+            $_this.bind('languagesChanged', function(event, enabled_languages) {
+                $lang_switch_panels.each(function() {
+                    setSwitchLanguages($(this), enabled_languages);
+                });
+            });
+
+
+
+    // ================================= END of Lang Switching panels ================================
         },
 
         _submitForm: function( $_this, form_data, progress_indicator_message) {
@@ -543,7 +632,7 @@
 
         _log: function( text ) {
             if ( typeof console !== 'undefined') {
-            //    console.log( text );
+                console.log( text );
             }
         }
 

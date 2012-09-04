@@ -54,12 +54,13 @@
                 var langChanged = function() {
                     // Prislusne Textarey nastavim spravny placeholder podle
                     // zvoleneho jazyka
+                    _log('langChanged called');
                     var changed_select = this;
                     var $input = $(this).parents('.langitem:first').find('.langinput');
 
                     // aktualne zvoleny select
                     var $select = $(this);
-
+                    _log('langChanged. before options iterator');
                     // Podivame se zda zvoleny jazyk neni zvolen ve vice selectech
                     // Najdeme vsechny option s aktualnim jazykem, ktere jsou selected
                     var $options = $("option[value='"+$select.val()+"']:selected", $this);
@@ -93,6 +94,7 @@
                         });
                     }
 
+                    _log('langChanged almost end');
                     // Precteme placeholder pro aktualne zvoleny jazyk
                     var selected_lang_placeholder = $select.find('option:selected').attr('placeholder');
                     // Nastavime inputu novy placeholder
@@ -107,10 +109,14 @@
                  * SLAVE - Tato funkce je zavolana v pripade ze prvek je slave a master prvek
                  * zmenil seznam povolenych jazyku
                  */
-                var onEnabledLanguagesChanged = function(enabled_languages)
+                var onEnabledLanguagesChanged = function(event, enabled_languages)
                 {
                     // Vytvorime si lokalni kopii pole jazyku
-                    var languages = enabled_languages.slice();
+                    var languages = [];
+                    for (var i in enabled_languages) {
+                        languages[languages.length] = i;
+                    }
+
                     if (typeof languages == 'undefined' || ! languages) {
                         return;
                     }
@@ -174,7 +180,7 @@
 
                 var _log = function(msg) {
                     if (typeof console != 'undefined' && console.log) {
-                    //    console.log(msg);
+                        console.log(msg);
                     }
                 }
 
@@ -185,18 +191,27 @@
                 {
                     // Na tuto udalost reagujeme jen pokud jsme master (muze nastat ikdyz jsme v unset mode)
                     if (params.mode == '<?= AppForm::LANG_MASTER ?>') {
+                        _log('languagesChanged is master');
                         // Posbirame seznam vsech zvolenych jazyku
                         var $selects = $('.langitems select', $this);
                         var languages = [];
-                        $selects.each(function(){
+                        // Toto se posila s udalost "languagesChanged"
+                        var languages_with_names = {};
+                        $selects.each(function() {
                             // Pridame jazyk do seznam
                             languages[languages.length] = $(this).val();
+                            languages_with_names[$(this).val()] = $(this).find('option:selected').text();
                         });
 
                         //fire a form event - the layout of the form has changed
-                        $form.objectForm('fireEvent', 'itemLayoutChanged', $this);
+                    //    $form.objectForm('fireEvent', 'itemLayoutChanged', $this);
+                        $this.trigger('itemLayoutChanged');
                         //item has been changed (form values has been changed)
-                        $form.objectForm('fireEvent', 'change', $this);
+                    //    $form.objectForm('fireEvent', 'change', $this);
+                        $this.trigger('change');
+
+                        // Vyvolame udalost "zmena jazyku"
+                        $this.trigger('languagesChanged', languages_with_names);
 
                         // Provedeme ajaxovou synchronizaci DB na serveru
                         _log('ajax request url: '+params.languages_syncer_url);
@@ -206,13 +221,10 @@
                             data: {'<?= AppForm::ENABLED_LANGUAGES_POST_KEY ?>' : languages},
                             success: function(r) {
                                 _log('DB has been synchronized...');
-
-                                // Vyvolame na formulari udalost "zmena jazyku"
-                                $form.objectForm('fireEvent', 'languagesChanged', languages);
                                 //item has been changed (form values has been changed)
-                                $form.objectForm('fireEvent', 'change', $this);
+                                $this.trigger('change');
                             }
-                        })
+                        });
                     }
                 }
 
@@ -301,8 +313,8 @@
                 // Inicializace odkazu pro pridani prekladu
                 var initAddLink = function()
                 {
-                    $(".langadd a", $this).on('click', function(){
-                        addLanguage() ;
+                    $(".langadd a", $this).on('click', function() {
+                        addLanguage();
                         // Focus do prave pridaneho inputu
                         $('.langitem:last', $this).find('.langinput:first').focus();
                     }); // end add_link event
@@ -324,7 +336,7 @@
                 var selectFirstUnusedLanguage = function($select)
                 {
                     _log('select first unusd locale called');
-                    $select.find('option').each(function(){
+                    $select.find('option').each(function() {
                         // Podivame se zda je option zvolena v nejakem selectu
                         var $selected = $("select option[value='"+this.value+"']:selected", $this);
                         if ( ! $selected.length) {
@@ -438,9 +450,11 @@
                     }
 
                     //fire a form event - the layout of the form has changed
-                    $form.objectForm('fireEvent', 'itemLayoutChanged', $this);
+                //    $form.objectForm('fireEvent', 'itemLayoutChanged', $this);
+                    $this.trigger('itemLayoutChanged');
                     //item has been changed (form values has been changed)
-                    $form.objectForm('fireEvent', 'change', $this);
+                //    $form.objectForm('fireEvent', 'change', $this);
+                    $this.trigger('change');
                 }
 
 
@@ -471,7 +485,7 @@
                 // coz je reseno pres system callbacku spravovanych formularem
                 if (params.mode == '<?= AppForm::LANG_SLAVE ?>') {
                     // Zavolame metodu jeho objectForm pluginu
-                    $form.objectForm('subscribeEvent', 'languagesChanged', onEnabledLanguagesChanged);
+                    $form.bind('languagesChanged', onEnabledLanguagesChanged);
                 }
 
 
