@@ -251,7 +251,7 @@ class Core_AppForm {
         {
             //if there is not Form Item for the attribute, then
             //the value will be set in the ORM model directly
-            if ( ! isset($this->config['items'][$attr]))
+            if ( ! isset($this->config['items'][$attr]) && $this->_model->hasAttr($attr))
             {
                 $this->_model->{$attr} = $value;
             }

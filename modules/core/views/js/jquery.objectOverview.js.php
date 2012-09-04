@@ -55,7 +55,7 @@
                 });
 
                 //budu odchytavat kliknuti na polozky submenu
-                $(settings.submenu_item_selector, $_this).click(function(e){
+                $(settings.submenu_item_selector, $_this).click(function(e) {
 
                     methods._activateSubmenuItem( $_this, $(this) );
 
@@ -155,6 +155,8 @@
             //nactu si URL na kterou budu posilat pozadavek
             var settings = methods._getData( $_this, 'settings' );
 
+
+
             if ( ! settings.use_hash) {
                 methods._loadSubcontent($_this, url);
             } else {
@@ -237,7 +239,23 @@
             $.bbq.pushState( '#' + active_submenu_item_name );
         },
 
+        /**
+         * Returns  current overview state (current tab name)
+         * @param $_this
+         * @return {*}
+         */
+        getState: function( $_this ) {
+            var state = $.bbq.getState();
+            for (var i in state)
+            {
+                return i;
+            }
+        },
         _restoreState: function ( $_this , $item) {
+            // If called from the outside
+            if ($_this == '_restoreState') {
+                $_this = $(this);
+            }
 
             if (typeof $item === 'undefined') {
                 var params = $.bbq.getState() || {};
