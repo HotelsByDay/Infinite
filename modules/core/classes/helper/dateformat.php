@@ -35,8 +35,8 @@ class Helper_DateFormat {
         }
         // Create datetime object
         $date = new DateTime();
-        // Create date from string in given format
-        $date->createFromFormat($input_date_format, $user_date);
+        // Create date from string in given format (!) there must be assignment (!)
+        $date = $date->createFromFormat($input_date_format, $user_date);
         // Return string in DB format
         return $date->format('Y-m-d');
     }
@@ -95,7 +95,7 @@ class Helper_DateFormat {
         // Create datetime object
         $date = new DateTime();
         // Create date from string in given format
-        $date->createFromFormat($user_datetime_format, $user_datetime);
+        $date = $date->createFromFormat($user_datetime_format, $user_datetime);
         // Get mysql date time string
         $mysql_datetime = $date->format('Y-m-d H:i:s');
 
