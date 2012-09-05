@@ -58,7 +58,21 @@ class Helper_Languages {
         }
         return $enabled;
     }
-    
+
+
+    /**
+     * Vygeneruje nazvy jazyku do hodnot zadaneho pole.
+     * @static
+     * @param array $languages - jako klice je ocekavan kod jazyka
+     * @return array languages - klice jsou stejne jako vstup, hodnoty jsou labely (prelozene nazvy) jazyku
+     */
+    public static function fillLanguagesLabels(array $languages)
+    {
+        foreach ($languages as $locale => $foo) {
+            $languages[$locale] = __('locale.'.$locale);
+        }
+        return $languages;
+    }
     
 }
 

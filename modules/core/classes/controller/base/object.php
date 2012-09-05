@@ -930,8 +930,17 @@ abstract class Controller_Base_Object extends Controller_Layout {
         //pridam JS soubor, ktery zajisti zakladni funkci editacniho formulare
         Web::instance()->addCustomJSFile(View::factory('js/jquery.objectForm.js'));
 
-        //inicializace pluginu
-        Web::instance()->addMultipleCustomJSFile(View::factory('js/jquery.objectForm-init.js'));
+
+        // inicializace pluginu
+        // Pokud model implementuje Slave_Compatible interface pak pluginu formulare predame seznam povolenych jazyku
+        $config = array();
+        if ($this->model instanceof Interface_AppFormItemLang_SlaveCompatible) {
+            // Get languages enabled for current model
+            $enabled_languages = $this->model->getEnabledLanguagesList();
+            // Add languages labels
+            $config['enabled_languages'] = Languages::fillLanguagesLabels($enabled_languages);
+        }
+        Web::instance()->addMultipleCustomJSFile(View::factory('js/jquery.objectForm-init.js', array('config' => $config)));
 
         //file set - standardni formularove prvky
         Web::instance()->addJSFileSet('form');
