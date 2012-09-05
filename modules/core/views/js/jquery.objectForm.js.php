@@ -37,7 +37,8 @@
                 methods._log('objectForm init - adding form className (uid: '+$_this.attr('id')+')');
                 $_this.addClass('<?= AppForm::FORM_CSS_CLASS ?>');
 
-                settings = $.extend(true, settings, options);
+                //vytvoreni noveho objektu - nechceme vzit objekt z aktualniho kontextu
+                var settings = $.extend(true, settings, options);
 
                 //ulozim si aktualni nastaveni pluginu
                 methods._setData( $_this , {
@@ -155,22 +156,24 @@
                     },{offset: 'bottom-in-view'});
 
                 //pokud neni panel s tlacitky po inicializaci formulare viditelny, tak bude prepnut na sticky
-                var below_window_bottom = ! (($_this.find('.form_control_panel').parent().offset().top) < ($(window).scrollTop() + $(window).height()));
+                if ($_this.find('.form_control_panel').parent().length != 0) {
+                    var below_window_bottom = ! (($_this.find('.form_control_panel').parent().offset().top) < ($(window).scrollTop() + $(window).height()));
 
-                if (below_window_bottom) {
-                    methods._toggleControlPanelSticky($_this, true);
-                }
-
-                //na window resize se musim pozice a sirka floating panleu spocitat znovu
-                $(window).resize(function() {
-                    if ($_this.find(".form_control_panel_wrapper").hasClass('sticky')) {
-                        //toggle vypnu , tim ziska svoji originalni pozici a sirku
-                        //a potom znovu inicializuju - floating panel dostane
-                        //levou pozici a sirku podle aktualniho stavu formulare
-                        methods._toggleControlPanelSticky($_this, false);
+                    if (below_window_bottom) {
                         methods._toggleControlPanelSticky($_this, true);
                     }
-                });
+
+                    //na window resize se musim pozice a sirka floating panleu spocitat znovu
+                    $(window).resize(function() {
+                        if ($_this.find(".form_control_panel_wrapper").hasClass('sticky')) {
+                            //toggle vypnu , tim ziska svoji originalni pozici a sirku
+                            //a potom znovu inicializuju - floating panel dostane
+                            //levou pozici a sirku podle aktualniho stavu formulare
+                            methods._toggleControlPanelSticky($_this, false);
+                            methods._toggleControlPanelSticky($_this, true);
+                        }
+                    });
+                }
             }
 
             //inicializace close_banner tlacitka v banneru
