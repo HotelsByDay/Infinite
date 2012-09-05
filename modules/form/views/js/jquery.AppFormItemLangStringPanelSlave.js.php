@@ -149,15 +149,16 @@
 
 
                 // Budeme odchytavat udalost languagesChanged (zmena jazyku master prvkem)
-                $form.bind('languageChanged', function(event, enabled_languages) {
-                    // Vazne to funguje?
-                    enabled_languages = enabled_languages || {};
+                $form.unbind('languagesChanged.langStringPanelSlave');
+                $form.bind('languagesChanged.langStringPanelSlave', function(event, languages) {
+                    // Create local copy of enabled languages object
+                    var enabled_languages = $.extend(true, {}, languages);
                     // Projdeme vsechny skryte inputy
                     $this.find('input[type="hidden"]').each(function() {
                         var $input = $(this);
                         var input_lang = $input.attr('data-locale');
                         // Pokud dany jazyk jiz neni povoleny - vyhodime input
-                        if ( ! input_lang in enabled_languages) {
+                        if ( ! (input_lang in enabled_languages)) {
                             $input.remove();
                         } else {
                             // Input lang is enabled - remove it from enabled languages list
@@ -180,6 +181,7 @@
                 initPlaceholder($visible_input);
 
                 // Na udalost activeLocaleChanged budeme menit hodnotu v inputu - hodime tam preklad pro dane locale
+                $form.unbind('activeLocaleChanged.langStringPanelSlave');
                 $form.bind('activeLocaleChanged', onActiveLocaleChanged);
 
                 onActiveLocaleChanged(null, $form.objectForm('getDefaultLocale'));

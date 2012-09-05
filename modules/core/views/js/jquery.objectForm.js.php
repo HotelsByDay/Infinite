@@ -272,8 +272,9 @@
     // ================================= Lang Switching panels =======================================
 
 
-            var active_language = null;
-
+            // Get default active locale
+            // - its global value stored in cookie
+            var active_language = $_this.objectForm('getDefaultLocale');
 
             /**
              * EventHandler called after lang switch button is clicked
@@ -318,37 +319,52 @@
             }
 
 
-
-            // Get default active locale
-            active_language = $_this.objectForm('getDefaultLocale');
-
-
             // Get all alng switching panel from the form
             var $lang_switch_panels = $_this.find('.lang_switch');
 
             // Init panels with languages from settings
             $lang_switch_panels.each(function(){
                 var $switch = $(this);
-                setSwitchLanguages($switch, settings.enabled_languages);
+                var enabled_languages = $_this.objectForm('_getEnabledLanguages');
+                methods._log('enabled_languages of the form: ');
+                for (var i in enabled_languages) {
+                    methods._log(i + ' -> ' + enabled_languages[i]);
+                }
+                setSwitchLanguages($switch, enabled_languages);
                 setSwitchActiveLanguage($switch, active_language);
             });
 
 
             // If active locale is changed via any of lang switch panels this event is triggered
-            $_this.bind('activeLocaleChanged', function(event, active_locale) {
+            $_this.unbind('activeLocaleChanged.switchPanel');
+            $_this.bind('activeLocaleChanged.switchPanel', function(event, active_locale) {
+                methods._log('activeLocaleChanged handler called');
                 $lang_switch_panels.each(function() {
                     setSwitchActiveLanguage($(this), active_locale);
                 });
                 // Save active locale in cookie
                 $.cookie('objectForm.active_locale', active_locale);
+                active_language = active_locale;
 
             });
 
             // If enabled locales are changed - we need to regenerate all switches
-            $_this.bind('languagesChanged', function(event, enabled_languages) {
+            $_this.unbind('languagesChanged.switchPanel');
+            $_this.bind('languagesChanged.switchPanel', function(event, enabled_languages) {
+                // enabled_languages definition is stored in global objectForm plugin namespace
+                $_this.objectForm('_setEnabledLanguages', enabled_languages);
                 $lang_switch_panels.each(function() {
                     setSwitchLanguages($(this), enabled_languages);
                 });
+                // If active language is no more enabled
+                if ( ! (active_language in enabled_languages)) {
+                    // activate first enabled locale
+                    for (var i in enabled_languages) {
+                        active_language = i;
+                        break;
+                    }
+                    $_this.trigger('activeLocaleChanged', active_language)
+                }
             });
 
             // ================================= END of Lang Switching panels ================================
@@ -360,7 +376,8 @@
          * @param foo
          * @return {*}
          */
-        getDefaultLocale: function (foo) {
+        getDefaultLocale: function (foo)
+        {
             var $_this = $(this);
             var settings = methods._getData( $_this, 'settings' );
             var locale = $.cookie('objectForm.active_locale');
@@ -371,6 +388,38 @@
             }
             return locale;
         },
+
+        /**
+         * Vrati seznam povolenych jazyku (dane instance formulare)
+         */
+        _getEnabledLanguages: function(foo)
+        {
+            methods._log('_getEnabledLanguages called');
+            var $_this = $(this);
+            // Precteme seznam povolenych jazyku
+            var enabled_languages =  methods._getData($_this, 'enabled_languages');
+            // Pokud neni definovan
+            if (typeof enabled_languages === 'undefined') {
+                // Vratime seznam prijaty v nastaveni pluginu
+                var settings = methods._getData( $_this, 'settings' );
+                return settings.enabled_languages;
+            } else {
+                // Jinak vratime ten precteny
+                return enabled_languages;
+            }
+        },
+
+        /**
+         * Ulozi seznam povolenych jazyku (pro danou instanci formulare)
+         */
+        _setEnabledLanguages: function(foo, enabled_languages)
+        {
+            methods._log('_setEnabledLanguages called with: ');
+            methods._log(enabled_languages);
+            var $_this = $(this);
+            methods._setData($_this, 'enabled_languages', enabled_languages);
+        },
+
 
         _submitForm: function( $_this, form_data, progress_indicator_message) {
 
@@ -544,22 +593,22 @@
         fireEvent: function($_this, eventName, params)
         {
             var $this = $(this);
-            methods._log('fireEvent - Appform id is: '+$this.attr('id'));
-            methods._log('fireEvent called with enventname: '+eventName);
+        //    methods._log('fireEvent - Appform id is: '+$this.attr('id'));
+        //    methods._log('fireEvent called with enventname: '+eventName);
             // Get all events subscriptions
             var data = methods._getData($this, 'subscriptions') || {};
-            methods._log('typeof data['+eventName+']: ' + typeof data[eventName]);
+        //    methods._log('typeof data['+eventName+']: ' + typeof data[eventName]);
             // Call all stored callbacks
             if (typeof data[eventName] !== 'undefined') {
-                methods._log('data[eventName] is set');
+       //         methods._log('data[eventName] is set');
                 for (var i in data[eventName]) {
-                    methods._log('processing callback');
+        //            methods._log('processing callback');
                     // Call stored callback with given params
                     var callback = data[eventName][i];
                     if (typeof callback == 'function') {
-                        methods._log('callback is a function - calling it');
+        //                methods._log('callback is a function - calling it');
                         callback(params);
-                        methods._log('callback has been called');
+        //                methods._log('callback has been called');
                     }
                 }
             }
@@ -577,21 +626,21 @@
         subscribeEvent: function(foo, eventName, callback)
         {
             var $this = $(this);
-            methods._log('subscribeEvent - Appform id is: '+$this.attr('id'));
-            methods._log('subscribeEvent called with enventname: '+eventName);
+        //    methods._log('subscribeEvent - Appform id is: '+$this.attr('id'));
+        //    methods._log('subscribeEvent called with enventname: '+eventName);
             // Get all events subscriptions
             var data = methods._getData($this, 'subscriptions');
             if (typeof data == 'undefined') {
                 data = {};
             }
             if (typeof data[eventName] == 'undefined') {
-                methods._log('subscribeEvent preparing array for event: '+eventName);
+        //        methods._log('subscribeEvent preparing array for event: '+eventName);
                 data[eventName] = [];
             }
             // Add callback into event name subscribers list
             data[eventName][data[eventName].length] = callback;
-            methods._setData($this, 'subscriptions', data);
-            methods._log('subscribeEvent callback has been added');
+        //    methods._setData($this, 'subscriptions', data);
+        //    methods._log('subscribeEvent callback has been added');
         },
 
         /**
