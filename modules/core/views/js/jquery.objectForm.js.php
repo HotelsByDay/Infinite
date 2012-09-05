@@ -37,7 +37,7 @@
                 methods._log('objectForm init - adding form className');
                 $_this.addClass('<?= AppForm::FORM_CSS_CLASS ?>');
 
-                settings = options || {};
+                settings = $.extend(true, settings, options);
 
                 //ulozim si aktualni nastaveni pluginu
                 methods._setData( $_this , {
@@ -274,12 +274,6 @@
 
             var active_language = null;
 
-            var getDefaultActiveLanguage = function()
-            {
-                // @todo - load value from cookie or return first enabled language code
-                return 'en';
-            }
-
 
             /**
              * EventHandler called after lang switch button is clicked
@@ -325,10 +319,12 @@
 
 
 
+            // Get default active locale
+            active_language = $_this.objectForm('getDefaultLocale');
+
+
             // Get all alng switching panel from the form
             var $lang_switch_panels = $_this.find('.lang_switch');
-
-            active_language = getDefaultActiveLanguage();
 
             // Init panels with languages from settings
             $lang_switch_panels.each(function(){
@@ -343,6 +339,9 @@
                 $lang_switch_panels.each(function() {
                     setSwitchActiveLanguage($(this), active_locale);
                 });
+                // Save active locale in cookie
+                $.cookie('objectForm.active_locale', active_locale);
+
             });
 
             // If enabled locales are changed - we need to regenerate all switches
@@ -352,9 +351,25 @@
                 });
             });
 
+            // ================================= END of Lang Switching panels ================================
+        },
 
-
-    // ================================= END of Lang Switching panels ================================
+        /**
+         * Vrati default locale - inicializace objectForm probiha DRIVE nez inicializace form items, takze
+         * itemy jeste nemaji nastavene event handlery a musi si samy zjistit jake je default locale.
+         * @param foo
+         * @return {*}
+         */
+        getDefaultLocale: function (foo) {
+            var $_this = $(this);
+            var settings = methods._getData( $_this, 'settings' );
+            var locale = $.cookie('objectForm.active_locale');
+            if (( ! locale || ! locale in settings.enabled_languages) && settings.enabled_languages) {
+                for (var i in settings.enabled_languages) {
+                    return i;
+                }
+            }
+            return locale;
         },
 
         _submitForm: function( $_this, form_data, progress_indicator_message) {

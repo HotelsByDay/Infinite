@@ -362,9 +362,6 @@
                             'unorderedlist', 'orderedlist', 'outdent', 'indent', '|', 'link'],
                         focus: false,
                         callback: function() {
-                            // Find parent form
-                            var $form = $this.parents(".<?= AppForm::FORM_CSS_CLASS ?>:first");
-
                             // Fire an event - the layout of the form has changed
                             $this.trigger('itemLayoutChanged');
                         }

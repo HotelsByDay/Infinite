@@ -45,8 +45,6 @@ class AppFormItem_LangWysiwyg extends AppFormItem_LangString
         return;
     }
 
-
-
     /**
      * Tato metoda slouzi ke zpracovani formularovych udalosti.
      *
@@ -107,10 +105,10 @@ class AppFormItem_LangWysiwyg extends AppFormItem_LangString
                 // Projdeme texty z jednotlivych editoru a ulozime temp obrazky a nahradime src
                 foreach ($form_data as $locale => $content)
                 {
-                    // Najdeme vsechny SRC obrazku z ukladaneho textu
-                    preg_match_all('@<img.*? src="(.*?)".*? data-tempfileid="(.*?)"@', $content, $matches);
+                    // Najdeme vsechny SRC obrazku z ukladaneho textu, ktere byly prave pridany (maji neprazdne data-tempfileid)
+                    preg_match_all('@<img[^>]*? src="([^"]*)"[^>]*? data-tempfileid="([^"]*?)"@', $content, $matches);
 
-                //    Kohana::$log->add(Kohana::INFO, 'matches[1] for '.$this->attr.'.'.$locale.': '.json_encode($matches[1]));
+                //    Kohana::$log->add(Kohana::INFO, "img matches: ".json_encode($matches));
 
                     // Pridame pole nalezenych (tempfileid => src)
                     foreach ($matches[1] as $key => $src) {
