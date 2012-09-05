@@ -357,7 +357,19 @@ class Kohana_ORM {
 			$val = $this->pk();
 
 			$model->where($col, '=', $val)->find();
-
+			
+			//JME: 5.9.2012
+            //This useful when we need to load has_one rel. record of a loaded model and need to be able
+            //to traverse back to the parent model from the has_one not-saved record. For example:
+            //$website_setting = $website->website_setting;
+            //$website_setting->loaded() == FALSE; //this is TRUE
+            //$website_stting->website->pk();   //this would be empty without the modification below
+			if ( ! $model->loaded())
+			{
+				$model->{$this->_has_one[$column]['foreign_key']} = $val;
+			}
+			//END OF JME: 5.9.2012
+			
 			return $this->_related[$column] = $model;
 		}
 		elseif (isset($this->_has_many[$column]))

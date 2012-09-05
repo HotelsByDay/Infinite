@@ -143,6 +143,20 @@ class Core_Web
     }
 
     /**
+     * Clears lists of included JS files.
+     *
+     * This is mostly used in tests, where we run multiple requests in a single script run.
+     *
+     */
+    public function clear()
+	{
+		$this->custom_js_views = 
+		$this->ai_custom_js_views = 
+		$this->multiple_custom_js_views = 
+		$this->custom_html_views = array();
+	}
+
+    /**
      * Vraci retezec, ktery predstavuje vsechny sablony nebo retezce, ktere byly
      * pridany metodou addCustomHTMLView sjednocene do jednoho retezce.
      * Jako oddelovac jednotlivych sablon nebo retezcu pouziva "\n".

@@ -80,7 +80,7 @@ abstract class Controller_Layout extends Controller_AuthTemplate {
             //do stranky vlozim JS soubory
             $this->template->js_files_include = Web::instance()->getJSFiles();
         }
-        
+                
         return parent::after();
     }
 
