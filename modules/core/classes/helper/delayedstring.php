@@ -43,7 +43,16 @@ class helper_delayedstring {
 
     public function __toString()
     {
-        return call_user_func($this->_callback);
+    	try
+    	{
+    		$retval = call_user_func($this->_callback);
+    	}
+    	catch (Exception $e)
+    	{
+    		die($e->getMessage());
+    	}
+    	
+        return $retval;
     }
 
 }

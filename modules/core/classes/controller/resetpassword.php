@@ -20,23 +20,23 @@ class Controller_ResetPassword extends Controller_Template {
      * Kontroluje stav prihlaseni uzivatele.
      * 
      */
-    public function before()
-    {
-        parent::before();
-        //Pokud je uzivatel prihlaseny, tak ani nevolam konstruktor rodice,
-        //ale rovnou presmeruju na defaultni stranku systemu.
-        if (Auth::instance()->logged_in()) {
-           //presmerovani uzivatele do systemu
-           $this->sendUserAlong();
-        }
-
-        //pokud neni v session priznak, ktery rika ze uzivatel provedl neuspesny
-        //pokud o prihlaseni, tak tato stranka neni pristupna
-        if ( ! Session::instance()->get('show_reset_password_option'))
-        {
-            $this->request->redirect(appurl::login_page());
-        }
-    }
+//    public function before()
+//    {
+//        parent::before();
+//        //Pokud je uzivatel prihlaseny, tak ani nevolam konstruktor rodice,
+//        //ale rovnou presmeruju na defaultni stranku systemu.
+//        if (Auth::instance()->logged_in()) {
+//           //presmerovani uzivatele do systemu
+//           $this->sendUserAlong();
+//        }
+//
+//        //pokud neni v session priznak, ktery rika ze uzivatel provedl neuspesny
+//        //pokud o prihlaseni, tak tato stranka neni pristupna
+//        if ( ! Session::instance()->get('show_reset_password_option'))
+//        {
+//            $this->request->redirect(appurl::login_page());
+//        }
+//    }
 
     /**
      * Tato akce slouzi k prihlaseni uzivatele. Prihlasovaci formular musi smerovat
