@@ -34,7 +34,7 @@
                 var autosaveTimer = false;
 
                 // Pridam formulari jeho css tridu
-                methods._log('objectForm init - adding form className');
+                methods._log('objectForm init - adding form className (uid: '+$_this.attr('id')+')');
                 $_this.addClass('<?= AppForm::FORM_CSS_CLASS ?>');
 
                 settings = $.extend(true, settings, options);
@@ -696,7 +696,7 @@
 
         _log: function( text ) {
             if ( typeof console !== 'undefined') {
-                console.log( text );
+             //   console.log( text );
             }
         }
 

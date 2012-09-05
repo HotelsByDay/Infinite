@@ -14,6 +14,30 @@ class AppFormItem_LangWysiwygPanelSlave extends AppFormItem_LangWysiwyg
 
 
     /**
+     * Nacteme seznam povolenych jazyku pro editovany objekt.
+     */
+    public function __construct($attr, $config, Kohana_ORM $model, ORM_Proxy $loaded_model, $form_data, $form)
+    {
+        parent::__construct($attr, $config, $model, $loaded_model, $form_data, $form);
+
+
+        // Check that model implements needed interface
+        if ( ! ($this->model instanceof Interface_AppFormItemLang_SlaveCompatible)) {
+            throw new Exception(__CLASS__.' can be used in slave mode only if parent model ('.$this->model->object_name().') implements "Interface_AppFormItemLang_SlaveCompatible"');
+        }
+
+        // Read enabled langs list
+        $langs = $this->model->getEnabledLanguagesList(array($this->default_locale));
+        // Fill labels into array
+        foreach ($langs as $key => $foo) {
+            $langs[$key] = arr::get($this->locales, $key);
+        }
+        // Store langs as new locales
+        $this->enabled_locales = $langs;
+    }
+
+
+    /**
      * Pripojeni potrebnych JS souboru pro LangString prvek
      */
     public function init()
@@ -124,7 +148,7 @@ class AppFormItem_LangWysiwygPanelSlave extends AppFormItem_LangWysiwyg
             $translates[$this->default_locale] = '';
         }
 
-        // Pokud jsme v rezimu SLAVE nebo MASTER pak vzdy zobrazime vsechny enabled jazyky
+        // Vzdy zobrazime vsechny enabled jazyky
         // Add undefined translates and keep result in order of enabled_locales
         $result = $this->enabled_locales;
         foreach ($this->enabled_locales as $locale => $foo) {

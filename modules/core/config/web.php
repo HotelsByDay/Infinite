@@ -7,7 +7,7 @@ return array(
         'form' => array(
             //explicitne nebudu definovat zadne soubory
             //vkladat nazvy sablon (napr. "js/file.js")
-            'list'   => array('js/FileUploader.js', 'js/jquery.fancybox.js', 'js/jquery.objectForm.js', 'js/jquery.qtip.min.js', 'js/jquery.redactor.js', 'js/jquery.miniColors.js'),
+            'list'   => array('js/FileUploader.js', 'js/jquery.fancybox.js', 'js/jquery.objectForm.js', 'js/jquery.qtip.min.js', 'js/jquery.redactor.js', 'js/jquery.miniColors.js', 'js/jquery.cookie.js'),
             //Definuje regularni vyraz, ktery bude pouzit pro nalezeni JS souboru,
             //ktere patri do tohoto setu
             'filter' => '#AppFormItem[^-]+\.#'

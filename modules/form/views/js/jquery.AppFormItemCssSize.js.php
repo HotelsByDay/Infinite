@@ -41,12 +41,10 @@
                 // Nastavi hodnotu do value inputu
                 var setValue = function(value, units)
                 {
-                    console.log('setting value: '+value);
                     // Pokud nejsou uvedeny jednotky - pouzijeme ty co jsou v inputu ted
                     if (typeof units === 'undefined' || units === false) {
                         units = $input.val().replace(/^[0-9.]*/, '');
                     }
-                    console.log('units: '+units);
 
                     // Zkontrolujeme ze uvedene jednotky jsou povolene
                     var re = '^([0-9]*\.?[0-9]+(' + settings.enabled_units.join('|') + ')|0)$';

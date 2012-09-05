@@ -14,7 +14,7 @@
     <textarea class="langinput" id="<?= $uid.'_langinput' ?>" placeholder="" <?= isset($min_length) ? "minlength=\"$min_length\"" : '' ?> <?= isset($max_length) ? "maxlength=\"$max_length\"" : '' ?>></textarea>
 
 
-        <?php $i=0; foreach ($translates as $locale => $value): $i++; ?>
+        <?php foreach ($translates as $locale => $value): ?>
 
             <textarea class="hidden" name="<?= $attr;?>[<?= $locale ?>]" data-locale="<?= $locale; ?>" style="display: none;"><?= $value ?></textarea>
 

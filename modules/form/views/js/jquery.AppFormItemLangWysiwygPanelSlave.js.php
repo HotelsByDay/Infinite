@@ -33,6 +33,7 @@
                  * s nazvem $this a dale pracujeme s nim - jedna se o uzel divu 
                  * okolo form item */
                 var $this = $(this);
+
                 // Najdeme parent formular
                 var $form = $this.parents(".<?= AppForm::FORM_CSS_CLASS ?>:first");
 
@@ -101,6 +102,10 @@
                     // Precteme text z hidden inputu prave aktivovaneho locale
                     var $hidden_input = $('textarea[data-locale="' + locale +'"]', $this);
                     translation = $hidden_input.val();
+
+                    if (typeof translation == 'undefined') {
+                        translation = '';
+                    }
                     // Zapiseme do editacniho inputu
                     $visible_input.setCode(translation);
 
@@ -124,10 +129,8 @@
                         var input_lang = $input.attr('data-locale');
                         // Pokud dany jazyk jiz neni povoleny - vyhodime input
                         if ( ! (input_lang in enabled_languages)) {
-                            console.log('removing input for locale: '+input_lang);
                             $input.remove();
                         } else {
-                            console.log('not adding input for locale: '+input_lang);
                             // Input lang is enabled - remove it from enabled languages list
                             delete enabled_languages[input_lang];
                         }
