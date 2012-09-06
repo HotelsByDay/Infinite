@@ -17,8 +17,7 @@
             /**
              * Defaultni hodnoty pro parametry a nastaveni pluginu
              */
-            var settings = {
-            };
+            var settings = {};
             
             /**
              * this je nyni neco jako jQuery iterator - to co vratil selector
@@ -36,7 +35,7 @@
                 $input.miniColors({
                     change: function(hex, rgb) {
                         // @todo - refaktorizovat - prepsat na $end_input.trigger('changing');
-                        $this.parents('.<?= AppForm::FORM_CSS_CLASS ?>:first').objectForm('fireEvent', 'changing');
+                        $input.trigger('changing');
                     }
                 });
 

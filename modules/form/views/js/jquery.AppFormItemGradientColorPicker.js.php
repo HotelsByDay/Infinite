@@ -151,13 +151,13 @@
                 $start_input.miniColors({
                     change: function(hex, rgb) {
                         // @todo - refaktorizovat - prepsat na $end_input.trigger('changing');
-                        $this.parents('.<?= AppForm::FORM_CSS_CLASS ?>:first').objectForm('fireEvent', 'changing');
+                        $start_input.trigger('changing');
                     }
                 });
                 $end_input.miniColors({
                     change: function(hex, rgb) {
                         // @todo - refaktorizovat - prepsat na $end_input.trigger('changing');
-                        $this.parents('.<?= AppForm::FORM_CSS_CLASS ?>:first').objectForm('fireEvent', 'changing');
+                        $end_input.trigger('changing');
                     }
                 });
 
@@ -174,11 +174,25 @@
 
 
 
+                var slideSlide = function()
+                {
+                    updateGradient();
+                    $this.trigger('sliding');
+                }
+
+                var slideChange = function()
+                {
+                    updateGradient();
+                    $this.trigger('change');
+                }
+
+
+
                 // Inicializace gradient slideru
                 $slider.slider({
                     value: $slider_input.val(),
-                    slide: updateGradient,
-                    change: updateGradient
+                    slide: slideSlide,
+                    change: slideChange
                 });
 
 
