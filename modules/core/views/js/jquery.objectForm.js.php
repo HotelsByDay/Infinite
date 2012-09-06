@@ -384,7 +384,7 @@
             var $_this = $(this);
             var settings = methods._getData( $_this, 'settings' );
             var locale = $.cookie('objectForm.active_locale');
-            if (( ! locale || ! locale in settings.enabled_languages) && settings.enabled_languages) {
+            if (settings.enabled_languages && ( ! locale || ! locale in settings.enabled_languages)) {
                 for (var i in settings.enabled_languages) {
                     return i;
                 }

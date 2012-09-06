@@ -223,6 +223,8 @@
                                 _log('DB has been synchronized...');
                                 //item has been changed (form values has been changed)
                                 $this.trigger('change');
+								// Vyvolame udalost "po zmene jazyku"
+		                        $this.trigger('languagesChanged-after', languages_with_names);
                             }
                         });
                     }
