@@ -427,7 +427,7 @@
         _submitForm: function( $_this, form_data, progress_indicator_message) {
 
             // Vypalime beforeSave event
-            $_this.objectForm('fireEvent', 'beforeSave');
+            $_this.trigger('beforeSave');
 
             //zablokuju UI
             $_this.block({message:progress_indicator_message});

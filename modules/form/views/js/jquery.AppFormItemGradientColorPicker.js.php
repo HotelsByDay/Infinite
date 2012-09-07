@@ -41,6 +41,33 @@
                 var $end_input = $('input[name*="[end]"]', $this);
                 var $slider = $('.slider', $this);
 
+                /**
+                 * Toto je sliderem nastaveno na true pred vypalenim sliding udalosti a po zavolani updateGradient je to nastaveno na false.
+                 * V miniColors event handlerech se tento priznak testuje a pokud je nastaven tak se nevyvolavaji "changing" udalosti nad start/end inputy
+                 * @type {Boolean}
+                 */
+                var sliding = false;
+
+
+                // === Nasledujici mechanismus zajisti, ze colorPicker a slider budou vystrelovat jen jeden callback
+                var INTERVAL = 80;
+
+                var delayed_callback = false;
+
+                setInterval(function() {
+                    if (typeof delayed_callback == 'function') {
+                        delayed_callback();
+                        delayed_callback = false;
+                    }
+                }, INTERVAL);
+
+                var setDelayedCallback = function(c)
+                {
+                    delayed_callback = c;
+                }
+
+
+
 
                 // From jquery mobile ThemeRoller
                 var computeGradient = function( color, slider_value ) {
@@ -119,15 +146,21 @@
                  */
                 var updateGradient  = function()
                 {
+                    // console log('updateGradient called');
                     // Precteme hodnotu slideru
                     var value = $slider.slider('value');
                     // Spocteme novy gradient
                     var gradient = computeGradient($color_input.val(), value);
                     // Ulozime hodnotu slideru do hindden inputu
-                    $slider_input.val(value);
+                    $slider_input.val(value); // no triggers
+
                     // zavolame keyup - to vyvola objectForm.changing a zaroven miniColors setColorFromInput
                     $start_input.val(gradient[0]).trigger('keyup');
-                    $end_input.val(gradient[1]).trigger('keyup');
+                //    $start_input.miniColors('value', gradient[0]);
+
+
+                   $end_input.val(gradient[1]).trigger('keyup');
+                //    $start_input.miniColors('value', gradient[1]);
                     // aktualizujeme barvu slider handle
                     var $handle = $slider.find('.ui-slider-handle');
                     $handle.css('backgroundImage', 'none').css('backgroundColor', $color_input.val());
@@ -139,25 +172,27 @@
                         // Aktualizujeme gradient - musime predat hodnotu slideru
                         // - hodnota nove barvy se precte primo z $color_input
                         updateGradient();
+
+                        setDelayedCallback(function(){
+                            $color_input.trigger('changing');
+                        });
                     }
                 });
 
-                // Pri zmene primo v inputu (uzivatel zapsal a opusti input)
-                $color_input.change(function() {
-                    updateGradient();
-                });
 
                 // A color pickery koncovych barev gradientu
                 $start_input.miniColors({
                     change: function(hex, rgb) {
-                        // @todo - refaktorizovat - prepsat na $end_input.trigger('changing');
-                        $start_input.trigger('changing');
+                        setDelayedCallback(function(){
+                            $start_input.trigger('changing');
+                        });
                     }
                 });
                 $end_input.miniColors({
                     change: function(hex, rgb) {
-                        // @todo - refaktorizovat - prepsat na $end_input.trigger('changing');
-                        $end_input.trigger('changing');
+                        setDelayedCallback(function(){
+                            $end_input.trigger('changing');
+                        });
                     }
                 });
 
@@ -170,7 +205,7 @@
                     $start_input.miniColors('destroy');
                     $end_input.miniColors('destroy');
                 }
-                $this.parents('.<?= AppForm::FORM_CSS_CLASS ?>:first').objectForm('subscribeEvent', 'beforeSave', beforeFormSave);
+                $this.parents('.<?= AppForm::FORM_CSS_CLASS ?>:first').bind('beforeSave', beforeFormSave);
 
 
 
@@ -187,16 +222,12 @@
                 }
 
 
-
                 // Inicializace gradient slideru
                 $slider.slider({
                     value: $slider_input.val(),
-                    slide: slideSlide,
+                    slide: function(){ setDelayedCallback(slideSlide) },
                     change: slideChange
                 });
-
-
-
 
 
                 $slider.find('.ui-slider-handle').css('backgroundImage', 'none').css('backgroundColor', $color_input.val());
