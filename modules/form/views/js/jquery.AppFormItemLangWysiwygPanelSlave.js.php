@@ -88,8 +88,10 @@
                  * activeLocaleChanged event handler
                  * @param event
                  * @param locale
+                 * @param no_focus - after formInit we do not want to have a focus in Wysiwyg editor
                  */
                 var onActiveLocaleChanged = function(event, locale) {
+
                     // Bez tohoto hazi redactor chybu, prestoze doslo k volani initWysiwyg funkces
                  //   $visible_input.redactor();
                     if (active_locale) {
@@ -107,7 +109,7 @@
                         translation = '';
                     }
                     // Zapiseme do editacniho inputu
-                    $visible_input.setCode(translation);
+                    $visible_input.setCode(translation, true);
 
                     // Nastavime viditelnemu inputu name toho skryteho - aby se po ulozeni poslal na server
                     $visible_input.attr('name', $hidden_input.attr('name'));

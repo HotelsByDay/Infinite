@@ -906,22 +906,29 @@ this.$el.val(this.$editor.html());
 },
 
 // API functions
-setCode: function(html)
+setCode: function(html, no_focus)
 {
-this.$editor.html(html).focus();
+    // Condition added by JDA [2012-09-10]
+    if (typeof no_focus != 'undefined' && no_focus) {
+        this.$editor.html(html);
+    } else {
+        this.$editor.html(html).focus();
+    }
 
-this.syncCode();
+    this.syncCode();
+    // Changed by JDA [2012-09-10]
+    this.observeImages();
 },
 getCode: function()
 {
-var html = this.$editor ? this.$editor.html() : this.$el.val();
+    var html = this.$editor ? this.$editor.html() : this.$el.val();
 
-return html;
+    return html;
 },
 insertHtml: function(html)
 {
-this.execCommand('inserthtml', html);
-this.observeImages();
+    this.execCommand('inserthtml', html);
+    this.observeImages();
 },
 destroy: function()
 {
@@ -2961,9 +2968,9 @@ if (typeof d !== 'undefined')
     return this.data('redactor').getSelectedHtml();
     };
 
-    $.fn.setCode = function(html)
+    $.fn.setCode = function(html, no_focus)
     {
-    this.data('redactor').setCode(html);
+    this.data('redactor').setCode(html, no_focus);
     };
 
     $.fn.insertHtml = function(html)

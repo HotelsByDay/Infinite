@@ -53,6 +53,10 @@ class AppFormItem_File extends AppFormItem_Base
     // Lang items mode (null / slave)
     protected $mode = null;
 
+    // Through this config parameter different foreign_key column can be used ($this->model->primary_key() column is default)
+    // Given foreign_key_column must exist in both main model and file model
+    protected $foreign_key_column = null;
+
 
     // Array with all localized attributes values in following form:
     // Array(
@@ -209,6 +213,7 @@ class AppFormItem_File extends AppFormItem_Base
             parent::addInitJs($lang_init_js);
         }
 
+        $this->foreign_key_column = arr::get($this->config, 'foreign_key_column', $this->foreign_key_column);
     }
 
     /**
@@ -396,7 +401,11 @@ class AppFormItem_File extends AppFormItem_Base
         // We need to have primary key of models in array which auto-indexes corresponds to $models auto-indexes
         $pks = array();
 
-        foreach ($this->model->{$this->attr}->where('deleted', 'IS', DB::Expr('NULL'))->find_all() as $model)
+        $file_models = ORM::factory($this->model_name)
+            ->where($this->getForeignKeyColumn(), '=', $this->getForeignKeyValue())
+            ->where('deleted', 'IS', DB::Expr('NULL'))->find_all();
+
+        foreach ($file_models as $model)
         {
             $models[] = $model;
             $pks[] = $model->pk();
@@ -465,6 +474,25 @@ class AppFormItem_File extends AppFormItem_Base
         return $models;
     }
 
+
+    /**
+     * Different foreign key can be used for images bindings
+     * @return null
+     */
+    protected function getForeignKeyColumn()
+    {
+        return ( ! empty($this->foreign_key_column))
+                ? $this->foreign_key_column
+                : $this->model->primary_key();
+    }
+
+    protected function getForeignKeyValue()
+    {
+        return ( ! empty($this->foreign_key_column))
+            ? $this->model->{$this->foreign_key_column}
+            : $this->model->pk();
+    }
+
     /**
      * Zpracovava vstupni hodnotu prvku.
      * Nahraje prislusne relacni modely, provede v nich zmeny a roztridi na soubory
@@ -525,7 +553,7 @@ class AppFormItem_File extends AppFormItem_Base
                 $target_model = ORM::factory($this->model_name)->initByTempFile($temp_file);
 
                 //nastavim vazbu na model nad kterym stoji tento formular
-                $target_model->{$this->model->primary_key()} = $this->model->pk();
+                $target_model->{$this->getForeignKeyColumn()} = $this->getForeignKeyValue();
 
                 //do ciloveho modelu nasipu vsechny dalsi hodnoty, ktere prisly na danem klici
                 $this->applyModelValues($target_model, $file_data);
@@ -603,8 +631,8 @@ class AppFormItem_File extends AppFormItem_Base
                 //modely k ulozeni ulozim
                 foreach ($this->save_rel_models as $key => $rel_model)
                 {
-                    //nastavim vazbu na model nad kterym stoji tento formular
-                    $rel_model->{$this->model->object_name()} = $this->model;
+                    // Nastavim souboru cizi klic (implicitne je to vazba na model nad kterym stoji form, ale lze to v configu zmenit)
+                    $rel_model->{$this->getForeignKeyColumn()} = $this->getForeignKeyValue();
 
                     $rel_model->save();
 
