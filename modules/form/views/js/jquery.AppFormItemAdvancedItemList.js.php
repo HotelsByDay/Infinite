@@ -31,12 +31,12 @@
                 var $form = $_this.parents(".<?= AppForm::FORM_CSS_CLASS ?>:first");
 
                 //tlacitko pro pridani noveho zaznamu
-                $_this.find(".add").click(function(){
+                $_this.find(".add").click(function() {
 
                     //pokud naposledy pridana polozka jeste nebyla editovana a
                     //je tedy prazdna, tak uzivateli hodim focus na prvni input
                     //a nenecham ho pridavat dalsi prazdne polozky
-                    if ($(this).data('new')) {
+                    if (options.one_unsaved_most && $(this).data('new')) {
 
                         $.userInfoMessage("<?= __('appformitemadvanceditemlist.cannot_add_new_there_is_empty_item');?>");
 
@@ -95,10 +95,13 @@
 
                                 $item_container.html(response['content']);
 
+                                // Init created item
+                                methods._initTemplate($_this, $item_container);
+
                                 //the layout and dmensions of this form item may have changed
-                                $form.objectForm('fireEvent', 'itemLayoutChanged', $_this);
+                                $_this.trigger('itemLayoutChanged');
                                 //item has been changed (form values has been changed)
-                                $form.objectForm('fireEvent', 'change', $_this);
+                                $_this.trigger('change', $_this);
                             }
 
                             //skryju progress indicator a zobrazim tlacitko pro

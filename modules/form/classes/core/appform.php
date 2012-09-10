@@ -236,7 +236,13 @@ class Core_AppForm {
 
         //nactu formularove prvky
         $this->loadFormItems();
+
+        // Pokud je vyzadovano v configu, automaticky ulozime non-loaded model
+        if (arr::get($config, 'autosave_model', false) and ! $this->_model->loaded()) {
+            $this->_model->save();
+        }
     }
+
     /**
      * Takes the array passed as argument and puts the values either in the ORM model
      * (for attributes that do not have a Form Item)

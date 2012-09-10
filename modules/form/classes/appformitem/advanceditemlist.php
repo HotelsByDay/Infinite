@@ -44,7 +44,8 @@ class AppFormItem_AdvancedItemList extends AppFormItem_Base
                                                                array($this->model->primary_key() => $this->model->pk())
             ),
             //bude mozne polozky radit (drag&drop na ".drag_handler")
-            'sortable' => arr::get($this->config, 'sortable', NULL)
+            'sortable' => arr::get($this->config, 'sortable', NULL),
+            'one_unsaved_most' => arr::get($this->config, 'one_unsaved_most', false)
         );
 
         //predam parametry sablone
