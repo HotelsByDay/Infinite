@@ -4,14 +4,19 @@
   <?php endif ?>
 
     <label for="<?= $uid ?>_color"><?= $label ?></label>
-    <input type="text" id="<?= $uid ?>_color" name="<?= $attr ?>[color]" value="<?= htmlspecialchars($value['color']) ?>" />
+        <input type="text" id="<?= $uid ?>_color" name="<?= $attr ?>[color]" value="<?= htmlspecialchars($value['color']) ?>" />
     <div class="color_picker_color"></div>
 
-    <div class="slider"></div>
-    <!-- <div class="plus"><a href="javascript: ;">+</a></div> -->
-    <input type="hidden" name="<?= $attr ?>[slider]" value="<?= $value['slider'] ?>" />
+    <div class="gradient_active">
+        <input type="checkbox" id="<?= $uid ?>_gradient" name="<?= $attr ?>[gradient]" value="1" <?php if ($value['gradient']) echo 'checked'; ?> />
+        <label for="<?= $uid ?>_gradient"><?= __('appformitem_gradientcolorpicker.gradient_enabled'); ?></label>
+    </div>
+
 
     <div class="gradient_colors">
+        <div class="slider"></div>
+        <input type="hidden" name="<?= $attr ?>[slider]" value="<?= $value['slider'] ?>" />
+
         <label for="<?= $uid ?>_start"><?= __('gradientcolorpicker.start') ?></label>
         <input type="text" id="<?= $uid ?>_start" name="<?= $attr ?>[start]" value="<?= htmlspecialchars($value['start']) ?>" />
         <div class="color_picker_start"></div>

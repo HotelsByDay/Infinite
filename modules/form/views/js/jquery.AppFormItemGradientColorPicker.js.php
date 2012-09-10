@@ -39,7 +39,12 @@
                 var $slider_input = $('input[name*="[slider]"]', $this);
                 var $start_input = $('input[name*="[start]"]', $this);
                 var $end_input = $('input[name*="[end]"]', $this);
+                var $gradient_enabled = $('input[name*="[gradient]"]', $this);
                 var $slider = $('.slider', $this);
+
+                // Div s prvky pro definici gradientu
+                var $gradient_colors = $(".gradient_colors", $this);
+
 
                 /**
                  * Toto je sliderem nastaveno na true pred vypalenim sliding udalosti a po zavolani updateGradient je to nastaveno na false.
@@ -230,7 +235,25 @@
                 });
 
 
+                // Po kliknuti na checkbox "pouzit gradient"
+                $gradient_enabled.bind('click', function() {
+                    if ($gradient_enabled.is(':checked')) {
+                        $gradient_colors.slideDown();
+                    } else {
+                        $gradient_colors.slideUp();
+                    }
+                });
+
+
+                // Nastavime slider handle barvu pozadi podle zvolene zakladni barvy
                 $slider.find('.ui-slider-handle').css('backgroundImage', 'none').css('backgroundColor', $color_input.val());
+
+                // Pokud neni gradient povolen tak skryjeme div pro jeho nastaveni
+                if ( ! $gradient_enabled.is(':checked')) {
+                    $gradient_colors.hide();
+                }
+
+
 
             });
             
