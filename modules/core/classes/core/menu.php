@@ -116,7 +116,7 @@ class Core_Menu {
     protected function hasAccess($item, $main_menu=false)
     {
         $link = arr::get($item, 'link', '');     
-        if (empty($link))
+        if (empty($link) or arr::get($item, 'no_access_control', false))
         {
             return true; // odkaz asi neni definovan - poloka se muze zobrazit
         }
