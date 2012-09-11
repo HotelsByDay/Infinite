@@ -45,7 +45,8 @@ class AppFormItem_AdvancedItemList extends AppFormItem_Base
             ),
             //bude mozne polozky radit (drag&drop na ".drag_handler")
             'sortable' => arr::get($this->config, 'sortable', NULL),
-            'one_unsaved_most' => arr::get($this->config, 'one_unsaved_most', false)
+            'one_unsaved_most' => arr::get($this->config, 'one_unsaved_most', false),
+            'highlight_new' => arr::get($this->config, 'highlight_new', false),
         );
 
         //predam parametry sablone
@@ -56,6 +57,7 @@ class AppFormItem_AdvancedItemList extends AppFormItem_Base
 
         Web::instance()->addCustomJSFile(View::factory('js/jquery.AppFormItemAdvancedItemList.js'));
     }
+
 
     /**
      * Provadi inicializaci a validaci relacnich modelu, ktere jsou urceny
@@ -93,6 +95,7 @@ class AppFormItem_AdvancedItemList extends AppFormItem_Base
         //@TODO: nejak upravit
         return empty($error_messages) ? NULL : $error_messages;
     }
+
 
     /**
      * Zpracovava vstupni hodnotu prvku.
@@ -136,6 +139,7 @@ class AppFormItem_AdvancedItemList extends AppFormItem_Base
         }
 
     }
+
 
     /**
      * Po ulozeni hlavniho zaznamu ulozim i nahrane soubory, ktere jsou v 1:N

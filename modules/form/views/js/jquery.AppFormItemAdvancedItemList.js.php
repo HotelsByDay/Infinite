@@ -98,6 +98,11 @@
                                 // Init created item
                                 methods._initTemplate($_this, $item_container);
 
+                                // Highlight item if needed
+                                if (options.highlight_new) {
+                                    methods._highlightItem($_this, $item_container);
+                                }
+
                                 //the layout and dmensions of this form item may have changed
                                 $_this.trigger('itemLayoutChanged');
                                 //item has been changed (form values has been changed)
@@ -231,6 +236,39 @@
             });
 
         },
+
+        /**
+         * Zvyrazni nove pridanou polozku - pokud je to configuraci prvku vyzadovano.
+         * - pouze ji prida class 'untouched' a po zmene polozky ji tuto class odebere
+         * @param $_this
+         * @param $item_container
+         * @private
+         */
+        _highlightItem: function($_this, $item_container) {
+            $item_container.addClass('untouched');
+            $item_container.bind('change', function(){
+                $item_container.removeClass('untouched');
+            }).bind('changing', function(){
+                $item_container.removeClass('untouched');
+            });
+
+            /*
+            $item_container.find('div.cols').css({
+                backgroundColor: '#ffff00'
+            });
+            setTimeout(function(){
+                $item_container.animate({
+                    backgroundColor: '#ffffff'
+                }, 1000)
+            }, 2000);
+            $item_container.change(function(){
+                $item_container.find('div.cols').css({
+                    backgroundColor: 'white',
+                });
+            });
+            */
+        },
+
 
         _log: function( text ) {
             if ( typeof console !== 'undefined') {
