@@ -262,7 +262,7 @@ class Model_Core_User extends Model_Auth_User {
                 }
             }
             //vyresetuju to co dedi - to uz priste nebudu muset pocitat, protoze
-            //to uz mam cele v 'functions' "namychane"
+            //to uz mam cele v 'functions' "namichane"
             $roles_definition[$role_name]['inherits'] = array();
 
             //mam zaklad role - to co dedi od ostatnich, k tomu pridam to co
