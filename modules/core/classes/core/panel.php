@@ -88,7 +88,8 @@ class Core_Panel {
      */
     protected function countCacheKey()
     {
-        return md5($this->controller_name);
+        $permissions_hash = Auth::instance()->get_user()->getPermissionListHash();
+        return md5($this->controller_name.$permissions_hash);
     }
     
     /**
