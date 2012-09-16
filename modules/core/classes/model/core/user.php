@@ -177,6 +177,17 @@ class Model_Core_User extends Model_Auth_User {
     }
 
     /**
+     * Vraci hash vsech uzivatelskych opravneni - pri zmene nektereho z jeho opravneni dojde i ke zmene hashe.
+     * @return string
+     */
+    public function getPermissionListHash()
+    {
+        // @todo - refaktorizovat - udelat metodu loadPermissionList()
+        $this->HasPermission('', '');
+        return md5(serialize($this->permission_list));
+    }
+
+    /**
      * Nacte seznam nazvu (atribut 'role.name') vsech uzivatelskcych roli, ktere
      * jsou uzivatel prirazeny.
      * @return <type>
