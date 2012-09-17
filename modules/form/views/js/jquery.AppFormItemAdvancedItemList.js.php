@@ -103,6 +103,8 @@
                                     methods._highlightItem($_this, $item_container);
                                 }
 
+                                // Set focus to the first input/textarea in the form
+                                $(":text, textarea", $item_container).eq(0).focus();
                                 //the layout and dmensions of this form item may have changed
                                 $_this.trigger('itemLayoutChanged');
                                 //item has been changed (form values has been changed)
