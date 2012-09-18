@@ -85,7 +85,7 @@
         
         _log: function( text ) {
             if ( typeof console !== 'undefined') {
-                console.log( text );
+            //    console.log( text );
             }
         }
 
