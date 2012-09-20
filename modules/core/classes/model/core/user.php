@@ -573,6 +573,20 @@ class Model_Core_User extends Model_Auth_User {
     }
 
     /**
+     * Metoda slouzi jako callback pri validaci. Kontroluje zda je emailova adresa uzivatele
+     * unikatni.
+     * @param Validate $array
+     * @param <type> $field
+     */
+    public function email_available(Validate $array, $field)
+    {
+        if ( ! $this->is_unique_value($field, $array[$field]))
+        {
+            $array->error($field, 'email_available', array($array[$field]));
+        }
+    }
+
+    /**
      * Metoda slouzi jako callback pri validaci. Kontroluje zda je uzivatelske
      * jmeno unikatni.
      * @param Validate $array

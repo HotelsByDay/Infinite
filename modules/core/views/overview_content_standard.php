@@ -1,6 +1,8 @@
+<div class="back_from_overview">
 <?php if (isset($return_link) && ! empty($return_link)):?>
 <a href="<?= $return_link;?>"><?= isset($return_link_label) && ! empty($return_link_label) ? $return_link_label : __('object.form_return_link_label');?></a>
 <?php endif ?>
+</div>
 
 <div class="overview_container" id="<?= $overview_container_id;?>">
 
