@@ -140,7 +140,7 @@
 
                 var _log = function(msg) {
                     if (typeof console != 'undefined' && console.log) {
-                        console.log(msg);
+                    //    console.log(msg);
                     }
                 }
 

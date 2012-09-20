@@ -69,6 +69,11 @@
                     }
                 }
 
+                // Init changing event
+                $input.bind('keyup', function(){
+                    $input.trigger('changing');
+                });
+
             });
         }
       

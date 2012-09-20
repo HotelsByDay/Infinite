@@ -82,7 +82,7 @@ return array(
     'object.reset_filter' => 'Deaktivovat filtr',
     'object.cancel_edit_filter' => 'Zrušit editaci filtru',
     'object.totally_found_items' => 'Found <strong>:total_found</strong> records.',
-    'object.no_data_found' => 'There are not records.',
+    'object.no_data_found' => 'No records found.',
 
     'object.action_delete.not_authorized' => 'You are not authorized to remove selected items..',
     'object.action_delete.item_not_found' => 'The item was not found.',
