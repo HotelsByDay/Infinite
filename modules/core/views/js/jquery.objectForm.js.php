@@ -350,6 +350,7 @@
                     setSwitchActiveLanguage($(this), active_locale);
                 });
                 // Save active locale in cookie
+            //    console.log('objectForm saving active locale: '+active_locale);
                 $.cookie('objectForm.active_locale', active_locale);
                 active_language = active_locale;
 
@@ -360,6 +361,8 @@
             $_this.bind('languagesChanged.switchPanel', function(event, enabled_languages) {
                 // enabled_languages definition is stored in global objectForm plugin namespace
                 $_this.objectForm('_setEnabledLanguages', enabled_languages);
+            //    console.log('objectForm languagesChanged handler languages are: ');
+            //    console.log(enabled_languages);
                 $lang_switch_panels.each(function() {
                     setSwitchLanguages($(this), enabled_languages);
                 });
@@ -379,7 +382,7 @@
 
         /**
          * Vrati default locale - inicializace objectForm probiha DRIVE nez inicializace form items, takze
-         * itemy jeste nemaji nastavene event handlery a musi si samy zjistit jake je default locale.
+         * itemy jeste nemaji nastavene event handlery a musi si samy zjistit jake je default locale - prostrednictvim teto metody.
          * @param foo
          * @return {*}
          */
@@ -388,8 +391,9 @@
             var $_this = $(this);
             var settings = methods._getData( $_this, 'settings' );
             var locale = $.cookie('objectForm.active_locale');
-            if (settings.enabled_languages && ( ! locale || ! (locale in settings.enabled_languages))) {
-                for (var i in settings.enabled_languages) {
+            var enabled_languages = $_this.objectForm('_getEnabledLanguages');
+            if (enabled_languages && ( ! locale || ! (locale in enabled_languages))) {
+                for (var i in enabled_languages) {
                     return i;
                 }
             }
