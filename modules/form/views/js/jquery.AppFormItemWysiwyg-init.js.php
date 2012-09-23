@@ -19,7 +19,7 @@ $(document).ready(function(){
     };
 
     if (config.images_upload) {
-        settings.imageUpload = params.images_upload;
+        settings.imageUpload = config.images_upload;
         settings.buttons[redactor_settings.buttons.length] = 'image';
     }
 
