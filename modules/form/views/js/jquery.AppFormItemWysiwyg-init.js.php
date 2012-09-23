@@ -20,14 +20,14 @@ $(document).ready(function(){
 
     if (config.images_upload) {
         settings.imageUpload = config.images_upload;
-        settings.buttons[redactor_settings.buttons.length] = 'image';
+        settings.buttons[settings.buttons.length] = 'image';
     }
 
     //options to align text
-    redactor_settings.buttons.push('|');
-    redactor_settings.buttons.push('alignleft');
-    redactor_settings.buttons.push('aligncenter');
-    redactor_settings.buttons.push('alignright');
+    settings.buttons.push('|');
+    settings.buttons.push('alignleft');
+    settings.buttons.push('aligncenter');
+    settings.buttons.push('alignright');
 
     $("#<?= $uid;?> textarea").redactor(settings);
 });
