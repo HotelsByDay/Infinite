@@ -900,10 +900,25 @@ left = left - width;
 
 this.air.css({ left: left + 'px', top: (e.clientY + $(document).scrollTop() + 14) + 'px' }).show();
 },
+
+
 syncCode: function()
 {
-this.$el.val(this.$editor.html());
+    // Trigger added by JDA - [2012-09-24]
+    this.$el.val(this.$editor.html()).trigger('changing');
+
+    // Added by JDA - [2012-09-24]
+    var last_height = this.$el.attr('data-last_height');
+    if (typeof last_height === 'undefined') {
+        last_height = 0;
+    }
+    var current_height = this.$editor.height();
+    if (current_height != last_height) {
+        this.$el.attr('data-last_height', current_height);
+        this.$el.trigger('itemLayoutChanged');
+    }
 },
+
 
 // API functions
 setCode: function(html, no_focus)

@@ -135,6 +135,7 @@
             $('input[type="text"], input[type="password"], textarea', $_this).bind('keyup', function(event){
                 $_this.objectForm('fireEvent', 'changing', event);
             });
+            // @todo remove
             $_this.bind('change', function(event){
                 $_this.objectForm('fireEvent', 'change', event);
             });
@@ -270,6 +271,15 @@
                         event: 'mouseleave'
                     }
                 });
+            });
+
+            $_this.bind('itemLayoutChanged', function(){
+                //if layout of any item has changed, then the layout and dimensions of the entire form
+                //may have changed and therefore we need to recalculate all waypoints - the waypoint
+                //are for example used for the float_control option
+                if (typeof $.waypoints !== 'undefined') {
+                    $.waypoints("refresh");
+                }
             });
 
     // ================================= Lang Switching panels =======================================

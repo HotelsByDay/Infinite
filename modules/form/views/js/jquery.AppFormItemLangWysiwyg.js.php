@@ -355,7 +355,7 @@
                 var initWysiwyg = function($item) {
                     var redactor_settings = {
                         path: '<?= url::base();?>redactor/',
-                        autoresize: false,
+                        autoresize: true,
                         resize: false,
                         // See http://redactorjs.com/docs/toolbar/
                         buttons: ['formatting', '|', 'bold', 'italic', '|','fontcolor','|',
