@@ -3,7 +3,7 @@ $(document).ready(function(){
     var config = <?= json_encode($config) ?>;
     var settings = {
         path: '<?= url::base();?>redactor/',
-        autoresize: false,
+        autoresize: true,
         resize: false,
         // See http://redactorjs.com/docs/toolbar/
         buttons: ['formatting', '|', 'bold', 'italic', '|','fontcolor','|',
@@ -24,10 +24,10 @@ $(document).ready(function(){
     }
 
     //options to align text
-    redactor_settings.buttons.push('|');
-    redactor_settings.buttons.push('alignleft');
-    redactor_settings.buttons.push('aligncenter');
-    redactor_settings.buttons.push('alignright');
+    settings.buttons.push('|');
+    settings.buttons.push('alignleft');
+    settings.buttons.push('aligncenter');
+    settings.buttons.push('alignright');
 
     $("#<?= $uid;?> textarea").redactor(settings);
 });
