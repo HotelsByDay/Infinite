@@ -3,7 +3,7 @@ $(document).ready(function(){
     var config = <?= json_encode($config) ?>;
     var settings = {
         path: '<?= url::base();?>redactor/',
-        autoresize: false,
+        autoresize: true,
         resize: false,
         // See http://redactorjs.com/docs/toolbar/
         buttons: ['formatting', '|', 'bold', 'italic', '|','fontcolor','|',
