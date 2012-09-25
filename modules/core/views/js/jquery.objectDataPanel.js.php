@@ -376,14 +376,22 @@
             return list;
         },
 
-        _loadForm: function( $this, url, title) {
+        _loadForm: function( $this, url, title, options) {
 
             var $dialog = methods._getData($this, 'dialog');
 
             //nadpis dialogu bude nastaven podle tretiho parametru
             $dialog._dialog('option', 'title', title);
 
-            $dialog._dialog('loadForm', url, {}, function(response){
+            // dalsi options dialogu
+            if (typeof options != 'undefined' && options) {
+                for (var i in options) {
+                    $dialog._dialog('option', i, options[i]);
+                }
+            }
+
+
+            $dialog._dialog('loadForm', url, {}, function(response) {
                 if (response['action_status'] == '<?= AppForm::ACTION_RESULT_SUCCESS;?>') {
                     $dialog._dialog('close');
                     //vyvolam refresh dat
@@ -730,11 +738,20 @@
                 $(this).click(function(){
 
                     var settings = methods._getData($_this, 'settings');
-
+                    var $clicked_item = $(this);
                     if (typeof settings['onEditAjaxClick'] === 'function') {
-                        return settings['onEditAjaxClick']($(this));
+                        return settings['onEditAjaxClick']($clicked_item);
                     } else {
-                        methods._loadForm($_this, $(this).attr('href'));
+                        var options = {};
+                        var width = $clicked_item.attr('data-dialog-width');
+                        var height = $clicked_item.attr('data-dialog-height');
+                        if (typeof width != 'undefined' && width) {
+                            options['width'] = width;
+                        }
+                        if (typeof height != 'undefined' && height) {
+                            options['height'] = height;
+                        }
+                        methods._loadForm($_this, $(this).attr('href'), null, options);
                         return false;
                     }
                 });
