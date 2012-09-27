@@ -46,7 +46,6 @@ class Controller_ResetPassword extends Controller_Template {
      */
     public function action_index()
     {
-
         //pokud jsou v POSTu prihlasovaci udaje uzivatele, tak
         if (isset($_POST['email'])) {
 
@@ -95,8 +94,12 @@ class Controller_ResetPassword extends Controller_Template {
                 //doplnujici hlavicka, ktera explicitne specifikuje odesilatele
                 $headers = 'From: '.$from_name.' <'.$from_email.'>'. "\r\n";
 
-                //jednoduche odeslani emailu
-                mail($to, $subject, $message, $headers);
+                try {
+                    //jednoduche odeslani emailu
+                    mail($to, $subject, $message, $headers);
+                } catch (Exception $e) {
+                    Kohana::$log->add(Kohana::ERROR, $e->getMessage());
+                }
             }
 
             //do sablony predam priznak, ktery rika ze doslo k uspesnemu

@@ -47,7 +47,7 @@
 
 	</form>
 
-        <?php if (AppConfig::instance()->get('reset_password_option', 'system') && Session::instance()->get('show_reset_password_option')): ?>
+        <?php if (AppConfig::instance()->get('reset_password_option', 'system')): ?>
         <a href="<?= appurl::object_action('resetpassword', 'index');?>">Lost my password</a>
         <?php endif ?>
 

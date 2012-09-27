@@ -1,5 +1,5 @@
 // <script>
-$(document).ready(function(){
+$(document).ready(function() {
     var config = <?= json_encode($config) ?>;
     var settings = {
         path: '<?= url::base();?>redactor/',
