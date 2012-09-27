@@ -990,12 +990,17 @@ class ORM extends Kohana_ORM {
      */
     public function is_unique_value($column, $value)
     {
-        return (bool) ! DB::select(array('COUNT("*")', 'total_count'))
+        $q = DB::select(array('COUNT("*")', 'total_count'))
 						->from($this->_table_name)
-                                                ->where($this->_primary_key, '!=', $this->pk())
-						->where($column, '=', $value)
-						->execute($this->_db)
-						->get('total_count');
+                        ->where($this->_primary_key, '!=', $this->pk())
+						->where($column, '=', $value);
+
+        if ($this->hasAttr('deleted'))
+        {
+            $q->where('deleted', 'IS', DB::Expr('NULL'));
+        }
+
+        return (bool) ! $q->execute($this->_db)->get('total_count');
     }
 
     /**

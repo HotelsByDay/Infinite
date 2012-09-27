@@ -140,7 +140,7 @@
 
                 var _log = function(msg) {
                     if (typeof console != 'undefined' && console.log) {
-                        console.log(msg);
+                    //    console.log(msg);
                     }
                 }
 
@@ -355,7 +355,7 @@
                 var initWysiwyg = function($item) {
                     var redactor_settings = {
                         path: '<?= url::base();?>redactor/',
-                        autoresize: false,
+                        autoresize: true,
                         resize: false,
                         // See http://redactorjs.com/docs/toolbar/
                         buttons: ['formatting', '|', 'bold', 'italic', '|','fontcolor','|',

@@ -31,12 +31,12 @@
                 var $form = $_this.parents(".<?= AppForm::FORM_CSS_CLASS ?>:first");
 
                 //tlacitko pro pridani noveho zaznamu
-                $_this.find(".add").click(function(){
+                $_this.find(".add").click(function() {
 
                     //pokud naposledy pridana polozka jeste nebyla editovana a
                     //je tedy prazdna, tak uzivateli hodim focus na prvni input
                     //a nenecham ho pridavat dalsi prazdne polozky
-                    if ($(this).data('new')) {
+                    if (options.one_unsaved_most && $(this).data('new')) {
 
                         $.userInfoMessage("<?= __('appformitemadvanceditemlist.cannot_add_new_there_is_empty_item');?>");
 
@@ -95,10 +95,20 @@
 
                                 $item_container.html(response['content']);
 
+                                // Init created item
+                                methods._initTemplate($_this, $item_container);
+
+                                // Highlight item if needed
+                                if (options.highlight_new) {
+                                    methods._highlightItem($_this, $item_container);
+                                }
+
+                                // Set focus to the first input/textarea in the form
+                                $(":text, textarea", $item_container).eq(0).focus();
                                 //the layout and dmensions of this form item may have changed
-                                $form.objectForm('fireEvent', 'itemLayoutChanged', $_this);
+                                $_this.trigger('itemLayoutChanged');
                                 //item has been changed (form values has been changed)
-                                $form.objectForm('fireEvent', 'change', $_this);
+                                $_this.trigger('change', $_this);
                             }
 
                             //skryju progress indicator a zobrazim tlacitko pro
@@ -229,9 +239,42 @@
 
         },
 
+        /**
+         * Zvyrazni nove pridanou polozku - pokud je to configuraci prvku vyzadovano.
+         * - pouze ji prida class 'untouched' a po zmene polozky ji tuto class odebere
+         * @param $_this
+         * @param $item_container
+         * @private
+         */
+        _highlightItem: function($_this, $item_container) {
+            $item_container.addClass('untouched');
+            $item_container.bind('change', function(){
+                $item_container.removeClass('untouched');
+            }).bind('changing', function(){
+                $item_container.removeClass('untouched');
+            });
+
+            /*
+            $item_container.find('div.cols').css({
+                backgroundColor: '#ffff00'
+            });
+            setTimeout(function(){
+                $item_container.animate({
+                    backgroundColor: '#ffffff'
+                }, 1000)
+            }, 2000);
+            $item_container.change(function(){
+                $item_container.find('div.cols').css({
+                    backgroundColor: 'white',
+                });
+            });
+            */
+        },
+
+
         _log: function( text ) {
             if ( typeof console !== 'undefined') {
-                console.log( text );
+            //    console.log( text );
             }
         }
 

@@ -118,6 +118,8 @@
 
 
                 var onActiveLocaleChanged = function(event, locale) {
+
+                //    console.log('onActiveLocaleChanged called with locale: '+locale);
                     if (active_locale) {
                         // Ulozime aktualni text do hidden inputu aktualniho locale
                         var translation = $visible_input.val();

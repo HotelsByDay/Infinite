@@ -177,6 +177,17 @@ class Model_Core_User extends Model_Auth_User {
     }
 
     /**
+     * Vraci hash vsech uzivatelskych opravneni - pri zmene nektereho z jeho opravneni dojde i ke zmene hashe.
+     * @return string
+     */
+    public function getPermissionListHash()
+    {
+        // @todo - refaktorizovat - udelat metodu loadPermissionList()
+        $this->HasPermission('', '');
+        return md5(serialize($this->permission_list));
+    }
+
+    /**
      * Nacte seznam nazvu (atribut 'role.name') vsech uzivatelskcych roli, ktere
      * jsou uzivatel prirazeny.
      * @return <type>
@@ -262,7 +273,7 @@ class Model_Core_User extends Model_Auth_User {
                 }
             }
             //vyresetuju to co dedi - to uz priste nebudu muset pocitat, protoze
-            //to uz mam cele v 'functions' "namychane"
+            //to uz mam cele v 'functions' "namichane"
             $roles_definition[$role_name]['inherits'] = array();
 
             //mam zaklad role - to co dedi od ostatnich, k tomu pridam to co
@@ -559,6 +570,20 @@ class Model_Core_User extends Model_Auth_User {
 
         //vratim hodnotu nastaveni daneho uzivatele
         return arr::get($settings, $name, $default);
+    }
+
+    /**
+     * Metoda slouzi jako callback pri validaci. Kontroluje zda je emailova adresa uzivatele
+     * unikatni.
+     * @param Validate $array
+     * @param <type> $field
+     */
+    public function email_available(Validate $array, $field)
+    {
+        if ( ! $this->is_unique_value($field, $array[$field]))
+        {
+            $array->error($field, 'email_available', array($array[$field]));
+        }
     }
 
     /**

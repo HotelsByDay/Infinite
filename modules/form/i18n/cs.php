@@ -88,5 +88,9 @@ return array(
     'appformitem.password.validation.not_empty' => 'Heslo musí být vyplněno.',
     'appformitem.password.validation.match' => 'Zadaná hesla se neshodují.',
     'appformitem.password.validation.min_length' => 'Minimální délka hesla je 8 znaků.',
-    'appformitem.password.validation.max_length' => 'Maximální délka hesla je 50 znaků.'
+    'appformitem.password.validation.max_length' => 'Maximální délka hesla je 50 znaků.',
+
+
+    // AppFormItemGradientColorPicker
+    'appformitem_gradientcolorpicker.gradient_enabled' => 'Použít gradient',
 );
