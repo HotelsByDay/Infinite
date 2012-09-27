@@ -112,4 +112,8 @@ return array(
 
     'appformitemlang.remove_lang_from_master.confirm' => 'Are you sure you want to remove the language and all translates for it?',
 
+
+    // AppFormItemGradientColorPicker
+    'appformitem_gradientcolorpicker.gradient_enabled' => 'Gradient enabled',
+
 );

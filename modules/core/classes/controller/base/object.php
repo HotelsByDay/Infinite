@@ -901,8 +901,6 @@ abstract class Controller_Base_Object extends Controller_Layout {
      * @param <int> $item_id ID zaznamu, ktery ma byt editovan. Pokud je NULL
      * tak je vygenerovan prazdny formular pro vlozeni noveho zaznamu.
      */
-
-
     public function action_edit($item_id)
     {
         //vyvolani globalni udalosti 'system.action_edit_pre'

@@ -97,13 +97,12 @@
                         value: parseFloat(val),
                         slide: function(event, ui) {
                             sliderChanged(ui.value);
-                            // @todo - refaktorizovat - prepsat na $end_input.trigger('changing');
+
                             $input.trigger('changing');
                             $this.trigger('sliding');
                         },
                         change: function(event, ui) {
                             sliderChanged(ui.value);
-                            // @todo - refaktorizovat - prepsat na $end_input.trigger('change');
                             $input.trigger('change');
                         }
                     });

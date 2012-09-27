@@ -900,28 +900,50 @@ left = left - width;
 
 this.air.css({ left: left + 'px', top: (e.clientY + $(document).scrollTop() + 14) + 'px' }).show();
 },
+
+
 syncCode: function()
 {
-this.$el.val(this.$editor.html());
+    // Trigger added by JDA - [2012-09-24]
+    this.$el.val(this.$editor.html()).trigger('changing');
+
+    // Added by JDA - [2012-09-24]
+    var last_height = this.$el.attr('data-last_height');
+    if (typeof last_height === 'undefined') {
+        last_height = 0;
+    }
+    var current_height = this.$editor.height();
+    if (current_height != last_height) {
+        this.$el.attr('data-last_height', current_height);
+        this.$el.trigger('itemLayoutChanged');
+    }
 },
 
-// API functions
-setCode: function(html)
-{
-this.$editor.html(html).focus();
 
-this.syncCode();
+// API functions
+setCode: function(html, no_focus)
+{
+    // Condition added by JDA [2012-09-10]
+    if (typeof no_focus != 'undefined' && no_focus) {
+        this.$editor.html(html);
+    } else {
+        this.$editor.html(html).focus();
+    }
+
+    this.syncCode();
+    // Changed by JDA [2012-09-10]
+    this.observeImages();
 },
 getCode: function()
 {
-var html = this.$editor ? this.$editor.html() : this.$el.val();
+    var html = this.$editor ? this.$editor.html() : this.$el.val();
 
-return html;
+    return html;
 },
 insertHtml: function(html)
 {
-this.execCommand('inserthtml', html);
-this.observeImages();
+    this.execCommand('inserthtml', html);
+    this.observeImages();
 },
 destroy: function()
 {
@@ -2961,9 +2983,9 @@ if (typeof d !== 'undefined')
     return this.data('redactor').getSelectedHtml();
     };
 
-    $.fn.setCode = function(html)
+    $.fn.setCode = function(html, no_focus)
     {
-    this.data('redactor').setCode(html);
+    this.data('redactor').setCode(html, no_focus);
     };
 
     $.fn.insertHtml = function(html)

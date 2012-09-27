@@ -116,7 +116,7 @@ class Core_Menu {
     protected function hasAccess($item, $main_menu=false)
     {
         $link = arr::get($item, 'link', '');     
-        if (empty($link))
+        if (empty($link) or arr::get($item, 'no_access_control', false))
         {
             return true; // odkaz asi neni definovan - poloka se muze zobrazit
         }
@@ -331,10 +331,10 @@ class Core_Menu {
 //            // Ulozime do cache
 //            Cache::instance()->set($cache_key, $menu);
 //        }
-        
+
         // odstranit
         // $menu = $this->parseMenu();
-        
+
         // Vratime menu
         return $menu;
     }
@@ -447,7 +447,9 @@ class Core_Menu {
         }
 
         // Pokud submenu bylo definovane a jeho definice nebyla prazdna - pridame odkazu tridu
-        if ( ! empty($submenu)) $link_classes[] = 'drop';
+        if ( ! empty($submenu)) {
+            $link_classes[] = 'drop';
+        }
 
         // Pokud je nastaven link
         if (isset($menu_item['link'])) {
@@ -471,8 +473,8 @@ class Core_Menu {
             $classes[] = $this->active_class_name; 
         }
         // Pridame submenu - pouze pokud polozka neni aktivni
-        // Vypada divne kdyz aktivni zalozka ma submenu
-        else
+        // Vypada divne kdyz aktivni zalozka ma submenu - ale je to potreba (MobiWe)
+   //     else
         {
 
             //pokud ma menu polozka submenu, tak dostane speicalni css tridu

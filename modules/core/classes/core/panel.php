@@ -48,6 +48,12 @@ class Core_Panel {
      */
     public function getPanel()
     {
+        // Pokud jsme v debug rezimu tak parsujeme a kasleme na cache (!)
+        if (AppConfig::instance()->debugMode()) {
+            return $this->parsePanel();
+        }
+
+        // Jinak zkusime precist z cache
         $key = $this->countCacheKey();
         // Zkusime precist z cache
         $panel = Cache::instance()->get($key, NULL);
@@ -88,7 +94,8 @@ class Core_Panel {
      */
     protected function countCacheKey()
     {
-        return md5($this->controller_name);
+        $permissions_hash = Auth::instance()->get_user()->getPermissionListHash();
+        return md5($this->controller_name.$permissions_hash);
     }
     
     /**
@@ -108,7 +115,7 @@ class Core_Panel {
             $link_attr = ' class="drop"';
         } else {
             $submenu = ''; // at nemusime testovat isset
-            $link_attr = ' class="action_button" action="'.$action.'"';
+            $link_attr = ' class="action_button action_button_'.$action.'" action="'.$action.'"';
         }
 
         //pokud je definovany atribut 'confirm', tak pridam do atributu prvku

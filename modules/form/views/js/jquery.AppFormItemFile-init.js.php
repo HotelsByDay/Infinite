@@ -1,11 +1,11 @@
 //<script>
 $(document).ready(function(){
 
-    function appFormItemPhoto_InitItem($photo, $item, $form) {
-
-        //inicializace fancyboxu
-        if ($photo.find('a.fancybox').length != 0) {
-            $photo.find('a.fancybox').fancybox({
+    function appFormItemPhoto_InitFancybox($uploader) {
+        if ($uploader.find('a.fancybox').length != 0) {
+            // Tohle nejak nefunguje
+        //    $uploader.find('a.fancybox').fancybox.cancel();
+            $uploader.find('a.fancybox').fancybox({
                 hideOnOverlayClick: true,
                 hideOnContentClick: true,
                 speedIn: 200,
@@ -15,6 +15,12 @@ $(document).ready(function(){
 
             });
         }
+    }
+
+    function appFormItemPhoto_InitItem($photo, $item, $form) {
+
+        //inicializace fancyboxu
+
 
         //kliknutim na tlacitko cancel zrusim soubor - odstranim
         //vsechny prvky, ktere se ho tykaji ze stranky
@@ -103,6 +109,8 @@ $(document).ready(function(){
         //reference na rodicovsky formular
         var $form = $item.parents(".<?= AppForm::FORM_CSS_CLASS ?>:first");
 
+        // Inicializace fancyboxu
+        appFormItemPhoto_InitFancybox($(this));
         $(this).find('.list .item').each(function(){
             appFormItemPhoto_InitItem($(this), $item, $form);
         });
@@ -238,6 +246,7 @@ $(document).ready(function(){
                     <?php endif ?>
 
                     //provede inicizalizaci zakladnich prvku na polozce
+                    appFormItemPhoto_InitFancybox($item);
                     appFormItemPhoto_InitItem($uploaded_file_preview, $item, $form);
 
                     $item.find('.list').append($uploaded_file_preview);
@@ -254,7 +263,7 @@ $(document).ready(function(){
                 }
 
                 //the layout and dmensions of this form item may have changed
-                $form.objectForm('fireEvent', 'itemLayoutChanged', $item);
+                $item.trigger('itemLayoutChanged', $item);
             },
             onCancel: function(id, fileName){
 
