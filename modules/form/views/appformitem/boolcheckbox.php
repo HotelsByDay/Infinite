@@ -4,6 +4,7 @@
     <span class="validation_error"><?= $error_message; ?></span>
   <?php endif ?>
 
+    <input type="hidden" name="<?= $attr ?>" value="0" />
     <input type="checkbox" id="<?= $attr ?>" name="<?= $attr ?>" value="1" <?php if ($value) echo 'checked="checked"'; ?> />
     <label for="<?= $attr ?>"><?= $label ?></label>
 
