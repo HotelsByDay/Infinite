@@ -383,6 +383,13 @@ class Core_AppForm {
             //vyvola incializaci prvku
             $form_item_class->init();
 
+            //non-virtual items need to be based on an attribute of the underlying model,
+            //otherwise they are ignored
+            if ( ! $form_item_class->isVirtual() && ! $this->_model->hasAttr($attr))
+            {
+                continue;
+            }
+
             //referenci na form prvek si ulozim
             $this->_form_items[$attr] = $form_item_class;
         }
@@ -537,6 +544,7 @@ class Core_AppForm {
         }
         catch (Exception_ModelDataValidationFailed $e)
         {
+            throw $e;
             //v konfiguraci muze byt nastaveno ze se nema zobrazovat
             //obecna chybova hlaska informujici o validacni chybe nekde ve formulari
             if ( ! arr::get($this->_config, 'display_general_validation_error', TRUE))
@@ -557,6 +565,7 @@ class Core_AppForm {
         //vyjimka, ktera muze byt "zobrazena" na formulari
         catch (Exception_FormAction $e)
         {
+            throw $e;
             //nastavim vysledek akce
             $this->requested_action_result = self::ACTION_RESULT_FAILED;
 
