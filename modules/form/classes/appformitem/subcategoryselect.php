@@ -30,6 +30,9 @@ class AppFormItem_SubCategorySelect extends AppFormItem_SelectDataSource
     // Nazev mapovaci tabulky/modelu
     protected $map = NULL;
 
+    protected $config = Array(
+        'columns_count' => 1,
+    );
 
 
     public function __construct($attr, $config, Kohana_ORM $model, ORM_Proxy $loaded_model, $form_data, $form)
@@ -57,6 +60,7 @@ class AppFormItem_SubCategorySelect extends AppFormItem_SelectDataSource
             'attr' => $this->attr,
             'preview' => arr::get($this->config, 'preview', ''),
             'data_url' => appurl::object_cb_data($this->config['subcategory_object'], arr::get($this->config, 'subfilter', array())),
+            'columns_count' => $this->config['columns_count'],
         );
         $init_js->config = $config;
 
@@ -317,7 +321,7 @@ class AppFormItem_SubCategorySelect extends AppFormItem_SelectDataSource
 
         $view->value = $this->getCategory();
         $view->values = $this->getValues();
-
+        $view->columns_count = $this->config['columns_count'];
 
         // Label pro checkboxy se sub-categoriemi s kategoriemi (parent label bude pouzit pro select s kategoriemi)
         $view->sub_label = FormItem::getLabel($this->model->object_name(), $this->attr.'.category');

@@ -5,21 +5,39 @@
     <?php endif ?>
 
 
+    <div class="category">
     <label><?= $label; ?></label>
     <?= form::select($attr.'[category]', $values, $value); ?>
-
+    </div>
 
     <label><?= $sub_label; ?></label>
     <div class="items">
-        <?php  foreach ($items as $item):
-            // Zjistime jestli je prvek zatrzen
-            $checked = in_array($item->pk(), $selected['id']);
-        ?>
-        <div class="item">
-            <input type="checkbox" <?= $checked ? 'checked="checked"' : '';?> id="item_<?= $attr;?>_<?=$item->pk();?>" value="<?= $item->pk();?>" name="<?= $attr;?>[id][<?= $item->pk() ?>]" />
-            <label for="item_<?= $attr;?>_<?=$item->pk();?>" class="check"><?= $item->preview();?></label>
+        <div class="column">
+            <?php
+            // Spocteme velikost sloupce - v poctu polozek
+            $items_count = count($items);
+            $column_size = (int)($items_count / $columns_count);
+            if ($items_count % $column_size) {
+                $column_size++;
+            }
+            $item_number = 0;
+            foreach ($items as $item):
+                // Zjistime jestli je prvek zatrzen
+                $checked = in_array($item->pk(), $selected['id']);
+                if ($item_number >= $column_size) {
+                    echo '</div><div class="column">';
+                    $item_number = 0;
+                }
+                $item_number++;
+            ?>
+            <div class="item">
+                <input type="checkbox" <?= $checked ? 'checked="checked"' : '';?> id="item_<?= $attr;?>_<?=$item->pk();?>" value="<?= $item->pk();?>" name="<?= $attr;?>[id][<?= $item->pk() ?>]" />
+                <label for="item_<?= $attr;?>_<?=$item->pk();?>" class="check"><?= $item->preview();?></label>
+            </div>
+            <?php endforeach ?>
         </div>
-        <?php endforeach ?>
     </div>
+
+    <div class="clear"></div>
 
 </div>

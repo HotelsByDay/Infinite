@@ -22,8 +22,10 @@
             var settings = {
                 data_url : "",
                 preview: null,
-                attr: ''
+                attr: '',
+                columns_count: 1
             };
+
 
             /**
              * this je nyni neco jako jQuery iterator - to co vratil selector
@@ -60,8 +62,6 @@
 
                     $form.block();
 
-
-
                     $._ajax({
                         // Sestaveni URL adresy na poradac prislusneho objektu
                         url: settings.data_url,
@@ -70,27 +70,46 @@
                         success: function( data ) {
                             // Smazeme aktualni checkboxu
                             $items.html('');
+                            // Celkovy pocet polozek
+                            var items_count = data.length;
+                            // Minimalni velikost sloupce - v poctu polozek
+                            var max_column_size = parseInt(items_count / params.columns_count);
+                            if (items_count % params.columns_count) {
+                                max_column_size++;
+                            };
+
+                            var items_in_column = 0;
+                            var items_html = '<div class="column">';
                             for (var i in data)
                             {
+                                // Pokud jsme dosahli pozadovaneho poctu polozek ve sloupci - uzavreme sloupec a otevreme novy
+                                if (items_in_column >= max_column_size) {
+                                    // Otevreme novy sloupec
+                                    items_html += '</div><div class="column">';
+                                    // Je v nem zatim 0 polozek
+                                    items_in_column = 0;
+                                }
                                 var item = data[i];
                                 var value = item.value;
                                 var name = item.name;
 
-                                var item_html = '<div class="item">';
-                                item_html += '<input type="checkbox" id="item_' + params.attr + '_' + value + '" value="' + value + '" name="' + params.attr + '[id][' + value + ']" /> ';
-                                item_html += ' <label for="item_' + params.attr + '_' + value + '" class="check"> ' + name + '</label>';
-                                item_html += '</div>';
+                                items_html += '<div class="item">';
+                                items_html += '<input type="checkbox" id="item_' + params.attr + '_' + value + '" value="' + value + '" name="' + params.attr + '[id][' + value + ']" /> ';
+                                items_html += ' <label for="item_' + params.attr + '_' + value + '" class="check"> ' + name + '</label>';
+                                items_html += '</div>';
 
-                                $items.append(item_html);
+                                // Zapocitame polozku ve sloupci
+                                items_in_column++;
                             }
-
+                            items_html += '</div>';
+                            // Zobrazime nove checkboxu
+                            $items.html(items_html);
+                            // Odblokujeme ui formulare
                             $form.unblock();
                         }
                     });
-
                 });
             });
-
         }
 
     }
