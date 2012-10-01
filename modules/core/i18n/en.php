@@ -115,6 +115,10 @@ return array(
     'codebook.default_prepend_value' => '-not selected-',
 
 
+    // Form items
+    'relnnselect.check_all' => 'Check All',
+    'relnnselect.uncheck_all' => 'Uncheck All',
+
     //TEMATA NAPOVEDY
     'tip_help.tip_title' => 'Help',
     'tip_help.topic_1'  => 'Tema napovedy cislo 1.',

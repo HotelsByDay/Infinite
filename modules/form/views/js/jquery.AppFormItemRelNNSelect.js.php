@@ -35,6 +35,24 @@
                 //Pokud prislo nastaveni, tak mergnu s defaultnimi hodnotami
                 var params = $.extend(true, settings, options);
 
+                // Tlacitka check/uncheck all
+                var $check_all = $('.check_all', $this);
+                var $uncheck_all = $('.uncheck_all', $this);
+
+
+                $check_all.bind('click', function(){
+                    $this.find(':checkbox').each(function(){
+                        $(this).attr('checked', true);
+                    });
+                    return false;
+                });
+                $uncheck_all.bind('click', function(){
+                    $this.find(':checkbox').each(function(){
+                        $(this).removeAttr('checked');
+                    });
+                    return false;
+                });
+
                 $(":checkbox", $this).each(function(){
                     var $c = $(this);
                     if ($c.is(':checked')) {
