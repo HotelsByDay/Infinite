@@ -23,8 +23,11 @@
         <?php
             // Spocteme velikost sloupce - v poctu polozek
             $items_count = count($items);
+            if ( ! $columns_count) {
+                $columns_count = 1;
+            }
             $column_size = (int)($items_count / $columns_count);
-            if ($items_count % $column_size) {
+            if ($column_size and $items_count % $column_size) {
                 $column_size++;
             }
             $item_number = 0;

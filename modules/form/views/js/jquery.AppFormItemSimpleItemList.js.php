@@ -30,24 +30,19 @@
                 //v nastavenich ocekavam sablonu pro novy relacni prvek
                 var new_template = options['new_template'];
 
+                $_this.data('appformitemsimpleitemlist', {options : options});
+
                 //inicializace polozek
-                $_this.find('.list .item').each(function(){
+                $_this.find('.list .item').each(function() {
                     methods._initTemplate($_this, $(this));
                 });
 
                 //tlacitko pro pridani noveho zaznamu
-                $_this.find(".add_new").click(function(){
+                $_this.find(".add_new").click(function() {
 
-                    $new_template = $(new_template);
+                    var $new_template = $(new_template);
                     
-                    //template incializuju (obsauje tlacitko pro odstraneni
-                    methods._initTemplate($_this, $new_template);
-
-                    //pridam na konec seznam existujicich prvku
-                    $_this.find('.list').append($new_template);
-
-                    //nastavim focus na prvni viditelny input
-                    $new_template.find('input:visible,select:visible,textarea:visible').filter(':first').focus();
+                    $_this.appFormItemSimpleItemList('append');
 
                     return false;
                 });
@@ -55,8 +50,41 @@
             });
         },
 
+        /**
+         * Public metoda - prida polozku do seznamu, s tim, ze ji inicializuje hodnotami ve values
+         * @param foo
+         * @param values
+         */
+        append: function(foo, values) {
+            var $_this = $(this);
+
+            var data = $_this.data('appformitemsimpleitemlist');
+            var options = data.options;
+
+            // HTML kod sablony prvku
+            var new_template = options['new_template'];
+            // jQuery objekt sablony prvku
+            var $new_template = $(new_template);
+
+            if (typeof values !== 'undefined') {
+                // Inicializujeme sablonu zadanymi hodnotami
+                for (var attr in values) {
+                    $new_template.find('input[name*="[' + attr + ']"]').val(values[attr]);
+                }
+            }
+
+            //template incializuju (obsauje tlacitko pro odstraneni
+            methods._initTemplate($_this, $new_template);
+
+            //pridam na konec seznam existujicich prvku
+            $_this.find('.list').append($new_template);
+
+            //nastavim focus na prvni viditelny input
+            $new_template.find('input:visible,select:visible,textarea:visible').filter(':first').focus();
+        },
+
         _initTemplate: function($_this, $template) {
-            
+
             //pri kliknuti na tlacitko odstranit
             $template.find('.delete').click(function(){
 
@@ -69,15 +97,9 @@
                     //id polozky (souboru ) je ulozeno v inputu, ktery v name atributu obsahuej "[id]"
                     var $id_input = $template.find('input[name*="\[id\]"]');
 
-                    //pokud nebyl input nalezen, tak nelze se souborem pracovat
-                    if ($id_input.length == 0) {
-                        alert("<?= __('appformitemfile.cannot_delete');?>");
-                        return false;
-                    }
-
                     //pokud $id_input ma prazdnou hodnotu, tak jeste dana polozka
                     //nebyla ulozena do DB a muzu rovnou odstranit z formulare
-                    if ($id_input.val() == '') {
+                    if ($id_input.length == 0 || $id_input.val() == '') {
 
                         //odstranim soubor ze stranky
                         $template.remove();
