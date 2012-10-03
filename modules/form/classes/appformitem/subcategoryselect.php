@@ -19,7 +19,7 @@
  );
  */
 
-class AppFormItem_SubCategorySelect extends AppFormItem_SelectDataSource
+class AppFormItem_SubCategorySelect extends AppFormItem_Select
 {
     //Nazev sablony pro tento formularovy prvek
     protected $view_name = 'appformitem/subcategoryselect';
