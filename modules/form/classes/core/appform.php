@@ -127,8 +127,13 @@ class Core_AppForm {
     //Formularova data, ktera jsou urcena k ulozeni
     protected $_form_data = array();
 
+
+    protected $_form_data_original = array();
+
     //Zde budou ulozeny jednotlive formularove prvky ve forme ReflectionClass
     protected $_form_items = array();
+
+    protected $_config_original;
 
     //slouzi k ulozeni konfigurace pro tento formular - jsou tady fallback hodnoty
     protected $_config = array(
@@ -179,24 +184,31 @@ class Core_AppForm {
         //ulozim si referenci na ORM model nad kterym formular stoji
         $this->_model = $model;
 
-        //tato reference bude predana do jednotlivych formitemu a v pripade
-        //uspesneho ulozeni nebo odstraneni $this->_model ji potrebuji prepsat
-        //coz zaridim pomoci Proxy navrhoveho vzoru.
-        //@TODO: Odmena 500Kc pro toho kdo tohle dokaze vyresit bez Proxy
-        $this->_loaded_model = ORM_Proxy::factory(clone $model);
+        $this->_config_original = $config;
 
-        //je formular nacitan do itemlistu
-        $this->in_itemlist = arr::get($form_data, 'itemlist', FALSE);
+        $this->_form_data_original = $form_data;
 
         //ulozim si hodnotu, ktera rika ze je instance formulare pouzita
         //v ajax pozadavku
         $this->is_ajax = $is_ajax;
+    }
+
+    public function init()
+    {
+        //tato reference bude predana do jednotlivych formitemu a v pripade
+        //uspesneho ulozeni nebo odstraneni $this->_model ji potrebuji prepsat
+        //coz zaridim pomoci Proxy navrhoveho vzoru.
+        //@TODO: Odmena 500Kc pro toho kdo tohle dokaze vyresit bez Proxy
+        $this->_loaded_model = ORM_Proxy::factory(clone $this->_model);
+
+        //je formular nacitan do itemlistu
+        $this->in_itemlist = arr::get($this->_form_data_original, 'itemlist', FALSE);
 
         if ($this->in_itemlist)
         {
             $this->_config['container_view_name'] = 'form_container_itemlist';
         }
-        //pokud je formular v ajax rezimu tak se pouzije jina defaultni 
+        //pokud je formular v ajax rezimu tak se pouzije jina defaultni
         //sablona pro form container
         else if ($this->is_ajax)
         {
@@ -207,17 +219,17 @@ class Core_AppForm {
         // udelam to rucne, protoze chci zachovat Kohana_ConfigFile
         foreach ($this->_config as $key => $value)
         {
-            $config->set($key, $value);
+            $this->_config_original->set($key, $value);
         }
-        $this->_config = $config;
+        $this->_config = $this->_config_original;
 
         //these values will be used as default
-        $this->_form_data_defaults   = arr::get($form_data, 'defaults', array());
+        $this->_form_data_defaults   = arr::get($this->_form_data_original, 'defaults', array());
         //these valus will overwrite whatever arrived from the form
-        $this->_form_data_overwrites = arr::get($form_data, 'overwrite', array());
+        $this->_form_data_overwrites = arr::get($this->_form_data_original, 'overwrite', array());
 
         //wont be needed anymore
-        unset($form_data['defaults'], $form_data['overwrite']);
+        unset($this->_form_data_original['defaults'], $this->_form_data_original['overwrite']);
 
         //initialize with the default data
         if ( ! $this->_model->loaded())
@@ -226,7 +238,7 @@ class Core_AppForm {
         }
 
         //load form data
-        $this->_form_data = arr::merge($this->_form_data, $form_data);
+        $this->_form_data = arr::merge($this->_form_data, $this->_form_data_original);
 
         //vlozi data do ORM modelu anebo do $this->_form_data
         $this->applyFormDataValues($this->_form_data_overwrites);
@@ -241,6 +253,8 @@ class Core_AppForm {
         if (arr::get($config, 'autosave_model', false) and ! $this->_model->loaded()) {
             $this->_model->save();
         }
+
+        return $this;
     }
 
     /**
@@ -544,7 +558,6 @@ class Core_AppForm {
         }
         catch (Exception_ModelDataValidationFailed $e)
         {
-            throw $e;
             //v konfiguraci muze byt nastaveno ze se nema zobrazovat
             //obecna chybova hlaska informujici o validacni chybe nekde ve formulari
             if ( ! arr::get($this->_config, 'display_general_validation_error', TRUE))
@@ -565,7 +578,6 @@ class Core_AppForm {
         //vyjimka, ktera muze byt "zobrazena" na formulari
         catch (Exception_FormAction $e)
         {
-            throw $e;
             //nastavim vysledek akce
             $this->requested_action_result = self::ACTION_RESULT_FAILED;
 
