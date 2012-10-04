@@ -1,7 +1,17 @@
 <?php defined('SYSPATH') OR die('No direct access allowed.');
 
 class Helper_Format {
-    
+
+    /**
+     * Nahradi alfanumericke znaky za hvezdicky
+     * @static
+     * @param $string
+     */
+    static public function starOut($string)
+    {
+        return preg_replace('/[^_ @#?!-]/', '*', $string);
+    }
+
     /**
      * Formatuje cislo jako telefoni cislo ve formatu platnem pro CR.
      * @param <string> $number Cislo k naformatovani
