@@ -109,6 +109,16 @@ class Helper_DateFormat {
         return $mysql_datetime;
     }
 
+    /**
+     * @static
+     * @param $mysql_datetime
+     * @param string $user_datetime_format
+     * @return Returns similar value as getUserDateTime but each of date and time is closed in <span> with class
+     */
+    public static function getUserDateTimeFormatted($mysql_datetime, $time_format='H:i')
+    {
+        return '<span class="date">' . static::getUserDate($mysql_datetime) . '</span>&nbsp;<span class="time">' . static::getUserDate($mysql_datetime, $time_format) . '</span>';
+    }
 
     /**
      * Converts mysql datetime string into user datetime string in given format (or in default format).

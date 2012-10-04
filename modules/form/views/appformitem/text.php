@@ -1,4 +1,4 @@
-<div class="appformitemcontainer <?= $css?>">
+<div class="appformitemcontainer <?= $css?>" id="<?= $uid; ?>">
 <?php
     if (isset($disabled)) {
         $name = ''; $disabled = ' disabled="disabled"';
@@ -6,6 +6,8 @@
         $name = ' name="'.$attr.'"';
     }
 ?>
+
+
 
 <?php if ( ! empty($error_message)): ?>
 <span class="validation_error"><?= $error_message;?></span>

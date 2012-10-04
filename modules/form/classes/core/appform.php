@@ -38,7 +38,7 @@
  * ***********************************************************
  * V metode Process se do techto atributu zapise typ pozadovane akce a jeji vysledek.
  * Na konci metody se tyto hodnoty poslou do setActionResult, aby se podle nich
- * vygenerovala defaultni zprava pro uzivatele.
+ * vygenerovala defaultni F pro uzivatele.
  * Navic pri generovani formulare v metode Render() se kontroluje zda prave
  * nedoslo k uspesnemu odstraneni zaznamu - pokud ano tak se vlastni formular
  * nevykresluje.
@@ -723,6 +723,22 @@ class Core_AppForm {
         //validace uspesna, vyvolam formularovou udalost pred ulozenim
         $this->runFormEvent(self::FORM_EVENT_BEFORE_SAVE);
 
+        // Ulozime model
+        $this->saveModel();
+        
+        //vyvolam formularovou udalost po ulozeni
+        $this->runFormEvent(self::FORM_EVENT_AFTER_SAVE);
+
+        //akce probehla uspesne 
+        return self::ACTION_RESULT_SUCCESS;
+    }
+
+    /**
+     * Ulozi model
+     * @throws Exception_SaveActionFailed
+     */
+    protected function saveModel()
+    {
         //pri ukladani by mohlo dojit k neocekavane chybe
         try
         {
@@ -731,10 +747,10 @@ class Core_AppForm {
             $this->_model->save();
 
             //$this->_loaded_model je Proxy trida - po uspesnem ulozeni zaznamu
-            //chci aby "ukazovala" na aktualni model 
+            //chci aby "ukazovala" na aktualni model
             $this->_loaded_model->setORM($this->_model);
         }
-        //doslo k nejake chybe pri ukladani
+            //doslo k nejake chybe pri ukladani
         catch (Exception $e)
         {
             kohana::$log->add(Kohana::ERROR, 'Error while saving form: :text', array(
@@ -751,7 +767,7 @@ class Core_AppForm {
                 $this->runFormEvent(self::FORM_EVENT_SAVE_FAILED, $event_data);
 
                 //vyhodim vyjimku, ktera bude uzivatle informovat o problemu
-                    throw new Exception_SaveActionFailed('form_action_status.model_save_failed');
+                throw new Exception_SaveActionFailed('form_action_status.model_save_failed');
             }
             //zaznam byl ulozen, ale doslo k nejake chybe - uzivateli se zobrazi hlaseni
             //formularove prvky se o tomto nedozvi
@@ -761,12 +777,6 @@ class Core_AppForm {
                 throw new Exception_SaveActionFailed('form_action_status.model_saved_but_may_be_incosistent');
             }
         }
-        
-        //vyvolam formularovou udalost po ulozeni
-        $this->runFormEvent(self::FORM_EVENT_AFTER_SAVE);
-
-        //akce probehla uspesne 
-        return self::ACTION_RESULT_SUCCESS;
     }
 
     protected function ActionValidate()
@@ -790,13 +800,7 @@ class Core_AppForm {
         }
 
         //pustim validaci hlavniho ORM modelu
-        if ( ! $this->_model->check())
-        {
-            //z ORM si vytahnu validacni chyby - chyby z form prvku vkladam do chyb
-            //z ORM - chyby zachycene form prvky maji vyssi prioritu, a budou zobrazeny
-            //na formulari "pred" chybami z ORM validace
-            $this->_error_messages = arr::merge($this->_model->getValidationErrors(), $this->_error_messages);
-        }
+        $this->validateModel();
 
         //pokud jsme pri validaci ziskali nejake chybove hlasky, tak se nebude pokracovat v ulozeni zaznamu
         if ( ! empty($this->_error_messages))
@@ -807,6 +811,20 @@ class Core_AppForm {
 
         //vracim uspech - akce probehla uspesne
         return self::ACTION_RESULT_SUCCESS;
+    }
+
+    /**
+     * Zvaliduje model a pripadne validation errors pri-mergne do lokalniho atributu
+     */
+    protected function validateModel()
+    {
+        if ( ! $this->_model->check())
+        {
+            //z ORM si vytahnu validacni chyby - chyby z form prvku vkladam do chyb
+            //z ORM - chyby zachycene form prvky maji vyssi prioritu, a budou zobrazeny
+            //na formulari "pred" chybami z ORM validace
+            $this->_error_messages = arr::merge($this->_model->getValidationErrors(), $this->_error_messages);
+        }
     }
 
     /**

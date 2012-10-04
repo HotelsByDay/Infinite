@@ -1,9 +1,28 @@
 <?php defined('SYSPATH') or die('No direct script access.');
 
-class AppFormItem_RelNNSelect extends AppFormItem_Base
+/**
+ * Prvek slouzici k vyberu kategorie a N jejich podkategorii. Podkategorie musi byt ulzoeny v asociacni tabulce.
+ $config => array(
+        // Relobject je pouzit pro nacteni hlavnich kategorii - model musi mit standardni vazbu na relobject
+        'relobject' => 'cb_performer_category',
+        // Pro nacteni subkategorii - checkboxy - vazby uklada pres metody add()/remove() (standardne by mela byt nastavena has_many through relace)
+        'subcategory_object' => 'cb_performer_subcategory',
+        // Filter pro hlavni kategorie - viz SelectDataSource
+        'filter' => array(
+            'column' => 'value',
+        ),
+        // Filter pro subcategorie
+        'subfilter' => array(
+            array('active', '=', '1'),
+            ...
+        ),
+ );
+ */
+
+class AppFormItem_SubCategorySelect extends AppFormItem_Select
 {
     //Nazev sablony pro tento formularovy prvek
-    protected $view_name = 'appformitem/relnnselect';
+    protected $view_name = 'appformitem/subcategoryselect';
 
     //Tento formularovy prvek je urcen k pouziti jako virtualni
     protected $virtual = TRUE;
@@ -11,20 +30,16 @@ class AppFormItem_RelNNSelect extends AppFormItem_Base
     // Nazev mapovaci tabulky/modelu
     protected $map = NULL;
 
-    protected $config = array(
-        // Pocet sloupcu ve kterych maji byt checkboxy zobrazeny
-        'columns_count' => null,
-        // Zda zobrazit tlacitka check/uncheck all
-        'allow_check_all' => false,
+    protected $config = Array(
+        'columns_count' => 1,
     );
-
 
 
     public function __construct($attr, $config, Kohana_ORM $model, ORM_Proxy $loaded_model, $form_data, $form)
     {
         parent::__construct($attr, $config, $model, $loaded_model, $form_data, $form);
         // Spocteme nazev mapovaci tabulky
-        $this->map = FormItem::NNTableName($this->model->object_name(), $this->config['rel']);
+        $this->map = FormItem::NNTableName($this->model->object_name(), $this->config['subcategory_object']);
     }
 
 
@@ -36,18 +51,34 @@ class AppFormItem_RelNNSelect extends AppFormItem_Base
     {
         parent::init();
 
+        // Pripojime JS soubor s pluginem
+        Web::instance()->addCustomJSFile(View::factory('js/jquery.AppFormItemSubCategorySelect.js'));
+        // A jeho inicializaci
+        $init_js = View::factory('js/jquery.AppFormItemSubCategorySelect-init.js');
+
+        $config = Array(
+            'attr' => $this->attr,
+            'preview' => arr::get($this->config, 'preview', ''),
+            'data_url' => appurl::object_cb_data($this->config['subcategory_object'], arr::get($this->config, 'subfilter', array())),
+            'columns_count' => $this->config['columns_count'],
+        );
+        $init_js->config = $config;
+
+        //prida do sablony identifikator tohoto prvku a zajisti vlozeni do stranky
+        parent::addInitJS($init_js);
+
+        /*
         // Plugin potrebujeme jen pokud jsou povoleny poznamky
-        if (arr::get($this->config, 'note', false) or $this->config['allow_check_all']) {
+        if (arr::get($this->config, 'note', false)) {
             // Pripojime JS soubor s pluginem
             Web::instance()->addCustomJSFile(View::factory('js/jquery.AppFormItemRelNNSelect.js'));
             // A jeho inicializaci
             $init_js = View::factory('js/jquery.AppFormItemRelNNSelect-init.js');
-            $init_js->config = Array(
-                'allow_check_all' => $this->config
-            );
+            $init_js->config = Array();
             //prida do sablony identifikator tohoto prvku a zajisti vlozeni do stranky
             parent::addInitJS($init_js);
         }
+        */
     }
 
 
@@ -66,7 +97,7 @@ class AppFormItem_RelNNSelect extends AppFormItem_Base
         }
         else
         {
-            $rel_key = $this->config['rel'].'id';
+            $rel_key = $this->config['subcategory_object'].'id';
 
             if (arr::get($this->config, 'note', false)) {
                 $model_key = $this->model->object_name().'id';
@@ -78,7 +109,7 @@ class AppFormItem_RelNNSelect extends AppFormItem_Base
             else {
                 // Pokud neni poznamka, pak pivotni tabulka nemusi mit standardni nazev
                 // a precteme ji tedy pres has_many relaci (kvuli zpetne kompatibilite)
-                $map_data = $this->model->{$this->config['rel']}->find_all();
+                $map_data = $this->model->{$this->config['subcategory_object']}->find_all();
             }
 
             $id = $note = array();
@@ -95,6 +126,17 @@ class AppFormItem_RelNNSelect extends AppFormItem_Base
         }
     }
 
+
+    /**
+     * Vrati ID aktualne zvolene kategorie
+     * @return mixed
+     */
+    protected function getCategory()
+    {
+        return $this->model->{$this->config['relobject'].'id'};
+    }
+
+
     /**
      * Metoda vraci pole, ktere obsahuje ID vsech relacnich zaznamu, ktere ma
      * uzivatel na vyber.
@@ -105,9 +147,12 @@ class AppFormItem_RelNNSelect extends AppFormItem_Base
         //zde vlozim modely relacnich zaznamu, ze kterych bude mit uzivatel na vyber
         $rel_models = array();
 
-        $model = ORM::factory($this->config['rel']);
+        $model = ORM::factory($this->config['subcategory_object']);
 
-        foreach (arr::get($this->config, 'filter', array()) as $filter_cond)
+        $category_attr = $this->config['relobject'].'id';
+        $model->where($category_attr, '=', $this->getCategory());
+
+        foreach (arr::get($this->config, 'subfilter', array()) as $filter_cond)
         {
             $model->where($filter_cond[0], $filter_cond[1], $filter_cond[2]);
         }
@@ -146,7 +191,7 @@ class AppFormItem_RelNNSelect extends AppFormItem_Base
             // Klice pro nalezeni pivotniho zaznamu
             $keys = Array(
                 $this->model->object_name().'id' => $this->model->pk(),
-                $this->config['rel'].'id' => $model->pk(),
+                $this->config['subcategory_object'].'id' => $model->pk(),
             );
             $map = ORM::factory($this->map, $keys);
             if ($map->loaded()) {
@@ -183,6 +228,14 @@ class AppFormItem_RelNNSelect extends AppFormItem_Base
         return parent::assignValue();
     }
 
+
+    public function setValue($value)
+    {
+        $category = arr::get($value, 'category');
+        $this->model->{$this->attr} = $category;
+    }
+
+
     /**
      * V udalosti FORM_EVENT_AFTER_SAVE provadi nastaveni vazeb na vybrane role.
      * @param <type> $type
@@ -200,7 +253,7 @@ class AppFormItem_RelNNSelect extends AppFormItem_Base
                 //takze tuto moznost zavrhuji. Misto toho projdu kazdou aktualne nastavenou
                 //polozku zvlast a budu testovat zda je vazba nastavena - toto je mene efektivni
                 //reseni, ale je bezpecnejsi
-                $rel = $this->config['rel'];
+                $rel = $this->config['subcategory_object'];
 
                 // Prijata data si rozdelime na pole IDcek relacnich zaznamu (zatrzene checkboxy)
                 // a na pole poznamek (tam mohou byt data i pro nezatrzene checkboxy)
@@ -210,7 +263,10 @@ class AppFormItem_RelNNSelect extends AppFormItem_Base
                 //odstranim vsechny 'prebyvajici' vazby
                 foreach ($this->model->{$rel}->find_all() as $model)
                 {
-                    if ( ! in_array($model->pk(), $data_id))
+                    // Pokud jiz subkategorie neni zvolena nebo nepatri do zvolene kategorie
+                    // - prvek stoji nad sloupcem pro ulozeni PK kategorie - $this->attr je tedy cizi klic kategorie ktery je zaroven pouzit
+                    //   v tabulce subkategorii
+                    if ( ! in_array($model->pk(), $data_id) or $model->{$this->attr} != $this->getCategory())
                     {
                         $this->removeRelItem($rel, $model);
                     }
@@ -221,8 +277,15 @@ class AppFormItem_RelNNSelect extends AppFormItem_Base
                 // - pokud jiz jsou nastavene, muze v metode addRelItem dojit k updatu
                 foreach ($data_id as $relitemid)
                 {
+                    // Model sub-kategorie
                     $model = ORM::factory($rel, $relitemid);
 
+                    // Pokud hlavni kategorie nesedi s aktualne zvolenou - skip
+                    if ($model->{$this->attr} != $this->getCategory()) {
+                        continue;
+                    }
+
+                    // Jinak pridame subkategorii
                     if (arr::get($this->config, 'note')) {
                         $data = Array(
                             'note' => trim(arr::get($data_note, $relitemid, '')),
@@ -238,6 +301,7 @@ class AppFormItem_RelNNSelect extends AppFormItem_Base
             break;
         }
     }
+
 
     /**
      * Generuje HTML kod formularoveho prvku
@@ -255,27 +319,23 @@ class AppFormItem_RelNNSelect extends AppFormItem_Base
         // Zavolame base Render, ktera vytvori pohled a preda zakladni atributy
         $view = parent::Render($render_style, $error_message);
 
+        $view->value = $this->getCategory();
+        $view->values = $this->getValues();
+        $view->columns_count = $this->config['columns_count'];
+
+        // Label pro checkboxy se sub-categoriemi s kategoriemi (parent label bude pouzit pro select s kategoriemi)
+        $view->sub_label = FormItem::getLabel($this->model->object_name(), $this->attr.'.category');
+
         //komplet vycet polozek k vyberu
         $view->items = $this->getRelItemList();
 
         //vytahnu si z DB aktualni stav relace
         $view->selected = $this->getRelItems();
 
-        // Pocet sloupcu - muze byt null
-        $view->columns_count = $this->config['columns_count'];
-
-        // Zda zobrazit check/uncheck all tlacitka
-        $view->allow_check_all = $this->config['allow_check_all'];
-
         $view->note = arr::get($this->config, 'note', false);
         // Vratime $view
         return $view;
     }
-
-
-
-
-
 
 
 

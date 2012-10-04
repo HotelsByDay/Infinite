@@ -24,6 +24,8 @@ class Controller_Base_Login extends Controller_Template {
         parent::before();
         //Pokud je uzivatel prihlaseny, tak ani nevolam konstruktor rodice,
         //ale rovnou presmeruju na defaultni stranku systemu.
+        // @todo - tohle je spatne - pokud je uzivatel prihlasen ale nema pristup na adresu kam smeruje sendUserAlong tak ho to hodi zpet na login
+        // @todo   a nepodari se mu prihlasit dokud nezada rucne adresu /logout - coz neni idealni chovani.
         if (Auth::instance()->logged_in()) {
            //presmerovani uzivatele do systemu
            $this->sendUserAlong();

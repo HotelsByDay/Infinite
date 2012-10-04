@@ -71,7 +71,7 @@ class Controller_ResetPassword extends Controller_Template {
             if ($user->loaded() == 1)
             {
                 //vygeneruje se nove heslo
-                $plaintext_password = text::random('distinct', 12);
+                $plaintext_password = text::random('@#$%^&*0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ', 12);
 
                 //zahashovane heslo se zapise do modelu uzivatele
                 $user->password = $plaintext_password;

@@ -1,5 +1,9 @@
 <div class="appformitemsimpleitemlist <?= $css ?>" id="<?= $uid;?>">
-    <a href="#" class="add_new button red"><?= $add_button_label;?></a>
+
+    <?php if ($add_enabled): ?>
+        <a href="#" class="add_new button red"><?= $add_button_label;?></a>
+    <?php endif; ?>
+
     <div class="list">
         <?php foreach ($rel_items as $rel_item): ?>
         <div class="item">

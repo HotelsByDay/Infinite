@@ -22,13 +22,7 @@ class AppFormItem_Select extends AppFormItem_SelectDataSource
     // Klic, pro hodnotu '-- nezvoleno --', pokud je pouzita varianta freeSelect
     //  - ta se aktivuje v configu nastavenim 'free' => '1',
     protected $empty_key = '';
-    
-    // Text reprezentujici prazdnou hodnotu - v odvozenych tridach bude
-    // uzitecne mit moznost ho zmenit 
-    protected $empty_value = '-- nezvoleno --';
-    
-    
-   
+
     /**
      * Vrati asociativni pole s vyctem hodnot pro tento prvek.
      * Zde neobsahuje zadnou funkcionalitu - slouzi k pretezovani v 
