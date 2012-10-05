@@ -1059,6 +1059,15 @@ abstract class Controller_Base_Object extends Controller_Layout {
             //presmerovani v tomto pripade ignoruji
         }
 
+        //pokud je definovana v konfiguraci volba pro presmerovani po uspesnem
+        //prvedeni fomrularo akce tak presmerujeme
+        if ($form->getRequestedActionResult() == Core_AppForm::ACTION_RESULT_SUCCESS
+            && ($closure = arr::get($form_config, 'on_success_redir')) != NULL)
+        {
+            $redirect_url = call_user_func($closure, $this->model);
+            return $this->request->redirect($redirect_url);
+        }
+
         //do sablony vlozim vysledek provedene akce
         $this->template->action_name   = $form->getRequestedAction();
         $this->template->action_result = $form->getActionResult();
@@ -1078,14 +1087,6 @@ abstract class Controller_Base_Object extends Controller_Layout {
         //do sablony vlozim pouze ty soubory, ktere mohou byt vlozeny vicekrat
         $script_include_tag = Web::instance()->getJSFiles(TRUE);
         $script_include_tag.= '<script type="text/javascript">$(document).ready(function(){if(typeof $.waypoints !== "undefined"){$.waypoints("refresh");}});</script>';
-
-        //pokud je definovana v konfiguraci volba pro presmerovani po uspesnem
-        //prvedeni fomrularo akce tak bude do dat pro klienta pridana i cilova URL
-        if ($form->getRequestedActionResult() == Core_AppForm::ACTION_RESULT_SUCCESS
-                && ($closure = arr::get($form_config, 'on_success_redir')) != NULL)
-        {
-            $this->template->redir = call_user_func($closure, $this->model);
-        }
 
         //vlozim do sablony aby doslo k nacteni prislusnych souboru do stranky
         $this->template->content->script_include_tag = $script_include_tag;
