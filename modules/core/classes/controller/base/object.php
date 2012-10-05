@@ -955,8 +955,10 @@ abstract class Controller_Base_Object extends Controller_Layout {
         //jedna se bud o bazovou tridu AppForm nebo nejakou z ni dedici
         $form_class_name = arr::get($form_config, 'class', $this->_action_edit_form_class_name());
 
+        $form = FormFactory::Get($form_class_name, $this->model, $form_config, $this->request_params, FALSE);
+
         //vytvorim si novy objekt formulare
-        $form = new $form_class_name($this->model, $form_config, $this->request_params, FALSE);
+//        $form = new $form_class_name($this->model, $form_config, $this->request_params, FALSE);
 
         //metoda muze vyhodit vyjimku, ktera muze zaridit presmerovani na jinou stranku
         try
@@ -1040,8 +1042,10 @@ abstract class Controller_Base_Object extends Controller_Layout {
         //jedna se bud o bazovou tridu AppForm nebo nejakou z ni dedici
         $form_class_name = arr::get($form_config, 'class', $this->_action_edit_form_class_name());
 
+        $form = FormFactory::Get($form_class_name, $this->model, $form_config, $this->request_params, TRUE);
+
         //vytvorim si novy objekt formulare
-        $form = new $form_class_name($this->model, $form_config, $this->request_params, TRUE);
+//        $form = new $form_class_name($this->model, $form_config, $this->request_params, TRUE);
 
         //metoda muze vyhodit vyjimku, ktera muze zaridit presmerovani na jinou stranku
         try
