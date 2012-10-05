@@ -213,11 +213,21 @@
                                 // 5.7.2012 - Dajc
                                 // - pridan change trigger nad danym prvkem po zapsani hodnoty do nej - spoleha na to
                                 //   prvek ObjectImageSelect
-                                $('input[name="'+k+'"],textarea[name="'+k+'"],select[name="'+k+'"]').each(function(){
+                                $('input[type="text"][name="'+k+'"],textarea[name="'+k+'"],select[name="'+k+'"]').each(function(){
                                     // Ulozime si info o tom ze prvek byl automaticky vyplnen
                                     filled_input_names[filled_input_names.length] = k;
                                     $(this).val(ui.item.fill[k]);
                                     $(this).trigger('change');
+                                });
+                                // Pokud je prvek radio, tak zvolime to s danou hodnotou
+                                $('input:radio[name="'+ k +'"]').each(function(){
+                                    // Pokud je value radia shodna s nastavovanou hodnotou
+                                    // - neni to v selectoru, protoze hodnota muze obsahovat nepovolene znaky - apostrofy a uvozovky
+                                    //   kvuli kterym pak selector havaruje -> exception
+                                    if ($(this).val() == ui.item.fill[k]) {
+                                        $(this).attr('checked', true);
+                                        $(this).trigger('change');
+                                    }
                                 });
                             }
                         }
