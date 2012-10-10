@@ -736,7 +736,6 @@
             //moznost editace, pres Ajax-loaded formularu v dialogovem okne
             $data_container.find('.edit_ajax[href]').each(function(){
                 $(this).click(function(){
-
                     var settings = methods._getData($_this, 'settings');
                     var $clicked_item = $(this);
                     if (typeof settings['onEditAjaxClick'] === 'function') {

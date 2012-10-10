@@ -8,11 +8,11 @@ class AppFormItem_DateTime extends AppFormItem_String
     //Nazev sablony pro tento formularovy prvek
     protected $view_name = 'appformitem/datetime';
 
-    protected $time_format = 'G:i';
+ //   protected $time_format = 'G:i';
 
     //tato promenna definuje ze se ma cas ukladat jako unix time
     //v opacnem pripade se bude ukladat v DATETIME formatu MySQL
-    protected $save_as_unix_time = TRUE;
+    protected $save_as_unix_time = false;
 
     protected $check = TRUE;
 
@@ -22,17 +22,24 @@ class AppFormItem_DateTime extends AppFormItem_String
     public function init()
     {
         // Nacteme nastaveni formatu casu - pokud neni, pouzije se vychozi (aktualne nastavene)
-        $this->time_format = arr::get($this->config, 'time_format', $this->time_format);
+    //    $this->time_format = arr::get($this->config, 'time_format', $this->time_format);
 
         //budeme ukladat ve formatu UNIT TIME nebo MySQL DATETIME
         $this->save_as_unix_time = arr::get($this->config, 'unix', $this->save_as_unix_time);
         
         Web::instance()->addCustomJSFile(View::factory('js/jquery.AppFormItemDateTime.js'));
-        
-        $this->addInitJS(View::factory('js/jquery.AppFormItemDateTime-init.js')->set('time_format', $this->time_format));
+
+        $init_js = View::factory('js/jquery.AppFormItemDateTime-init.js');
+        $config = Array(
+            'time_format' => 'G:i',
+            'date_format' => DateFormat::getDatePickerDateFormat(),
+        );
+        $init_js->config = $config;
+        $this->addInitJS($init_js);
         
         return parent::init();
     }
+
 
     /**
      * 
@@ -41,13 +48,18 @@ class AppFormItem_DateTime extends AppFormItem_String
     {
         if (count($this->form_data) == 2)
         {
-            // Slepime datum a cas - zustava ceska reprezentace
-            //pokud je 'date' i 'time' prazdne tak potrebuju otrimovat tu
-            //mezeru uprostred, ktera se  doplnuje vyse
-            $new_value = trim(trim(arr::get($this->form_data, 'date')) . ' ' . trim(arr::get($this->form_data, 'time')));
-
-            $this->setValue($new_value);
+            $this->setValue($this->formDataValue());
         }
+    }
+
+
+    public function formDataValue()
+    {
+        if (isset($this->form_data['date'], $this->form_data['time']) and ! empty($this->form_data['date']) and ! empty($this->form_data['time']))
+        {
+            return trim(trim(arr::get($this->form_data, 'date')) . ' ' . trim(arr::get($this->form_data, 'time')));
+        }
+        return null;
     }
 
     /**
@@ -63,21 +75,12 @@ class AppFormItem_DateTime extends AppFormItem_String
     {
         $value = parent::getValue();
 
-        if (empty($value))
-        {
-            return NULL;
-        }
-
-        //pokud neni cas ulozen jako unixtime, tak ho prevedu na pozadovany
-        //format aby byl parametr do metody czechDate ve spravnem formatu
-        if ( ! $this->save_as_unix_time)
-        {
-            $value = strtotime($value);
-        }
-
-        //trimovani kvuli tomu ze by time_format mohl byt prazdny
-        return trim(date('Y-m-d '.$this->time_format, $value));
+        return Array(
+            'date' => DateFormat::getUserDate($value),
+            'time' => DateFormat::getUserDate($value, 'H:i'),
+        );
     }
+
 
     /**
      * 
@@ -89,6 +92,13 @@ class AppFormItem_DateTime extends AppFormItem_String
             return __('appformitem_datetime.format_error');
         }
 
+        if (arr::get($this->config, 'required') //prvek je required - musi byt vyplneny
+            &&
+            ( ! Validate::not_empty($this->formDataValue()))) //a nesplnil kontrolu
+        {
+            return __($this->model->table_name().'.'.$this->attr.'.validation.required');
+        }
+
         return parent::check();
     }
 
@@ -98,16 +108,21 @@ class AppFormItem_DateTime extends AppFormItem_String
      * Tato metoda slouzi pro vlastni zapis do modelu.
      * Zde prevadi datum do DB formatu
      */
-    protected function setValue($value)
+    public function setValue($value)
     {
+        Kohana::$log->add(Kohana::INFO, 'datetime.setValue called with: '.json_encode($value));
         if ( ! empty($value))
         {
             //prevedu na mysql date format - pokud je vstupni format netozeznan
             //tak vraci FALSE
-            $formatted_value = Format::mysqlDateTime($value);
+            $formatted_value = DateFormat::getMysqlDateTime($value);
+
+
+
+            Kohana::$log->add(Kohana::INFO, 'datetime.setValue formatted_value: '.json_encode($formatted_value));
 
             //datum je ve spatnem formatu - ulozim si priznak, ze je spatna hodnota
-            if ($formatted_value === FALSE)
+            if ( ! $formatted_value)
             {
                 $this->check = FALSE;
 
@@ -134,36 +149,21 @@ class AppFormItem_DateTime extends AppFormItem_String
         parent::setValue($formatted_value);
     }
 
-
-    public function Render($render_style = NULL, $error_messages = NULL)
+    /**
+     * @param null $render_style
+     * @param null $error_message
+     * @return View
+     */
+    public function Render($render_style = NULL, $error_message = NULL)
     {
-        $view = parent::Render($render_style, $error_messages);
+        $view = parent::Render($render_style, $error_message);
 
-        //pokud byl vstupni format datumu a casu nerozeznan, tak budu
-        //na formulari zobrazovat hodnoty ktere primo z formulare prisly
-        if ( ! $this->check)
-        {
-            $view->date_value = arr::get($this->form_data, 'date');
-            $view->time_value = arr::get($this->form_data, 'time');
-        }
-        else
-        {
-            // Precteme hodnotu atributu - vraci datum a cas v cz formatu
-            $value = $this->getValue();
-
-            //pokud je hodnota prazdna (NULL) tak se na formulari zobrazi prazdne pole
-            if (empty($value))
-            {
-                $view->date_value = $view->time_value = '';
-            }
-            else
-            {
-                $view->date_value = date('j.n.Y', strtotime($value));
-                $view->time_value = date($this->time_format, strtotime($value));
-            }
+        if ( ! empty($error_message)) {
+            $view->value = $this->form_data;
         }
 
         return $view;
     }
+
 
 }

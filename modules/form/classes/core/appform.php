@@ -267,6 +267,7 @@ class Core_AppForm {
      */
     public function applyFormDataValues($values)
     {
+        Kohana::$log->add(Kohana::INFO, 'applyFormDatavalues: '.json_encode($values));
         foreach ($values as $attr => $value)
         {
             //if there is not Form Item for the attribute, then
@@ -277,6 +278,8 @@ class Core_AppForm {
             }
             else
             {
+
+                Kohana::$log->add(Kohana::INFO, 'applyFormDatavalues for item: '.$attr.' - '.json_encode($value));
                 $this->_form_data[$attr] = $value;
             }
         }
@@ -631,8 +634,9 @@ class Core_AppForm {
 
         //do ORM modelu vlozim defaultni hodnoty, ktere do nej byly vlozeni
         //pri inicializaci formulare
-        $this->applyDefaultValues();
-        $this->applyOverwriteValues();
+        // @todo - chybejici metody
+     //   $this->applyDefaultValues();
+     //   $this->applyOverwriteValues();
     }
 
     /**

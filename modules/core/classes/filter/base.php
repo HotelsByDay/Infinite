@@ -566,7 +566,8 @@ abstract class Filter_Base
      */
     protected function _filter_container_view()
     {
-        return View::factory('filter_container');
+        $filter_container = arr::get($this->config, 'filter_container', 'filter_container');
+        return View::factory($filter_container);
     }
 
     /**
