@@ -108,6 +108,8 @@ class Upload_FileUploader
 
             $file_mimetype = strtolower(finfo_file($finfo, $filepath));
 
+            Kohana::$log->add(Kohana::INFO, 'File mime: '.$file_mimetype.'  allowed types: '.json_encode($this->allowed_mimetypes));
+
             finfo_close($finfo);
 
             //pokud se nejedna o jeden z povolenych typu tak vyhodim vyjimku

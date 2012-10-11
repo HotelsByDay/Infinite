@@ -394,13 +394,13 @@ abstract class Controller_Base_Object extends Controller_Layout {
         {
             //dale nactu sablonu, ktera tvori obal pro sablonu s daty
             //pridava strankovani, hromadne akce, apod
-            $table_data_container_view = $this->_view_table_data_container();
+            $table_data_container_view = $filter_instance->view_table_data_container();
         }
         else
         {
             //tato sablona slouzi k informovani uzivatele o tom ze podle
             //daneho filtru nebyly nalezeny zadne zaznamy
-            $table_data_container_view = $this->_view_table_empty_data_container();
+            $table_data_container_view = $filter_instance->view_empty_table_data_container();
         }
 
         //nejdrive si nactu sablonu, ktera pouze zobrazuje tabulku s daty - ta je

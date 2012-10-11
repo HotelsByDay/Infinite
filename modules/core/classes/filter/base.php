@@ -1215,6 +1215,25 @@ abstract class Filter_Base
         
         return $html;
     }
+
+
+
+    public function view_table_data_container($view_name=NULL)
+    {
+        //nazev sablony, kterou budu nacitat
+        empty($view_name) AND $view_name = 'table_data_container';
+
+        return View::factory($view_name);
+    }
+
+    public function view_empty_table_data_container($view_name=NULL)
+    {
+        //nazev sablony, kterou budu nacitat
+        empty($view_name) AND $view_name = 'table_empty_data_container';
+
+        return View::factory($view_name);
+    }
+
 }
 
 ?>

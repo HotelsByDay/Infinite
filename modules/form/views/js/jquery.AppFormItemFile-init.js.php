@@ -11,8 +11,9 @@ $(document).ready(function(){
                 speedIn: 200,
                 speedOut: 10,
                 titleShow: true,
-                titlePosition: 'inside'
-
+                titlePosition: 'inside',
+                nextEffect: 'fade',
+                prevEffect: 'fade'
             });
         }
     }
