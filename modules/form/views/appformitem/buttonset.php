@@ -1,4 +1,4 @@
-<div class="appformitembuttonset <?= $css ?>" id="<?= $uid;?>">
+<div class="appformitemcontainer appformitembuttonset <?= $css ?>" id="<?= $uid;?>">
 
 <?php if ( ! empty($error_message)): ?>
 <span class="validation_error"><?= $error_message;?></span>

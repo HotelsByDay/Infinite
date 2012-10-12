@@ -512,8 +512,6 @@ class ORM extends Kohana_ORM {
         parent::__construct($id);
 
         //pokud se vytvari novy model, tak dojde k nastaveni defaultnich hodnot
-        //@TODO - je toto potreba kdyz je nastaveni defaultnicho hodnot implementovano
-        //v metode clear ?
         if ( ! $this->loaded())
 	    {
             foreach ($this->getDefaults($this->getDefaultsModificators()) as $column => $value)
@@ -523,6 +521,10 @@ class ORM extends Kohana_ORM {
             }
         }
     }
+
+
+
+
 
     /**
      * Provadi nastaveni defaultnich hodnot modelu, ktere vraci metoda
