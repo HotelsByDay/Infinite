@@ -134,6 +134,7 @@ class Model_Core_User extends Model_Auth_User {
      */
     public function HasPermission($object_name, $function = NULL)
     {
+
         //admin ma opravneni na vsecko
         if ($this->IsAdmin()) {
             return TRUE;

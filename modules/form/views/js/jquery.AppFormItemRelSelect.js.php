@@ -97,7 +97,7 @@
                     }
                 });
                 
-                
+
                 var onFocusHandler = function(){
                     if (this.value == "") {
                         $(this).autocomplete('search', '');
