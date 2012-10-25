@@ -9,8 +9,8 @@
 
     <?php if ($allow_check_all): ?>
         <div class="check_all">
-            <button class="button blue check_all"><?= __('relnnselect.check_all'); ?></button>
-            <button class="button blue uncheck_all"><?= __('relnnselect.uncheck_all'); ?></button>
+            <a class="button blue check_all"><?= __('relnnselect.check_all'); ?></a>
+            <a class="button blue uncheck_all"><?= __('relnnselect.uncheck_all'); ?></a>
         </div>
     <?php endif; ?>
 
