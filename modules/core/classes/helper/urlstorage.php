@@ -9,6 +9,11 @@ class Helper_UrlStorage
     protected static $_cache = Array();
 
 
+    public static function getUriForObject(Kohana_ORM $object)
+    {
+        return self::getUri($object->object_name(), $object->pk());
+    }
+
     /**
      * Returns Array('object_name' => 'foo', 'object_id' => X) for given URI.
      * If uri not found then empty array is returned
@@ -79,11 +84,14 @@ class Helper_UrlStorage
 
     public static function setUri($object_name, $object_id, $title, $make_unique=true)
     {
+        if (empty($title)) {
+            throw new AppException('Trying to set empty uri for object '.$object_name.':'.$object_id.'.');
+        }
 
         $title = $final_title = url::title($title);
         $number = 0; $saved = false;
 
-        $reserved_static_segments = Kohana::config('routes.reserved_static_segments');
+        $reserved_static_segments = (array)Kohana::config('routes.reserved_static_segments');
 
         while ( ! $saved) {
             // If title is used for static URI
