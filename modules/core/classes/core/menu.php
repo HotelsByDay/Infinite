@@ -247,11 +247,11 @@ class Core_Menu {
 
                 if ( ! empty($active_submenu_item))
                 {
-                    return '<a href="#" class="active_submenu">'.$label.$this->label_separator.'<span class="active">'.arr::get($active_submenu_item, 'label').'</span></a>';
+                    return '<a href="#" class="active_submenu" data-toggle="dropdown">'.$label.$this->label_separator.'<span class="active">'.arr::get($active_submenu_item, 'label').'</span></a>';
                 }
                 else
                 {
-                    return '<a href="#">'.$label.'</a>';
+                    return '<a href="#" data-toggle="dropdown">'.$label.'</a>';
                 }
                 
             break;
@@ -453,7 +453,7 @@ class Core_Menu {
 
 
         // Pokud je nastaven link
-        if (true or isset($menu_item['link'])) {
+        if (isset($menu_item['link'])) {
             $content = $this->createLink(arr::get($menu_item, 'link', '#'), $label, $link_classes);
         } else {
             // Pokud link neni nastaven, tak se negeneruje odkaz (<a></a>)
