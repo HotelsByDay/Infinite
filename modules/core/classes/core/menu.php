@@ -451,11 +451,11 @@ class Core_Menu {
             $link_classes[] = 'drop';
         }
 
-        // Pokud je nastaven link
-        if (isset($menu_item['link'])) {
-            $content = $this->createLink($menu_item['link'], $label, $link_classes);
-        } else {
 
+        // Pokud je nastaven link
+        if (true or isset($menu_item['link'])) {
+            $content = $this->createLink(arr::get($menu_item, 'link', '#'), $label, $link_classes);
+        } else {
             // Pokud link neni nastaven, tak se negeneruje odkaz (<a></a>)
             $content = $label;
         }
@@ -675,11 +675,16 @@ class Core_Menu {
      */
     protected function createLink($href, $content, $classes=Array())
     {
+        $attr = '';
         // Pokud jsou tridy predane jako pole, prevedeme na retezec
-        if (is_array($classes)) $classes = implode(' ', $classes);
-        
-        // At vysledek neobsahuje zbytecne class=""
-        $attr = empty($classes) ? '' : ' class="'.$classes.'"';
+        if (is_array($classes)) {
+            if (in_array('drop', $classes)) {
+                $attr .= ' data-toggle="dropdown"';
+            }
+            $classes = implode(' ', $classes);
+            $attr .= ' class="'.$classes.'"';
+        }
+
         
         // Vratime odkaz
         return '<a href="'.$href.'"'.$attr.'>'.$content.'</a>';
