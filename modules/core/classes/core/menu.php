@@ -174,7 +174,7 @@ class Core_Menu {
     {
         // Tim ze umoznime volat wrap s prazdnym submenu zjednodusime kod v neprehlednych castech tridy
         if (empty($submenu)) return '';
-        return '<ul>
+        return '<ul class="dropdown-menu">
                     '.$submenu.'
                 </ul>';
     }
