@@ -32,6 +32,7 @@ class Helper_UrlStorage
             $data = array(
                 'object_name' => $url_name->object_name,
                 'object_id' => $url_name->object_id,
+                'latest'    => $url_name->latest,
             );
             return self::$_cache[$uri] = $data;
         }
@@ -40,6 +41,11 @@ class Helper_UrlStorage
         return array();
     }
 
+
+    public static function isUriLatest($uri)
+    {
+        return (bool)arr::get(self::getObjectArrayForUri($uri), 'latest', false);
+    }
 
     /**
      * Returns object name for given URI
@@ -61,6 +67,14 @@ class Helper_UrlStorage
     public static function getObjectIdForUri($uri)
     {
         return arr::get(self::getObjectArrayForUri($uri), 'object_id', false);
+    }
+
+    public static function getLatestUri($uri)
+    {
+        $uri_data = self::getObjectArrayForUri($uri);
+        if ( ! arr::get($uri_data, 'latest', false)) {
+            return self::getUri($uri_data['object_name'], $uri_data['object_id']);
+        }
     }
 
 
@@ -103,11 +117,28 @@ class Helper_UrlStorage
             }
             // Try to store url_name
             try {
-                $url_name = ORM::factory(self::$storrage_model);
+                // We try to find the record we are about to create
+                $url_name = ORM::factory(self::$storrage_model)
+                    ->where('object_name', '=', $object_name)
+                    ->where('object_id', '=', $object_id)
+                    ->where('url_name', '=', $final_title)
+                    ->find();
+                ;
                 $url_name->url_name = $final_title;
                 $url_name->object_name = $object_name;
                 $url_name->object_id = $object_id;
+                // Make sure currently stored url_name will be the latest version
+                $url_name->latest = 1;
                 $url_name->save();
+
+                // Other sotered url names for current object are not the latest
+                DB::query(Database::UPDATE, "UPDATE ".self::$storrage_model." SET latest=0 WHERE object_id=:object_id AND object_name=:object_name AND url_name <> :url_name")
+                    ->parameters(array(
+                    ':object_id' => $object_id,
+                    ':object_name' => $object_name,
+                    ':url_name' => $final_title,
+                ))->execute();
+
                 $saved = true;
             }
             catch (Database_Exception $e) {
@@ -133,6 +164,7 @@ class Helper_UrlStorage
         $uri = ORM::factory(self::$storrage_model)
             ->where('object_name', '=', $object_name)
             ->where('object_id', '=', $object_id)
+            ->where('latest', '=', 1)
             ->find();
         return $uri->url_name;
     }
