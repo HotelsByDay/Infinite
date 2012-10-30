@@ -159,7 +159,7 @@ class Core_Menu {
     {
         return '<div id="nav">
                     <div id="nav-in">
-                        <ul id="menu">
+                        <ul id="menu"  class="nav nav-tabs">
                             '.$main_menu.'
                         </ul>
                         <br class="clear">
@@ -480,7 +480,7 @@ class Core_Menu {
             //pokud ma menu polozka submenu, tak dostane speicalni css tridu
             if ( ! empty($submenu))
             {
-                $classes[] = 'has_submenu';
+                $classes[] = 'has_submenu dropdown';
             }
 
             // At je submenu prazdne nebo ne, muzeme ho pridat za odkaz
