@@ -1,6 +1,11 @@
-<strong><?= Auth::instance()->get_user()->name();?></strong> |
-<a href="<?= appurl::user_profile();?>"><?= __('general.my_profile');?></a> |
-<a href="<?= appurl::logout_action();?>"><?= __('general.logout');?></a>
+<div class="btn-group">
+  <a class="btn btn-primary" href="#"><i class="icon-user icon-white"></i><?= Auth::instance()->get_user()->name();?></a>
+  <a class="btn btn-primary dropdown-toggle" data-toggle="dropdown" href="#"><span class="caret"></span></a>
+  <ul class="dropdown-menu">
+    <li><a href="<?= appurl::user_profile();?>"><i class="icon-user"></i><?= __('general.my_profile');?></a></li>
+    <li><a href="<?= appurl::logout_action();?>"><i class="icon-off"></i><?= __('general.logout');?></a></li>
+  </ul>
+</div>
 
 <div class="cb"></div>
 

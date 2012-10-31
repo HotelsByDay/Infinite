@@ -247,11 +247,11 @@ class Core_Menu {
 
                 if ( ! empty($active_submenu_item))
                 {
-                    return '<a href="#" class="active_submenu" data-toggle="dropdown">'.$label.$this->label_separator.'<span class="active">'.arr::get($active_submenu_item, 'label').'</span></a>';
+                    return '<a href="#" class="active_submenu dropdown-toggle" data-toggle="dropdown">'.$label.$this->label_separator.'<span class="active">'.arr::get($active_submenu_item, 'label').'</span><b class="caret"></b></a>';
                 }
                 else
                 {
-                    return '<a href="#" data-toggle="dropdown">'.$label.'</a>';
+                    return '<a href="#" class="dropdown-toggle" data-toggle="dropdown">'.$label.'<b class="caret"></b></a>';
                 }
                 
             break;

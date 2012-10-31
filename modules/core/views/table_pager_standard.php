@@ -11,7 +11,7 @@
 <?php endif ?>
 
 
-<div class="paginator fr">
+<div class="paginator fr pagination">
     <ul>
     <li>
       <?php if ($current_page_index != 0): ?>
