@@ -12,7 +12,7 @@
     <?php foreach ($values as $val => $label): ?>
         <div class="item">
             <?= form::radio($attr, $val, ($val == $value), Array('id' => $uid.'_'.$val)) ?>
-            <label class="radio" for="<?= $uid ?>_<?= $val ?>"><?= $label ?></label>
+            <label class="radio"  for="<?= $uid ?>_<?= $val ?>"><?= $label ?></label>
         </div>
     <?php endforeach; ?>
     </div>
