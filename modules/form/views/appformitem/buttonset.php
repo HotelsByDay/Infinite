@@ -7,9 +7,9 @@
 <label class="main"><?= $label ?></label>
 
 <?php foreach ($values as $key => $val): ?>
-
+ <label class="checkbox inline" for="<?= $attr.$key; ?>"><?= $val; ?>
     <input type="radio" id="<?= $attr.$key; ?>" name="<?= $attr ?>" value="<?= $key ?>" <?= ((string)$key == (string)$value) ? 'checked="checked"': ' ' ?>/>
-    <label for="<?= $attr.$key; ?>"><?= $val; ?></label>
+   </label>
 
 <?php endforeach; ?>
 
