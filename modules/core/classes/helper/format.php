@@ -2,6 +2,12 @@
 
 class Helper_Format {
 
+
+    static public function absoluteUrl($url)
+    {
+        return (strpos($url, 'http') !== 0) ? 'http://'.$url : $url;
+    }
+
     /**
      * Nahradi alfanumericke znaky za hvezdicky
      * @static

@@ -685,7 +685,6 @@ class Core_Menu {
             $attr .= ' class="'.$classes.'"';
         }
 
-        
         // Vratime odkaz
         return '<a href="'.$href.'"'.$attr.'>'.$content.'</a>';
     }
