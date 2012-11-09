@@ -1,9 +1,9 @@
 
-<div class="view-data">
+<div class="view-data row-fluid">
 
 
-<div class="line-data">
-    <div class="records-found">
+<div class="line-data row-fluid">
+    <div class="records-found span3">
         <?= __('object.totally_found_items', array(':total_found' => $total_found));?>
     </div>
     

@@ -185,7 +185,7 @@ class Core_Menu {
     {
         if (empty($subnavigation)) return '';
         return '<div id="sub-nav ">
-        <ul class="unstyled">
+        <ul class="unstyled pull-right">
                     
                             '.$subnavigation.'
                        
