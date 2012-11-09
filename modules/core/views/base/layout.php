@@ -30,7 +30,7 @@
 
 <div id="header">
     <div id="header-in">
-        <span style="font-size: 24px;"><?= AppConfig::instance()->get('system_header', 'application');?></span>
+        <span class="logo"><?= AppConfig::instance()->get('system_header', 'application');?></span>
 
         <div class="log-nav">
         <?= $top_navigation;?>

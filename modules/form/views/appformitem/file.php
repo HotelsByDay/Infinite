@@ -17,7 +17,7 @@
     <?php endif ?>
 
     <?php if ($table_header): ?>
-        <table class="list">
+        <table class="list table">
 
             <?= $table_header; ?>
 

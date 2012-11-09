@@ -11,7 +11,7 @@
 <?php endif ?>
 
 
-<div class="paginator fr">
+<div class="paginator fr pagination">
     <ul>
     <li <?php if ($current_page_index == 0): ?> class="disabled" <?php endif; ?>>
             <a href="#" class="pager_button" <?= $prev_page_index !== FALSE ? 'pi="' . $prev_page_index . '"' : ''; ?>>
