@@ -117,7 +117,7 @@
           </p>
 
           <?php if(isset($args_id)): ?>
-          <table id="<?php echo $args_id ?>" class="arguments">
+          <table id="<?php echo $args_id ?>" class="arguments table">
             <?php foreach($step['args'] as $name => $arg): ?>
             <tr>
               <td class="name"><?php echo $name;?></td>

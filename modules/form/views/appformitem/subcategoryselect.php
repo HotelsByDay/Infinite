@@ -34,8 +34,8 @@
                 $item_number++;
             ?>
             <div class="item">
-                <input type="checkbox" <?= $checked ? 'checked="checked"' : '';?> id="item_<?= $attr;?>_<?=$item->pk();?>" value="<?= $item->pk();?>" name="<?= $attr;?>[id][<?= $item->pk() ?>]" />
-                <label for="item_<?= $attr;?>_<?=$item->pk();?>" class="check"><?= $item->preview();?></label>
+
+                <label for="item_<?= $attr;?>_<?=$item->pk();?>" class="check checkbox"><?= $item->preview();?><input type="checkbox" <?= $checked ? 'checked="checked"' : '';?> id="item_<?= $attr;?>_<?=$item->pk();?>" value="<?= $item->pk();?>" name="<?= $attr;?>[id][<?= $item->pk() ?>]" /></label>
             </div>
             <?php endforeach ?>
         </div>

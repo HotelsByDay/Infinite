@@ -18,7 +18,7 @@ class Core_Panel {
      */
     protected function wrapPanel($panel) 
     {
-        return '<ul class="filter-nav">'.$panel.'</ul>';
+        return '<ul class="filter-nav unstyled">'.$panel.'</ul>';
     }
     
     /**
@@ -115,7 +115,7 @@ class Core_Panel {
             $link_attr = ' class="drop"';
         } else {
             $submenu = ''; // at nemusime testovat isset
-            $link_attr = ' class="action_button action_button_'.$action.'" action="'.$action.'"';
+            $link_attr = ' class="action_button  btn action_button_'.$action.'" action="'.$action.'"';
         }
 
         //pokud je definovany atribut 'confirm', tak pridam do atributu prvku
