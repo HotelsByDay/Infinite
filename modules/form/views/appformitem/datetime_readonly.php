@@ -5,6 +5,6 @@
 <?php endif ?>
 
 <label for="<?= $attr ?>_date"><?= $label ?></label>
-<span class="small"><?= $date_value ?></span><span class="input-space">-</span>
-<span class="small"><?= $time_value ?></span>
+<span class="small input-small"><?= $date_value ?></span><span class="input-space">-</span>
+<span class="small input-small"><?= $time_value ?></span>
 </div>

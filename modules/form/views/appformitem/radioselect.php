@@ -10,9 +10,10 @@
 
     <div class="items">
     <?php foreach ($values as $val => $label): ?>
-        <div class="item">
+        <div class="span6">
+            <label class="radio"  for="<?= $uid ?>_<?= $val ?>"><?= $label ?>
             <?= form::radio($attr, $val, ($val == $value), Array('id' => $uid.'_'.$val)) ?>
-            <label class="radio"  for="<?= $uid ?>_<?= $val ?>"><?= $label ?></label>
+            </label>
         </div>
     <?php endforeach; ?>
     </div>
