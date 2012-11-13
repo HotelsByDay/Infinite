@@ -29,7 +29,7 @@
         </table>
         <div class="clearfix cb"></div>
     <?php else: ?>
-        <ul class="list">
+        <ul class="list unstyled">
             <?php foreach ($files as $file): ?>
             <li class="list_item">
             <?=(string)$file;?>

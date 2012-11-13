@@ -1,5 +1,5 @@
 <div class="appformitemadvanceditemlist <?= $css ?>" id="<?= $uid;?>">
-    <div class="list">
+    <div class="list unstyled">
         <?php foreach ($rel_items as $rel_item): ?>
         <div class="item">
             <?= (string)$rel_item;?>

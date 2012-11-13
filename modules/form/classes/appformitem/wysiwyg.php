@@ -7,6 +7,7 @@ class AppFormItem_Wysiwyg extends AppFormItem_String
 
     protected $config = Array(
         'images_upload' => true,
+        'formatting_tags' => NULL, // keep editor default setting
     );
 
     /**
@@ -24,6 +25,10 @@ class AppFormItem_Wysiwyg extends AppFormItem_String
                 'relid'   => $this->model->pk(),
             );
             $config['images_upload'] = AppUrl::directupload_file_action('wysiwyg.images_upload', $get_params);
+        }
+
+        if (is_array($this->config['formatting_tags'])) {
+            $config['formatting_tags'] = $this->config['formatting_tags'];
         }
 
         //inicializace pluginu na teto instanci form prvku
