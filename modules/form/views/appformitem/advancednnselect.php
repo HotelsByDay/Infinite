@@ -35,9 +35,10 @@
     ?>
     
     <div class="item item_<?= $item->pk() ?> <?php if ( ! $selection_is_empty) { echo $active ? 'active' : 'inactive';}?>">
-        <input type="checkbox" <?= $active ? 'checked="checked"' : '';?> id="<?= $uid ?>_<?=$item->pk() ?>" value="<?= $item->pk(); ?>" name="<?= $attr ?>[selected][]" main="<?= $main ?>" />
+        <label class="checkbox" for="<?= $uid ?>_<?=$item->pk() ?>"><?= $item->preview(); ?>
+            <input class="checkbox" type="checkbox" <?= $active ? 'checked="checked"' : '';?> id="<?= $uid ?>_<?=$item->pk() ?>" value="<?= $item->pk(); ?>" name="<?= $attr ?>[selected][]" main="<?= $main ?>" />
         
-        <label for="<?= $uid ?>_<?=$item->pk() ?>"><?= $item->preview(); ?></label>
+        </label>
        
         <?php 
             if ($form) {

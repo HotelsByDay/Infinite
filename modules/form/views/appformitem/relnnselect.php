@@ -9,8 +9,8 @@
 
     <?php if ($allow_check_all): ?>
         <div class="check_all">
-            <a class="button blue check_all"><?= __('relnnselect.check_all'); ?></a>
-            <a class="button blue uncheck_all"><?= __('relnnselect.uncheck_all'); ?></a>
+            <a class="button blue check_all btn btn-mini "><?= __('relnnselect.check_all'); ?></a>
+            <a class="button blue uncheck_all btn btn-mini "><?= __('relnnselect.uncheck_all'); ?></a>
         </div>
     <?php endif; ?>
 
@@ -45,8 +45,8 @@
         ?>
 
         <div class="item">
-            <input type="checkbox" <?= $checked ? 'checked="checked"' : '';?> id="item_<?= $attr;?>_<?=$item->pk();?>" value="<?= $item->pk();?>" name="<?= $attr;?>[id][<?= $item->pk() ?>]" />
-            <label for="item_<?= $attr;?>_<?=$item->pk();?>" class="check"><?= $item->preview();?></label>
+
+            <label for="item_<?= $attr;?>_<?=$item->pk();?>" class="check checkbox"><?= $item->preview();?><input type="checkbox" <?= $checked ? 'checked="checked"' : '';?> id="item_<?= $attr;?>_<?=$item->pk();?>" value="<?= $item->pk();?>" name="<?= $attr;?>[id][<?= $item->pk() ?>]" /></label>
 
             <?php if ($note): ?>
                 <div class="note_outer" <?= $checked ? '' : 'style="display: none;"' ?>>

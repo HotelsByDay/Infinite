@@ -17,7 +17,7 @@
     <?php endif ?>
 
     <?php if ($table_header): ?>
-        <table class="list">
+        <table class="list table">
 
             <?= $table_header; ?>
 
@@ -29,7 +29,7 @@
         </table>
         <div class="clearfix cb"></div>
     <?php else: ?>
-        <ul class="list">
+        <ul class="list unstyled">
             <?php foreach ($files as $file): ?>
             <li class="list_item">
             <?=(string)$file;?>

@@ -1,7 +1,6 @@
-<div class="content-title">
-    <h1><?= $headline;?></h1>
-    <br class="clear">
-</div>
+
+    <h4><?= $headline;?></h4>
+   
 
 
 
@@ -15,30 +14,38 @@
 
 <div class="filter" id="main_data_filter">
 
-        <form method="GET" action="<?= $action_link; ?>" class="search" name="filter_container" id="filter_container" onsubmit="return false;">
+        <form method="GET" action="<?= $action_link; ?>" class="search form-horizontal" name="filter_container" id="filter_container" onsubmit="return false;">
 
             <?= $filter_form; ?>
-        
-            <div class="action">
-
-                    <button class="submit_filter button red"><?= __('filter.submit_filter'); ?></button>
-                    <button href="#" class="reset_filter button blue"><?= __('filter.reset_filter_state'); ?></button>
+     
+          
+<div class="row show-grid">
+<div class="span4" style="margin-top:10px;">
+                    <button class="submit_filter button btn btn-primary red btn"><?= __('filter.submit_filter'); ?></button>
+                    <button href="#" class="reset_filter btn button blue"><?= __('filter.reset_filter_state'); ?></button>
 
                     <?php if ($user_filters_enabled): ?>
-                        <a href="#" class="button_2 save_filter"><?= __('filter.save_filter_state');?></a>
+                        <a href="#" class="button_2 save_filter btn"><?= __('filter.save_filter_state');?></a>
                     <?php endif ?>
-
+    
+            
+            
+           
+            
+            
+            
                 <div style="display:none;">
-                    <button class="button_3 save_filter" ><?= __('filter.save_filter_state'); ?></button>
-                    <a href="#" class="cancel_edit_filter" ><?= __('object.cancel_edit_filter'); ?></a>
+                    <button class="button_3 save_filter btn" ><?= __('filter.save_filter_state'); ?></button>
+                    <a href="#" class="cancel_edit_filter btn" ><?= __('object.cancel_edit_filter'); ?></a>
                 </div>
-            </div>
-
+           
+			
+  </div> 
+  </div>    
         </form>
     
     <?php if ($export_enabled): ?>
-        <br/>
-        <br/>
+        
         Exportovat
         <select class="export_control">
             <option value="dummy">jako...</option>

@@ -11,8 +11,8 @@
 <?php endif ?>
 
 
-<div class="paginator fr">
-    <ul>
+<div class="paginator fr pagination span5 pull-right">
+    <ul class="pull-right">
     <li <?php if ($current_page_index == 0): ?> class="disabled" <?php endif; ?>>
             <a href="#" class="pager_button" <?= $prev_page_index !== FALSE ? 'pi="' . $prev_page_index . '"' : ''; ?>>
             <?= '&lt;';//__('general.pager_goto_previous_page'); ?>
