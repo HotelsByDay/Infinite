@@ -1,7 +1,23 @@
 <?php defined('SYSPATH') OR die('No direct access allowed.');
 
 class Helper_Format {
-    
+
+
+    static public function absoluteUrl($url)
+    {
+        return (strpos($url, 'http') !== 0) ? 'http://'.$url : $url;
+    }
+
+    /**
+     * Nahradi alfanumericke znaky za hvezdicky
+     * @static
+     * @param $string
+     */
+    static public function starOut($string)
+    {
+        return preg_replace('/[^_ @#?!-]/', '*', $string);
+    }
+
     /**
      * Formatuje cislo jako telefoni cislo ve formatu platnem pro CR.
      * @param <string> $number Cislo k naformatovani
@@ -29,6 +45,14 @@ class Helper_Format {
         }
 
         return $orig_number;
+    }
+
+    static public function phone_us($number)
+    {
+        //return $number;
+        $number = preg_replace('/[^0-9]/', '', $number);
+        $number = preg_replace('/^(.*?)(.{1,3})(.{3})(.{4})$/', '$1 ($2) $3-$4', $number);
+        return $number;
     }
     
     

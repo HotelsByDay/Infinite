@@ -38,7 +38,7 @@
  * ***********************************************************
  * V metode Process se do techto atributu zapise typ pozadovane akce a jeji vysledek.
  * Na konci metody se tyto hodnoty poslou do setActionResult, aby se podle nich
- * vygenerovala defaultni zprava pro uzivatele.
+ * vygenerovala defaultni F pro uzivatele.
  * Navic pri generovani formulare v metode Render() se kontroluje zda prave
  * nedoslo k uspesnemu odstraneni zaznamu - pokud ano tak se vlastni formular
  * nevykresluje.
@@ -127,8 +127,13 @@ class Core_AppForm {
     //Formularova data, ktera jsou urcena k ulozeni
     protected $_form_data = array();
 
+
+    protected $_form_data_original = array();
+
     //Zde budou ulozeny jednotlive formularove prvky ve forme ReflectionClass
     protected $_form_items = array();
+
+    protected $_config_original;
 
     //slouzi k ulozeni konfigurace pro tento formular - jsou tady fallback hodnoty
     protected $_config = array(
@@ -179,24 +184,31 @@ class Core_AppForm {
         //ulozim si referenci na ORM model nad kterym formular stoji
         $this->_model = $model;
 
-        //tato reference bude predana do jednotlivych formitemu a v pripade
-        //uspesneho ulozeni nebo odstraneni $this->_model ji potrebuji prepsat
-        //coz zaridim pomoci Proxy navrhoveho vzoru.
-        //@TODO: Odmena 500Kc pro toho kdo tohle dokaze vyresit bez Proxy
-        $this->_loaded_model = ORM_Proxy::factory(clone $model);
+        $this->_config_original = $config;
 
-        //je formular nacitan do itemlistu
-        $this->in_itemlist = arr::get($form_data, 'itemlist', FALSE);
+        $this->_form_data_original = $form_data;
 
         //ulozim si hodnotu, ktera rika ze je instance formulare pouzita
         //v ajax pozadavku
         $this->is_ajax = $is_ajax;
+    }
+
+    public function init()
+    {
+        //tato reference bude predana do jednotlivych formitemu a v pripade
+        //uspesneho ulozeni nebo odstraneni $this->_model ji potrebuji prepsat
+        //coz zaridim pomoci Proxy navrhoveho vzoru.
+        //@TODO: Odmena 500Kc pro toho kdo tohle dokaze vyresit bez Proxy
+        $this->_loaded_model = ORM_Proxy::factory(clone $this->_model);
+
+        //je formular nacitan do itemlistu
+        $this->in_itemlist = arr::get($this->_form_data_original, 'itemlist', FALSE);
 
         if ($this->in_itemlist)
         {
             $this->_config['container_view_name'] = 'form_container_itemlist';
         }
-        //pokud je formular v ajax rezimu tak se pouzije jina defaultni 
+        //pokud je formular v ajax rezimu tak se pouzije jina defaultni
         //sablona pro form container
         else if ($this->is_ajax)
         {
@@ -207,17 +219,17 @@ class Core_AppForm {
         // udelam to rucne, protoze chci zachovat Kohana_ConfigFile
         foreach ($this->_config as $key => $value)
         {
-            $config->set($key, $value);
+            $this->_config_original->set($key, $value);
         }
-        $this->_config = $config;
+        $this->_config = $this->_config_original;
 
         //these values will be used as default
-        $this->_form_data_defaults   = arr::get($form_data, 'defaults', array());
+        $this->_form_data_defaults   = arr::get($this->_form_data_original, 'defaults', array());
         //these valus will overwrite whatever arrived from the form
-        $this->_form_data_overwrites = arr::get($form_data, 'overwrite', array());
+        $this->_form_data_overwrites = arr::get($this->_form_data_original, 'overwrite', array());
 
         //wont be needed anymore
-        unset($form_data['defaults'], $form_data['overwrite']);
+        unset($this->_form_data_original['defaults'], $this->_form_data_original['overwrite']);
 
         //initialize with the default data
         if ( ! $this->_model->loaded())
@@ -226,7 +238,7 @@ class Core_AppForm {
         }
 
         //load form data
-        $this->_form_data = arr::merge($this->_form_data, $form_data);
+        $this->_form_data = arr::merge($this->_form_data, $this->_form_data_original);
 
         //vlozi data do ORM modelu anebo do $this->_form_data
         $this->applyFormDataValues($this->_form_data_overwrites);
@@ -241,6 +253,8 @@ class Core_AppForm {
         if (arr::get($config, 'autosave_model', false) and ! $this->_model->loaded()) {
             $this->_model->save();
         }
+
+        return $this;
     }
 
     /**
@@ -253,6 +267,7 @@ class Core_AppForm {
      */
     public function applyFormDataValues($values)
     {
+    //    Kohana::$log->add(Kohana::INFO, 'applyFormDatavalues: '.json_encode($values));
         foreach ($values as $attr => $value)
         {
             //if there is not Form Item for the attribute, then
@@ -382,6 +397,13 @@ class Core_AppForm {
 
             //vyvola incializaci prvku
             $form_item_class->init();
+
+            //non-virtual items need to be based on an attribute of the underlying model,
+            //otherwise they are ignored
+            if ( ! $form_item_class->isVirtual() && ! $this->_model->hasAttr($attr))
+            {
+                continue;
+            }
 
             //referenci na form prvek si ulozim
             $this->_form_items[$attr] = $form_item_class;
@@ -610,8 +632,9 @@ class Core_AppForm {
 
         //do ORM modelu vlozim defaultni hodnoty, ktere do nej byly vlozeni
         //pri inicializaci formulare
-        $this->applyDefaultValues();
-        $this->applyOverwriteValues();
+        // @todo - chybejici metody
+     //   $this->applyDefaultValues();
+     //   $this->applyOverwriteValues();
     }
 
     /**
@@ -702,6 +725,22 @@ class Core_AppForm {
         //validace uspesna, vyvolam formularovou udalost pred ulozenim
         $this->runFormEvent(self::FORM_EVENT_BEFORE_SAVE);
 
+        // Ulozime model
+        $this->saveModel();
+        
+        //vyvolam formularovou udalost po ulozeni
+        $this->runFormEvent(self::FORM_EVENT_AFTER_SAVE);
+
+        //akce probehla uspesne 
+        return self::ACTION_RESULT_SUCCESS;
+    }
+
+    /**
+     * Ulozi model
+     * @throws Exception_SaveActionFailed
+     */
+    protected function saveModel()
+    {
         //pri ukladani by mohlo dojit k neocekavane chybe
         try
         {
@@ -710,10 +749,10 @@ class Core_AppForm {
             $this->_model->save();
 
             //$this->_loaded_model je Proxy trida - po uspesnem ulozeni zaznamu
-            //chci aby "ukazovala" na aktualni model 
+            //chci aby "ukazovala" na aktualni model
             $this->_loaded_model->setORM($this->_model);
         }
-        //doslo k nejake chybe pri ukladani
+            //doslo k nejake chybe pri ukladani
         catch (Exception $e)
         {
             kohana::$log->add(Kohana::ERROR, 'Error while saving form: :text', array(
@@ -730,7 +769,7 @@ class Core_AppForm {
                 $this->runFormEvent(self::FORM_EVENT_SAVE_FAILED, $event_data);
 
                 //vyhodim vyjimku, ktera bude uzivatle informovat o problemu
-                    throw new Exception_SaveActionFailed('form_action_status.model_save_failed');
+                throw new Exception_SaveActionFailed('form_action_status.model_save_failed');
             }
             //zaznam byl ulozen, ale doslo k nejake chybe - uzivateli se zobrazi hlaseni
             //formularove prvky se o tomto nedozvi
@@ -740,12 +779,6 @@ class Core_AppForm {
                 throw new Exception_SaveActionFailed('form_action_status.model_saved_but_may_be_incosistent');
             }
         }
-        
-        //vyvolam formularovou udalost po ulozeni
-        $this->runFormEvent(self::FORM_EVENT_AFTER_SAVE);
-
-        //akce probehla uspesne 
-        return self::ACTION_RESULT_SUCCESS;
     }
 
     protected function ActionValidate()
@@ -769,13 +802,7 @@ class Core_AppForm {
         }
 
         //pustim validaci hlavniho ORM modelu
-        if ( ! $this->_model->check())
-        {
-            //z ORM si vytahnu validacni chyby - chyby z form prvku vkladam do chyb
-            //z ORM - chyby zachycene form prvky maji vyssi prioritu, a budou zobrazeny
-            //na formulari "pred" chybami z ORM validace
-            $this->_error_messages = arr::merge($this->_model->getValidationErrors(), $this->_error_messages);
-        }
+        $this->validateModel();
 
         //pokud jsme pri validaci ziskali nejake chybove hlasky, tak se nebude pokracovat v ulozeni zaznamu
         if ( ! empty($this->_error_messages))
@@ -786,6 +813,20 @@ class Core_AppForm {
 
         //vracim uspech - akce probehla uspesne
         return self::ACTION_RESULT_SUCCESS;
+    }
+
+    /**
+     * Zvaliduje model a pripadne validation errors pri-mergne do lokalniho atributu
+     */
+    protected function validateModel()
+    {
+        if ( ! $this->_model->check())
+        {
+            //z ORM si vytahnu validacni chyby - chyby z form prvku vkladam do chyb
+            //z ORM - chyby zachycene form prvky maji vyssi prioritu, a budou zobrazeny
+            //na formulari "pred" chybami z ORM validace
+            $this->_error_messages = arr::merge($this->_model->getValidationErrors(), $this->_error_messages);
+        }
     }
 
     /**

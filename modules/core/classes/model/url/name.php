@@ -1,8 +1,7 @@
 <?php defined('SYSPATH') or die('No direct access allowed.');
 
-class Model_User extends Model_Core_User
+class Model_Url_Name extends ORM
 {
 
 
-
-} // End User Model
+}

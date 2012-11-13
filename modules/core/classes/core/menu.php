@@ -159,7 +159,7 @@ class Core_Menu {
     {
         return '<div id="nav">
                     <div id="nav-in">
-                        <ul id="menu">
+                        <ul id="menu"  class="nav nav-tabs">
                             '.$main_menu.'
                         </ul>
                         <br class="clear">
@@ -174,7 +174,7 @@ class Core_Menu {
     {
         // Tim ze umoznime volat wrap s prazdnym submenu zjednodusime kod v neprehlednych castech tridy
         if (empty($submenu)) return '';
-        return '<ul>
+        return '<ul class="dropdown-menu">
                     '.$submenu.'
                 </ul>';
     }
@@ -247,11 +247,11 @@ class Core_Menu {
 
                 if ( ! empty($active_submenu_item))
                 {
-                    return '<a href="#" class="active_submenu">'.$label.$this->label_separator.'<span class="active">'.arr::get($active_submenu_item, 'label').'</span></a>';
+                    return '<a href="#" class="active_submenu" data-toggle="dropdown">'.$label.$this->label_separator.'<span class="active">'.arr::get($active_submenu_item, 'label').'</span></a>';
                 }
                 else
                 {
-                    return '<a href="#">'.$label.'</a>';
+                    return '<a href="#" data-toggle="dropdown">'.$label.'</a>';
                 }
                 
             break;
@@ -451,11 +451,11 @@ class Core_Menu {
             $link_classes[] = 'drop';
         }
 
+
         // Pokud je nastaven link
         if (isset($menu_item['link'])) {
-            $content = $this->createLink($menu_item['link'], $label, $link_classes);
+            $content = $this->createLink(arr::get($menu_item, 'link', '#'), $label, $link_classes);
         } else {
-
             // Pokud link neni nastaven, tak se negeneruje odkaz (<a></a>)
             $content = $label;
         }
@@ -480,7 +480,7 @@ class Core_Menu {
             //pokud ma menu polozka submenu, tak dostane speicalni css tridu
             if ( ! empty($submenu))
             {
-                $classes[] = 'has_submenu';
+                $classes[] = 'has_submenu dropdown';
             }
 
             // At je submenu prazdne nebo ne, muzeme ho pridat za odkaz
@@ -675,12 +675,16 @@ class Core_Menu {
      */
     protected function createLink($href, $content, $classes=Array())
     {
+        $attr = '';
         // Pokud jsou tridy predane jako pole, prevedeme na retezec
-        if (is_array($classes)) $classes = implode(' ', $classes);
-        
-        // At vysledek neobsahuje zbytecne class=""
-        $attr = empty($classes) ? '' : ' class="'.$classes.'"';
-        
+        if (is_array($classes)) {
+            if (in_array('drop', $classes)) {
+                $attr .= ' data-toggle="dropdown"';
+            }
+            $classes = implode(' ', $classes);
+            $attr .= ' class="'.$classes.'"';
+        }
+
         // Vratime odkaz
         return '<a href="'.$href.'"'.$attr.'>'.$content.'</a>';
     }

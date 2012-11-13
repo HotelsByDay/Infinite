@@ -1,5 +1,5 @@
 // <script>
-$(document).ready(function(){
+$(document).ready(function() {
     var config = <?= json_encode($config) ?>;
     var settings = {
         path: '<?= url::base();?>redactor/',
@@ -23,11 +23,17 @@ $(document).ready(function(){
         settings.buttons[settings.buttons.length] = 'image';
     }
 
+    if (typeof config.formatting_tags != 'undefined') {
+        settings.formattingTags = config.formatting_tags;
+    }
+
     //options to align text
     settings.buttons.push('|');
     settings.buttons.push('alignleft');
     settings.buttons.push('aligncenter');
     settings.buttons.push('alignright');
 
+
+    console.log(settings);
     $("#<?= $uid;?> textarea").redactor(settings);
 });

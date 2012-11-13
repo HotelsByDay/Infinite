@@ -14,7 +14,6 @@
  * vytvorni instanci relacniho modelu a tu ulozi do $this->rel_models. Indexy
  * v techto dvou polich si odpovidaji.
  *
- *
  */
 class AppFormItem_SimpleItemList extends AppFormItem_Base
 {
@@ -139,12 +138,12 @@ class AppFormItem_SimpleItemList extends AppFormItem_Base
                 if ( ! $rel_model->check())
                 {
                     //z ORM si vytahnu validacni chyby
-                    $error_messages[$i] = $rel_model->validate()->errors($rel_model->table_name());
+                    $error_messages[$i] = $rel_model->getValidationErrors();
                 }
             }
         }
 
-        return $error_messages;
+        return (empty($error_messages)) ? NULL : array($this->attr => $error_messages);
     }
 
     /**
@@ -313,6 +312,8 @@ class AppFormItem_SimpleItemList extends AppFormItem_Base
     {
         $view = parent::Render($render_style, $error_message);
 
+        $error_message = (array)arr::get($error_message, $this->attr, array());
+
         //do sablony vlozim popisek na tlacitko pro pridani noveho zaznamu
         $view->add_button_label = $this->add_button_label;
 
@@ -348,6 +349,8 @@ class AppFormItem_SimpleItemList extends AppFormItem_Base
         }
         
         $view->rel_items = $rel_items;
+
+        $view->add_enabled = (bool)arr::get($this->config, 'add_enabled', true);
 
         return $view;
     }

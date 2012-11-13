@@ -7,6 +7,14 @@ Route::set('tip_help', '<controller>/<action>',
             'action'     => 'tip',
         ));
 
+
+Route::set('reset_password', '<controller>/<action>',
+    array(
+        'controller' => 'resetpassword',
+        'action'     => 'index',
+    ));
+
+
 //Url pro nahlaseni JS chyby ke kterym dojde u klienta
 Route::set('js_error', '<controller>/<action>',
         array(

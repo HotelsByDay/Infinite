@@ -1,7 +1,7 @@
 //<script>
 $(document).ready(function(){
-
     function appFormItemPhoto_InitFancybox($uploader) {
+
         if ($uploader.find('a.fancybox').length != 0) {
             // Tohle nejak nefunguje
         //    $uploader.find('a.fancybox').fancybox.cancel();
@@ -11,8 +11,9 @@ $(document).ready(function(){
                 speedIn: 200,
                 speedOut: 10,
                 titleShow: true,
-                titlePosition: 'inside'
-
+                titlePosition: 'inside',
+                nextEffect: 'fade',
+                prevEffect: 'fade'
             });
         }
     }
@@ -245,11 +246,13 @@ $(document).ready(function(){
 
                     <?php endif ?>
 
+
+
+                    $item.find('.list').append($uploaded_file_preview);
+
                     //provede inicizalizaci zakladnich prvku na polozce
                     appFormItemPhoto_InitFancybox($item);
                     appFormItemPhoto_InitItem($uploaded_file_preview, $item, $form);
-
-                    $item.find('.list').append($uploaded_file_preview);
 
                     //change event tady je vyvolan aby se propagoval vyse -
                     //to je potreba napriklad pri pouziti na advanceditemlist

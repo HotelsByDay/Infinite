@@ -394,13 +394,13 @@ abstract class Controller_Base_Object extends Controller_Layout {
         {
             //dale nactu sablonu, ktera tvori obal pro sablonu s daty
             //pridava strankovani, hromadne akce, apod
-            $table_data_container_view = $this->_view_table_data_container();
+            $table_data_container_view = $filter_instance->view_table_data_container();
         }
         else
         {
             //tato sablona slouzi k informovani uzivatele o tom ze podle
             //daneho filtru nebyly nalezeny zadne zaznamy
-            $table_data_container_view = $this->_view_table_empty_data_container();
+            $table_data_container_view = $filter_instance->view_empty_table_data_container();
         }
 
         //nejdrive si nactu sablonu, ktera pouze zobrazuje tabulku s daty - ta je
@@ -955,8 +955,10 @@ abstract class Controller_Base_Object extends Controller_Layout {
         //jedna se bud o bazovou tridu AppForm nebo nejakou z ni dedici
         $form_class_name = arr::get($form_config, 'class', $this->_action_edit_form_class_name());
 
+        $form = FormFactory::Get($form_class_name, $this->model, $form_config, $this->request_params, FALSE);
+
         //vytvorim si novy objekt formulare
-        $form = new $form_class_name($this->model, $form_config, $this->request_params, FALSE);
+//        $form = new $form_class_name($this->model, $form_config, $this->request_params, FALSE);
 
         //metoda muze vyhodit vyjimku, ktera muze zaridit presmerovani na jinou stranku
         try
@@ -1040,8 +1042,10 @@ abstract class Controller_Base_Object extends Controller_Layout {
         //jedna se bud o bazovou tridu AppForm nebo nejakou z ni dedici
         $form_class_name = arr::get($form_config, 'class', $this->_action_edit_form_class_name());
 
+        $form = FormFactory::Get($form_class_name, $this->model, $form_config, $this->request_params, TRUE);
+
         //vytvorim si novy objekt formulare
-        $form = new $form_class_name($this->model, $form_config, $this->request_params, TRUE);
+//        $form = new $form_class_name($this->model, $form_config, $this->request_params, TRUE);
 
         //metoda muze vyhodit vyjimku, ktera muze zaridit presmerovani na jinou stranku
         try
@@ -1057,6 +1061,15 @@ abstract class Controller_Base_Object extends Controller_Layout {
         catch (Exception_Redir $e)
         {
             //presmerovani v tomto pripade ignoruji
+        }
+
+        //pokud je definovana v konfiguraci volba pro presmerovani po uspesnem
+        //prvedeni fomrularo akce tak presmerujeme
+        if ($form->getRequestedActionResult() == Core_AppForm::ACTION_RESULT_SUCCESS
+            && ($closure = arr::get($form_config, 'on_success_redir')) != NULL)
+        {
+            $redirect_url = call_user_func($closure, $this->model);
+            return $this->request->redirect($redirect_url);
         }
 
         //do sablony vlozim vysledek provedene akce
@@ -1078,14 +1091,6 @@ abstract class Controller_Base_Object extends Controller_Layout {
         //do sablony vlozim pouze ty soubory, ktere mohou byt vlozeny vicekrat
         $script_include_tag = Web::instance()->getJSFiles(TRUE);
         $script_include_tag.= '<script type="text/javascript">$(document).ready(function(){if(typeof $.waypoints !== "undefined"){$.waypoints("refresh");}});</script>';
-
-        //pokud je definovana v konfiguraci volba pro presmerovani po uspesnem
-        //prvedeni fomrularo akce tak bude do dat pro klienta pridana i cilova URL
-        if ($form->getRequestedActionResult() == Core_AppForm::ACTION_RESULT_SUCCESS
-                && ($closure = arr::get($form_config, 'on_success_redir')) != NULL)
-        {
-            $this->template->redir = call_user_func($closure, $this->model);
-        }
 
         //vlozim do sablony aby doslo k nacteni prislusnych souboru do stranky
         $this->template->content->script_include_tag = $script_include_tag;

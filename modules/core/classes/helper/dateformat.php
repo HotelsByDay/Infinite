@@ -37,6 +37,9 @@ class Helper_DateFormat {
         $date = new DateTime();
         // Create date from string in given format (!) there must be assignment (!)
         $date = $date->createFromFormat($input_date_format, $user_date);
+        if ( ! $date) {
+            return NULL;
+        }
         // Return string in DB format
         return $date->format('Y-m-d');
     }
@@ -96,6 +99,11 @@ class Helper_DateFormat {
         $date = new DateTime();
         // Create date from string in given format
         $date = $date->createFromFormat($user_datetime_format, $user_datetime);
+
+        // Date object was not could not be initialized with user datetime value
+        if ( ! $date) {
+            return NULL;
+        }
         // Get mysql date time string
         $mysql_datetime = $date->format('Y-m-d H:i:s');
 
@@ -109,6 +117,16 @@ class Helper_DateFormat {
         return $mysql_datetime;
     }
 
+    /**
+     * @static
+     * @param $mysql_datetime
+     * @param string $user_datetime_format
+     * @return Returns similar value as getUserDateTime but each of date and time is closed in <span> with class
+     */
+    public static function getUserDateTimeFormatted($mysql_datetime, $time_format='H:i')
+    {
+        return '<span class="date">' . static::getUserDate($mysql_datetime) . '</span>&nbsp;<span class="time">' . static::getUserDate($mysql_datetime, $time_format) . '</span>';
+    }
 
     /**
      * Converts mysql datetime string into user datetime string in given format (or in default format).

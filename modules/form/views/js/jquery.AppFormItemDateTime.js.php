@@ -20,7 +20,7 @@
              * Defaultni hodnoty pro parametry a nastaveni pluginu
              */
             var settings = {
-                
+                date_format: 'd.m.yy'
             };
             //Pokud prislo nastaveni, tak mergnu s defaultnimi hodnotami
             $.extend( settings, options );
@@ -41,8 +41,8 @@
                 var $date = $('input[name$="[date]"]', $this);
                 // Stejne tak pro time
                 var $time = $('input[name$="[time]"]', $this);
-                
-                $date.datepicker({ dateFormat: 'd.m.yy' });
+
+                $date.datepicker({ dateFormat: settings.date_format });
             });
             
         }

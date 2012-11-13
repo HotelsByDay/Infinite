@@ -15,7 +15,7 @@ return array(
         'table' => array(
             'list' => array(
                 'js/jquery.objectFilter.js',
-                'js/jquery.objectItemAction.js'
+                'js/jquery.objectItemAction.js',
             ),
             'filter' => NULL
         )

@@ -74,7 +74,7 @@ class ORM_CB extends ORM {
         $results = $this->find_all();
         $codebook = array();
         foreach ($results as $result) {
-            $codebook[$result->code] = $result->pk();
+            $codebook[$result->key] = $result->pk();
         }
         return $codebook;
     }

@@ -173,7 +173,7 @@
                 //s naseptavacem protoze tam se hodnota uklada v data() a je
                 //potreba aby po resetovani se vyvolala change udalost, coz by
                 //zajistilo ze se vymazou i data().
-                $(".reset_filter", $_this).click(function(){
+                $(".reset_filter", $_this).click(function() {
                     //volam primo na JavaScript DOM element
 
                     //formular vycistim
@@ -1000,7 +1000,18 @@
                 //url pro nacteni editacniho formulare
                 var edit_url = $(this).attr('href');
 
-                $dialog._dialog('loadForm',edit_url, {}, function(response){
+                var $clicked_item = $(this);
+                var options = {};
+                var width = $clicked_item.attr('data-dialog-width');
+                var height = $clicked_item.attr('data-dialog-height');
+                if (typeof width != 'undefined' && width) {
+                    $dialog._dialog('option', 'width', width);
+                }
+                if (typeof height != 'undefined' && height) {
+                    $dialog._dialog('option', 'height', height);
+                }
+                // @todo - tady je problem s predanim options
+                $dialog._dialog('loadForm',edit_url, {}, function(response) {
                     if (response['action_status'] == '<?= AppForm::ACTION_RESULT_SUCCESS;?>') {
                         //zavru dialogove okno
                         $dialog._dialog('close');
