@@ -608,10 +608,13 @@ class Core_AppForm {
             $instance->clear();
         }
 
-        //do ORM modelu vlozim defaultni hodnoty, ktere do nej byly vlozeni
-        //pri inicializaci formulare
-        $this->applyDefaultValues();
-        $this->applyOverwriteValues();
+        //initialize with the default data
+        if ( ! $this->_model->loaded())
+        {
+            $this->applyFormDataValues($this->_form_data_defaults);
+        }
+        //vlozi data do ORM modelu anebo do $this->_form_data
+        $this->applyFormDataValues($this->_form_data_overwrites);
     }
 
     /**
