@@ -191,6 +191,8 @@ class Core_AppForm {
         //ulozim si hodnotu, ktera rika ze je instance formulare pouzita
         //v ajax pozadavku
         $this->is_ajax = $is_ajax;
+
+        $this->init();
     }
 
     public function init()
@@ -250,7 +252,7 @@ class Core_AppForm {
         $this->loadFormItems();
 
         // Pokud je vyzadovano v configu, automaticky ulozime non-loaded model
-        if (arr::get($config, 'autosave_model', false) and ! $this->_model->loaded()) {
+        if (arr::get($this->_config, 'autosave_model', false) and ! $this->_model->loaded()) {
             $this->_model->save();
         }
 
