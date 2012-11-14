@@ -199,7 +199,7 @@ class Core_Menu {
     protected function wrapSubNavigationNew($content)
     {
          // Ten pristup do jazykoveho soubrou nemusi vzdy fungovavt (!)
-         return '<span class="label" style="display:none">'.__('object.add_new').'</span>
+         return '<span class="" style="display:none">'.__('object.add_new').'</span>
                  
                 '.$content.'
                  ';
