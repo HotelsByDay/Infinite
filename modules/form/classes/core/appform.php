@@ -935,7 +935,7 @@ class Core_AppForm {
                                                                     array(
                                                                         'confirm' => ___('form_action_button.'.$this->_config->get_group_name().'.delete_action_confirm', array(), NULL),
                                                                         'value' => self::ACTION_DELETE,
-                                                                        'class' => self::FORM_BUTTON_CSS_CLASS.' button blue btn',
+                                                                        'class' => self::FORM_BUTTON_CSS_CLASS.' button blue btn btn-danger',
                                                                         //tento popisek bude zobrazen v progress indicatoru po kliknuti na toto tlacitko
                                                                         'ptitle'    => ___('form_action_button.'.$this->_config->get_group_name().'.delete_ptitle',
                                                                                            'form_action_button.delete_ptitle')
