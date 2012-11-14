@@ -1291,7 +1291,8 @@ abstract class Controller_Base_Object extends Controller_Layout {
 
         //po vykresleni formulare:
         //do sablony vlozim pouze ty soubory, ktere mohou byt vlozeny vicekrat
-        $html .= Web::instance()->getJSFiles(TRUE);
+
+       $html .= Web::instance()->getJSFiles(TRUE);
 
         $this->template->content = array(
                                        'html' => $html,
