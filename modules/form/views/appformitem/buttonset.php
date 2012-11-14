@@ -6,12 +6,13 @@
 
 <label class="main"><?= $label ?></label>
 
-<?php foreach ($values as $key => $val): ?>
- <label class="checkbox inline" for="<?= $attr.$key; ?>"><?= $val; ?>
-    <input type="radio" id="<?= $attr.$key; ?>" name="<?= $attr ?>" value="<?= $key ?>" <?= ((string)$key == (string)$value) ? 'checked="checked"': ' ' ?>/>
-   </label>
 
-<?php endforeach; ?>
+<div class="items">
+    <?php foreach ($values as $key => $val): ?>
+        <input type="radio" id="<?= $attr.$key; ?>" name="<?= $attr ?>" value="<?= $key ?>" <?= ((string)$key == (string)$value) ? 'checked="checked"': ' ' ?>/>
+        <label class="inline" for="<?= $attr.$key; ?>"><?= $val; ?></label>
+    <?php endforeach; ?>
+</div>
 
     <?php if (isset($hint) && !empty($hint)): ?>
     <span class="hint"><?= $hint; ?></span>
