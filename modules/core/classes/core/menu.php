@@ -257,7 +257,23 @@ class Core_Menu {
             break;
             
             default:
-                return $label;
+
+                if (arr::get($item, 'submenu'))
+                {
+                    if ( ! empty($active_submenu_item))
+                    {
+                        return '<a href="#" class="active_submenu dropdown-toggle" data-toggle="dropdown">'.$label.$this->label_separator.'<span class="active">'.arr::get($active_submenu_item, 'label').'</span><b class="caret"></b></a>';
+                    }
+                    else
+                    {
+                        return '<a href="#" class="dropdown-toggle" data-toggle="dropdown">'.$label.'<b class="caret"></b></a>';
+                    }
+                }
+                else
+                {
+                    return $label;
+                }
+
         }
     }
     
@@ -358,7 +374,7 @@ class Core_Menu {
         // protoze prvky budou float:right tak pole reversuju - v konfiguraku
         // jsou definovane z leva do prava, tak jako leva cast menu
         $right_menu = array_reverse(arr::get($this->config, 'items_right', Array()));
-        $this->createMenu($right_menu, array('right'));
+        $this->createMenu($right_menu, array('pull-right'));
         
         // Predani argumentu neni nutne - zustavame v kontextu objektu
         // ale myslim se pro pretezovani to bude takhle jasnejsi
