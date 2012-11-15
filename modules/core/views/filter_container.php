@@ -61,7 +61,7 @@
 
 
 
-    <div class="info msg" id="table_result_placeholder" style="display:none;">
+    <div class="info alert" id="table_result_placeholder" style="display:none; text-align: center">
         <span class="msg2">
         </span>
     </div>
