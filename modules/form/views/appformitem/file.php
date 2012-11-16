@@ -1,6 +1,6 @@
 <div class="appformitemfile<?= $css ?>" name="<?= $attr;?>_item" id="<?= $uid;?>">
 
-    <span class="label"><?=  $label;?></span>
+    <span class=""><?=  $label;?></span>
 
     <style type="text/css">
             /* pro otestovani funkcnosti jquery pluginy */
@@ -13,7 +13,7 @@
     <?= $tooltip; ?>
 
     <?php if (!empty($error_message)):?>
-        <span class="validation_error" style="color:red;"><?= $error_message; ?></span>
+        <span class="validation_error alert alert-error" style="color:red;"><?= $error_message; ?></span>
     <?php endif ?>
 
     <?php if ($table_header): ?>

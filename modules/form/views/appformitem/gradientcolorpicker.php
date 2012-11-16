@@ -1,6 +1,6 @@
 <div  class="appformitemcontainer appformitemgradientcolorpicker <?= $css; ?>" name="<?= $attr ?>_item" id="<?= $uid; ?>">
   <?php if (!empty($error_message)): ?>
-    <span class="validation_error"><?= $error_message; ?></span>
+    <span class="validation_error alert alert-error"><?= $error_message; ?></span>
   <?php endif ?>
 
     <label for="<?= $uid ?>_color"><?= $label ?></label>

@@ -1,7 +1,7 @@
 <div class="appformpassword <?= $css ?>" id="<?= $uid; ?>">
 
     <?php if (!empty($error_message)): ?>
-        <span class="validation_error"><?= $error_message; ?></span>
+        <span class="validation_error alert alert-error"><?= $error_message; ?></span>
     <?php endif ?>
 
 
@@ -13,11 +13,11 @@
 
                     <input <?php if (isset($placeholder_confirm) and ! empty($placeholder_confirm)) echo "placeholder=\"$placeholder_confirm\""; ?> id="<?= $attr; ?>-password_confirm" autocomplete="off" type="password" name="<?= $attr; ?>[password_confirm]"/>
 
-                    <div class="passwords_dont_match" style="display:none;">
+                    <div class="passwords_dont_match alert alert-error" style="display:none;">
                     <?= __('appformitempassword.passwords_dont_match_message'); ?>
                 </div>
 
-                <div class="password_strength_info" style="display:none;">
+                <div class="password_strength_info alert alert-info " style="display:none;">
                     <span class="message"></span>
                 </div>
 

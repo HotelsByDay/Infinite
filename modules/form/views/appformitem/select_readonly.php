@@ -1,5 +1,5 @@
 <?php if ( ! empty($error_message)): ?>
-<span class="validation_error"><?= $error_message;?></span>
+<span class="validation_error alert alert-error"><?= $error_message;?></span>
 <?php endif ?>
 
 <div class="appformitemcontainer <?= $css ?>">

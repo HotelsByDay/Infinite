@@ -169,7 +169,7 @@ $(document).ready(function(){
 
             template: '<div class="qq-uploader">' +
                         '<div class="qq-upload-drop-area"><span><?=__("valumsUpload.drop_files_here_to_upload");?></span></div>' +
-                        '<div class="qq-upload-button upld"><?=__("valumsUpload.upload_file");?></div>' +
+                        '<div class="qq-upload-button upld btn"><?=__("valumsUpload.upload_file");?></div>' +
                         '<ul class="qq-upload-list"></ul>' +
                       '</div>',
 

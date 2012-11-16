@@ -199,7 +199,7 @@ class Core_Menu {
     protected function wrapSubNavigationNew($content)
     {
          // Ten pristup do jazykoveho soubrou nemusi vzdy fungovavt (!)
-         return '<span class="label" style="display:none">'.__('object.add_new').'</span>
+         return '<span class="" style="display:none">'.__('object.add_new').'</span>
                  
                 '.$content.'
                  ';
@@ -257,7 +257,23 @@ class Core_Menu {
             break;
             
             default:
-                return $label;
+
+                if (arr::get($item, 'submenu'))
+                {
+                    if ( ! empty($active_submenu_item))
+                    {
+                        return '<a href="#" class="active_submenu dropdown-toggle" data-toggle="dropdown">'.$label.$this->label_separator.'<span class="active">'.arr::get($active_submenu_item, 'label').'</span><b class="caret"></b></a>';
+                    }
+                    else
+                    {
+                        return '<a href="#" class="dropdown-toggle" data-toggle="dropdown">'.$label.'<b class="caret"></b></a>';
+                    }
+                }
+                else
+                {
+                    return $label;
+                }
+
         }
     }
     

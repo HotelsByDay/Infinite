@@ -1,7 +1,7 @@
 
 <div  class="appformitemcontainer appformitemobjectimageselector <?= $css; ?>" name="<?= $attr ?>_item" id="<?= $uid; ?>">
   <?php if (!empty($error_message)): ?>
-    <span class="validation_error"><?= $error_message; ?></span>
+    <span class="validation_error alert alert-error"><?= $error_message; ?></span>
   <?php endif ?>
 
     <input type="hidden" name="<?= $attr ?>[images_list]" value="" />

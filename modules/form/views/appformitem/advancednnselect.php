@@ -3,7 +3,7 @@
 
 
     <?php if (!empty($error_message) && is_string($error_message)): ?>
-        <span class="validation_error" style="color:red;"><?= $error_message; ?></span>
+        <span class="validation_error alert alert-error" style="color:red;"><?= $error_message; ?></span>
     <?php endif ?>
 
     <div class="autocomplete clear">
