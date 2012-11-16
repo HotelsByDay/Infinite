@@ -46,6 +46,7 @@
 
 <div id="content">
     <div id="content-in">
+
         <?=$content;?>
     </div><!-- end .content-in -->
 </div><!-- end .content -->
