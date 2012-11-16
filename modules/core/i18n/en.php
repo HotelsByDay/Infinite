@@ -10,6 +10,8 @@ return array(
     'error.404.title' => 'The requested page was not found.',
     'error.404.message' => '',
 
+    'error.unexpected_error.title' => 'Unexpected error',
+    'error.unexpected_error.message' => 'Unexpected error occurred.',
     'error.500.title' => 'Unexpected error occured.',
     'error.500.message' => 'Pleaase contact our support at <a href="mailto:support@infinite.cz">support@infinite.cz</a>.',
 
