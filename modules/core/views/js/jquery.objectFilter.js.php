@@ -344,12 +344,17 @@
 
                 var selected = methods._getSelectedItems();
 
+                var $link = $(this);
+
                 //pokud nejsou vybrane zadne nabidky, tak uzivatele upozornim
                 //na to ze musi nejake nabidky vybrat
                 if (selected == '') {
-                    //zobrazim zpravu - bude automaticky skryta za 60s
-                    methods._showMessage($_this, "<?= __('filter.no_items_selected');?>", 60000);
-                    return false;
+                    // Pokud akci lze volat pouze nad zvolenymi zaznamy, oznamime uzivateli ze nejake musi vybrat
+                    if ($link.attr('need_selection')) {
+                        //zobrazim zpravu - bude automaticky skryta za 60s
+                        methods._showMessage($_this, "<?= __('filter.no_items_selected');?>", 60000);
+                        return false;
+                    }
                 }
 
                 //nazev akce, kterou budu vyvolavat

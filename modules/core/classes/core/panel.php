@@ -118,6 +118,9 @@ class Core_Panel {
             $link_attr = ' class="action_button  btn action_button_'.$action.'" action="'.$action.'"';
         }
 
+        if (arr::get($item, 'need_selection', true)) {
+            $link_attr .= ' need_selection="1"';
+        }
         //pokud je definovany atribut 'confirm', tak pridam do atributu prvku
         if (isset($item['confirm']))
         {
