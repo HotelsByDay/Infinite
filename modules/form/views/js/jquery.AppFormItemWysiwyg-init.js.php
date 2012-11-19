@@ -6,7 +6,7 @@ $(document).ready(function() {
         autoresize: true,
         resize: false,
         // See http://redactorjs.com/docs/toolbar/
-        buttons: ['formatting', '|', 'bold', 'italic', '|','fontcolor','|',
+        buttons: ['html', 'formatting', '|', 'bold', 'italic', '|','fontcolor','|',
             'unorderedlist', 'orderedlist', 'outdent', 'indent', '|', 'link'],
         focus: false,
         callback: function() {

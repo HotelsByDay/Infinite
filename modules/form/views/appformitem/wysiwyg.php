@@ -14,7 +14,7 @@
 <label for="<?= $attr ?>"><?= $label ?></label>
 
 <div class="textarea_container">
-    <textarea id="<?= $attr ?>"<?= $name ?>><?= $value ?></textarea>
+    <textarea style="min-height: 200px;" id="<?= $attr ?>"<?= $name ?>><?= $value ?></textarea>
 </div>
 
 </div>
