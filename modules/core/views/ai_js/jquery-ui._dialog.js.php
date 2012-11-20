@@ -35,6 +35,11 @@ $.widget("ui._dialog", $.ui.dialog, {
             _this.close();
         });
 
+        //pokud se vyska formulare nastavuje podle obsahu, chci aby dialog zustaval vycentrovany
+        if (_this.option('height') == 'auto') {
+            _this.option('position', 'center')
+        }
+
         //odeslani formulare vyvolam rucne pri kliknuti na jedno z tlacitek
         $content.find('.<?= AppForm::FORM_BUTTON_CSS_CLASS;?>').click(function(data){
 
