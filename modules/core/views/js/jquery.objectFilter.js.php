@@ -160,11 +160,17 @@
                 }
                 
                 //potrebuji odchytit kliknuti na tlacitko 'vyhledat'
-                $(".submit_filter", $_this).click(function(e){
-
+                $(".submit_filter", $_this).click(function(e) {
+                    // Ignorujeme kliknuti na selecty - o ty se postara change handler
+                    if ($(this).is('select')) return;
                     //metoda zorbazi progress indicator a odesle pozadavek na nactenidat
                     methods._setState( $_this, methods._getCurrentFilterParams($_this) );
 
+                    return false;
+                });
+                $("select.submit_filter", $_this).change(function(e){
+                    //metoda zorbazi progress indicator a odesle pozadavek na nactenidat
+                    methods._setState( $_this, methods._getCurrentFilterParams($_this) );
                     return false;
                 });
 

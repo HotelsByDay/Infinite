@@ -182,4 +182,27 @@ class Helper_DateFormat {
     }
 
 
+    /**
+     * @static
+     * This can be used for generating drop-downs
+     */
+    public static function getMonthList()
+    {
+        return Array(
+            '1' => __('month_1'),
+            '2' => __('month_2'),
+            '3' => __('month_3'),
+            '4' => __('month_4'),
+            '5' => __('month_5'),
+            '6' => __('month_6'),
+            '7' => __('month_7'),
+            '8' => __('month_8'),
+            '9' => __('month_9'),
+            '10' => __('month_10'),
+            '11' => __('month_11'),
+            '12' => __('month_12'),
+        );
+    }
+
+
 }

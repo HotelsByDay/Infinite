@@ -138,4 +138,18 @@ return array(
     'upload.error.invalid_image_dimension.max_width'  => 'The image width is :width px which exceeds the maximal width of :max_width px.',
     'upload.error.invalid_image_dimension.min_height' => 'The image height is :height px which does not meet the minimal required height of :min_height px.',
     'upload.error.invalid_image_dimension.max_height' => 'The image height is :height px which exceeds the maximal height of :max_height px.',
+
+    'month_1' => 'Jan',
+    'month_2' => 'Feb',
+    'month_3' => 'Mar',
+    'month_4' => 'Apr',
+    'month_5' => 'May',
+    'month_6' => 'Jun',
+    'month_7' => 'Jul',
+    'month_8' => 'Aug',
+    'month_9' => 'Sep',
+    'month_10' => 'Oct',
+    'month_11' => 'Nov',
+    'month_12' => 'Dec',
+
 );
