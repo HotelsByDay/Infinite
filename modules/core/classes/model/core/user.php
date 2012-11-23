@@ -63,6 +63,15 @@ class Model_Core_User extends Model_Auth_User {
 
 
     /**
+     * Toto je volano z login controlleru ihned po uspesnem prihlaseni uzivatele
+     */
+    public function afterLogin()
+    {
+        // nothing by default
+    }
+
+
+    /**
      * Metoda testuje zda uzivatel ma roli s danym nazvem. Druha varianta pouziti
      * je ze $role_name je pole retezcu (nazvu uzivatelskych roli) a podle druheho
      * argumentu se testuje zda ma uzivatl kazdou z nich nebo alespon jednu.

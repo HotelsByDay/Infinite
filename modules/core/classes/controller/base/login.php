@@ -50,6 +50,8 @@ class Controller_Base_Login extends Controller_Template {
 
             if (Auth::instance()->login($login, $password, $remember)) {
 
+                Auth::instance()->get_user()->afterLogin();
+
                 //prihlaseni uspesne
                 //pokud je v session ulozena stranka na kterou se uzivatel snazil
                 //dostat pres prihlasenim tak jej na tuto stranku presmeruji
