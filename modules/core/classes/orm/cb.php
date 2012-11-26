@@ -26,6 +26,12 @@ class ORM_CB extends ORM {
     protected $_value_key = 'value';
 
     /**
+     * Default format 'preview' zaznamu.
+     * @var string
+     */
+    protected $_preview = '@value';
+
+    /**
      * Defaultni zpusob razeni codebooku je podle sequence hodnoty.
      * @var <type>
      */
@@ -74,7 +80,7 @@ class ORM_CB extends ORM {
         $results = $this->find_all();
         $codebook = array();
         foreach ($results as $result) {
-            $codebook[$result->key] = $result->pk();
+            $codebook[$result->code] = $result->pk();
         }
         return $codebook;
     }
@@ -125,7 +131,48 @@ class ORM_CB extends ORM {
      */
     public function preview($preview = NULL)
     {
-        return $this->{$this->_value_key};
+        // Pokud neni nacten zaznam, nemuzeme delat nahled
+        if ( ! $this->loaded()) return NULL;
+
+        // Pokud nebyl zadan format nahledu, vezme se z jazykoveho souboru
+        if ( ! is_string($preview) or empty($preview))
+        {
+            $preview = __($this->_preview);
+        }
+
+        // Rozparsovani retezce s formatem - v $matched bude "pole klicu pro nahrazeni"
+        preg_match_all('/@([a-zA-Z_]+)/', $preview, $matched);
+
+        // Projdeme vsechny klice
+        foreach ($matched[1] as $i => $key) {
+
+            // Pokud se jedna o belongs_to relaci, tak nahradim preview daneho zaznamu
+            if (isset($this->_belongs_to[$key]))
+            {
+                // Klic v preview nahradim Preview daneho relacniho zaznamu
+                $replace_with = $this->{$key}->preview();
+            }
+
+            // Pokud se jedna o atribut/virtualni atribut
+            else {
+                // Dostupnost virtualniho atributu nelze overit
+                // Proste ho zkusime precist
+                try {
+                    $replace_with = $this->{$key};
+                }
+                    // Predpokladam ze kdyby zde doslo k jine chybe nez nedostupnost atributu,
+                    // tak by se na ni urcite narazilo i jinde v behu skriptu, proto ji muzeme ignorovat
+                catch (Exception $e) {
+
+                    //neznamy atribut necha v puvodni podobe - muze byt doplnen
+                    //v dedici tride
+                    continue;
+                }
+            }
+            $preview = str_replace($matched[0][$i], $replace_with, $preview);
+        }
+
+        return trim($preview);
     }
 
 //    /**

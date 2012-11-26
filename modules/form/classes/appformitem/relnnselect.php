@@ -37,7 +37,7 @@ class AppFormItem_RelNNSelect extends AppFormItem_Base
         parent::init();
 
         // Plugin potrebujeme jen pokud jsou povoleny poznamky
-        if (arr::get($this->config, 'note', false) or $this->config['allow_check_all']) {
+        if (arr::get($this->config, 'note', false) or arr::get($this->config, 'allow_check_all')) {
             // Pripojime JS soubor s pluginem
             Web::instance()->addCustomJSFile(View::factory('js/jquery.AppFormItemRelNNSelect.js'));
             // A jeho inicializaci
@@ -262,10 +262,10 @@ class AppFormItem_RelNNSelect extends AppFormItem_Base
         $view->selected = $this->getRelItems();
 
         // Pocet sloupcu - muze byt null
-        $view->columns_count = $this->config['columns_count'];
+        $view->columns_count = arr::get($this->config, 'columns_count');
 
         // Zda zobrazit check/uncheck all tlacitka
-        $view->allow_check_all = $this->config['allow_check_all'];
+        $view->allow_check_all = arr::get($this->config, 'allow_check_all');
 
         $view->note = arr::get($this->config, 'note', false);
         // Vratime $view

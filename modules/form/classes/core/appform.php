@@ -191,6 +191,8 @@ class Core_AppForm {
         //ulozim si hodnotu, ktera rika ze je instance formulare pouzita
         //v ajax pozadavku
         $this->is_ajax = $is_ajax;
+
+        $this->init();
     }
 
     public function init()
@@ -250,7 +252,7 @@ class Core_AppForm {
         $this->loadFormItems();
 
         // Pokud je vyzadovano v configu, automaticky ulozime non-loaded model
-        if (arr::get($config, 'autosave_model', false) and ! $this->_model->loaded()) {
+        if (arr::get($this->_config, 'autosave_model', false) and ! $this->_model->loaded()) {
             $this->_model->save();
         }
 
@@ -731,24 +733,9 @@ class Core_AppForm {
         //vyvolam formularovou udalost po ulozeni
         $this->runFormEvent(self::FORM_EVENT_AFTER_SAVE);
 
-        // vyvolame udalost afterFormSaved - v te mohou odvozene tridy implementovat dodatecnou funkcionalitu
-        // - vychozi je volani metody "afterFormSaved" nad editovanym modelem
-        $this->afterFormSaved();
-
         //akce probehla uspesne 
         return self::ACTION_RESULT_SUCCESS;
     }
-
-
-    /**
-     * Volano po ulozeni modelu a vyvolani after save eventu nad form prvky
-     */
-    protected function afterFormSaved()
-    {
-        $this->_model->afterFormSaved();
-    }
-
-
 
     /**
      * Ulozi model
@@ -934,7 +921,7 @@ class Core_AppForm {
                                                                 array(
                                                                     'confirm' => ___('form_action_button.'.$this->_config->get_group_name().'.update_action_confirm', array(), NULL),
                                                                     'value' => self::ACTION_SAVE,
-                                                                    'class' => self::FORM_BUTTON_CSS_CLASS.' button red btn btn-primary',
+                                                                    'class' => self::FORM_BUTTON_CSS_CLASS.' button red',
                                                                     //tento popisek bude zobrazen v progress indicatoru po kliknuti na toto tlacitko
                                                                     'ptitle'    => ___('form_action_button.'.$this->_config->get_group_name().'.update_ptitle',
                                                                                        'form_action_button.update_ptitle')
@@ -950,7 +937,7 @@ class Core_AppForm {
                                                                     array(
                                                                         'confirm' => ___('form_action_button.'.$this->_config->get_group_name().'.delete_action_confirm', array(), NULL),
                                                                         'value' => self::ACTION_DELETE,
-                                                                        'class' => self::FORM_BUTTON_CSS_CLASS.' button blue btn btn-danger',
+                                                                        'class' => self::FORM_BUTTON_CSS_CLASS.' button blue',
                                                                         //tento popisek bude zobrazen v progress indicatoru po kliknuti na toto tlacitko
                                                                         'ptitle'    => ___('form_action_button.'.$this->_config->get_group_name().'.delete_ptitle',
                                                                                            'form_action_button.delete_ptitle')
@@ -968,7 +955,7 @@ class Core_AppForm {
                                                                 array(
                                                                     'confirm' => ___('form_action_button.'.$this->_config->get_group_name().'.insert_action_confirm', NULL),
                                                                     'value' => self::ACTION_SAVE,
-                                                                    'class' => self::FORM_BUTTON_CSS_CLASS.' button red btn btn-primary',
+                                                                    'class' => self::FORM_BUTTON_CSS_CLASS.' button red',
                                                                     //tento popisek bude zobrazen v progress indicatoru po kliknuti na toto tlacitko
                                                                     'ptitle'    => ___('form_action_button.'.$this->_config->get_group_name().'.insert_ptitle',
                                                                                        'form_action_button.insert_ptitle'),
@@ -980,7 +967,7 @@ class Core_AppForm {
         $buttons['l']['close'] = array('close',
                                          __('form_action_button.close_label'),
                                          array(
-                                            'class'     => self::FORM_BUTTON_CLOSE_CSS_CLASS.' button no-color btn',
+                                            'class'     => self::FORM_BUTTON_CLOSE_CSS_CLASS.' button no-color',
                                          ));
 
         //vyslednou definici tlacitek vratim
