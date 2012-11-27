@@ -20,7 +20,7 @@
 
     <div class="form_control_panel_wrapper">
         <div class="form_control_panel">
-            <div class="form_control_panel_content">
+            <div class="form_control_panel_content form-actions">
                 <div class="cb hr"></div>
                 <div class="pull-left">
                     <?php foreach (arr::getifset($form_buttons, 'l', array()) as $params): ?>

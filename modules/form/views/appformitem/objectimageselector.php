@@ -36,7 +36,7 @@
         }
     </style>
 
-    <div><label for="<?= $attr; ?>-password"><?= $label ?></label><br /></div>
+    <div><label for="<?= $attr; ?>-password"><?= $label ?></label></div>
 
     <div class="images_preview_outer">
 

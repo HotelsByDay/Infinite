@@ -110,8 +110,8 @@ return array(
     'logaction.th_useragent' => 'Typ přístupu',
     'logaction.th_locality' => 'Lokalita',
     'user_activity.filter_fulltext' => 'Obsahuje:',
-    'user_activity.filter_to_from' => 'Od:',
-    'user_activity.filter_to_to' => 'Do:',
+    'user_activity.filter_to_from' => 'From:',
+    'user_activity.filter_to_to' => 'To:',
 
     //obecne pomocne texty
     'codebook.default_prepend_value' => '-not selected-',
