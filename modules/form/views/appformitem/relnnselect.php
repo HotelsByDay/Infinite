@@ -16,16 +16,17 @@
 
 
     <div class="items">
-        <?php if ($columns_count): ?>
-            <div class="column">
-        <?php endif; ?>
+        <?php
+        if ( ! $columns_count) {
+            $columns_count = 1;
+        }
+        ?>
+        <div class="column">
 
         <?php
             // Spocteme velikost sloupce - v poctu polozek
             $items_count = count($items);
-            if ( ! $columns_count) {
-                $columns_count = 1;
-            }
+
             $column_size = (int)($items_count / $columns_count);
             if ($column_size and $items_count % $column_size) {
                 $column_size++;
@@ -59,9 +60,7 @@
         </div>
         <?php endforeach ?>
 
-        <?php if ($columns_count): ?>
-            </div>
-        <?php endif; ?>
+        </div>
     </div>
 
 
