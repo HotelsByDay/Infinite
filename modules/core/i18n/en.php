@@ -90,6 +90,7 @@ return array(
     'object.action_delete.item_not_found' => 'The item was not found.',
     'object.action_delete.not_authorized_on_item' => 'You are not authorized to remove selected item.',
     'object.action_delete.error_occured' => 'An error occured when removing the item.',
+    'object.delete_action_confirm' => 'Do you really want to delete selected item?',
 
     'more.menu_name' => 'Next',
 
