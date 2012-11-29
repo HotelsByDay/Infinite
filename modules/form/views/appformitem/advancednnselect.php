@@ -6,13 +6,13 @@
         <span class="validation_error alert alert-error" style="color:red;"><?= $error_message; ?></span>
     <?php endif ?>
 
-    <div class="autocomplete clear">
+    <div class="autocomplete clearfix">
         <label for="<?= $uid ?>_autocomplete"><?= $label ?></label>
         <input type="text" id="<?= $uid ?>_autocomplete" name="<?= $attr ?>[autocomplete]" value="" />
     </div>
     
 
-    <div class="items clear">
+    <div class="items clearfix">
     <?php
 
         //predikat, ktery rika ze aktualne neni vybrana ani jedna polozka
@@ -56,7 +56,7 @@
         <?php endforeach ?>
     </div><!-- items -->
 
-    <div class="clear"></div>
+    <div class="clearfix"></div>
     
     <?php
     // Tohle je tady definovane dvakrat - nevim jestli ma cenu pro to delat dalsi sablonu.?

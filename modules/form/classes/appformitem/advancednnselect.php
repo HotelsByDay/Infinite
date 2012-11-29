@@ -278,7 +278,6 @@ class AppFormItem_AdvancedNNSelect extends AppFormItem_Base
         }
 
         $view->form = $form_view_name;
-
         // Vratime $view
         return $view;
     }
