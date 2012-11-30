@@ -104,7 +104,6 @@
                 // Pridani noveho prvku
                 var addItem = function(name, id) 
                 {
-                    alert('addItem called with name: '+name + ' id: '+id);
                     // Div celeho prvku - bud nacteme existujici nebo naklonujeme novy
                     var $item;
                     // Zda mame zablikat - to chceme pokud prvek jiz ve formulari je

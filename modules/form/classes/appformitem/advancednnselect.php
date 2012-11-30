@@ -80,7 +80,7 @@ class AppFormItem_AdvancedNNSelect extends AppFormItem_Base
     {
         if ($this->form_data !== NULL)
         {
-            Kohana::$log->add(Kohana::INFO, 'advancednnselect form data: '.json_encode($this->form_data));
+        //    Kohana::$log->add(Kohana::INFO, 'advancednnselect form data: '.json_encode($this->form_data));
             // Ziskame nazev relacniho modelu
             $rel_model = $this->model->{$this->config['rel']}->object_name();
             // Vyprazdnime - pro jistotu
@@ -148,7 +148,7 @@ class AppFormItem_AdvancedNNSelect extends AppFormItem_Base
             $list[$model->{$rel.'id'}] = $model;
         }
 
-        Kohana::$log->add(Kohana::INFO, 'advancednnselect getRelItems returning: '.json_encode(array_keys($list)));
+    //    Kohana::$log->add(Kohana::INFO, 'advancednnselect getRelItems returning: '.json_encode(array_keys($list)));
         return $list;
     }
 
@@ -201,11 +201,7 @@ class AppFormItem_AdvancedNNSelect extends AppFormItem_Base
             }
         }
 
-
         $items = $model->find_all();
-
-        Kohana::$log->add(Kohana::INFO, 'advancednnselect query: '.$model->last_query());
-        
         foreach ($items as $model)
         {
             $rel_models[] = $model;
