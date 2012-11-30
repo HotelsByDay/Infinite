@@ -6,12 +6,15 @@
 <?php endif ?>
 
 <label for="<?= $attr ?>_name"><?= $label ?></label>
+
+<div class="form-inline">
 <input type="text" id="<?= $attr ?>_name" name="<?= $name_attr ?>" value="<?= $name ?>" <?= isset($watermark) ? 'class="watermark"' : '' ?> />
 
 <input type="hidden" id="<?= $attr ?>_id" name="<?= $value_attr ?>" value="<?= (int)$value ?>" />
 
 <?php if (isset($new) && $new): ?>
-    <a href="#" class="add_new button red"><?= $new_label;?></a>
+    <a href="#" class="add_new btn btn-primary"><?= $new_label;?></a>
 <?php endif ?>
+</div>
 
 </div>
