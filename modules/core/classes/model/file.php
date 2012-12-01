@@ -147,6 +147,18 @@ abstract class Model_File extends ORM
         return $this;
     }
 
+
+    /**
+     * more formats can be found at http://www.fileinfo.com/filetypes/audio
+     * @return bool - true if file is audio file (mp3/wav/...)
+     */
+    public function isAudio()
+    {
+        $ext = strtolower(pathinfo($this->filename, PATHINFO_EXTENSION));
+        return in_array($ext, array('mp3', 'm3u', 'aif', 'iff', 'm4a', 'mid', 'mpa', 'ra', 'wav', 'wma', 'aa', 'aa3', 'acd', 'ogg'));
+    }
+
+
     /**
      * Vraci originalni nazev souboru - nazev ktery prisel od uzivatele.
      * @return <string>

@@ -731,9 +731,24 @@ class Core_AppForm {
         //vyvolam formularovou udalost po ulozeni
         $this->runFormEvent(self::FORM_EVENT_AFTER_SAVE);
 
+        // vyvolame udalost afterFormSaved - v te mohou odvozene tridy implementovat dodatecnou funkcionalitu
+        // - vychozi je volani metody "afterFormSaved" nad editovanym modelem
+        $this->afterFormSaved();
+
         //akce probehla uspesne 
         return self::ACTION_RESULT_SUCCESS;
     }
+
+
+    /**
+     * Volano po ulozeni modelu a vyvolani after save eventu nad form prvky
+     */
+    protected function afterFormSaved()
+    {
+        $this->_model->afterFormSaved();
+    }
+
+
 
     /**
      * Ulozi model

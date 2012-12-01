@@ -9,7 +9,7 @@ class Security extends Kohana_Security {
      * @param int $base_length
      * @return string 45 characters long random unique string as default
      */
-    public static function getRandomSecredCode($append_uid=true, $base_length=32)
+    public static function getRandomSecretCode($append_uid=true, $base_length=32)
     {
         $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
         $randstring = '';
