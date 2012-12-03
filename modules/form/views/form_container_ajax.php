@@ -16,10 +16,10 @@
     <input type="hidden" name="_id" value="<?= $model->pk();?>"/>
     <?php endif ?>
             
-    <?= $form_view;?>
+    <?= $form_view ?>
 
     <div class="form_control_panel_wrapper">
-        <div class="form_control_panel">
+        <div class="form_control_panel form-actions">
             <div class="form_control_panel_content">
                 <div class="cb hr"></div>
                 <div class="pull-left">

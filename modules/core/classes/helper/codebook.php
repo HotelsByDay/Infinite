@@ -14,10 +14,10 @@
 class Helper_Codebook
 {
     // vychozi hodnoty pro prazdny key a value - pro metodu listing
-    protected static $default_prepend_key = '';
+    public static $default_prepend_key = '';
     
     // kotva do jazykoveho souboru pro ziskani defaultni hodnoty - nececho jako '-- vse --'
-    protected static $default_prepend_value = 'codebook.default_prepend_value';
+    public static $default_prepend_value = 'codebook.default_prepend_value';
     
     
     /**
