@@ -12,7 +12,7 @@
     <?php foreach ($values as $val => $label): ?>
 
             <label class="radio"><?= $label ?>
-            <?= form::radio('', $val, ($val == $value), Array('disabled' => 'disabled')) ?>
+            <?= form::radio($attr, $val, ($val == $value), Array('disabled' => 'disabled')) ?>
             </label>
 
     <?php endforeach; ?>
