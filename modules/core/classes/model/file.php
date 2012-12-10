@@ -589,7 +589,7 @@ abstract class Model_File extends ORM
             // @todo refactor initBy* methods to avoid usage of this "flag"
             $save_again = $this->copySourceFile($this->_copy_source_filepath, $target_filedir . DIRECTORY_SEPARATOR . $this->nicename );
             if ($save_again === TRUE) {
-                $this->save();
+                parent::save();
             }
         }
  
