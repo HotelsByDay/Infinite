@@ -35,7 +35,10 @@
             ?>
             <div class="item">
 
-                <label for="item_<?= $attr;?>_<?=$item->pk();?>" class="check checkbox"><?= $item->preview();?><input type="checkbox" <?= $checked ? 'checked="checked"' : '';?> id="item_<?= $attr;?>_<?=$item->pk();?>" value="<?= $item->pk();?>" name="<?= $attr;?>[id][<?= $item->pk() ?>]" /></label>
+                <label class="check checkbox">
+                    <?= $item->preview();?>
+                    <input type="checkbox" <?= $checked ? 'checked="checked"' : '';?>  value="<?= $item->pk();?>" name="<?= $attr;?>[id][<?= $item->pk() ?>]" />
+                </label>
             </div>
             <?php endforeach ?>
         </div>

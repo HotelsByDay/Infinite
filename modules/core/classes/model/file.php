@@ -584,9 +584,13 @@ abstract class Model_File extends ORM
                 mkdir($target_filedir, 0777, TRUE);
             }
 
-
-            //provede kopii souboru
-            copy($this->_copy_source_filepath, $target_filedir . DIRECTORY_SEPARATOR . $this->nicename );
+            // provede kopii souboru - v odvozenych modelech muze vzniknout pozadavek na znovu-ulozeni
+            // - volani save() by zpusobilo nechtenou rekurzi, takze pokud se vrati true, probehne ulozeni zde
+            // @todo refactor initBy* methods to avoid usage of this "flag"
+            $save_again = $this->copySourceFile($this->_copy_source_filepath, $target_filedir . DIRECTORY_SEPARATOR . $this->nicename );
+            if ($save_again === TRUE) {
+                parent::save();
+            }
         }
  
  		//vytvori se resize varianty dle nataveni modelu
@@ -596,6 +600,12 @@ abstract class Model_File extends ORM
         $this->createCroppedVariants();
 
         return $retval;
+    }
+
+
+    protected function copySourceFile($source, $target)
+    {
+        return copy($source, $target);
     }
 
     /**

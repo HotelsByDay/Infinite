@@ -94,8 +94,9 @@
                                 var name = item.name;
 
                                 items_html += '<div class="item">';
+                                items_html += ' <label class="check checkbox"> ' + name;
                                 items_html += '<input type="checkbox" id="item_' + params.attr + '_' + value + '" value="' + value + '" name="' + params.attr + '[id][' + value + ']" /> ';
-                                items_html += ' <label for="item_' + params.attr + '_' + value + '" class="check"> ' + name + '</label>';
+                                items_html += '</label>';
                                 items_html += '</div>';
 
                                 // Zapocitame polozku ve sloupci
