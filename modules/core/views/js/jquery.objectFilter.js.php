@@ -1061,7 +1061,7 @@
                 var current_filter_params = methods._getCurrentFilterParams($_this);
                 $.ajax({
                     url: $(this).attr('href'),
-                    type: 'POST',gitq
+                    type: 'POST',
                     data: current_filter_params,
                     dataType:'json',
                     success: function(data){
