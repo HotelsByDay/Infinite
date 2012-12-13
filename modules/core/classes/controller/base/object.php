@@ -1719,11 +1719,12 @@ abstract class Controller_Base_Object extends Controller_Layout {
         $table_config_group  = $this->request->param('table_config');
         $export_config_group = $this->request->param('export_config');
 
+        $table_config  = kohana::config($table_config_group);
         $export_config = kohana::config($export_config_group);
 
         try{
             //vytvori instanci tridy, ktera zajistuje logiku filtrovani
-            $filter_instance = $this->loadAndInitFilterClassInstance($table_config_group);
+            $filter_instance = $this->loadAndInitFilterClassInstance($table_config);
 
             //Vraci ORM_Iterator predstavici vysledky vyhledavani
             list($results, $filter_state_id, $filter_state_stat) = $filter_instance->getResults(FALSE);
