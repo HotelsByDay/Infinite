@@ -8,7 +8,7 @@ class DataExport_Driver_CSV implements DataExport_iDriver
     protected $source_filename = NULL;
 
     const DEFAULT_CSV_NL        = "\r\n";
-    const DEFAULT_CSV_DELIMITER = ";";
+    const DEFAULT_CSV_DELIMITER = ",";
 
     public function __construct($config, $data, DataExport_FileStorage $file_storage)
     {
@@ -131,7 +131,7 @@ class DataExport_Driver_CSV implements DataExport_iDriver
      */
     protected function escapeValue($csv_delimiter, $value)
     {
-        return str_replace($csv_delimiter, '\\'.$csv_delimiter, $value);
+        return '"'.str_replace('"', '""', $value).'"';
     }
 
     /**
