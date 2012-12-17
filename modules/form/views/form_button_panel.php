@@ -8,10 +8,10 @@ if ( ! $form->is_readonly() &&
          || ( ! $model->loaded() && Auth::instance()->get_user()->HasPermission($model->object_name(), 'db_insert')))):
 ?>
 <div class="fl">
-    <button ptitle="<?= $save_button_ptitle;?>" class="form_button button_1" value="save" name="_a">Uložit</button>
+    <button ptitle="<?= $save_button_ptitle;?>" class="form_button button_1 btn btn-primary" value="save" name="_a">Uložit</button>
 </div>
 <?php endif ?>
 
 <div class="fr">
-    <button class="form_button_close button_2" name="close">Zavřít</button>
+    <button class="form_button_close button_2 btn" name="close">Zavřít</button>
 </div>

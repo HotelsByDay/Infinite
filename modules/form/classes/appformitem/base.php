@@ -363,7 +363,7 @@ class AppFormItem_Base
             //required znacka '*' nemusi byt vzdy zobrazena
             if (arr::get($this->config, 'display_required_symbol', TRUE))
             {
-                $label .= '<span class="required_label">*</span>';
+                $label .= '<span class="required_label"></span>';
             }
         }
 

@@ -1,10 +1,10 @@
 <div  class="appformitemnnsimpleselect" name="<?= $attr ?>_item" id="<?= $uid;?>">
 
 <?php if ( ! empty($error_message)): ?>
-<span class="validation_error"><?= $error_message ?></span>
+<span class="validation_error alert alert-error"><?= $error_message ?></span>
 <?php endif ?>
 
-<label for="<?= $attr ?>_id"><?= $label ?></label>
+<label class="main"><?= $label ?></label>
 
     <?php if (isset($hint) && !empty($hint)): ?>
       <span class="hint"><?= $hint; ?></span>
@@ -12,9 +12,10 @@
 
 <?php foreach ($values as $key => $val): ?>
     <div class="item">
-      <label for="<?= $attr.$key ?>"><?= $val ?></label>
-      <input type="checkbox" id="<?= $attr.$key ?>" name="<?= $attr ?>[<?= $key ?>]" value="<?= $key ?>" <?= (in_array($key, $value)) ? 'checked="checked"': ' ' ?>/>
-      
+      <label class="checkbox">
+          <input type="checkbox" name="<?= $attr ?>[<?= $key ?>]" value="<?= $key ?>" <?= (in_array($key, $value)) ? 'checked="checked"': '' ?> />
+          <?= $val ?>
+      </label>
     </div>
 <?php endforeach; ?>
 

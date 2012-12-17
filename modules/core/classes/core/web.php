@@ -504,11 +504,11 @@ class Core_Web
      */
     public function getPageTitle()
     {
-        $site_name = AppConfig::instance()->get('system_name', 'application');
         if (empty($this->page_title)) {
             //defaultni page title
-            return $site_name;
+            return AppConfig::instance()->get('system_title', 'application');
         }
+        $site_name = AppConfig::instance()->get('system_name', 'application');
         return $this->page_title.' - '.$site_name;
     }
 

@@ -13,7 +13,7 @@ class AppFormItem_RelNNSelect extends AppFormItem_Base
 
     protected $config = array(
         // Pocet sloupcu ve kterych maji byt checkboxy zobrazeny
-        'columns_count' => null,
+        'columns_count' => 1,
         // Zda zobrazit tlacitka check/uncheck all
         'allow_check_all' => false,
     );

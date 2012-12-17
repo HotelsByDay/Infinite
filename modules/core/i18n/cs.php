@@ -14,6 +14,8 @@ return array(
     'error.500.title' => 'Došlo k neočekávané chybě.',
     'error.500.message' => 'Kontaktuje prosím technickou podporu na e-mailove adrese <a href="mailto:aukce@porsche.cz">aukce@porsche.cz</a>.',
 
+    'error.unexpected_error.title' => 'Unexpected error',
+    'error.unexpected_error.message' => 'Unexpected error occurred.',
 
     //ZAKLADNI POPISKY
     'jquery-ui._dialog.message_window_ok_button_label' => 'Zavřít',

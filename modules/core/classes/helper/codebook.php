@@ -54,16 +54,13 @@ class Helper_Codebook
         //do filtru se automaticky prida podminka 'status'=1 ... coz zajisti
         //ze budou nacteny pouze aktivni polozky ciselniku
         //$filter[] = array('status', '=', '1');
-        
-        // @TODO Tady bude kontrola jestli je ciselnik v cache atd...
-        // Spocteme cache klic aktualne pozadovaneho ciselniku
-        $cache_key = self::countCacheKey($codebook, 'value_list', $filter);
+
         // Zkusime vytahnout ciselnik z cache
-        $values = Cache::instance()->get($cache_key, FALSE);
+        $values = self::readFromCache($codebook, 'value_list', $filter);
         // Pokud tam nebyl, nacteme z DB a ulozime do cache
-        if ($values === FALSE) {
+        if ($values === NULL) {
             $values = ORM::factory($codebook)->get_codebook($filter);
-            Cache::instance()->set($cache_key, $values, Kohana::config('caching')->get('codebook'));
+            self::saveToCache($values, $codebook, 'value_list', $filter);
         }// else { echo "readed from cache - $codebook - <br>"; print_r($values); exit; }
         
         // Vratime ciselnik + pripadne prepend hodnoty
@@ -78,14 +75,12 @@ class Helper_Codebook
      */
     public static function value($codebook, $id) 
     {
-        // Spocteme cache key
-        $cache_key = self::countCacheKey($codebook, 'value_list');
         // Zkusime vytahnout ciselnik z cache
-        $values = Cache::instance()->get($cache_key, FALSE);
+        $values = self::readFromCache($codebook, 'value_list');
         // Pokud tam nebyl, nacteme z DB a ulozime do cache
         if ($values === FALSE) {
             $values = ORM::factory($codebook)->get_codebook();
-            Cache::instance()->set($cache_key, $values, Kohana::config('caching')->get('codebook'));
+            self::saveToCache($values, $codebook, 'value_list');
         }
         
         // Vratime nazev pozadovane polozky ciselniku
@@ -107,15 +102,13 @@ class Helper_Codebook
         if (count($selector) != 2) return NULL;
         // Ulozime casti selectoru do drou ruznych promennych
         list($codebook, $key) = $selector;
-        
-        // Spocteme cache key
-        $cache_key = self::countCacheKey($codebook, 'key_list');
+
         // Zkusime vytahnout ciselnik z cache
-        $values = Cache::instance()->get($cache_key, FALSE);
+        $values = self::readFromCache($codebook, 'key_list');
         // Pokud tam nebyl, nacteme z DB a ulozime do cache
         if ($values === FALSE) {
             $values = ORM::factory($codebook)->get_cb_keys();
-            Cache::instance()->set($cache_key, $values, Kohana::config('caching')->get('codebook'));
+            self::saveToCache($values, $codebook, 'key_list');
         }
         
         // Vratime ID s prislusnym klicem - pokud klic existuje
@@ -157,13 +150,65 @@ class Helper_Codebook
      *   retezcovych klicu na hodnoty.
      * @param <array> $filter pripadne fitrovaci podminky 
      */
-    protected static function countCacheKey($codebook, $type, $filter=Array()) 
+    protected static function countCacheKey($codebook, $type)
     {
         // Vsechny hodnoty definujici ciselnik zahashujeme
-        return md5("$codebook-$type".serialize($filter));
+        return '__cb-'.$codebook.$type;
     }
-    
-    
+
+
+    /**
+     * Returns value from cache
+     * @static
+     * @param $codebook
+     * @param $type
+     * @param $filter
+     * @return mixed desired data or NULL
+     */
+    protected static function readFromCache($codebook, $type, $filter=Array())
+    {
+        $cache_key = self::countCacheKey($codebook, $type);
+        $data = (array)Cache::instance()->get($cache_key, array());
+        $filter_key = md5(serialize($filter));
+        return arr::get($data, $filter_key);
+    }
+
+
+    /**
+     * Saves value into cache where key is based on codebook, type and filter
+     * @static
+     * @param $value
+     * @param $codebook
+     * @param $type
+     * @param array $filter
+     */
+    protected static function saveToCache($value, $codebook, $type, $filter=Array())
+    {
+        // Get codebook cache key
+        $cache_key = self::countCacheKey($codebook, $type);
+        // Get filter key
+        $filter_key = md5(serialize($filter));
+        // Read current cb cached data
+        $data = (array)Cache::instance()->get($cache_key, array());
+        // Store given value on given filters key
+        $data[$filter_key] = $value;
+        // save new filter key
+        Cache::instance()->set($cache_key, $data, Kohana::config('caching')->get('codebook'));
+    }
+
+
+    /**
+     * Smaze z cache zaznamy daneho codebooku
+     * @static
+     * @param $codebook
+     */
+    public static function invalidateCodebookCache($codebook)
+    {
+        $cache_key = self::countCacheKey($codebook, 'value_list');
+        Cache::instance()->delete($cache_key);
+        $cache_key = self::countCacheKey($codebook, 'key_list');
+        Cache::instance()->delete($cache_key);
+    }
 
 }
 

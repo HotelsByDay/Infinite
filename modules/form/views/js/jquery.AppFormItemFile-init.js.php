@@ -1,7 +1,7 @@
 //<script>
 $(document).ready(function(){
-
     function appFormItemPhoto_InitFancybox($uploader) {
+
         if ($uploader.find('a.fancybox').length != 0) {
             // Tohle nejak nefunguje
         //    $uploader.find('a.fancybox').fancybox.cancel();
@@ -169,7 +169,7 @@ $(document).ready(function(){
 
             template: '<div class="qq-uploader">' +
                         '<div class="qq-upload-drop-area"><span><?=__("valumsUpload.drop_files_here_to_upload");?></span></div>' +
-                        '<div class="qq-upload-button upld"><?=__("valumsUpload.upload_file");?></div>' +
+                        '<div class="qq-upload-button upld btn"><?=__("valumsUpload.upload_file");?></div>' +
                         '<ul class="qq-upload-list"></ul>' +
                       '</div>',
 
@@ -246,11 +246,13 @@ $(document).ready(function(){
 
                     <?php endif ?>
 
+
+
+                    $item.find('.list').append($uploaded_file_preview);
+
                     //provede inicizalizaci zakladnich prvku na polozce
                     appFormItemPhoto_InitFancybox($item);
                     appFormItemPhoto_InitItem($uploaded_file_preview, $item, $form);
-
-                    $item.find('.list').append($uploaded_file_preview);
 
                     //change event tady je vyvolan aby se propagoval vyse -
                     //to je potreba napriklad pri pouziti na advanceditemlist

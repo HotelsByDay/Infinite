@@ -49,7 +49,26 @@ class ORM_CB extends ORM {
         
         parent::__construct($id);
     }
-    
+
+
+    public function delete($id = NULL, array $plan = array())
+    {
+        $res = parent::delete($id, $plan);
+        Codebook::invalidateCodebookCache($this->object_name());
+        return $res;
+    }
+
+
+    public function save()
+    {
+        $changed = $this->_changed;
+        $res = parent::save();
+        if ($changed) {
+            Codebook::invalidateCodebookCache($this->object_name());
+        }
+        return $res;
+    }
+
 
     /**
      * Vraci asociativni pole s ciselnikem.

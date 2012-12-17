@@ -10,6 +10,8 @@ return array(
     'error.404.title' => 'The requested page was not found.',
     'error.404.message' => '',
 
+    'error.unexpected_error.title' => 'Unexpected error',
+    'error.unexpected_error.message' => 'Unexpected error occurred.',
     'error.500.title' => 'Unexpected error occured.',
     'error.500.message' => 'Pleaase contact our support at <a href="mailto:support@infinite.cz">support@infinite.cz</a>.',
 
@@ -88,6 +90,7 @@ return array(
     'object.action_delete.item_not_found' => 'The item was not found.',
     'object.action_delete.not_authorized_on_item' => 'You are not authorized to remove selected item.',
     'object.action_delete.error_occured' => 'An error occured when removing the item.',
+    'object.delete_action_confirm' => 'Do you really want to delete selected item?',
 
     'more.menu_name' => 'Next',
 
@@ -108,8 +111,8 @@ return array(
     'logaction.th_useragent' => 'Typ přístupu',
     'logaction.th_locality' => 'Lokalita',
     'user_activity.filter_fulltext' => 'Obsahuje:',
-    'user_activity.filter_to_from' => 'Od:',
-    'user_activity.filter_to_to' => 'Do:',
+    'user_activity.filter_to_from' => 'From:',
+    'user_activity.filter_to_to' => 'To:',
 
     //obecne pomocne texty
     'codebook.default_prepend_value' => '-not selected-',
@@ -136,4 +139,18 @@ return array(
     'upload.error.invalid_image_dimension.max_width'  => 'The image width is :width px which exceeds the maximal width of :max_width px.',
     'upload.error.invalid_image_dimension.min_height' => 'The image height is :height px which does not meet the minimal required height of :min_height px.',
     'upload.error.invalid_image_dimension.max_height' => 'The image height is :height px which exceeds the maximal height of :max_height px.',
+
+    'month_1' => 'Jan',
+    'month_2' => 'Feb',
+    'month_3' => 'Mar',
+    'month_4' => 'Apr',
+    'month_5' => 'May',
+    'month_6' => 'Jun',
+    'month_7' => 'Jul',
+    'month_8' => 'Aug',
+    'month_9' => 'Sep',
+    'month_10' => 'Oct',
+    'month_11' => 'Nov',
+    'month_12' => 'Dec',
+
 );

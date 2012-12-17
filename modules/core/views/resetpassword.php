@@ -47,13 +47,13 @@
 	<form method="post" action="<?= appurl::object_action('resetpassword', 'index');?>">
 
             <?php if (isset($validation_error)): ?>
-            <div id="err_msg">
+            <div class="alert alert-error">
                 <?php echo $validation_error;?>
             </div>
             <?php endif ?>
 
             <fieldset><label for="email"><?= __('resetpassword_page.email');?></label><input id="email" type="text" name="email" value="" tabindex="1"/></fieldset>
-            <input type="submit" class="button blue" value="<?= __('resetpassword_page.reset_action');?>"/>
+            <input type="submit" class="btn btn-primary" value="<?= __('resetpassword_page.reset_action');?>"/>
 
 	</form>
         <?php endif ?>

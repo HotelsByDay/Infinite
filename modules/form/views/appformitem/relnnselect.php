@@ -1,7 +1,7 @@
 <div class="appformitemrelnnselect <?= $css ?>" id="<?= $uid;?>">
 
     <?php if (!empty($error_message)): ?>
-        <span class="validation_error" style="color:red;"><?= $error_message; ?></span>
+        <span class="validation_error alert alert-error" style="color:red;"><?= $error_message; ?></span>
     <?php endif ?>
 
     <label><?= $label;?></label>
@@ -9,23 +9,24 @@
 
     <?php if ($allow_check_all): ?>
         <div class="check_all">
-            <a class="button blue check_all"><?= __('relnnselect.check_all'); ?></a>
-            <a class="button blue uncheck_all"><?= __('relnnselect.uncheck_all'); ?></a>
+            <a class="button blue check_all btn btn-mini "><?= __('relnnselect.check_all'); ?></a>
+            <a class="button blue uncheck_all btn btn-mini "><?= __('relnnselect.uncheck_all'); ?></a>
         </div>
     <?php endif; ?>
 
 
     <div class="items">
-        <?php if ($columns_count): ?>
-            <div class="column">
-        <?php endif; ?>
+        <?php
+        if ( ! $columns_count) {
+            $columns_count = 1;
+        }
+        ?>
+        <div class="column">
 
         <?php
             // Spocteme velikost sloupce - v poctu polozek
             $items_count = count($items);
-            if ( ! $columns_count) {
-                $columns_count = 1;
-            }
+
             $column_size = (int)($items_count / $columns_count);
             if ($column_size and $items_count % $column_size) {
                 $column_size++;
@@ -45,8 +46,8 @@
         ?>
 
         <div class="item">
-            <input type="checkbox" <?= $checked ? 'checked="checked"' : '';?> id="item_<?= $attr;?>_<?=$item->pk();?>" value="<?= $item->pk();?>" name="<?= $attr;?>[id][<?= $item->pk() ?>]" />
-            <label for="item_<?= $attr;?>_<?=$item->pk();?>" class="check"><?= $item->preview();?></label>
+
+            <label for="item_<?= $attr;?>_<?=$item->pk();?>" class="check checkbox"><?= $item->preview();?><input type="checkbox" <?= $checked ? 'checked="checked"' : '';?> id="item_<?= $attr;?>_<?=$item->pk();?>" value="<?= $item->pk();?>" name="<?= $attr;?>[id][<?= $item->pk() ?>]" /></label>
 
             <?php if ($note): ?>
                 <div class="note_outer" <?= $checked ? '' : 'style="display: none;"' ?>>
@@ -59,9 +60,7 @@
         </div>
         <?php endforeach ?>
 
-        <?php if ($columns_count): ?>
-            </div>
-        <?php endif; ?>
+        </div>
     </div>
 
 

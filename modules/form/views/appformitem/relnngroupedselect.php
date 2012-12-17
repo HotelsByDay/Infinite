@@ -1,7 +1,7 @@
 <div  class="appformitemnnsimpleselect" name="<?= $attr ?>_item" id="<?= $uid;?>">
 
     <?php if ( ! empty($error_message)): ?>
-    <span class="validation_error"><?= $error_message ?></span>
+    <span class="validation_error alert alert-error"><?= $error_message ?></span>
     <?php endif ?>
 
     <label for="<?= $attr ?>_id"><?= $label ?></label>
@@ -49,14 +49,16 @@ foreach ($items as $group_id => $codebook):
     
     <?php // Vypiseme vlastni skupinu checkboxu ?>
     <div class="items_group">
-    <h3 for="<?= $attr.'_'.'group_'.$group_id ?>"><?= arr::get($groups, $group_id) ?></h3>
+    <h4 for="<?= $attr.'_'.'group_'.$group_id ?>"><?= arr::get($groups, $group_id) ?></h4>
 
     <?php foreach ($codebook as $key => $val):
         $checked = in_array($key, (array)$selected['id']);
     ?>
     <div class="item">
-        <label for="<?= $attr.$key ?>"><?= $val ?></label>
-        <input type="checkbox" id="<?= $attr.$key ?>" name="<?= $attr ?>[id][<?= $key ?>]" value="<?= $key ?>" <?= $checked ? 'checked="checked"': ' ' ?>/>
+        <label class="checkbox">
+            <input type="checkbox" name="<?= $attr ?>[id][<?= $key ?>]" value="<?= $key ?>" <?= $checked ? 'checked="checked"': ' ' ?>/>
+            <?= $val ?>
+        </label>
 
         <?php if ($note): ?>
         <div class="note_outer" <?= $checked ? '' : 'style="display: none;"' ?>>

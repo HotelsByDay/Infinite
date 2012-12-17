@@ -8,13 +8,13 @@
 ?>
 
 <?php if ( ! empty($error_message)): ?>
-<span class="validation_error"><?= $error_message;?></span>
+<span class="validation_error alert alert-error"><?= $error_message;?></span>
 <?php endif ?>
 
 <label for="<?= $attr ?>"><?= $label ?></label>
 
 <div class="textarea_container">
-    <textarea id="<?= $attr ?>"<?= $name ?>><?= $value ?></textarea>
+    <textarea style="min-height: 200px;" id="<?= $attr ?>"<?= $name ?>><?= $value ?></textarea>
 </div>
 
 </div>

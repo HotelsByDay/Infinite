@@ -22,6 +22,8 @@
             var settings = {
                 data_url : "",
                 preview : "",
+                add_new_url: false,
+                dialog_config: {},
                 remove_interval: 10
             };
             
@@ -135,7 +137,7 @@
                         $pom = $("label[for$='_']", $item);
                         $pom.attr('for', $pom.attr('for')+id);
                         // Nastaveni hodnoty labelu
-                        $pom.html(name);
+                        $pom.append(name);
                         // Prejmenovani tridy formu
                         $pom = $(".form", $item);
                         $pom.removeClass('form_0').addClass('form_'+id);
@@ -215,7 +217,63 @@
                 }).focus(onFocusHandler).change(onChangeHandler);
 
 
-            });
+
+
+
+
+                //pokud je v nastaveni povoleno pridani nove relacni polozky
+                //v ramci tohoto prvku, tak tuto funkci inicializuji
+                if (typeof settings.add_new_url === 'string') {
+
+                    var $dialog = $( document.createElement('div') ).hide()
+                        .appendTo($this);
+
+                    //defaultni parametry dialogu
+                    var dialog_options = {
+                        modal:true,
+                        draggable:false,
+                        autoOpen: false
+                    };
+
+                    //vezmu defaultni nastaveni dialogu z argumentu pluginu
+                    var dialog_options = $.extend(dialog_options, default_params['dialog']);
+
+                    //inicializace dialogu
+                    $dialog._dialog(dialog_options);
+
+                    //pri kliknuti na tlacitko pridat se do dialogu nacte editacni
+                    //formular relacniho objektu
+                    $(".add_new", $this).click(function(){
+
+                        //objekt, ktery obsahuje dodatecne parametry pozadavku
+                        var params = {};
+
+                        if (typeof settings.preview !== 'undefined') {
+                            params.__preview = settings.preview;
+                        }
+
+                        $dialog._dialog('loadForm', settings.add_new_url, params, function(response){
+                            if (response['action_status'] == '<?= AppForm::ACTION_RESULT_SUCCESS;?>') {
+                                //dialog zavru
+                                $dialog._dialog('close');
+
+                                addItem(response.preview, response.id);
+
+                            }
+                        });
+
+                        //zamezeni defaultni akce anchoru
+                        return false;
+                    });
+                }
+
+
+
+
+
+            }); // end each
+
+
             
         }
       
