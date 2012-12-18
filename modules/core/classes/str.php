@@ -5,7 +5,7 @@
 class Str
 {
 
-    protected $string = NULL;
+    protected $string = '';
 
     public static function create($string)
     {
@@ -46,7 +46,7 @@ class Str
      */
     public function append($prefix, $string, $suffix='')
     {
-        $this->add($prefix, $string, $suffix);
+        return $this->add($prefix, $string, $suffix);
     }
 
 
@@ -66,7 +66,7 @@ class Str
      */
     function __toString()
     {
-        return $this->string;
+        return (string)$this->string;
     }
 
 
