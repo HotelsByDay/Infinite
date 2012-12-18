@@ -1704,4 +1704,48 @@ abstract class Controller_Base_Object extends Controller_Layout {
                 return parent::__call($name, $arguments);
         }
     }
+
+    /**
+     * Processes data export Ajax requests (see DataExport module for more info)
+     */
+    public function action_table_data_export()
+    {
+        //kontrola opravneni uzivatele na konkretni akci tohoto kontroleru
+        if ( ! $this->user->HasPermission($this->object_name, 'table'))
+        {
+            return $this->runUnauthorizedAccessEvent();
+        }
+
+        $table_config_group  = $this->request->param('table_config');
+        $export_config_group = $this->request->param('export_config');
+
+        $table_config  = kohana::config($table_config_group);
+        $export_config = kohana::config($export_config_group);
+
+        try{
+            //vytvori instanci tridy, ktera zajistuje logiku filtrovani
+            $filter_instance = $this->loadAndInitFilterClassInstance($table_config);
+
+            //Vraci ORM_Iterator predstavici vysledky vyhledavani
+            list($results, $filter_state_id, $filter_state_stat) = $filter_instance->getResults(FALSE);
+
+            $export_filename = DataExport::Factory($export_config, $results)
+                ->generateExport()
+                ->getFilePath();
+
+            $response = array(
+                'f' => URL::site(str_replace(DIRECTORY_SEPARATOR, '/', $export_filename)),
+            );
+        }
+        catch (Exception $e)
+        {
+            kohana::$log->add(KOHANA::ERROR, $e->getMessage());
+
+            $response = array(
+                'e' => __('object.data_export.server_side_error')
+            );
+        }
+
+        die(json_encode($response,  JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP));
+    }
 }

@@ -1,0 +1,17 @@
+<!-- DO NOT USE (not finished) -->
+<phpunit colors="true" bootstrap="../../index-test.php">
+    <php>
+        <server name="HTTP_HOST" value="localhost:8888"/>
+        <server name="HTTP_USER_AGENT" value="chrome"/>
+        <server name="SERVER_NAME" value="localhost"/>
+
+        <const name="TEST_USERNAME" value="root"/>
+    </php>
+    <testsuites>
+        <testsuite name="Forms">
+            <directory>export/DataExportTest.php</directory>
+            <directory>export/DataExportCSVDriverTest.php</directory>
+            <directory>export/DataExportFileStorageTest.php</directory>
+        </testsuite>
+    </testsuites>
+</phpunit>

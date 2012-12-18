@@ -1058,8 +1058,11 @@
 
             $data_container.find('.btn-table-export[href]').click(function(){
                 var $btn = $(this).addClass('btn-loading');
+                var current_filter_params = $.bbq.getState() || {};
                 $.ajax({
                     url: $(this).attr('href'),
+                    type: 'POST',
+                    data: current_filter_params,
                     dataType:'json',
                     success: function(data){
                         $btn.removeClass('btn-loading');

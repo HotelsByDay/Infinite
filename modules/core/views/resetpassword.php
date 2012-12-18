@@ -24,11 +24,27 @@
 <!--[if IE 7 ]>    <body class="ie7" id="dark"> <![endif]-->
 <!--[if IE 8 ]>    <body class="ie8" id="dark"> <![endif]-->
 <!--[if IE 9 ]>    <body class="ie9"  id="dark"> <![endif]-->
-<!--[if (gt IE 9)|!(IE)]><!--> <body id="dark" onload="document.forms[0].email.focus();" <!--<![endif]-->
+<!--[if (gt IE 9)|!(IE)]><!--> <body style="max-width:350px!important; " id="dark" onload="document.forms[0].email.focus();" <!--<![endif]-->
 
 <?= View::factory('noscript');?>
+<div id="header">
+    <div id="header-in">
+        <span class="logo"><?= AppConfig::instance()->get('system_header', 'application');?></span>
 
-<div class="container">
+        <div class="log-nav">
+            <?= $top_navigation;?>
+        </div>
+
+    </div>
+</div>
+
+
+
+<?=$navigation;?>
+
+
+<div id="content">
+<div class="">
     <div id="login">
 	<div class="logo" style="display:none;"><img src="images/logo.jpg"></div>
 
@@ -59,6 +75,7 @@
         <?php endif ?>
     </div>
 </div>
+    </div>
 
 </body>
 </html>
