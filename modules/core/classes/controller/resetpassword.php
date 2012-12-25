@@ -90,13 +90,14 @@ class Controller_ResetPassword extends Controller_Template {
                     'user' => $user,
                     'new_password' => $plaintext_password
                 ));
-                
+
                 //doplnujici hlavicka, ktera explicitne specifikuje odesilatele
-                $headers = 'From: '.$from_name.' <'.$from_email.'>'. "\r\n";
+                // $headers = 'From: '.$from_name.' <'.$from_email.'>'. "\r\n";
 
                 try {
                     //jednoduche odeslani emailu
-                    mail($to, $subject, $message, $headers);
+                    Emailq::factory()->add_email($to, NULL, NULL, array($from_email, $from_name), $subject, $message);
+                    // mail($to, $subject, $message, $headers);
                 } catch (Exception $e) {
                     Kohana::$log->add(Kohana::ERROR, $e->getMessage());
                 }

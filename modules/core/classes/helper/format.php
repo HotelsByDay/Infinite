@@ -47,12 +47,22 @@ class Helper_Format {
         return $orig_number;
     }
 
+    static public function db_phone($number)
+    {
+        return preg_replace('/\D/', '', $number);
+    }
+
+    static public function user_phone($number)
+    {
+        return self::phone_us($number);
+    }
+
     static public function phone_us($number)
     {
         //return $number;
         $number = preg_replace('/[^0-9]/', '', $number);
         $number = preg_replace('/^(.*?)(.{1,3})(.{3})(.{4})$/', '$1 ($2) $3-$4', $number);
-        return $number;
+        return trim($number);
     }
     
     

@@ -7,6 +7,7 @@ return array(
     'invalid_login_or_password' => 'Invalid username or password.',
     'footer_copyright' => 'Footer copyright...',
 
+    'resetpassword.email.subject' => PRODUCT_NAME.' - Your New Password',
     'error.404.title' => 'The requested page was not found.',
     'error.404.message' => '',
 
