@@ -410,6 +410,17 @@ class ORM extends Kohana_ORM {
         return $this;
     }
 
+
+    /**
+     * Volano z AppForm tridy po uspesnem provedeni ActionSave
+     */
+    public function afterFormSaved()
+    {
+        // nothing by default
+    }
+
+
+
     public function savePerformed()
     {
         return $this->_save_performed;

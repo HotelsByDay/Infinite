@@ -3,16 +3,20 @@
 
 
     <?php if (!empty($error_message) && is_string($error_message)): ?>
-        <span class="validation_error" style="color:red;"><?= $error_message; ?></span>
+        <span class="validation_error alert alert-error" style="color:red;"><?= $error_message; ?></span>
     <?php endif ?>
 
-    <div class="autocomplete clear">
-        <label for="<?= $uid ?>_autocomplete"><?= $label ?></label>
+    <label for="<?= $uid ?>_autocomplete"><?= $label ?></label>
+    <div class="autocomplete clearfix form-inline">
         <input type="text" id="<?= $uid ?>_autocomplete" name="<?= $attr ?>[autocomplete]" value="" />
+
+        <?php if (isset($new) && $new): ?>
+            <a href="#" class="add_new btn btn-primary"><?= $new_label;?></a>
+        <?php endif ?>
     </div>
     
 
-    <div class="items clear">
+    <div class="items clearfix">
     <?php
 
         //predikat, ktery rika ze aktualne neni vybrana ani jedna polozka
@@ -35,9 +39,10 @@
     ?>
     
     <div class="item item_<?= $item->pk() ?> <?php if ( ! $selection_is_empty) { echo $active ? 'active' : 'inactive';}?>">
-        <input type="checkbox" <?= $active ? 'checked="checked"' : '';?> id="<?= $uid ?>_<?=$item->pk() ?>" value="<?= $item->pk(); ?>" name="<?= $attr ?>[selected][]" main="<?= $main ?>" />
-        
-        <label for="<?= $uid ?>_<?=$item->pk() ?>"><?= $item->preview(); ?></label>
+        <label class="checkbox">
+            <input class="checkbox" type="checkbox" <?= $active ? 'checked="checked"' : '';?> value="<?= $item->pk(); ?>" name="<?= $attr ?>[selected][]" main="<?= $main ?>" />
+            <?= $item->preview(); ?>
+        </label>
        
         <?php 
             if ($form) {
@@ -55,15 +60,16 @@
         <?php endforeach ?>
     </div><!-- items -->
 
-    <div class="clear"></div>
+    <div class="clearfix"></div>
     
     <?php
     // Tohle je tady definovane dvakrat - nevim jestli ma cenu pro to delat dalsi sablonu.?
     ?>
     <div class="item item_0" style="display: none;">
-        <input type="checkbox" id="<?= $uid ?>_" value="" name="<?= $attr ?>[selected][]" main="0" />
         
-        <label for="<?= $uid ?>_"></label>
+        <label for="<?= $uid ?>_" class="checkbox">
+            <input type="checkbox" id="<?= $uid ?>_" value="" name="<?= $attr ?>[selected][]" main="0" />
+        </label>
     <?php 
     // Prazdny formular - pro dynamicke vytvareni novych prvku pomoci jQuery clone
     if ($form) {

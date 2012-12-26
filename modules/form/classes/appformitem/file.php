@@ -752,7 +752,10 @@ class AppFormItem_File extends AppFormItem_Base
         //ma se vykreslovat seznam souboru jako tabulka ?
         if (($view_name = arr::get($this->config, 'as_table')))
         {
-            $view->table_header = View::factory($view_name);
+            $view->table_header = ($render_style == AppForm::RENDER_STYLE_READONLY)
+                ? View::factory($view_name.'_readonly')
+                : View::factory($view_name);
+
             // pokud je definovan seznam jazyku pro popisky, predame ho do hlavicky tabulky
             if ($this->is_languable) {
                 // Set locales list into table header - for select creation

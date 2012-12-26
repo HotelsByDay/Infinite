@@ -13,7 +13,7 @@
     var methods = {
         
         init: function( options ) {
-            
+
             /**
              * Defaultni hodnoty pro parametry a nastaveni pluginu
              */
@@ -36,11 +36,11 @@
                 var params = $.extend(true, settings, options);
 
                 // Tlacitka check/uncheck all
-                var $check_all = $('.check_all', $this);
-                var $uncheck_all = $('.uncheck_all', $this);
+                var $check_all = $('a.check_all', $this);
+                var $uncheck_all = $('a.uncheck_all', $this);
 
 
-                $check_all.bind('click', function(){
+                $check_all.bind('click', function() {
                     $this.find(':checkbox').each(function(){
                         $(this).attr('checked', true);
                     });

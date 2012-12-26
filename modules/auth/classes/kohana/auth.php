@@ -165,7 +165,7 @@ abstract class Kohana_Auth {
 	 */
 	public function logged_in($role = NULL)
 	{
-		return FALSE !== $this->get_user();
+		return (FALSE !== $this->get_user());
 	}
 
 	/**

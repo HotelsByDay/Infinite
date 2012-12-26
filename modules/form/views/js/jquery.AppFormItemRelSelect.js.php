@@ -93,7 +93,6 @@
                             });
                         }
                         filled_input_names = [];
-
                     }
                 });
                 
@@ -209,11 +208,11 @@
                         // a myslim ze je logicke aby prvek vyvolal svou change udalost az dokonci vsechny zmeny v DOM
                         // mazani hodnot dcerinych prvku jsem vsak nepresunul, abych nezpusobil nechtene vedlejsi efekty
                         if (typeof ui.item.fill !== 'undefined') {
-                            for (k in ui.item.fill) {
+                            for (var k in ui.item.fill) {
                                 // 5.7.2012 - Dajc
                                 // - pridan change trigger nad danym prvkem po zapsani hodnoty do nej - spoleha na to
                                 //   prvek ObjectImageSelect
-                                $('input[type="text"][name="'+k+'"],textarea[name="'+k+'"],select[name="'+k+'"]').each(function(){
+                                $('input[type="text"][name="'+k+'"],input[type="hidden"][name="'+k+'"],textarea[name="'+k+'"],select[name="'+k+'"]').each(function(){
                                     // Ulozime si info o tom ze prvek byl automaticky vyplnen
                                     filled_input_names[filled_input_names.length] = k;
                                     $(this).val(ui.item.fill[k]);

@@ -1,4 +1,4 @@
 $(document).ready(function(){
-    $("#<?= $uid;?>").buttonset();
+    $("#<?= $uid;?> .items").buttonset();
 });
 

@@ -6,7 +6,7 @@
     <span class="hint"><?= $hint; ?></span>
     <?php endif ?>
 
-    <ul class="list">
+    <ul class="list unstyled">
         <?php foreach ($rel_items as $rel_item): ?>
         <li class="item">
             <?= (string)$rel_item;?>

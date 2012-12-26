@@ -160,11 +160,17 @@
                 }
                 
                 //potrebuji odchytit kliknuti na tlacitko 'vyhledat'
-                $(".submit_filter", $_this).click(function(e){
-
+                $(".submit_filter", $_this).click(function(e) {
+                    // Ignorujeme kliknuti na selecty - o ty se postara change handler
+                    if ($(this).is('select')) return;
                     //metoda zorbazi progress indicator a odesle pozadavek na nactenidat
                     methods._setState( $_this, methods._getCurrentFilterParams($_this) );
 
+                    return false;
+                });
+                $("select.submit_filter", $_this).change(function(e){
+                    //metoda zorbazi progress indicator a odesle pozadavek na nactenidat
+                    methods._setState( $_this, methods._getCurrentFilterParams($_this) );
                     return false;
                 });
 
@@ -344,12 +350,17 @@
 
                 var selected = methods._getSelectedItems();
 
+                var $link = $(this);
+
                 //pokud nejsou vybrane zadne nabidky, tak uzivatele upozornim
                 //na to ze musi nejake nabidky vybrat
                 if (selected == '') {
-                    //zobrazim zpravu - bude automaticky skryta za 60s
-                    methods._showMessage($_this, "<?= __('filter.no_items_selected');?>", 60000);
-                    return false;
+                    // Pokud akci lze volat pouze nad zvolenymi zaznamy, oznamime uzivateli ze nejake musi vybrat
+                    if ($link.attr('need_selection')) {
+                        //zobrazim zpravu - bude automaticky skryta za 60s
+                        methods._showMessage($_this, "<?= __('filter.no_items_selected');?>", 60000);
+                        return false;
+                    }
                 }
 
                 //nazev akce, kterou budu vyvolavat

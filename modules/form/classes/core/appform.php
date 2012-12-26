@@ -632,13 +632,11 @@ class Core_AppForm {
             $instance->clear();
         }
 
-        //initialize with the default data
-        if ( ! $this->_model->loaded())
-        {
-            $this->applyFormDataValues($this->_form_data_defaults);
-        }
-        //vlozi data do ORM modelu anebo do $this->_form_data
-        $this->applyFormDataValues($this->_form_data_overwrites);
+        //do ORM modelu vlozim defaultni hodnoty, ktere do nej byly vlozeni
+        //pri inicializaci formulare
+        // @todo - chybejici metody
+     //   $this->applyDefaultValues();
+     //   $this->applyOverwriteValues();
     }
 
     /**
@@ -923,7 +921,7 @@ class Core_AppForm {
                                                                 array(
                                                                     'confirm' => ___('form_action_button.'.$this->_config->get_group_name().'.update_action_confirm', array(), NULL),
                                                                     'value' => self::ACTION_SAVE,
-                                                                    'class' => self::FORM_BUTTON_CSS_CLASS.' button red',
+                                                                    'class' => self::FORM_BUTTON_CSS_CLASS.' button red btn btn-primary',
                                                                     //tento popisek bude zobrazen v progress indicatoru po kliknuti na toto tlacitko
                                                                     'ptitle'    => ___('form_action_button.'.$this->_config->get_group_name().'.update_ptitle',
                                                                                        'form_action_button.update_ptitle')
@@ -939,7 +937,7 @@ class Core_AppForm {
                                                                     array(
                                                                         'confirm' => ___('form_action_button.'.$this->_config->get_group_name().'.delete_action_confirm', array(), NULL),
                                                                         'value' => self::ACTION_DELETE,
-                                                                        'class' => self::FORM_BUTTON_CSS_CLASS.' button blue',
+                                                                        'class' => self::FORM_BUTTON_CSS_CLASS.' button blue btn btn-danger',
                                                                         //tento popisek bude zobrazen v progress indicatoru po kliknuti na toto tlacitko
                                                                         'ptitle'    => ___('form_action_button.'.$this->_config->get_group_name().'.delete_ptitle',
                                                                                            'form_action_button.delete_ptitle')
@@ -957,7 +955,7 @@ class Core_AppForm {
                                                                 array(
                                                                     'confirm' => ___('form_action_button.'.$this->_config->get_group_name().'.insert_action_confirm', NULL),
                                                                     'value' => self::ACTION_SAVE,
-                                                                    'class' => self::FORM_BUTTON_CSS_CLASS.' button red',
+                                                                    'class' => self::FORM_BUTTON_CSS_CLASS.' button red btn btn-primary',
                                                                     //tento popisek bude zobrazen v progress indicatoru po kliknuti na toto tlacitko
                                                                     'ptitle'    => ___('form_action_button.'.$this->_config->get_group_name().'.insert_ptitle',
                                                                                        'form_action_button.insert_ptitle'),
@@ -969,7 +967,7 @@ class Core_AppForm {
         $buttons['l']['close'] = array('close',
                                          __('form_action_button.close_label'),
                                          array(
-                                            'class'     => self::FORM_BUTTON_CLOSE_CSS_CLASS.' button no-color',
+                                            'class'     => self::FORM_BUTTON_CLOSE_CSS_CLASS.' button no-color btn',
                                          ));
 
         //vyslednou definici tlacitek vratim

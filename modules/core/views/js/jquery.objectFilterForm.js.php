@@ -68,7 +68,7 @@
          */
         _clear: function($_this) {
 
-            this.find('input,select,textarea').val('');
+            this.find('input[type="text"],input[type="hidden"],select,textarea').val('');
 
         },
 

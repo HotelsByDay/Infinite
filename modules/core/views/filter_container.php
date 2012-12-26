@@ -19,7 +19,7 @@
             <?= $filter_form; ?>
      
           
-<div class="row-fluid show-grid">
+<div class="row show-grid">
 <div class="span4" style="margin-top:10px;">
                     <button class="submit_filter button btn btn-primary red btn"><?= __('filter.submit_filter'); ?></button>
                     <button href="#" class="reset_filter btn button blue"><?= __('filter.reset_filter_state'); ?></button>
@@ -61,7 +61,7 @@
 
 
 
-    <div class="info msg" id="table_result_placeholder" style="display:none;">
+    <div class="info alert" id="table_result_placeholder" style="display:none; text-align: center">
         <span class="msg2">
         </span>
     </div>

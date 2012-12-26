@@ -1,9 +1,9 @@
 <div class="appformitemfile <?= $css ?>" name="<?= $attr;?>_item" id="<?= $uid;?>">
 
-    <span class="label"><?=  $label;?></span>
+    <span class=""><?=  $label;?></span>
 
     <?php if ($table_header): ?>
-        <table class="list">
+        <table class="list table">
 
             <?= $table_header;?>
 

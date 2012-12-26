@@ -143,7 +143,7 @@ abstract class Controller_Base_Object extends Controller_Layout {
      * V opacnem pripade bude provedena 'undo' varianta akce.
      * @return <bool> 
      */
-    protected function process_action($action_name, $items, $do = TRUE, & $action_result_ref = NULL)
+    protected function process_action($action_name, $items=NULL, $do = TRUE, & $action_result_ref = NULL)
     {
         //nactu si konfiguracni soubor objektu tohoto kontroleru a vyhledam
         //pozadovanou akci - k tomu pridavam jeste konfiguraci zakladnich systemovych
@@ -202,6 +202,29 @@ abstract class Controller_Base_Object extends Controller_Layout {
 
         //do tohoto pole budou vlozeny chyby ke kterym dojde pri provadeni akci
         $action_errors = array();
+
+        // Pokud nejsou zvoleny zadne zaznamy pro pozadovanou akci
+        if (empty($item_id_list)) {
+            // A v configu je receno ze akce se neprovadi nad zvolenymi zaznamy
+            if ( ! arr::get($action_config, 'need_selection', true)) {
+                // Provedeme akci
+                try
+                {
+                    call_user_func($action_function);
+                }
+                catch (Exception $e)
+                {
+                    //k popisu chyby pridam preview zaznamu i popis chyby
+                    $action_errors['no_selection'] = array(
+                        '',
+                        $e->getMessage()
+                    );
+                }
+            } else {
+                // Akce ktera je urcena k volani nad zvolenymy zaznamy byla zavolana bez zvolenych zaznamu
+                throw new AppException('Table action called with empty selection.');
+            }
+        }
 
         foreach ($item_id_list as $id)
         {
@@ -344,7 +367,7 @@ abstract class Controller_Base_Object extends Controller_Layout {
         $items       = trim(arr::get($this->request_params, 'i'), ' ,');
         $do          = (bool)arr::get($this->request_params, 'd', TRUE);
 
-        if ( ! empty($action_name) && ! empty($items))
+        if ( ! empty($action_name))
         {
             //metoda do teto promenne vlozi sablonu, ktera predstavuje vysledek akce
             //(pres referenci)
@@ -1291,7 +1314,8 @@ abstract class Controller_Base_Object extends Controller_Layout {
 
         //po vykresleni formulare:
         //do sablony vlozim pouze ty soubory, ktere mohou byt vlozeny vicekrat
-        $html .= Web::instance()->getJSFiles(TRUE);
+
+       $html .= Web::instance()->getJSFiles(TRUE);
 
         $this->template->content = array(
                                        'html' => $html,
