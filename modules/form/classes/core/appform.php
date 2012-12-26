@@ -853,6 +853,11 @@ class Core_AppForm {
             //odstranim nepotrebnou kopii
             unset($data_copy);
         }
+
+        // Also call closure from the config - if defined
+        if ($type == self::FORM_EVENT_AFTER_SAVE and is_callable($callback = arr::get($this->_config, 'after_save_callback'))) {
+            call_user_func($callback, $this->_model);
+        }
     }
 
     /**
