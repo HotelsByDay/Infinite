@@ -25,7 +25,8 @@ abstract class Model_File extends ORM
      * )
      *
      */
-    protected $resize_variants = array();
+    protected $resize_variants = array(
+    );
 
     /**
      *
@@ -380,7 +381,10 @@ abstract class Model_File extends ORM
                 $image = Image::factory(DOCROOT.$filepath);
 
 				//pokud jsou oba rozmery nedefinovane, tak se resize obrazku neprovede
-				if ( ! empty($variant_setting[0]) && ! empty($variant_setting[1]))
+				if ( ! empty($variant_setting[0]) && ! empty($variant_setting[1])
+                    // Stejne tak pokud zadny rozmer neni treba zmensit, neprovede se resize
+                    and ($variant_setting[0] < $image->width or $variant_setting[1] < $image->height)
+                )
 				{
 					//provede vlastni resize obrazku
                 	$image->resize(arr::get($variant_setting, 0),
