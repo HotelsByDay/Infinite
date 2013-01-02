@@ -58,7 +58,7 @@ class Helper_Codebook
         // Zkusime vytahnout ciselnik z cache
         $values = self::readFromCache($codebook, 'value_list', $filter);
         // Pokud tam nebyl, nacteme z DB a ulozime do cache
-        if ($values === NULL) {
+        if ($values === FALSE) {
             $values = ORM::factory($codebook)->get_codebook($filter);
             self::saveToCache($values, $codebook, 'value_list', $filter);
         }// else { echo "readed from cache - $codebook - <br>"; print_r($values); exit; }
@@ -110,7 +110,7 @@ class Helper_Codebook
             $values = ORM::factory($codebook)->get_cb_keys();
             self::saveToCache($values, $codebook, 'key_list');
         }
-        
+
         // Vratime ID s prislusnym klicem - pokud klic existuje
         return arr::get($values, $key, NULL);
     }
@@ -170,7 +170,7 @@ class Helper_Codebook
         $cache_key = self::countCacheKey($codebook, $type);
         $data = (array)Cache::instance()->get($cache_key, array());
         $filter_key = md5(serialize($filter));
-        return arr::get($data, $filter_key);
+        return arr::get($data, $filter_key, false);
     }
 
 
