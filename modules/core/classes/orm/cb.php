@@ -52,12 +52,14 @@ class ORM_CB extends ORM {
 
     public function __set($column, $value)
     {
-        switch ($column) {
-            case 'value': {
+        if (isset($this->_object_name)) {
+            switch ($column) {
+                case 'value': {
                 if (empty($this->code)) {
-                    $this->code = $value;
+                    $this->code = $value; // Text::webalize($value);
                 }
                 break;
+                }
             }
         }
         return parent::__set($column, $value);
