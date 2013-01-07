@@ -74,7 +74,9 @@ class AppFormItem_PropertyAddress extends AppFormItem_Base
      */
     public function check()
     {
+        Kohana::$log->add(Kohana::INFO, 'check called in propertyAddress ');
         if ($this->config['required']) {
+            Kohana::$log->add(Kohana::INFO, 'item is required propertyAddress ');
             if ($this->isReadonly()) {
                 // V readonly rezimu kontrolujeme jen adresu
                 $key = 'address';
@@ -84,11 +86,14 @@ class AppFormItem_PropertyAddress extends AppFormItem_Base
                 }
             }
             else {
+
+                Kohana::$log->add(Kohana::INFO, 'check else in propertyAddress ');
                 // Jinak kontrolujeme vice prvku
-                foreach (array('address', 'value', 'postal_code') as $key) {
+                foreach (array('value') as $key) {
                     $value = arr::get($this->form_data, $key, NULL);
                     if (empty($value)) {
                         if ($key == 'value') $key = 'property_locationid';
+                        Kohana::$log->add(Kohana::INFO, 'validation_error in propertyAddress on '.$key);
                         return __($this->model->table_name().'.'.$key.'.validation.required');
                     }
                 }

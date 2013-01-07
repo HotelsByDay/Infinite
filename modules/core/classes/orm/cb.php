@@ -50,6 +50,27 @@ class ORM_CB extends ORM {
         parent::__construct($id);
     }
 
+    public function __set($column, $value)
+    {
+        switch ($column) {
+            case 'value': {
+                if (empty($this->code)) {
+                    $this->code = $value;
+                }
+                break;
+            }
+        }
+        return parent::__set($column, $value);
+    }
+
+
+    protected function getDefaults()
+    {
+        $data = parent::getDefaults();
+        $data['sequence'] = 100;
+        return $data;
+    }
+
 
     public function delete($id = NULL, array $plan = array())
     {
