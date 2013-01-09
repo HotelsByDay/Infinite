@@ -1,6 +1,15 @@
 <?php defined('SYSPATH') or die('No direct access allowed.');
 
 
+
+Route::set('generate_image_resize_variant', '<controller>/<action>/<object_name>/<object_id>/<filename>',
+    array(
+        'controller' => 'web',
+        'action'     => 'resize_variant',
+        'filename'   => '.*',
+    ));
+
+
 Route::set('tip_help', '<controller>/<action>',
         array(
             'controller' => 'help',

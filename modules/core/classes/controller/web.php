@@ -5,6 +5,57 @@
  */
 class Controller_Web extends Controller {
 
+
+    /**
+     * /default-property_image/123/photo_120x100.jpg
+     *
+     * @param $object_name
+     * @param $object_id
+     * @param $requested_filename
+     */
+    public function action_resize_variant($object_name, $object_id, $requested_filename)
+    {
+        if (substr($object_name, 0, 8) == 'default-') {
+            $object_name = substr($object_name, 8);
+        }
+
+        try {
+            // Process requested filename - it have to contain width and height of the image
+            $pattern = '/.+_([0-9]+)x([0-9]+)\.[a-zA-Z]{2,5}$/';
+            $res = preg_match($pattern, $requested_filename, $matches);
+            if ( ! $res or count($matches) != 3) {
+                throw new Exception('Requested filename ('.$requested_filename.') does not match the pattern: '.$pattern);
+            }
+            // Get width and height
+            list($_foo, $width, $height) = $matches;
+
+            // Create image instance
+            $image = ORM::factory($object_name, $object_id);
+            if ( ! $image instanceof Model_File) {
+                throw new Exception('Model for given object name ('.$object_name.') is not instance of Model_File class.');
+            }
+            if ( ! $image->loaded()) {
+                throw new Exception('Given object does not exist in database ('.$object_name.' : '.$object_id);
+            }
+
+            // Generate resize variant
+            $resized = $image->createExactResizeAndCroppedVariant($width, $height);
+            if ( ! $resized) {
+                throw new Exception('Unable to create resize_variant '.$width.'x'.$height.' ('.$object_name.' : '.$object_id);
+            }
+
+            // Get resize variant file diskname and send the file as response
+            $filename = $image->getExactVariantDiskName($width, $height);
+
+            $this->request->send_file($filename, NULL, array('inline' => true));
+
+        } catch (Exception $e) {
+            Kohana::$log->add(Kohana::ERROR, 'Unable to create resize_variant: '.$e->getMessage());
+            echo "Error while generating image resize variant. See log for more details.";
+        }
+    }
+
+
     /**
      * Zakladni povinna akce - nedela nic.
      */

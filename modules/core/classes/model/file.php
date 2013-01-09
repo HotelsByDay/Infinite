@@ -393,6 +393,59 @@ abstract class Model_File extends ORM
         }
     }
 
+
+    public function getExactVariantDiskName($width, $height)
+    {
+        return $this->getDirName().'/'.Format::imageExactResizeVariantName($this->filename, $width, $height);
+    }
+
+
+    /**
+     * Vytvori resize variantu s exaktne zadanym rozmerem a pojmenuje ji jako
+     * <filename>_<width>x<height>.<ext>
+     * @param $width
+     * @param $height
+     */
+    public function createExactResizeAndCroppedVariant($width, $height)
+    {
+        // nazev souboru na disku
+        $filepath = $this->getFileDiskName();
+        $target_filepath = $this->getExactVariantDiskName($width, $height);
+
+        //pokud uz varianta existuje, tak ji nebudu znovu vytvaret
+        if (file_exists($target_filepath))
+        {
+            return true;
+        }
+
+        //pri vytvareni resize varianty muze dojit k chybam
+        try
+        {
+            //jinak ji vytvorim
+            $image = Image::factory(DOCROOT.$filepath);
+
+            //provede vlastni resize obrazku
+            $image->resize($width, $height, Image::INVERSE);
+
+            // Crop exact rectangle from the centre of the image
+            $image->crop($width, $height);
+
+            //pred vlastni nazev souboru vlozim prefix - nazev resize varianty
+            $image->save($target_filepath);
+        }
+        catch (Exception $e)
+        {
+            //chybu zaloguju a pokracuje se ve vytvareni dalsich resize variant
+            Kohana::$log->add(Kohana::ERROR,
+                'Unable to create resize variant ":variant_name" with target path ":target_path" due to "'.$e->getMessage().'".',
+                array(':target_path' => $target_filepath));
+            return false;
+        }
+        return true;
+    }
+
+
+
     /**
      * Vytvorit cropped varianty obrazku podle $cropped_variants atributu.
      *
@@ -491,16 +544,16 @@ abstract class Model_File extends ORM
     public function delete($id = NULL, array $plan = array())
     {
         if ($id === NULL)
-	{
+	    {
             // Use the the primary key value
             $id = $this->pk();
-	}
+	    }
 
         //tato metoda provede standardni odstraneni zaznamu z DB
         $retval = parent::delete($id, $plan);
 
-	if ( ! empty($id) OR $id === '0')
-	{
+        if ( ! empty($id) OR $id === '0')
+        {
             //v pripade update_on_delete pocitam s tim ze muze uzivatel
             //zaznam z aplikace obnovit a nebudu tedy mazat soubory na disku
             if ( ! $this->update_on_delete)
@@ -528,7 +581,7 @@ abstract class Model_File extends ORM
             }
         }
 
-	return $retval;
+        return $retval;
     }
 
     /**

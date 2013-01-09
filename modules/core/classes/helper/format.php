@@ -3,6 +3,16 @@
 class Helper_Format {
 
 
+
+    static public function imageExactResizeVariantName($fname, $width, $height)
+    {
+        $filename = pathinfo($fname, PATHINFO_FILENAME);
+        $ext = pathinfo($fname, PATHINFO_EXTENSION);
+        return $filename. '_' .$width. 'x' .$height. '.' .$ext;
+    }
+
+
+
     static public function absoluteUrl($url)
     {
         return (strpos($url, 'http') !== 0) ? 'http://'.$url : $url;
