@@ -8,6 +8,14 @@ class Helper_UrlStorage
     // Local cache
     protected static $_cache = Array();
 
+    public static function deleteUriForObject(Kohana_ORM $object)
+    {
+        ORM::factory(self::$storrage_model)
+            ->where('object_name', '=', $object->object_name())
+            ->where('object_id', '=', $object->pk())
+            ->delete_all();
+    }
+
 
     public static function getUriForObject(Kohana_ORM $object)
     {
