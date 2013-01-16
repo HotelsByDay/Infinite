@@ -142,7 +142,7 @@ abstract class Model_Core_File extends ORM
 
         //nazev souboru s priponou
         $this->nicename =
-        $this->filename = arr::get($pathinfo, 'basename');
+        $this->filename = $nicename ? $nicename : arr::get($pathinfo, 'basename');
 
         return $this;
     }
