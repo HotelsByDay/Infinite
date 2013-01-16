@@ -3,7 +3,13 @@
 class Helper_Format {
 
 
-
+    /**
+     * @static
+     * @param $fname
+     * @param $width
+     * @param $height
+     * @return string
+     */
     static public function imageExactResizeVariantName($fname, $width, $height)
     {
         $filename = pathinfo($fname, PATHINFO_FILENAME);

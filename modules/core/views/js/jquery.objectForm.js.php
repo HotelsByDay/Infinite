@@ -496,6 +496,8 @@
 
                             }
 
+                            $_this.trigger('objectFormSuccess');
+
                         //pokud doslo k validacni chybe, tak uzivatele posunu
                         } else if (response['action_status'] == '<?= AppForm::ACTION_RESULT_FAILED;?>') {
 
@@ -555,7 +557,7 @@
 
         loadEditation: function( $this, item_id ) {
 
-            $_this = this;
+            var $_this = $(this);
 
             //zablokuju UI
             $_this.block();

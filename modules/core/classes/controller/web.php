@@ -56,6 +56,7 @@ class Controller_Web extends Controller {
     }
 
 
+
     /**
      * Zakladni povinna akce - nedela nic.
      */
