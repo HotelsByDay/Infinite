@@ -534,9 +534,6 @@ class ORM extends Kohana_ORM {
     }
 
 
-
-
-
     /**
      * Provadi nastaveni defaultnich hodnot modelu, ktere vraci metoda
      * $this->getDefaults().
@@ -550,7 +547,10 @@ class ORM extends Kohana_ORM {
 
         foreach ($this->getDefaults($this->getDefaultsModificators()) as $column => $value)
         {
-            $this->_changed[] = $column;
+            // (!) @todo - it does not make sense to have non-empty _changed columns list after clear call (!)
+            //             there is a problem with this in StyleHotels property.modified flag - after update triggers
+            //             (update is fired even if there is no real change)
+        //    $this->_changed[] = $column; // COMMENTED 21.1.2013
             $this->_object[$column] = $value;
         }
 

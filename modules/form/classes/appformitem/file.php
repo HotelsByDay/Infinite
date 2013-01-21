@@ -654,7 +654,7 @@ class AppFormItem_File extends AppFormItem_Base
                                 // If content is empty
                                 if (empty($content)) {
                                     // translation removal from Db will be processed after foreach
-                                    // Skip futher processing
+                                    // Skip further processing
                                     continue;
                                 }
 
@@ -680,7 +680,6 @@ class AppFormItem_File extends AppFormItem_Base
                         }
                         $del_model->delete_all();
                     }
-
                 }
 
                 //modely k odstraneni odstranim

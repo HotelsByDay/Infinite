@@ -16,6 +16,8 @@ class AppFormItem_ObjectImageSelector extends AppFormItem_Base
     // Object for which we will find images
     protected $relobject = null;
 
+    protected $image_object = NULL;
+
     /**
      * Nacteme config
      */
@@ -26,6 +28,8 @@ class AppFormItem_ObjectImageSelector extends AppFormItem_Base
 
         // Ulozime si relobject do local atributu
         $this->relobject = arr::get($this->config, 'relobject');
+
+        $this->image_object = arr::get($this->config, 'image_object', $this->relobject.'_image');
     }
 
     /**
@@ -56,7 +60,7 @@ class AppFormItem_ObjectImageSelector extends AppFormItem_Base
         $resize_variant = arr::get($this->config, 'image_resize_variant');
         $zoomed_resize_variant = arr::get($this->config, 'zoomed_resize_variant', null);
         // precteme obrazky pres relace modelu
-        $images = $this->model->{$this->relobject}->{$this->relobject.'_image'}->find_all();
+        $images = $this->model->{$this->relobject}->{$this->image_object}->find_all();
         // Projdeme obrazky a ulozime si potrebne info do pole
         $result = Array();
         foreach ($images as $image) {
