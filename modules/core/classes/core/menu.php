@@ -184,7 +184,7 @@ class Core_Menu {
     protected function wrapSubNavigation($subnavigation)
     {
         if (empty($subnavigation)) return '';
-        return '<div id="sub-nav ">
+        return '<div id="sub-nav">
         <ul class="unstyled pull-right">
                     
                             '.$subnavigation.'
