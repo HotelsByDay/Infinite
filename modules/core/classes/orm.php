@@ -1030,7 +1030,7 @@ class ORM extends Kohana_ORM {
             throw new Exception_UnauthorisedAction('Unauthorised db action "select" on object "'.$this->_object_name.'" ('.$this->permissionObjectName().').');
         }
 
-        if ( ! $deleted_too && array_key_exists('deleted', $this->_object))
+        if ( ! $deleted_too && array_key_exists('deleted', $this->_object) && $this->update_on_delete)
         {
             $this->where($this->table_name().'.deleted', 'IS', DB::Expr('NULL'));
         }
@@ -1051,12 +1051,12 @@ class ORM extends Kohana_ORM {
             throw new Exception_UnauthorisedAction('Unauthorised db action "select (all)" on object "'.$this->_object_name.'" ('.$this->permissionObjectName().').');
         }
 
-        if ( ! $deleted_too && array_key_exists('deleted', $this->_object))
+        if ( ! $deleted_too && array_key_exists('deleted', $this->_object) && $this->update_on_delete)
         {
             $this->where($this->table_name().'.deleted', 'IS', DB::Expr('NULL'));
         }
-
         return parent::find_all();
+
     }
 
     /**
@@ -1075,7 +1075,7 @@ class ORM extends Kohana_ORM {
             throw new Exception_UnauthorisedAction('Unauthorised db action "count (all)" on object "'.$this->_object_name.'".');
         }
 
-        if (array_key_exists('deleted', $this->_object))
+        if (array_key_exists('deleted', $this->_object) && $this->update_on_delete)
         {
             $this->where($this->table_name().'.deleted', 'IS', DB::Expr('NULL'));
         }

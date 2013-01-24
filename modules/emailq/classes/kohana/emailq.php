@@ -144,12 +144,12 @@ class Kohana_Emailq {
 
                     try
                     {
-			$message = Swift_Message::newInstance()
-					->setSubject($e->subject)
-					->setFrom($from)
-					->setTo($e->email)
-					->setBody($e->body)
-					->addPart($e->body, 'text/html');
+                        $message = Swift_Message::newInstance()
+                                ->setSubject($e->subject)
+                                ->setFrom($from)
+                                ->setTo($e->email)
+                                ->setBody($e->body)
+                                ->addPart($e->body, 'text/html');
 
                         //add attachment to the message
                         foreach ($e->email_queue_attachment->find_all() as $email_queue_attachment)
@@ -171,7 +171,7 @@ class Kohana_Emailq {
 			//$result = $mailer->send($message);
                         //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
                         
-			if ($result)
+			            if ($result)
                         {
                             //vymazu i vsechny zaznamy o prilohacg
                             $e->email_queue_attachment->delete_all();
