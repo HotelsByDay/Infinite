@@ -116,4 +116,7 @@ return array(
     // AppFormItemGradientColorPicker
     'appformitem_gradientcolorpicker.gradient_enabled' => 'Gradient enabled',
 
+
+    'appformitem_phone.validation.phone_global' => 'Please use a valid phone number.',
+
 );
