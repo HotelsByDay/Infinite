@@ -35,7 +35,6 @@
             <?=(string)$file;?>
             <li class="list_item">
             <?php endforeach ?>
-           <div class="clearfix cb"></div>
         </ul>
         <div class="clearfix cb"></div>
     <?php endif ?>

@@ -533,6 +533,15 @@ abstract class Model_Core_File extends ORM
 
     }
 
+    public function delete_all()
+    {
+        $files = $this->find_all();
+        foreach ($files as $file) {
+            $file->delete();
+        }
+    }
+
+
     /**
      * Metoda kontroluje hodnotu atributu $this->update_on_delete <bool> ktera
      * rozhoduje zda maji byt zaznamy fyzicky z tabulky odstraneny anebo pouze

@@ -911,6 +911,7 @@ abstract class Controller_Base_Object extends Controller_Layout {
 
             $this->template->output = array('error' => __('object.action_delete.error_occured'));
             return;
+
         }
 
         //prazdny vystup - akce provedena uspesne
