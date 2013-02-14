@@ -139,7 +139,8 @@ class AppFormItem_PropertyAddress extends AppFormItem_Base
                 }
             }
             // value zapiseme do property_locationid
-            $this->model->{$this->location_object.'id'} = arr::get($this->form_data, 'value');
+            $locationid = arr::get($this->form_data, 'value');
+            $this->model->{$this->location_object.'id'} = empty($locationid) ? NULL : $locationid;
         }
 
         return parent::AssignValue();
