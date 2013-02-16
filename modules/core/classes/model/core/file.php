@@ -425,7 +425,7 @@ abstract class Model_Core_File extends ORM
             $image = Image::factory(DOCROOT.$filepath);
 
             //provede vlastni resize obrazku
-            $image->resize($width, $height, Image::INVERSE);
+            $image->resize($width, $height, Image::AUTO);
 
             // Crop exact rectangle from the centre of the image
             $image->crop($width, $height);
