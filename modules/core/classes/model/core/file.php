@@ -424,10 +424,24 @@ abstract class Model_Core_File extends ORM
             //jinak ji vytvorim
             $image = Image::factory(DOCROOT.$filepath);
 
-            if ( ! $no_upsize or $image->width > $width or $image->height > $height) {
-                //provede vlastni resize obrazku
-                $image->resize($width, $height, Image::AUTO);
+            // Nechceme zvetsovat
+            if ($no_upsize) {
+                // Oba rozmery jsou vetsi nez pozadovane
+                if ($image->width > $width and $image->height > $height) {
+                    //provede vlastni resize obrazku - pote se jeste vyrizne stred
+                    $image->resize($width, $height, Image::INVERSE);
+                } elseif ($image->width > $width or $image->height > $height) {
+                    // Alespon jeden rozmer je vetsi nez pozadovany
+                    // - resize do pozadovaneho obdelniku se zachovanim pomeru stran
+                    // - vyrezavani jiz neprobehne, protoze nebude proc vyrezavat
+                    $image->resize($width, $height, Image::AUTO);
+                }
+
+            } else {
+                // Zvetsovani nam nevadi - zvetsime mensi rozmer na pozadovany a pak vyrizneme stred
+                $image->resize($width, $height, Image::INVERSE);
             }
+
 
             // Crop exact rectangle from the centre of the image
             $image->crop($width, $height);
