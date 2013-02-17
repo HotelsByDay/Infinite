@@ -410,7 +410,7 @@ abstract class Model_Core_File extends ORM
     {
         // nazev souboru na disku
         $filepath = $this->getFileDiskName();
-        $target_filepath = $this->getExactVariantDiskName($width, $height);
+        $target_filepath = $this->getExactVariantDiskName($width, $height, $no_upsize=true);
 
         //pokud uz varianta existuje, tak ji nebudu znovu vytvaret
         if (file_exists($target_filepath))
@@ -424,8 +424,10 @@ abstract class Model_Core_File extends ORM
             //jinak ji vytvorim
             $image = Image::factory(DOCROOT.$filepath);
 
-            //provede vlastni resize obrazku
-            $image->resize($width, $height, Image::AUTO);
+            if ( ! $no_upsize or $image->width > $width or $image->height > $height) {
+                //provede vlastni resize obrazku
+                $image->resize($width, $height, Image::AUTO);
+            }
 
             // Crop exact rectangle from the centre of the image
             $image->crop($width, $height);
