@@ -40,6 +40,9 @@ class AppFormItem_SubCategorySelect extends AppFormItem_Select
         parent::__construct($attr, $config, $model, $loaded_model, $form_data, $form);
         // Spocteme nazev mapovaci tabulky
         $this->map = FormItem::NNTableName($this->model->object_name(), $this->config['subcategory_object']);
+
+        // Klic prazdne (free) polozky muze byt v configu
+        $this->empty_key = arr::get($this->config, 'empty_key', $this->empty_key);
     }
 
 
