@@ -509,7 +509,7 @@ class Core_Web
             return AppConfig::instance()->get('system_title', 'application');
         }
         $site_name = AppConfig::instance()->get('system_name', 'application');
-        return $this->page_title.' - '.$site_name;
+        return $this->page_title.' | '.$site_name;
     }
 
 }
