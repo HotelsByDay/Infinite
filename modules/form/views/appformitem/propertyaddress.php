@@ -39,6 +39,7 @@
             <div class="item-element">
             <label for="<?= $uid ?>-longitude"><?= __('appformitempropertyaddress.longitude') ?></label>
             <input type="text" name="<?= $attr ?>[longitude]" value="<?= $value['longitude'] ?>" readonly="readonly" />
+            <a href="javascript: ;" class="btn load_gps">Reload GPS</a>
             <div class="clear"></div>
             </div>
 

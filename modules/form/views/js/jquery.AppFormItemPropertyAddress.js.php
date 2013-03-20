@@ -145,6 +145,8 @@
 
                 // Po zmene adresy uzivatelem dojde ke zjisteni novych gps souradnic
                 $("input[name$='[value]'], input[name$='[postal_code]'], input[name$='[address]']", $this).on('change', search_gps);
+                $(".load_gps", $this).on('click', search_gps);
+
 
 
 
