@@ -53,6 +53,7 @@ class AppFormItem_PropertyAddress extends AppFormItem_Base
             // Predame nastaveni zoomu
             'location_zoom' => $this->config['location_zoom'],
             'address_zoom' => $this->config['address_zoom'],
+            'gps_ok'       => (int)$this->model->gps_ok,
         );
 
 
@@ -117,6 +118,11 @@ class AppFormItem_PropertyAddress extends AppFormItem_Base
             $this->form_data['address'] = $this->model->address;
             $this->form_data['latitude']  = $this->model->latitude;
             $this->form_data['longitude'] = $this->model->longitude;
+            $this->form_data['google_latitude'] = $this->model->google_latitude;
+            $this->form_data['google_longitude'] = $this->model->google_longitude;
+            $this->form_data['arn_latitude'] = $this->model->arn_latitude;
+            $this->form_data['arn_longitude'] = $this->model->arn_longitude;
+            $this->form_data['gps_ok'] = $this->model->gps_ok;
             // $this->form_data['city'] = $this->model->city;
             $this->form_data['postal_code'] = $this->model->postal_code;
 
@@ -133,7 +139,7 @@ class AppFormItem_PropertyAddress extends AppFormItem_Base
             foreach ($this->form_data as $attr => $value)
             {
                 //do modelu chci vlozit pouze nektere polozky
-                if (in_array($attr, array('address', 'latitude', 'longitude', 'postal_code')))
+                if (in_array($attr, array('address', 'latitude', 'longitude', 'postal_code', 'gps_ok')))
                 {
                     $this->model->{$attr} = trim($value);
                 }
