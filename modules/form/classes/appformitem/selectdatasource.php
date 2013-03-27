@@ -74,6 +74,9 @@ class AppFormItem_SelectDataSource extends AppFormItem_Base
 
                 return $data;
             }
+            else if (($data = arr::get($this->config, 'options', false))) {
+                return $data;
+            }
         }
 
         // Jinak vratime prazdne pole - hodnoty si pravdepodobne doplni odvozena trida
