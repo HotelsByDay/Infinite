@@ -135,9 +135,7 @@ class AppFormItem_AdvancedItemList extends AppFormItem_Base
                 $this->itemlist_form[$id] = $this->loadRelModelForm($model, $item_data);
                 $this->itemlist_model[$id] = $model;
             }
-
         }
-
     }
 
 

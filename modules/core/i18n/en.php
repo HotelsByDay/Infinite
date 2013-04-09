@@ -7,6 +7,8 @@ return array(
     'invalid_login_or_password' => 'Invalid username or password.',
     'footer_copyright' => 'Footer copyright...',
 
+    'afi_url_name.uri_not_available' => 'Given URL name is already used for another object.',
+
     'error.404.title' => 'The requested page was not found.',
     'error.404.message' => '',
 

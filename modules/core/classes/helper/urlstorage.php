@@ -5,13 +5,21 @@ class Helper_UrlStorage
 
     protected static $storrage_model = 'url_name';
 
+    protected static $object_name_column = 'object_name';
+
+    protected static $object_id_column = 'object_id';
+
+    protected static $url_name_column = 'url_name';
+
+    protected static $latest_column = 'latest';
+
     // Local cache
     protected static $_cache = Array();
 
 
     public static function getUriForObject(Kohana_ORM $object)
     {
-        return self::getUri($object->object_name(), $object->pk());
+        return static::getUri($object->object_name(), $object->pk());
     }
 
     /**
@@ -23,18 +31,18 @@ class Helper_UrlStorage
      */
     public static function getObjectArrayForUri($uri)
     {
-        if (isset(self::$_cache[$uri])) {
-            return self::$_cache[$uri];
+        if (isset(static::$_cache[$uri])) {
+            return static::$_cache[$uri];
         }
 
-        $url_name = ORM::factory(self::$storrage_model, array('url_name' => $uri));
+        $url_name = ORM::factory(static::$storrage_model, array('url_name' => $uri));
         if ($url_name->loaded()) {
             $data = array(
                 'object_name' => $url_name->object_name,
-                'object_id' => $url_name->object_id,
-                'latest'    => $url_name->latest,
+                'object_id'   => $url_name->object_id,
+                'latest'      => $url_name->latest,
             );
-            return self::$_cache[$uri] = $data;
+            return static::$_cache[$uri] = $data;
         }
 
         // Object for uri not found
@@ -44,7 +52,7 @@ class Helper_UrlStorage
 
     public static function isUriLatest($uri)
     {
-        return (bool)arr::get(self::getObjectArrayForUri($uri), 'latest', false);
+        return (bool)arr::get(static::getObjectArrayForUri($uri), 'latest', false);
     }
 
     /**
@@ -55,7 +63,7 @@ class Helper_UrlStorage
      */
     public static function getObjectNameForUri($uri)
     {
-        return arr::get(self::getObjectArrayForUri($uri), 'object_name', false);
+        return arr::get(static::getObjectArrayForUri($uri), 'object_name', false);
     }
 
     /**
@@ -66,14 +74,14 @@ class Helper_UrlStorage
      */
     public static function getObjectIdForUri($uri)
     {
-        return arr::get(self::getObjectArrayForUri($uri), 'object_id', false);
+        return arr::get(static::getObjectArrayForUri($uri), 'object_id', false);
     }
 
     public static function getLatestUri($uri)
     {
-        $uri_data = self::getObjectArrayForUri($uri);
+        $uri_data = static::getObjectArrayForUri($uri);
         if ( ! arr::get($uri_data, 'latest', false)) {
-            return self::getUri($uri_data['object_name'], $uri_data['object_id']);
+            return static::getUri($uri_data['object_name'], $uri_data['object_id']);
         }
     }
 
@@ -92,7 +100,29 @@ class Helper_UrlStorage
         }
         $object_name = $model->object_name();
         $object_id = $model->pk();
-        self::setUri($object_name, $object_id, $title, $make_unique);
+        static::setUri($object_name, $object_id, $title, $make_unique);
+    }
+
+    /**
+     * Returns TRUE if given URL is available - if object is given then url is available
+     * if it's not used OR it's used for given object.
+     * @param $uri
+     * @param null $object_name
+     * @param null $object_id
+     * @return bool
+     */
+    public static function isUriAvailable($uri, $object_name=NULL, $object_id=NULL)
+    {
+        $url_name = ORM::factory(static::$storrage_model)
+            ->where(static::$url_name_column, '=', $uri);
+        if ( ! empty($object_name) and ! empty($object_id)) {
+            $url_name->and_where_open()
+                ->where(static::$object_name_column, '!=', $object_name)
+                ->or_where(static::$object_id_column, '!=', $object_id)
+                ->and_where_close();
+        }
+        $url_name->find();
+        return ! $url_name->loaded();
     }
 
 
@@ -118,21 +148,21 @@ class Helper_UrlStorage
             // Try to store url_name
             try {
                 // We try to find the record we are about to create
-                $url_name = ORM::factory(self::$storrage_model)
-                    ->where('object_name', '=', $object_name)
-                    ->where('object_id', '=', $object_id)
-                    ->where('url_name', '=', $final_title)
+                $url_name = ORM::factory(static::$storrage_model)
+                    ->where(static::$object_name_column, '=', $object_name)
+                    ->where(static::$object_id_column, '=', $object_id)
+                    ->where(static::$url_name_column, '=', $final_title)
                     ->find();
                 ;
-                $url_name->url_name = $final_title;
-                $url_name->object_name = $object_name;
-                $url_name->object_id = $object_id;
+                $url_name->{static::$url_name_column} = $final_title;
+                $url_name->{static::$object_name_column} = $object_name;
+                $url_name->{static::$object_id_column} = $object_id;
                 // Make sure currently stored url_name will be the latest version
-                $url_name->latest = 1;
+                $url_name->{static::$latest_column} = 1;
                 $url_name->save();
 
                 // Other sotered url names for current object are not the latest
-                DB::query(Database::UPDATE, "UPDATE ".self::$storrage_model." SET latest=0 WHERE object_id=:object_id AND object_name=:object_name AND url_name <> :url_name")
+                DB::query(Database::UPDATE, "UPDATE ".static::$storrage_model." SET ".static::$latest_column."=0 WHERE ".static::$object_id_column."=:object_id AND ".static::$object_name_column."=:object_name AND ".static::$url_name_column." <> :url_name")
                     ->parameters(array(
                     ':object_id' => $object_id,
                     ':object_name' => $object_name,
@@ -161,10 +191,10 @@ class Helper_UrlStorage
 
     public static function getUri($object_name, $object_id)
     {
-        $uri = ORM::factory(self::$storrage_model)
-            ->where('object_name', '=', $object_name)
-            ->where('object_id', '=', $object_id)
-            ->where('latest', '=', 1)
+        $uri = ORM::factory(static::$storrage_model)
+            ->where(static::$object_name_column, '=', $object_name)
+            ->where(static::$object_id_column, '=', $object_id)
+            ->where(static::$latest_column, '=', 1)
             ->find();
         return $uri->url_name;
     }
