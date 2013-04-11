@@ -6,10 +6,25 @@
 
     <label for="<?= $attr ?>"><?= $label ?></label>
 
-    <?php if (isset($field_prefix)): ?>
-        <span class="field_prefix"><?= $field_prefix ?></span>
+    <?php if (isset($field_prefix) or isset($filed_suffix)): ?>
+        <div class="<?php if (isset($field_prefix)): ?>input-prepend<?php endif; ?> <?php if (isset($field_suffix)): ?>input-append<?php endif; ?>">
     <?php endif; ?>
-    <input type="text" <?php if (isset($placeholder) and ! empty($placeholder)) echo "placeholder=\"$placeholder\""; ?> <?php if ($html_autocomplete) echo 'autocomplete="'.$html_autocomplete.'"';?> id="<?= $attr ?>" name="<?= $attr ?>" value="<?= htmlspecialchars($value) ?>" <?= ! $editable ? 'readonly="readonly"' : '';?> <?= isset($min_length) ? "minlength=\"$min_length\"" : '' ?> <?= isset($max_length) ? "maxlength=\"$max_length\"" : '' ?> />
+
+        <?php if (isset($field_prefix)): ?>
+            <span class="add-on"><?= $field_prefix ?></span>
+        <?php endif; ?>
+
+        <input class="<?= isset($input_class) ? $input_class : '' ?>" type="text" <?php if (isset($placeholder) and ! empty($placeholder)) echo "placeholder=\"$placeholder\""; ?> <?php if ($html_autocomplete) echo 'autocomplete="'.$html_autocomplete.'"';?> id="<?= $attr ?>" name="<?= $attr ?>" value="<?= htmlspecialchars($value) ?>" <?= ! $editable ? 'readonly="readonly"' : '';?> <?= isset($min_length) ? "minlength=\"$min_length\"" : '' ?> <?= isset($max_length) ? "maxlength=\"$max_length\"" : '' ?> />
+
+        <?php if (isset($field_suffix)): ?>
+            <span class="add-on"><?= $field_suffix ?></span>
+        <?php endif; ?>
+
+    <?php if (isset($field_prefix) or isset($filed_suffix)): ?>
+        </div>
+    <?php endif; ?>
+
+
     <?php if (isset($hint) && !empty($hint)): ?>
         <span class="hint"><?= $hint; ?></span>
     <?php endif ?>
