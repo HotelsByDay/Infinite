@@ -229,6 +229,8 @@
                                 $('input[name="'+attr+'[value]"]').val('');
                             }
                         }
+
+                        $value.trigger('change');
                     },
                     open: function(){
                         $(this).unbind('focus', onFocusHandler);
@@ -239,6 +241,23 @@
                         //$(this).bind('change', onChangeHandler);
                     }
                 }).focus(onFocusHandler);//.change(onChangeHandler);
+
+
+
+                // Addresses jQuery 1.8.16 bug 7555: http://bugs.jqueryui.com/ticket/7555
+                $('.ui-autocomplete-input', $this).each(function (idx, elem) {
+                    var autocomplete = $(elem).data('autocomplete');
+                    if ('undefined' !== typeof autocomplete) {
+                        var blur = autocomplete.menu.options.blur;
+                        autocomplete.menu.options.blur = function (evt, ui) {
+                            if (autocomplete.pending === 0) {
+                                blur.apply(this,  arguments);
+                            }
+                        };
+                    }
+                });
+
+
 
 
                 //pokud je v nastaveni povoleno pridani nove relacni polozky
