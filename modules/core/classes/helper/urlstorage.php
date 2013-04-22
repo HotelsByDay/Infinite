@@ -126,7 +126,7 @@ class Helper_UrlStorage
     }
 
 
-    public static function setUri($object_name, $object_id, $title, $make_unique=true)
+    public static function setUri($object_name, $object_id, $title, $make_unique=true, $params=array())
     {
         if (empty($title)) {
             throw new AppException('Trying to set empty uri for object '.$object_name.':'.$object_id.'.');
@@ -154,11 +154,14 @@ class Helper_UrlStorage
                     ->where(static::$url_name_column, '=', $final_title)
                     ->find();
                 ;
+                // Load additional params
+                $url_name->values($params);
                 $url_name->{static::$url_name_column} = $final_title;
                 $url_name->{static::$object_name_column} = $object_name;
                 $url_name->{static::$object_id_column} = $object_id;
                 // Make sure currently stored url_name will be the latest version
                 $url_name->{static::$latest_column} = 1;
+
                 $url_name->save();
 
                 // Other sotered url names for current object are not the latest
@@ -183,6 +186,8 @@ class Helper_UrlStorage
                         // re-throw the exception
                         throw $e;
                     }
+                } else {
+                    throw $e;
                 }
             }
         }

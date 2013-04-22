@@ -403,7 +403,8 @@ class AppFormItem_File extends AppFormItem_Base
 
         $file_models = ORM::factory($this->model_name)
             ->where($this->getForeignKeyColumn(), '=', $this->getForeignKeyValue())
-            ->where('deleted', 'IS', DB::Expr('NULL'))->find_all();
+            // ->where('deleted', 'IS', DB::Expr('NULL')) // WTF - this is implemented in ORM layer
+            ->find_all();
 
         foreach ($file_models as $model)
         {

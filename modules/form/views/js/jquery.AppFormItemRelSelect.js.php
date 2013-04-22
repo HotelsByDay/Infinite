@@ -7,7 +7,6 @@
      */
     var plugin_name_space = 'AppFormItemRelSelect';
 
-   
 
     /**
      * Metody pro tento plugin.
@@ -102,35 +101,6 @@
                         $(this).autocomplete('search', '');
                     }
                 };
-//                var onChangeHandler = function(){
-//
-//                    return;
-//
-//                    $name.val('');
-//                    $value.val('');
-//console.log('onChangeHandler');
-//                        //pokud je definovany dceriny prvek - tak jeho hodnotu vymazu
-//                        //pri zmene hodnoty tohoto prvku
-//                        if (typeof default_params.filter_child_attr !== 'undefined') {
-//                            for (k in default_params.filter_child_attr) {
-//                                var attr_name = default_params.filter_child_attr[k];
-//
-//                                //vezmu si hodnotu atributu 'name' tohoto prvku
-//                                var name = $name.attr('name');
-//                                //vlastni nazev atributu replacnu za ten cilovy - ten podle ktereho se ma filtrovat
-//                                //tento zpusob je kvuli pouziti na appformitemadvanceditemlist, protoze
-//                                //potrebuju sahat na formular modelu nad kterym je tato instance prvku
-//                                //a ne na ostatni formulare - v name atributu je i ID daneho formulare/modelu
-//                                name = name.replace(default_params['attr'], attr_name)
-//
-//                                var input_name = name;
-//                                var input_value = name.replace('[name]', '[value]');
-//
-//                                $('input[name="'+input_name+'"]').val('');
-//                                $('input[name="'+input_value+'"]').val('');
-//                            }
-//                        }
-//                };
                 
                 //defaultni parametry, ktere se budou posilat s kazdym pozadavkem
                 var pom_data = {
@@ -188,7 +158,7 @@
                                     return item;
                                 }));
                             }
-			});
+                        });
                     },
                     autoFocus: true,
                     minLength: 0,

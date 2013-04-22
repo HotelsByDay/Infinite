@@ -15,6 +15,19 @@ class Helper_Appurl
     //Pokud je pouzitova kodovani parametru pozadavku tak zakodovana data jsou na tomto klici
     const ENCODED_PACK_KEY = 'ed';
 
+
+    /**
+     * @param $object_name
+     * @param $object_id
+     * @param $config_key
+     * @return string
+     */
+    static public function polymorphic_cb_data($object_name, $object_id, $config_key)
+    {
+        return url::site("polymorphicnnselect/cb_data/$object_name/$object_id/$config_key");
+    }
+
+
     /**
      * Vraci odkaz na prihlasovaci stranku.
      * @return <string>
