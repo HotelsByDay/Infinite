@@ -11,7 +11,7 @@
 <?php endif ?>
 
 <label for="<?= $attr ?>"><?= $label ?></label>
-<textarea id="<?= $attr ?>"<?= $name ?><?= $disabled ?><?= isset($min_length) ? " minlength=\"$min_length\"" : '' ?> <?= isset($max_length) ? " maxlength=\"$max_length\"" : '' ?>><?= htmlspecialchars($value) ?></textarea>
+<textarea class="input-block-level" id="<?= $attr ?>"<?= $name ?><?= $disabled ?><?= isset($min_length) ? " minlength=\"$min_length\"" : '' ?> <?= isset($max_length) ? " maxlength=\"$max_length\"" : '' ?>><?= htmlspecialchars($value) ?></textarea>
 
 <?php if (isset($hint) && !empty($hint)): ?>
     <span class="hint"><?= $hint; ?></span>
