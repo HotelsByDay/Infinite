@@ -91,6 +91,15 @@ class AppFormItem_Select extends AppFormItem_SelectDataSource
         //configuration may define translation for specific values
         $translated_values = $this->translateValues($values);
 
+
+        // If field_prefix is defined
+        if (isset($this->config['field_prefix'])) {
+            $view->field_prefix = $this->config['field_prefix'];
+        }
+        if (isset($this->config['field_suffix'])) {
+            $view->field_suffix = $this->config['field_suffix'];
+        }
+
         $view->values = $translated_values;
         return $view;
     }

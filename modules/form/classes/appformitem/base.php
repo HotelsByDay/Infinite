@@ -27,6 +27,9 @@ class AppFormItem_Base
     //nazev sablony pro GUI prvku
     protected $view_name = 'null';
 
+    //validation error template view name
+    protected $validation_error_view_name = 'appformitem/base/validation_error';
+
     //nazev atributu nad kterym stoji tento formularovy prvek
     protected $attr = NULL;
 
@@ -323,6 +326,25 @@ class AppFormItem_Base
     }
 
     /**
+     * @param $error_messages - messages from the AppForm class
+     */
+    public function RenderValidationErrors($error_messages, $custom_render=false)
+    {
+        $error_message = $this->getErrorMessage($error_messages);
+        if (empty($error_message)) {
+            return NULL; // no error message needed
+        }
+        // We are rendering validation error from the outside of the form item (in form template)
+        if ($custom_render) {
+            // Return validation error with it's layout
+            return View::factory($this->validation_error_view_name)->set('error_message', $error_message);
+        } else {
+            // Return plaintext validation error - to allow customizations of the error message in item template
+            return $error_message;
+        }
+    }
+
+    /**
      * Generuje HTML kod formularoveho prvku
      *
      * @param <const> $render_style Definuje zpusob zobrazeni formularoveho prvku.
@@ -404,8 +426,14 @@ class AppFormItem_Base
         // pres #uid)
         $view->uid = $this->uid;
 
-        // predam text validacni chyby
-        $view->error_message = $this->getErrorMessage($error_messages);
+        // if custom validation errors are not enabled
+        if ( ! arr::get($this->config, 'custom_validation_errors', false)) {
+            // then pull validation error message directly to the item template
+            $view->error_message = $this->RenderValidationErrors($error_messages);
+        } else {
+            // empty error message otherwise (this line is here for compatibility reasons - items are expecting 'error_message' variable to be set)
+            $view->error_message = '';
+        }
 
         //is the field supposed to be editable (the different between RENDER_STYLE_READONLY is
         //that 'not editable' item is sending its value to the server, while RENDER_STYLE_READONLY is only displaying

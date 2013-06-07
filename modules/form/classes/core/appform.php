@@ -1174,6 +1174,24 @@ class Core_AppForm {
     }
 
     /**
+     * Generuje HTML reprezentaci validacni chyby formularoveho prvku na atributu $attr.
+     *
+     * @param <string> $attr Nazev atributu
+     * @return <type>
+     */
+    public function RenderItemValidationErrors($attr)
+    {
+        if ( ! isset($this->_form_items[$attr]))
+        {
+            //neexistujici prvek nebude vykreslen, provedu zapis do logu
+            $this->_log('Unable to render AppFormItem\'s validation error for non-existing attr "'.$attr.'".');
+            return NULL;
+        }
+        //prvek existuje - bude vykreslena jeho pripadna validani chyba
+        return $this->_form_items[$attr]->RenderValidationErrors($this->_error_messages, true);
+    }
+
+    /**
      * Metoda generuje kompletni formular.
      *
      * Vlastni sablona formulare, ktera definuje rozmisteni prvku je definovana
