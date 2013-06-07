@@ -1118,6 +1118,9 @@ abstract class Controller_Base_Object extends Controller_Layout {
 
         //vlozim do sablony aby doslo k nacteni prislusnych souboru do stranky
         $this->template->content->script_include_tag = $script_include_tag;
+
+        // Posleme spravne hlavicky
+        $this->request->headers['Content-Type'] = 'application/json';
     }
 
     /**

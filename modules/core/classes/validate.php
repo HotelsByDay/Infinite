@@ -2,6 +2,16 @@
 
 class Validate extends Kohana_Validate {
 
+
+    public static function min_int_value($val, $min)
+    {
+        return ((int)$val >= $min);
+    }
+    public static function max_int_value($val, $max)
+    {
+        return ((int)$val <= $max);
+    }
+
     /**
      * Tato validancni metoda je temer stejna jako metoda 'numeric', ale
      * akcetuje pouze positivni cisla.

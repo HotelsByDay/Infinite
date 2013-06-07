@@ -978,12 +978,14 @@ class Core_AppForm {
         }
 
         //tlacitko 'zavrit'
+        // @todo - myslim ze tohle by melo byt jen ve formulari ktery je v dialogovem okne
+        /*
         $buttons['l']['close'] = array('close',
                                          __('form_action_button.close_label'),
                                          array(
                                             'class'     => self::FORM_BUTTON_CLOSE_CSS_CLASS.' button no-color btn',
                                          ));
-
+        */
         //vyslednou definici tlacitek vratim
         return $buttons;
     }

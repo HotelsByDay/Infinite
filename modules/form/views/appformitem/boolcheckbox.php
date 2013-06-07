@@ -5,8 +5,9 @@
   <?php endif ?>
 
     <input type="hidden" name="<?= $attr ?>" value="0" />
-    <label class="checkbox" for="<?= $attr ?>"><?= $label ?>
-       <input class="checkbox" type="checkbox" id="<?= $attr ?>" name="<?= $attr ?>" value="1" <?php if ($value) echo 'checked="checked"'; ?> />
+    <label class="checkbox" for="<?= $attr ?>">
+        <input class="checkbox" type="checkbox" id="<?= $attr ?>" name="<?= $attr ?>" value="1" <?php if ($value) echo 'checked="checked"'; ?> />
+        <?= $label ?>
     </label>
 
   <?php if (isset($hint) && !empty($hint)): ?>
