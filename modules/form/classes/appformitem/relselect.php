@@ -31,6 +31,7 @@ class AppFormItem_RelSelect extends AppFormItem_Base
         //max pocet vysledku, ktery se ma nacitat do autocompletu
         //(fallback hodnota je 15)
         $init_js->page_size = arr::get($this->config, 'page_size', 10);
+        $init_js->min_length = arr::get($this->config, 'min_length', 0);
 
         //pokud ma prvek umoznit vytvoreni noveho relacniho zaznamu, tak
         //jQuery pluginu predam URL pro nacteni editacniho formulare

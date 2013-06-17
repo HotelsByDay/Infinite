@@ -4,6 +4,7 @@ $(document).ready(function(){
         attr: "<?= $attr;?>",
         preview: "<?= $preview ?>",
         _ps: <?= $page_size;?>,
+        min_length: <?= $min_length;?>,
         data_url: "<?= $data_url?>"<?php if (isset($add_new_url)):?>,
         add_new_url: "<?= $add_new_url; ?>",
         dialog: <?= json_encode($dialog_config);?>
