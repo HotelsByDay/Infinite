@@ -115,7 +115,7 @@ class Upload_FileUploader
             //pokud se nejedna o jeden z povolenych typu tak vyhodim vyjimku
             if ( ! empty($this->allowed_mimetypes) && ! in_array($file_mimetype, $this->allowed_mimetypes))
             {
-                throw new Upload_Exception_UserError(__('upload.error.not_allowed_file_type'));
+                throw new Upload_Exception_UserError(__('upload.error.not_allowed_file_type', array(':mime' => $file_mimetype)));
             }
 
             //kontrola na povolene rozmery obrazku
