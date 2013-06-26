@@ -6,6 +6,15 @@ class Helper_DateFormat {
     // User timezone string
     protected static $user_timezone = null;
 
+
+    /**
+     * @return string current datetime in MySQL format
+     */
+    public static function now()
+    {
+        return Date('Y-m-d H:i:s');
+    }
+
     /**
      * Set current user timezone - should be called in bootstrap.php
      * @static
