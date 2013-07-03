@@ -1695,8 +1695,6 @@ class ORM extends Kohana_ORM {
         //ze nedoslo ke zmene zadneho atributu, tak by nebyl proveden DB insert
         $this->_changed = array_keys($this->_object);
 
-        $this->_db = Database::instance('live');
-
         //vlastni ulozeni nove kopie do DB
         $this->save();
 

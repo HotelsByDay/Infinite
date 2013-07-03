@@ -3,7 +3,7 @@
   <?php if (!empty($error_message)): ?>
     <span class="validation_error alert alert-error"><?= $error_message; ?></span>
   <?php endif ?>
-    <label for="<?= $attr ?>">
+    <label for="<?= $attr ?>" class="checkbox">
     <input type="checkbox" disabled="disabled" id="<?= $attr ?>" name="" value="1" <?php if ($value) echo 'checked="checked"'; ?> />
     <?php if ($value): ?>
         <input type="hidden" name="<?= $attr ?>" value="1" />

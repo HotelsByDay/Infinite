@@ -1165,7 +1165,8 @@ class Core_AppForm {
 
         //pokud je v konfiguraci formulare explicitne definovano ze ma byt vygenerovan
         //jako readonly, tak vsechny prvky budou jako readonly
-        if ($this->is_readonly(/*$attr*/))
+        // - attr param is ignored as a default but is_readonly method can be overridden in child classes
+        if ($this->is_readonly($attr))
         {
             $style = AppForm::RENDER_STYLE_READONLY;
         }
