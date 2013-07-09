@@ -4,6 +4,7 @@ $uid = 'o'.mt_rand();
 ?>
 
 <div id="<?= $uid;?>" <?= isset($css_class) ? 'class="'.$css_class.'"' : '';?> >
+
 </div>
 
 <script type="text/javascript">
