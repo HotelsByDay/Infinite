@@ -9,14 +9,29 @@ class AppFormItem_Date extends AppFormItem_String
     protected $view_name = 'appformitem/date';
     
     protected $check = TRUE;
-    
+
+    protected $config = array(
+        'datepicker_config' => array(),
+    );
+
     /**
      * Inicializace objektu - volano v konstruktoru AppFormItem_Base
      */
     public function init()
     {
+        $default_config = array(
+            'dateFormat' => DateFormat::getDatePickerDateFormat(),
+            'showWeek' => true,
+            'changeMonth' => true,
+            'changeYear' => true,
+            'showAnim' => "fadeIn",
+        );
+
+        // Merge final datepicker config
+        $config = array_merge($default_config, $this->config['datepicker_config']);
+        // Init item
         $init_js = View::factory('js/jquery.AppFormItemDate-init.js');
-        $init_js->format = DateFormat::getDatePickerDateFormat();
+        $init_js->config = $config;
         parent::addInitJS($init_js);
         return parent::init();
     }

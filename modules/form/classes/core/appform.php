@@ -1192,6 +1192,16 @@ class Core_AppForm {
         return $this->_form_items[$attr]->RenderValidationErrors($this->_error_messages, true);
     }
 
+
+    /**
+     * @return string HTML FORM tag attributes from a config as a string
+     */
+    public function getFormAttributes()
+    {
+        $attributes = (array)arr::get($this->_config, 'attributes');
+        return html::attributes($attributes);
+    }
+
     /**
      * Metoda generuje kompletni formular.
      *
@@ -1220,6 +1230,8 @@ class Core_AppForm {
 
         //do container sablony vlozim vlastni sablonu formulare
         $container_view->form_view = $form_view;
+
+        $container_view->form_attributes = $this->getFormAttributes();
 
         //sablone predam referenci na tento formular
         $container_view->form = $this;

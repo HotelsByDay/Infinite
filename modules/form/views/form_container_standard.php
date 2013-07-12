@@ -9,7 +9,7 @@
 <? endif ?>
 
 <form method="POST" action="<?= $form_action_link;?>" <?= isset($banner) ? 'style="display:none;"' : ''; ?>
-      css="<?= $css;?>">
+      css="<?= $css;?>" <?= isset($form_attributes) ? $form_attributes : '' ?>>
 
     <?= $form_view;?>
 
