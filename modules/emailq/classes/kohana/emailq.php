@@ -30,8 +30,8 @@ class Kohana_Emailq {
 	public function Kohana_Emailq()
 	{
 		require_once MODPATH . 'emailq/swiftmailer/swift_required.php';
+
 		$this->config = Kohana::config('emailq');
-		//print_r($this->config);
 	}
 
 	/**
@@ -43,26 +43,39 @@ class Kohana_Emailq {
 	 * @param  $body
 	 * @return boolean - returns wether the message was added to the database.
 	 */
-	public function add_email($email, $from, $subject, $body, $attachments = array())
+	public function add_email($to, $cc, $bcc, $from, $subject, $body, $attachments = array())
 	{
 		$queue = ORM::factory('emailqueue');
-		$queue->email = $email;
-		$queue->subject = $subject;
-		$queue->body = $body;
+		$queue->to      = implode(',', (array)$to);
+        $queue->cc      = implode(',', (array)$cc);
+        $queue->bcc      = implode(',', (array)$bcc);
+		$queue->subject = (string)$subject;
+        if (is_array($body) and count($body) == 2) {
+            $queue->body = arr::get($body, 0);
+            $queue->plain_body = arr::get($body, 1);
+        } else {
+            $queue->body    = (string)$body;
+        }
 
                 if (is_array($from))
                 {
-                    $queue->from_email = arr::get($from, '0');
-                    $queue->from_name  = arr::get($from, '1');
+                    $queue->from_email = (string)arr::get($from, 0);
+                    $queue->from_name  = (string)arr::get($from, 1);
+                }
+                elseif ( ! empty($from))
+                {
+                    $queue->from_email = (string)$from;
+                    $queue->from_name = '';
                 }
                 else
                 {
-                    $queue->from_email = $from;
-                    $queue->from_name = '';
+                    // Use default values from config
+                    $queue->from_email = AppConfig::instance()->get('from_email', 'application');
+                    $queue->from_name = AppConfig::instance()->get('from_name', 'application');
                 }
 
 
-		if ( ! $queue->save())
+		        if ( ! $queue->save())
                 {
                     return FALSE;
                 }
@@ -96,24 +109,20 @@ class Kohana_Emailq {
 	{
 		$config = $this->config->mail_options;
 
-                if ($queueid)
-                {
-                    $emails = ORM::factory('emailqueue')
+        if ($queueid)
+        {
+            $emails = ORM::factory('emailqueue')
                                     ->where('email_queueid', '=', $queueid)
                                     ->find_all();
-                }
-                else
-                {
-                    $emails = ORM::factory('emailqueue')
+        }
+        else
+        {
+            $emails = ORM::factory('emailqueue')
                                     ->limit($amount)
                                     ->find_all();
-                }
+        }
 
-		$transport = Swift_SmtpTransport::newInstance(
-				$this->config->mail_options['host'],
-				$this->config->mail_options['port'],
-                                arr::get($this->config->mail_options, 'encryption'))->setUsername($this->config->mail_options['username'])
-                                                                                    ->setPassword($this->config->mail_options['password']);
+        $transport = Swift_SendmailTransport::newInstance();
 
 		$mailer = Swift_Mailer::newInstance($transport);
                 
@@ -144,12 +153,25 @@ class Kohana_Emailq {
 
                     try
                     {
+                        if (isset($e->plain_body)) {
+                            $plaintext_body = $e->plain_body;
+                        }
 			$message = Swift_Message::newInstance()
 					->setSubject($e->subject)
 					->setFrom($from)
-					->setTo($e->email)
-					->setBody($e->body)
+					->setTo($e->to)
+					->setBody($plaintext_body)
 					->addPart($e->body, 'text/html');
+
+                        // If cc is set - set it to message
+                        if ( ! empty($e->cc)) {
+                            $message->setCc($e->cc);
+                        }
+
+                        // If bcc is set - set it to message
+                        if ( ! empty($e->bcc)) {
+                            $message->setBcc($e->bcc);
+                        }
 
                         //add attachment to the message
                         foreach ($e->email_queue_attachment->find_all() as $email_queue_attachment)
@@ -168,7 +190,7 @@ class Kohana_Emailq {
                         }
 
                         //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-			//$result = $mailer->send($message);
+			$result = $mailer->send($message);
                         //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
                         
 			if ($result)
