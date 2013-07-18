@@ -43,13 +43,14 @@ class Kohana_Emailq {
 	 * @param  $body
 	 * @return boolean - returns wether the message was added to the database.
 	 */
-	public function add_email($to, $cc, $bcc, $from, $subject, $body, $attachments = array())
+	public function add_email($to, $cc, $bcc, $from, $subject, $body, $attachments = array(), $direct_attachements = NULL)
 	{
 		$queue = ORM::factory('emailqueue');
 		$queue->to      = implode(',', (array)$to);
         $queue->cc      = implode(',', (array)$cc);
         $queue->bcc      = implode(',', (array)$bcc);
 		$queue->subject = (string)$subject;
+        $queue->attachements = $direct_attachements;
         if (is_array($body) and count($body) == 2) {
             $queue->body = arr::get($body, 0);
             $queue->plain_body = arr::get($body, 1);
@@ -156,12 +157,12 @@ class Kohana_Emailq {
                         if (isset($e->plain_body)) {
                             $plaintext_body = $e->plain_body;
                         }
-			$message = Swift_Message::newInstance()
-					->setSubject($e->subject)
-					->setFrom($from)
-					->setTo($e->to)
-					->setBody($plaintext_body)
-					->addPart($e->body, 'text/html');
+                        $message = Swift_Message::newInstance()
+                                ->setSubject($e->subject)
+                                ->setFrom($from)
+                                ->setTo($e->to)
+                                ->setBody($plaintext_body)
+                                ->addPart($e->body, 'text/html');
 
                         // If cc is set - set it to message
                         if ( ! empty($e->cc)) {
@@ -187,6 +188,24 @@ class Kohana_Emailq {
 
                             //add to the message
                             $message->attach($swift_attachment);
+                        }
+
+                        // add "direct" attachements to the message
+                        if ($e->attachements) {
+                            $attachements = (array)@json_decode($e->attachements, true);
+                            foreach ($attachements as $a) {
+                                if (isset($a['filename'], $a['diskname'])) {
+
+                                    //initialize Swift_Attachment by the target file
+                                    $swift_attachment = Swift_Attachment::fromPath($a['diskname']);
+
+                                    //set the original file name
+                                    $swift_attachment->setFilename($a['filename']);
+
+                                    //add to the message
+                                    $message->attach($swift_attachment);
+                                }
+                            }
                         }
 
                         //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
