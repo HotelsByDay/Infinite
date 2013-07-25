@@ -13,6 +13,15 @@ class Validate extends Kohana_Validate {
     }
 
     /**
+     * Check that given value is date at least $min_days_in_future days in future
+     * @param $val
+     */
+    public static function future_date($val, $min_days_in_future=0)
+    {
+        return strtotime($val) >= strtotime(Date('Y-m-d')) + $min_days_in_future * 24*3600;
+    }
+
+    /**
      * Tato validancni metoda je temer stejna jako metoda 'numeric', ale
      * akcetuje pouze positivni cisla.
      *

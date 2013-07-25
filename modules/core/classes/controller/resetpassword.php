@@ -96,7 +96,7 @@ class Controller_ResetPassword extends Controller_Template {
 
                 try {
                     // Send mail via emailq
-                    Emailq::factory()->add_email($to, NULL, NULL, array($from_name, $from_email), $subject, $message);
+                    Emailq::factory()->add_email($to, NULL, NULL, array($from_email, $from_name), $subject, $message);
                 } catch (Exception $e) {
                     Kohana::$log->add(Kohana::ERROR, $e->getMessage());
                 }
