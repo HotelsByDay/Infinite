@@ -1093,7 +1093,9 @@ abstract class Controller_Base_Object extends Controller_Layout {
             && ($closure = arr::get($form_config, 'on_success_redir')) != NULL)
         {
             $redirect_url = call_user_func($closure, $this->model);
-            return $this->request->redirect($redirect_url);
+            if ($redirect_url) {
+                return $this->request->redirect($redirect_url);
+            }
         }
 
         //do sablony vlozim vysledek provedene akce
