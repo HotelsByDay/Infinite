@@ -119,7 +119,9 @@ class Helper_UrlStorage
             $url_name->and_where_open()
                 ->where(static::$object_name_column, '!=', $object_name)
                 ->or_where(static::$object_id_column, '!=', $object_id)
-                ->and_where_close();
+                ->and_where_close()
+                // we are concerned only about latest urls - archived urls can be re-assigned to a different object - #5486
+                ->where(static::$latest_column, '=', '1');
         }
         $url_name->find();
         return ! $url_name->loaded();
@@ -149,9 +151,18 @@ class Helper_UrlStorage
             try {
                 // We try to find the record we are about to create
                 $url_name = ORM::factory(static::$storrage_model)
-                    ->where(static::$object_name_column, '=', $object_name)
-                    ->where(static::$object_id_column, '=', $object_id)
-                    ->where(static::$url_name_column, '=', $final_title)
+                    ->where_open()
+                        ->where_open()
+                            ->where(static::$object_name_column, '=', $object_name)
+                            ->where(static::$object_id_column, '=', $object_id)
+                            ->where(static::$url_name_column, '=', $final_title)
+                        ->where_close()
+                        // #5486 - we can re-assign archived url to a different object
+                        ->or_where_open()
+                            ->where(static::$url_name_column, '=', $final_title)
+                            ->where(static::$latest_column, '=', '0')
+                        ->or_where_close()
+                    ->where_close()
                     ->find();
                 ;
                 // Load additional params
