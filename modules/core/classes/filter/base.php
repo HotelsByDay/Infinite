@@ -723,6 +723,18 @@ abstract class Filter_Base
     abstract protected function applyFulltextFilter($orm, $query);
 
     /**
+     * Wrapper pro applyFulltextFilter - ta je protected a my ji potrebujeme volat i z vnejsku
+     * @param $orm
+     * @param $query
+     * @return mixed
+     */
+    public function staticApplyFulltextQuery($orm, $query)
+    {
+        $this->applyFulltextFilter($orm, $query);
+        return $orm;
+    }
+
+    /**
      * Metoda provadi aplikaci ODP (Object Data Panel) filtru, ktere jsou definovany
      * v konfiguracnim souboru <object_name> na klici 'odp_filters'. Na ORM model
      * muze aplikovat pouze ty filtry, ktere maji v konfiguraci korektne definovan

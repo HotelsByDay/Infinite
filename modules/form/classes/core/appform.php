@@ -358,6 +358,15 @@ class Core_AppForm {
         $this->_action_result_view->error_messages = $foreign_error_messages;
     }
 
+
+    /**
+     * This comes handy in form items. (PolymorphicNNSelect)
+     */
+    public function getConfigGroupName()
+    {
+        return $this->_config->get_group_name();
+    }
+
     /**
      * Nacte vsechny formularove prvky podle konfigurace formulare.
      */
@@ -1158,7 +1167,6 @@ class Core_AppForm {
         {
             $style = AppForm::RENDER_STYLE_READONLY;
         }
-
         //prvek existuje - bude vykreslen
         return $this->_form_items[$attr]->Render($style, $this->_error_messages);
     }

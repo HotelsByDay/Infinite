@@ -126,6 +126,9 @@ class ORM extends Kohana_ORM {
      */
     public function __set($column, $value) 
     {
+        if ( ! isset($this->_object_name)) {
+            return parent::__set($column, $value);
+        }
         /**
          * Log action - pokud __set zpusobi ZMENU hodnoty databazoveho atributu
          * A jedna se o hodnotu, ktera se ma logovat, pak se ulozi puvodni hodnota
@@ -588,7 +591,7 @@ class ORM extends Kohana_ORM {
      * @param <string> $value
      * @return <array>
      */
-    /*
+
     public function get_cb($key, $value=NULL)
     {
         // Zajisti ze PK dane tabulky bude defaultnim klicem
@@ -607,7 +610,7 @@ class ORM extends Kohana_ORM {
             $codebook[$result->{$key}] = $result->{$value};
         }
         return $codebook;
-    } */
+    }
     
     
     /** 
@@ -1014,6 +1017,17 @@ class ORM extends Kohana_ORM {
         }
 
         return (bool) ! $q->execute($this->_db)->get('total_count');
+    }
+
+    /**
+     * Validation callback for uniqueness
+     * @param Validate $validate
+     * @param $field
+     */
+    public function validation_unique(Validate $validate, $field) {
+        if ( ! $this->is_unique_value($field, $this->{$field})) {
+            $validate->error($field, 'validation_unique');
+        }
     }
 
     /**
