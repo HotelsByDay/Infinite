@@ -123,7 +123,18 @@ class Kohana_Emailq {
                                     ->find_all();
         }
 
-        $transport = Swift_SendmailTransport::newInstance();
+        if ($this->config->mail_options['driver'] == 'smtp') {
+            $transport = Swift_SmtpTransport::newInstance(
+                $this->config->mail_options['host'],
+                $this->config->mail_options['port'],
+                arr::get($this->config->mail_options, 'encryption')
+            )
+                ->setUsername($this->config->mail_options['username'])
+                ->setPassword($this->config->mail_options['password'])
+            ;
+        } else {
+            $transport = Swift_SendmailTransport::newInstance();
+        }
 
 		$mailer = Swift_Mailer::newInstance($transport);
                 
