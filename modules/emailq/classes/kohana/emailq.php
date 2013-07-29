@@ -19,7 +19,7 @@ class Kohana_Emailq {
 	 */
 	public static function factory()
 	{
-		return new Kohana_Emailq();
+		return new Emailq();
 	}
 
 	/**
