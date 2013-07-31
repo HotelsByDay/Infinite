@@ -134,7 +134,7 @@ class Helper_UrlStorage
             throw new AppException('Trying to set empty uri for object '.$object_name.':'.$object_id.'.');
         }
 
-        $title = $final_title = url::title($title);
+        $title = $final_title = url::title($title, '-', true);
         $number = 0; $saved = false;
 
         $reserved_static_segments = (array)Kohana::config('routes.reserved_static_segments');
