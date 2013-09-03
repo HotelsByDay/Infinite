@@ -4,7 +4,7 @@
 <span class="validation_error alert alert-error"><?= $error_message;?></span>
 <?php endif ?>
 
-<label class="main"><?= $label ?></label>
+<label><?= $label ?></label>
 
 
 <div class="items">
