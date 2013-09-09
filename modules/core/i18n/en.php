@@ -47,7 +47,7 @@ return array(
     'resetpassword_page.email' => 'E-mail:',
     'resetpassword_page.reset_action' => 'Send me new password',
     'resetpassword.validation.email' => 'The e-mail address is invalid.',
-    'resetpasswod.help' => 'Please submit e-mail address associated with you account and you password will be reset and sent to you.',
+    'resetpasswod.help' => 'Please submit e-mail address associated with your account and your password will be reset and sent to you.',
     'resetpassword.processed' => 'Your password has been reset and sent to your email.',
     'resetpassword.goback_to_login' => 'Go back to login page',
 
