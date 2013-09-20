@@ -1316,11 +1316,19 @@ abstract class Controller_Base_Object extends Controller_Layout {
         //po vykresleni formulare:
         //do sablony vlozim pouze ty soubory, ktere mohou byt vlozeny vicekrat
 
-       $html .= Web::instance()->getJSFiles(TRUE);
+    //    $html .= Web::instance()->getJSFiles(TRUE);
 
-        $this->template->content = array(
-                                       'html' => $html,
-                                   );
+//        Web::instance()->addMultipleCustomJSFile(View::factory('js/test.js'));
+        $content = array(
+            'html' => $html,
+        );
+        // Add init scripts into the response
+        $init_scripts = Web::instance()->getMultipleCustomJSFilesUrl();
+        if ( ! empty($init_scripts)) {
+//            $content['_js_files'] = array('http://swallentin.github.io/msd-jquery-gmaps/assets/js/msd-jquery-gmaps.js', 'http://swallentin.github.io/msd-jquery-gmaps/assets/js/app.js', 'http://localhost:8080/csv/test.js');
+            $content['_js_init'] = array(url::site($init_scripts));
+        }
+        $this->template->content = $content;
     }
 
     /**

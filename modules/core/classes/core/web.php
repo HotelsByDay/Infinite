@@ -167,6 +167,33 @@ class Core_Web
         return implode("\n", $this->custom_html_views);
     }
 
+
+    public function getMultipleCustomJSFilesUrl()
+    {
+//        Kohana::$log->add(Kohana::ERROR, 'MULTIPLE_CUSTOM_JS_VIEWS: '.json_encode($this->multiple_custom_js_views));
+        $files = array();
+        foreach ($this->multiple_custom_js_views as $item) {
+            if (is_array($item)) {
+                foreach ($item as $file) {
+                    $files[] = (string)$file;
+                }
+            } else {
+                $files[] = (string)$item;
+            }
+        }
+        if (empty($files)) {
+            return NULL;
+        }
+        $all_js_content = array(
+            'content' => implode("\n", $files),
+        );
+//        Kohana::$log->add(Kohana::ERROR, 'MULTIPLE_CUSTOM_JS_VIEWS content: '.$all_js_content);
+        $cache_key = 'js.cutom' . uniqid();
+        Cache::instance()->set($cache_key, $all_js_content);
+        return 'js/' . $cache_key;
+    }
+
+
     /**
      * Vraci retezec, ktery obsahuje <script> elementy, ktere predstavuji
      * JS soubory, ktere maji byt vlozeny do stranky.

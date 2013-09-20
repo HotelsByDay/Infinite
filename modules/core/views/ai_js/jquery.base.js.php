@@ -188,6 +188,46 @@ $(document).ready(function() {
 });
 
 
+// Dynamically load more external JS files
+var _initJS = function(scripts, init_scripts)
+{
+    var to_load = 0, loaded = 0;
+
+    var loadInitScripts = function()
+    {
+//        console.log('loading init scripts');
+        if (typeof init_scripts != 'undefined' && init_scripts) {
+            for (var i in init_scripts) {
+                var src = init_scripts[i];
+//                console.log('loading script: ' + src);
+                $.getScript(src);
+            }
+        }
+    }
+    var scriptLoaded = function()
+    {
+        loaded++;
+        // If all scripts were loaded - load init scripts
+        if (loaded >= to_load) {
+            loadInitScripts();
+        }
+    }
+
+    if (typeof (scripts) != 'undefined' && scripts) {
+        to_load = scripts.length;
+        for (var i in scripts) {
+            var src = scripts[i];
+//            console.log('loading script: ' + src);
+            $.getScript(src, scriptLoaded);
+        }
+    } else {
+//        console.log('no scripts to load');
+//        console.log(scripts);
+        loadInitScripts();
+    }
+}
+
+
 // ajax function overload
 // - redirect support added
 $._ajax = function(arg1, arg2)
@@ -201,11 +241,21 @@ $._ajax = function(arg1, arg2)
 
     // Put it into new callback and process potential redirect
     var newCallback = function(data, status, jqXHR) {
-        // If redirect should be executed
-        if (typeof data !== 'undefined' && typeof data.redirect_to === 'string') {
-            window.location.href = data.redirect_to;
-            return;
+
+        // Process special parts of the response
+        if (typeof data !== 'undefined') {
+            // If redirect should be executed
+            if (typeof data.redirect_to === 'string') {
+                window.location.href = data.redirect_to;
+                return;
+            }
+
+            // Load more JS if needed
+            _initJS(data._js_files, data._js_init);
         }
+
+
+
 
         if (typeof originalCallback === 'function') {
             originalCallback(data, status, jqXHR);
