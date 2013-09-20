@@ -38,8 +38,8 @@ class Helper_UrlStorage
         $url_name = ORM::factory(static::$storrage_model, array('url_name' => $uri));
         if ($url_name->loaded()) {
             $data = array(
-                'object_name' => $url_name->object_name,
-                'object_id'   => $url_name->object_id,
+                'object_name' => $url_name->type,
+                'object_id'   => $url_name->id,
                 'latest'      => $url_name->latest,
             );
             return static::$_cache[$uri] = $data;
