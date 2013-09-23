@@ -353,12 +353,7 @@ class AppFormItem_Base
         }
 
         // pokud je prvek required, tak se automaticky prida znacka k labelu
-        if (((arr::get($this->config, 'required')
-                // nektere prvky pouzivaji spcialne tento atribut aby se vyhly standardnimu zpracovani
-                // a mohli udelat svoje custom (napr. AppFormItemFile)
-                // @TODO: Tohle by asi slo vyresit lepe, ale neni na to ted cas (31.1.2012)
-                || arr::get($this->config, '_required'))
-                || $this->model->IsRequired($this->attr)) && ! $this->form->is_readonly())
+        if ($this->isRequired())
         {
             //required znacka '*' nemusi byt vzdy zobrazena
             if (arr::get($this->config, 'display_required_symbol', TRUE))
@@ -414,6 +409,19 @@ class AppFormItem_Base
 
         //vracim inicializovanou sablonu
         return $view;
+    }
+
+    /**
+     * @return bool - true if the field is required in current form
+     */
+    public function isRequired()
+    {
+        return (((arr::get($this->config, 'required')
+                // nektere prvky pouzivaji spcialne tento atribut aby se vyhly standardnimu zpracovani
+                // a mohli udelat svoje custom (napr. AppFormItemFile)
+                // @TODO: Tohle by asi slo vyresit lepe, ale neni na to ted cas (31.1.2012)
+                || arr::get($this->config, '_required'))
+            || $this->model->IsRequired($this->attr)) && ! $this->form->is_readonly());
     }
 
     /**

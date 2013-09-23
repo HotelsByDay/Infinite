@@ -53,18 +53,23 @@ class AppFormItem_Gps extends AppFormItem_Base
     }
 
 
-    /**
-     * Validace hodnot prvku
-     * @return string
-     */
-    public function check()
+    public function getHandledErrorMessagesKeys()
     {
-        if ($this->config['required']) {
-            // @todo ?
-        }
-        return NULL;
+        return array($this->config['latitude_column'], $this->config['longitude_column']);
     }
 
+
+
+    public function getLatitude()
+    {
+        $latitude_column = $this->config['latitude_column'];
+        return $this->model->{$latitude_column};
+    }
+    public function getLongitude()
+    {
+        $longitude_column = $this->config['longitude_column'];
+        return $this->model->{$longitude_column};
+    }
 
     /**
      * Metoda priradi hodnotu z formulare do ORM modelu a pokud z formnulare hodnota
@@ -73,15 +78,12 @@ class AppFormItem_Gps extends AppFormItem_Base
      */
     public function assignValue()
     {
-
-        $latitude_column = $this->config['latitude_column'];
-        $longitude_column = $this->config['longitude_column'];
         //z formulare neprisly zadna data, tak $this->form_data naplnim podle
         //aktualniho ORM modelu
         if ($this->form_data == NULL)
         {
-            $this->form_data['latitude']  = $this->model->latitude;
-            $this->form_data['longitude'] = $this->model->longitude;
+            $this->form_data['latitude']  = $this->getLatitude();
+            $this->form_data['longitude'] = $this->getLongitude();
         }
         else
         {
@@ -103,6 +105,16 @@ class AppFormItem_Gps extends AppFormItem_Base
     public function  Render($render_style = NULL, $error_message = NULL) {
 
         $view = parent::Render($render_style, $error_message);
+        $lat_label = __('appformitemgps.latitude');
+        $lon_label = __('appformitemgps.longitude');
+
+        if ($this->isRequired()) {
+            $lat_label .= '<span class="required_label"></span>';
+            $lon_label .= '<span class="required_label"></span>';
+        }
+
+        $view->lat_label = $lat_label;
+        $view->lon_label = $lon_label;
         return $view;
     }
 }
