@@ -371,7 +371,7 @@ class AppFormItem_File extends AppFormItem_Base
             if ( ! $rel_model->check())
             {
                 //z ORM si vytahnu validacni chyby
-                $error_messages[$i] = $rel_model->validate()->errors($rel_model->table_name());
+                $error_messages[$i] = $rel_model->getValidationErrors();
             }
         }
 
@@ -599,7 +599,6 @@ class AppFormItem_File extends AppFormItem_Base
         }
     }
 
-
     /**
      * Walks through $this->lang_values and set all found locales as active
      */
@@ -618,6 +617,14 @@ class AppFormItem_File extends AppFormItem_Base
         }
     }
 
+    protected function saveRelModel($rel_model)
+    {
+        // Nastavim souboru cizi klic (implicitne je to vazba na model nad kterym stoji form, ale lze to v configu zmenit)
+        $rel_model->{$this->getForeignKeyColumn()} = $this->getForeignKeyValue();
+
+        $rel_model->save();
+    }
+
     /**
      * Po ulozeni hlavniho zaznamu ulozim i nahrane soubory, ktere jsou v 1:N
      * relaci.
@@ -632,10 +639,8 @@ class AppFormItem_File extends AppFormItem_Base
                 //modely k ulozeni ulozim
                 foreach ($this->save_rel_models as $key => $rel_model)
                 {
-                    // Nastavim souboru cizi klic (implicitne je to vazba na model nad kterym stoji form, ale lze to v configu zmenit)
-                    $rel_model->{$this->getForeignKeyColumn()} = $this->getForeignKeyValue();
-
-                    $rel_model->save();
+                    // Save rel model in sepparate method
+                    $this->saveRelModel($rel_model);
 
                     // If item is languable then process lang fields
                     if ($this->is_languable) {
