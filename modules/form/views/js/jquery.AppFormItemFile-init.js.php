@@ -30,8 +30,12 @@ $(document).ready(function(){
             //pridam classu, ktera prvek zvyrazni aby uzivatel videl
             //ktery soubor bude odstranen
             $photo.addClass('removed');
-            
-            if (confirm("<?= __('appformitemfile.confirm_file_delete');?>")) {
+
+            var confirm_msg = $(this).attr('data-confirm');
+            if (typeof confirm_msg == 'undefined' || ! confirm_msg) {
+                confirm_msg = "<?= __('appformitemfile.confirm_file_delete');?>";
+            }
+            if (confirm(confirm_msg)) {
 
                 //id polozky (souboru ) je ulozeno v inputu, ktery v name atributu obsahuej "[id]"
                 var $id_input = $photo.find('input[name*="\[id\]"]');
