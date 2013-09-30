@@ -38,6 +38,7 @@ class Model_Core_User extends Model_Auth_User {
     (
         //kontroluje zda je uzivatelske jmeno unikatni
         'username' => array('username_available'),
+        'email' => array('email_available'),
     );
 
     /**

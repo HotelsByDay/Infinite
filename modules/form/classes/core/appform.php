@@ -997,7 +997,7 @@ class Core_AppForm {
      */
     public function getActionResultStatus()
     {
-        return$this->action_result_status;
+        return $this->action_result_status;
     }
 
     /**
@@ -1034,7 +1034,6 @@ class Core_AppForm {
      */
     public function getHeadline()
     {
-
         //nadpis se generuje podle toho zda je zaznam jiz ulozen
         return $this->_model->loaded()
                 ? ___($this->getFormType().'.form_edit_headline', array(':preview' => $this->_model->preview()), __($this->_model->object_name().'.form_edit_headline', array(':preview' => $this->_model->preview())))
@@ -1165,7 +1164,8 @@ class Core_AppForm {
 
         //pokud je v konfiguraci formulare explicitne definovano ze ma byt vygenerovan
         //jako readonly, tak vsechny prvky budou jako readonly
-        if ($this->is_readonly(/*$attr*/))
+        // - attr param is ignored as a default but is_readonly method can be overridden in child classes
+        if ($this->is_readonly($attr))
         {
             $style = AppForm::RENDER_STYLE_READONLY;
         }
@@ -1189,6 +1189,16 @@ class Core_AppForm {
         }
         //prvek existuje - bude vykreslena jeho pripadna validani chyba
         return $this->_form_items[$attr]->RenderValidationErrors($this->_error_messages, true);
+    }
+
+
+    /**
+     * @return string HTML FORM tag attributes from a config as a string
+     */
+    public function getFormAttributes()
+    {
+        $attributes = (array)arr::get($this->_config, 'attributes');
+        return html::attributes($attributes);
     }
 
     /**
@@ -1219,6 +1229,8 @@ class Core_AppForm {
 
         //do container sablony vlozim vlastni sablonu formulare
         $container_view->form_view = $form_view;
+
+        $container_view->form_attributes = $this->getFormAttributes();
 
         //sablone predam referenci na tento formular
         $container_view->form = $this;

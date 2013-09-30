@@ -4,4 +4,11 @@ class Model_User extends Model_Auth_User {
 
 	// This class can be replaced or extended
 
+
+    public function getUserName()
+    {
+        return $this->name . ' ' . $this->surname;
+    }
+
+
 } // End User Model
