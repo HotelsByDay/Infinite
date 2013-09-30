@@ -129,6 +129,14 @@ $(document).ready(function(){
         //reference na rodicovsky formular
         var $form = $item.parents(".<?= AppForm::FORM_CSS_CLASS ?>:first");
 
+
+        <?php if ($file_count != 0): ?>
+        // Hide drop area and upload btn if files limit was reached (here show if limit is not reached)
+        if ($item.find('.list .item:not(.removed)').length + $item.find('.qq_file_item:visible').length >= <?= $file_count;?>) {
+            $item.find('.button').hide();
+        }
+        <?php endif; ?>
+
         // Inicializace fancyboxu
         appFormItemPhoto_InitFancybox($(this));
         $(this).find('.list .item').each(function(){
