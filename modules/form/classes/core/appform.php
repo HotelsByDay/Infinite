@@ -997,7 +997,7 @@ class Core_AppForm {
      */
     public function getActionResultStatus()
     {
-        return$this->action_result_status;
+        return $this->action_result_status;
     }
 
     /**
@@ -1034,7 +1034,6 @@ class Core_AppForm {
      */
     public function getHeadline()
     {
-
         //nadpis se generuje podle toho zda je zaznam jiz ulozen
         return $this->_model->loaded()
                 ? ___($this->getFormType().'.form_edit_headline', array(':preview' => $this->_model->preview()), __($this->_model->object_name().'.form_edit_headline', array(':preview' => $this->_model->preview())))

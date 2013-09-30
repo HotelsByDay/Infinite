@@ -307,7 +307,6 @@ class Helper_Format {
         //jsou to znaky, ktere by pak delali bordel po volani explode
         $value = str_replace('||', '', $value);
         $value = trim($value, '|');
-
         return explode('|', $value);
     }
 

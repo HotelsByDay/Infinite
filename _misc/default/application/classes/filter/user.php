@@ -4,6 +4,7 @@ class Filter_User extends Filter_Base {
 
     protected function applyFilter($orm)
     {
+
         if (($value = arr::get($this->filter_params, 'fulltext')) != NULL)
         {
             $orm->join('seller')
