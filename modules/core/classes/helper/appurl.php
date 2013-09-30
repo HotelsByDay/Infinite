@@ -16,6 +16,12 @@ class Helper_Appurl
     const ENCODED_PACK_KEY = 'ed';
 
 
+    static public function table_export($controller, $table_config, $export_config, $params)
+    {
+        return self::object_action($controller, 'table_data_export', array($table_config, $export_config), $params);
+    }
+
+
     /**
      * @param $object_name
      * @param $object_id

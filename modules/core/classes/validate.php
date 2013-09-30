@@ -13,6 +13,15 @@ class Validate extends Kohana_Validate {
     }
 
     /**
+     * Check that given value is date at least $min_days_in_future days in future
+     * @param $val
+     */
+    public static function future_date($val, $min_days_in_future=0)
+    {
+        return strtotime($val) >= strtotime(Date('Y-m-d')) + $min_days_in_future * 24*3600;
+    }
+
+    /**
      * Tato validancni metoda je temer stejna jako metoda 'numeric', ale
      * akcetuje pouze positivni cisla.
      *
@@ -23,10 +32,10 @@ class Validate extends Kohana_Validate {
     public static function positive_numeric($str)
     {
         // Get the decimal point for the current locale
-	list($decimal) = array_values(localeconv());
+        list($decimal) = array_values(localeconv());
 
-	// A lookahead is used to make sure the string contains at least one digit (before or after the decimal point)
-	return (bool) preg_match('/^(\+|)(?=.*[0-9])[0-9]*+'.preg_quote($decimal).'?+[0-9]*+$/D', (string) $str);
+        // A lookahead is used to make sure the string contains at least one digit (before or after the decimal point)
+        return (bool) preg_match('/^(\+|)(?=.*[0-9])[0-9]*+'.preg_quote($decimal).'?+[0-9]*+$/D', (string) $str);
     }
 
     /**

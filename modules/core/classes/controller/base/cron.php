@@ -10,7 +10,7 @@ class Controller_Base_Cron extends Controller
         //kvuli priloham musim prihlasit uzivatele, ktery ma opravneni je precist
         Auth::instance()->force_login('root');
 
-        Kohana_Emailq::factory()->send_emails();
+        Emailq::factory()->send_emails();
     }
 
     /**

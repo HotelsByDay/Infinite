@@ -61,8 +61,10 @@ abstract class Kohana_Auth {
 	 */
 	public function __construct($config = array())
 	{
+        $res = Kohana::config('auth')->get('salt_pattern');
+        $res = (string)$res;
 		// Clean up the salt pattern and split it into an array
-		$config['salt_pattern'] = preg_split('/,\s*/', Kohana::config('auth')->get('salt_pattern'));
+		$config['salt_pattern'] = preg_split('/,\s*/', $res);
 
 		// Save the config in the object
 		$this->_config = $config;

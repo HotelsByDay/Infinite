@@ -56,7 +56,7 @@
                 var filter_container_empty = true;
 
                 //vytvorim si blok ktery bude drzet ve ohledne filtru
-                var $filter_container = $( document.createElement('div') ).addClass('odp-filter-container');
+                var $filter_container = $( document.createElement('div') ).addClass('odp-filter-container').addClass('form-inline');
 
 
                 //pred fulltext input vlozi tags container, ale pouze vpripade
@@ -156,7 +156,6 @@
                 //preset_filter_container neste seznam prednstavenych filtru
                 if ( has_preset_filters ) {
                     $preset_filter_container.appendTo( $filter_container );
-
                 }
 
                 //vytvorim instanci jQuery.dialogu spolecnou pro vsechny instance
@@ -228,6 +227,75 @@
                 //pridam div, ktery ponese datovy obsah
                 $data_container = $( document.createElement('div') ).addClass('odp-data-container')
                                                                     .appendTo($content_container);
+
+
+                if (typeof settings.exports != 'undefined') {
+                    var $exports_div = $(document.createElement('div')).addClass('odp-data-export-buttons');
+                    for (var i in settings.exports) {
+                        var exp = settings.exports[i];
+                        var $a = $(document.createElement('a'))
+                            .attr('href', exp.url)
+                            .addClass('btn')
+                            .addClass('btn-table-export')
+                            .append('<i class="icon icon-circle-arrow-right"></i> ')
+                            .append(exp.label);
+                        $exports_div.append($a);
+                    }
+                    $content_container.append($exports_div);
+
+
+                    $content_container.find('.btn-table-export[href]').click(function() {
+                        var $btn = $(this).addClass('btn-loading');
+
+                        //pripravim parametry pro filtrovani
+                        var params = methods._getData( $this, 'request_params' );
+                        //vezmu hodnotu fulltext filtru
+                        params['_q'] = $this.find('.odp-fulltext-input').val();
+                        //vycet aktivnich prednastavenych filtru
+                        //je take parametr
+                        var currently_active_tags = methods._getData( $this, 'tags' );
+                        params['_f'] = [];
+                        var i = 0;
+                        for ( var tag_value in currently_active_tags ) {
+                            params['_f'][i++] = tag_value;
+                        }
+
+                        //z nastaveni si vytahnu URL pro dotazovani na data
+                        var settings = methods._getData( $this, 'settings');
+
+                        //k parametrum se jeste pokusim pridat velikost stranky, kterou si
+                        //uzivatel mohl jiz zvolit
+                        var request_params = methods._getData( $this, 'request_params' );
+                        if (typeof request_params !== 'undefined' && typeof request_params['_ps'] !== 'undefined') {
+                            params['_ps'] = request_params['_ps'];
+                        }
+
+
+                        $.ajax({
+                            url: $(this).attr('href'),
+                            type: 'POST',
+                            data: params,
+                            dataType:'json',
+                            success: function(data){
+                                $btn.removeClass('btn-loading');
+                                if (typeof data === 'object' && data != null  && typeof data['f'] !== 'undefined') {
+                                    window.location.href = data['f'];
+                                } else {
+                                    alert(typeof data !== 'object' || data == null || typeof data['e'] === 'undefined'
+                                        ? "<?= __('object.data_export.error');?>"
+                                        : data['e']);
+                                }
+                            },
+                            error: function(){
+                                alert("<?= __('object.data_export.error');?>");
+                            }
+                        });
+                        return false;
+                    });
+
+                }
+
+
 
                 //inicializace dokoncena - muzu obsah znovu zobrazit
                 $this.find('.odp-content').removeClass('odp-content-initializing');
@@ -704,7 +772,7 @@
                 }
                 //mezi parametry vyhledavani pridam atribut a smer razeni a
                 //dale resetuji index stranky - zobrazi se prvni stranka
-                methods._updateQuery( $_this, {_ob: ob, _obd: obd, _pi:1} );
+                methods._updateQuery( $_this, {_ob: ob, _obd: obd, _pi:0} );
                 return false;
             });
 
@@ -755,6 +823,10 @@
                     }
                 });
             });
+
+
+
+
 
             //pokud je v nastaveni definovany callback - after_initDataContent
             //tak ho vyvolam

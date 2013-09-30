@@ -7,7 +7,7 @@ class Model_Core_User extends Model_Auth_User {
     );
 
     /**
-     * Validacni pravidla
+     * Validacni pravidlaq
      */
     protected $_rules = array
     (

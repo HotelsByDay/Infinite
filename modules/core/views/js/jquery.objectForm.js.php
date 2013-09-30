@@ -496,7 +496,7 @@
 
                             }
 
-                            $_this.trigger('objectFormSuccess');
+                            $_this.trigger('objectFormSuccess', response);
 
                         //pokud doslo k validacni chybe, tak uzivatele posunu
                         } else if (response['action_status'] == '<?= AppForm::ACTION_RESULT_FAILED;?>') {

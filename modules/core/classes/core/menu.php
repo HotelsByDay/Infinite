@@ -735,7 +735,6 @@ class Core_Menu {
         // Nacteni aktualniho controlleru a akce z Request tridy
         $this->controller = Request::instance()->controller;
         $this->action = Request::instance()->action;
-       
     }
     
     private function __clone() {}    

@@ -73,7 +73,7 @@ class Log_Email extends Kohana_Log_Writer
 		foreach($to_emails as $email)
 		{
                     //email bude vlozen do fronty e-mailu k odeslani
-                    Kohana_Emailq::factory()->add_email($email, 'Fleet4U', $subject, (string)$content);
+                    Kohana_Emailq::factory()->add_email($email, NULL, NULL, 'Fleet4U', $subject, (string)$content);
 		}
 	}
 }

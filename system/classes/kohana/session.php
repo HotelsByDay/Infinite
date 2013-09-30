@@ -125,7 +125,7 @@ abstract class Kohana_Session {
 		$this->read($id);
 
                 //JME: 
-                $this->_data = $_SESSION;
+            //    $this->_data = $_SESSION; // JDA: - what was this for?
 	}
 
 	/**

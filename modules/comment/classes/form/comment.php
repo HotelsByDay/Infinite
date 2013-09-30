@@ -84,6 +84,8 @@ class Form_Comment extends Core_AppForm
         {
             //vlozi email do fronty k odeslani (ta je zpracovavana pomoci cronu)
             Emailq::factory()->add_email($user->contact_email(),
+                                         NULL,
+                                         NULL,
                                          $user->name(),
                                          $subject,
                                          $body);

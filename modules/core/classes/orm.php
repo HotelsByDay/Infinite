@@ -1689,13 +1689,13 @@ class ORM extends Kohana_ORM {
 
         //vytvari se novy zaznam - nastavi se defaultni hodnoty (tohle se dela
         //standardne v konstruktoru)
-        $this->_load_values($this->getDefaults($this->getDefaultsModificators()));
+        // @todo - purpose of this was to "overwrite" columns like "created" or "updated"
+        //         but it does not work if there are some real defaults which we do not want to overwrite
+    //    $this->_load_values($this->getDefaults($this->getDefaultsModificators()));
 
         //timto rikam ze byly zmeneny hodnoty vsech atributu. pokud ORM detekuje
         //ze nedoslo ke zmene zadneho atributu, tak by nebyl proveden DB insert
         $this->_changed = array_keys($this->_object);
-
-        $this->_db = Database::instance('live');
 
         //vlastni ulozeni nove kopie do DB
         $this->save();

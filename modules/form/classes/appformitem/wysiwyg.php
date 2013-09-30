@@ -53,19 +53,12 @@ class AppFormItem_Wysiwyg extends AppFormItem_String
         switch($type)
         {
             //volano po uspesne ulozeni zaznamu
-            case AppForm::FORM_EVENT_AFTER_SAVE:
+            case AppForm::FORM_EVENT_BEFORE_SAVE:
 
-                // Data prijata z formulare upravena na asociativni tvar
-                // - v parentu je jiz zajisteno jejich ulozeni do DB
-                //   zde pouze zajistime preulozeni temp obrazku (prave pridanych pres wysiwyg)
-                $content = $this->virtual_value;
-
-                die($this->virtual_value);
+                $content = $this->getValue();
 
                 // Najdeme vsechny SRC obrazku z ukladaneho textu
                 preg_match_all('@<img.*? src="(.*?)"@', $content, $matches);
-
-                Kohana::$log->add(Kohana::INFO, 'matches[1] for '.$this->attr.': '.json_encode($matches[1]));
 
                 // Pridame pole nalezenych URL v danem prekladu do celkoveho pole
                 $used_urls = $matches[1];
@@ -92,8 +85,6 @@ class AppFormItem_Wysiwyg extends AppFormItem_String
                 // Projdeme text z editoru a ulozime temp obrazky a nahradime src
                 // Najdeme vsechny SRC obrazku z ukladaneho textu, ktere byly prave pridany (maji neprazdne data-tempfileid)
                 preg_match_all('@<img[^>]*? src="([^"]*)"[^>]*? data-tempfileid="([^"]*?)"@', $content, $matches);
-
-                //    Kohana::$log->add(Kohana::INFO, "img matches: ".json_encode($matches));
 
                 // Pridame pole nalezenych (tempfileid => src)
                 foreach ($matches[1] as $key => $src) {
@@ -124,7 +115,9 @@ class AppFormItem_Wysiwyg extends AppFormItem_String
                     );
 
                     // Nahradime ve virtual_value danou temp src za novou
-                    $this->virtual_value = str_replace($replace_from, $replace_to, $content);
+                    $value = str_replace($replace_from, $replace_to, $content);
+
+                    $this->setValue($value);
                 }
                 break;
         }

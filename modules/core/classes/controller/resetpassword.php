@@ -95,8 +95,8 @@ class Controller_ResetPassword extends Controller_Template {
                 $headers = 'From: '.$from_name.' <'.$from_email.'>'. "\r\n";
 
                 try {
-                    //jednoduche odeslani emailu
-                    mail($to, $subject, $message, $headers);
+                    // Send mail via emailq
+                    Emailq::factory()->add_email($to, NULL, NULL, array($from_email, $from_name), $subject, $message);
                 } catch (Exception $e) {
                     Kohana::$log->add(Kohana::ERROR, $e->getMessage());
                 }
