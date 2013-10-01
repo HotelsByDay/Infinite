@@ -163,6 +163,13 @@ class AppFormItem_Base
      */
     public function setValue($value)
     {
+        // @todo - this maybe should be based on model->isAttrNullable($this->attr) rather then on config value
+        // If item is nullable
+        if (arr::get($this->config, 'nullable', false)) {
+            if ($value == '') {
+                $value = NULL;
+            }
+        }
         if ( ! $this->virtual)
         {
             $this->model->{$this->attr} = $value;
