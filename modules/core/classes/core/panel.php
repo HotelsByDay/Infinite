@@ -18,7 +18,7 @@ class Core_Panel {
      */
     protected function wrapPanel($panel) 
     {
-        return '<ul class="filter-nav unstyled">'.$panel.'</ul>';
+        return '<ul class="filter-nav">'.$panel.'</ul>';
     }
     
     /**
@@ -114,8 +114,9 @@ class Core_Panel {
             // - odkaz slouzi pouze pro zobrazeni akcnich tlacitek, sam akcni nebude
             $link_attr = ' class="drop"';
         } else {
+            $custom_classes = arr::get($item, 'class');
             $submenu = ''; // at nemusime testovat isset
-            $link_attr = ' class="action_button  btn action_button_'.$action.'" action="'.$action.'"';
+            $link_attr = ' class="action_button btn btn-primary action_button_'.$action.' '.$custom_classes.'" action="'.$action.'"';
         }
 
         if (arr::get($item, 'need_selection', true)) {
