@@ -548,6 +548,9 @@ class ORM extends Kohana_ORM {
     {
         parent::clear();
 
+        // @todo - I suggest to not load defaults here at all 2.10.2013 - it just makes things complicated
+        // - This is related to the __set() method vhere non-changed values are not written and not marked and changed
+        //   but they may be set from here without setting _changed flag - the value then is not saved (AMLI imported agent created date)
         foreach ($this->getDefaults($this->getDefaultsModificators()) as $column => $value)
         {
             // (!) @todo - it does not make sense to have non-empty _changed columns list after clear call (!)
