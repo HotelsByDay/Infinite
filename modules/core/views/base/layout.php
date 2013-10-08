@@ -14,7 +14,7 @@
     
         <meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0;">
 
-        <link rel="stylesheet" media="handheld" href="<?= url::base();?>css/handheld.css?v=1"/>
+<!--        <link rel="stylesheet" media="handheld" href="--><?//= url::base();?><!--css/handheld.css?v=1"/>-->
         <link href="<?=url::base();?>css/jquery-ui-1.8.7.custom.css" rel="stylesheet" type="text/css" ></link>
         <link rel="stylesheet" href="<?= url::base();?>css/style.css?v=1"/>
         <?= View::factory('base/ga_tracker');?>

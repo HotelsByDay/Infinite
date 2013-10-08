@@ -15,7 +15,7 @@
   <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 
   <link rel="stylesheet" href="<?= url::base();?>css/style.css?v=1">
-  <link rel="stylesheet" media="handheld" href="css/handheld.css?v=1">
+<!--  <link rel="stylesheet" media="handheld" href="css/handheld.css?v=1">-->
 
 </head>
 
