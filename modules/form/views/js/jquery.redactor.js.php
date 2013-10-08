@@ -2853,6 +2853,9 @@ var RLANG = {
 
             }, this));
 
+            // Added by Jiri #6661
+            var this_redactor = this;
+
             $(resize).mousemove(function(e)
             {
                 if (clicked)
@@ -2879,6 +2882,9 @@ var RLANG = {
 
                     start_x = Math.round(e.pageX - $(this).eq(0).offset().left);
                     start_y = Math.round(e.pageY - $(this).eq(0).offset().top);
+
+                    // Added by Jiri #6661
+                    this_redactor.syncCode();
                 }
             });
         },
