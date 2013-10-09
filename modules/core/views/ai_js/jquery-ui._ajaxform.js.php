@@ -130,7 +130,7 @@
          *
          */
         loadForm: function(load_url, arg1 , arg2) {
-            console.log('loadForm called');
+//            console.log('loadForm called');
             //obsah dialogu odstranim (promennou $content vyuzije nize)
             var $content = $(this);
             //zruseni obsahu
