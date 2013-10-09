@@ -61,6 +61,19 @@ Route::set('direct_upload_file', '<controller>/<action>/<config_key>',
         'config_key'     => '[.a-z_]+'
     ));
 
+
+/**
+ * Log debug message - only if in debug mode.
+ * @param $msg - message to be logged
+ * @param $type - log item type
+ */
+function _log($msg, $type=Kohana::INFO)
+{
+    if (AppConfig::instance()->debugMode()) {
+        Kohana::$log->add($type, $msg);
+    }
+}
+
 /**
  * Kohana translation/internationalization function. The PHP function
  * [strtr](http://php.net/strtr) is used for replacing parameters.

@@ -85,12 +85,11 @@
         _setValues: function($_this, values) {
 
             for (attr in values) {
-console.log("[name=\""+attr+"\"]" + "(" + this.find("[name=\""+attr+"\"]").length + ")");
+//console.log("[name=\""+attr+"\"]" + "(" + this.find("[name=\""+attr+"\"]").length + ")");
                 if (this.find("[name=\""+attr+"\"]").length != 0) {
                     //hodnoty vlozim do formulare
                     this.find("[name=\""+attr+"\"]").val(values[attr]);
                 }
-
             }
 
         }

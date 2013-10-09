@@ -34,6 +34,6 @@ $(document).ready(function() {
     settings.buttons.push('alignright');
 
 
-    console.log(settings);
+//    console.log(settings);
     $("#<?= $uid;?> textarea").redactor(settings);
 });
