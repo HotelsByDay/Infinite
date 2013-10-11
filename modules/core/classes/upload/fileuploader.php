@@ -19,7 +19,7 @@ class Upload_FileUploader
     protected $image_dimension_limit = array();
 
     /**
-     * 
+     *
      * @param <type> $file Instance tridy Upload_Driver_Form nebo Upload_Driver_Xhr
      * reprezentujici uploadovany souboru
      * @param <array> $allowed_mimetypes Vycet povolenych MIME-TYPU pro soubor
@@ -35,7 +35,7 @@ class Upload_FileUploader
 
         //limit na povolene mimetypy
         $this->allowed_mimetypes = $allowed_mimetypes;
-        
+
         //ulozim si limit na velikost obrazku
         $this->image_dimension_limit = $image_dimension_limit;
     }
@@ -141,7 +141,7 @@ class Upload_FileUploader
                     {
                         throw new Upload_Exception_UserError(__('upload.error.invalid_image_dimension.max_width', array(
                             ':width'     => $image->width,
-                            ':max_width' => $min_width
+                            ':max_width' => $max_width
                         )));
                     }
                 }
@@ -152,7 +152,7 @@ class Upload_FileUploader
                     {
                         throw new Upload_Exception_UserError(__('upload.error.invalid_image_dimension.min_height', array(
                             ':height'     => $image->height,
-                            ':min_height' => $min_width
+                            ':min_height' => $min_height
                         )));
                     }
                 }
@@ -163,7 +163,7 @@ class Upload_FileUploader
                     {
                         throw new Upload_Exception_UserError(__('upload.error.invalid_image_dimension.max_height', array(
                             ':height'     => $image->height,
-                            ':max_height' => $max_width
+                            ':max_height' => $max_height
                         )));
                     }
                 }
