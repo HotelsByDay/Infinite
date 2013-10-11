@@ -110,10 +110,12 @@ class Kohana_Emailq {
                 }
 
 		$transport = Swift_SmtpTransport::newInstance(
-				$this->config->mail_options['host'],
-				$this->config->mail_options['port'],
-                                arr::get($this->config->mail_options, 'encryption'))->setUsername($this->config->mail_options['username'])
-                                                                                    ->setPassword($this->config->mail_options['password']);
+				                $this->config->mail_options['host'],
+				                $this->config->mail_options['port'],
+                                arr::get($this->config->mail_options, 'encryption')
+            )
+            ->setUsername($this->config->mail_options['username'])
+            ->setPassword($this->config->mail_options['password']);
 
 		$mailer = Swift_Mailer::newInstance($transport);
                 

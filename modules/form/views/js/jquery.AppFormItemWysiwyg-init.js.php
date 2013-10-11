@@ -6,8 +6,7 @@ $(document).ready(function() {
         autoresize: true,
         resize: false,
         // See http://redactorjs.com/docs/toolbar/
-        buttons: ['html', 'formatting', '|', 'bold', 'italic', '|','fontcolor','|',
-            'unorderedlist', 'orderedlist', 'outdent', 'indent', '|', 'link'],
+        buttons: config.buttons,
         focus: false,
         callback: function() {
             // Find parent form
@@ -27,13 +26,5 @@ $(document).ready(function() {
         settings.formattingTags = config.formatting_tags;
     }
 
-    //options to align text
-    settings.buttons.push('|');
-    settings.buttons.push('alignleft');
-    settings.buttons.push('aligncenter');
-    settings.buttons.push('alignright');
-
-
-    console.log(settings);
     $("#<?= $uid;?> textarea").redactor(settings);
 });

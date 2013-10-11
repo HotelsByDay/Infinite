@@ -51,9 +51,24 @@
             var values = new Object();
 
             this.find('input,textarea,select').each(function(){
-                values[$(this).attr('name')] = $(this).val();
+                if (typeof $(this).attr('name') !== 'undefined') {
+                    //vyjimka pro radio a checkbox
+                    if ($(this).is(':checkbox')) {
+                        if ( ! $(this).is(':checked')) {
+                            values[$(this).attr('name')] = '';
+                        } else {
+                            values[$(this).attr('name')] = $(this).val();
+                        }
+                    } else if ($(this).is(':radio')) {
+                        if ( ! $(this).is(':checked')) {
+                            return;
+                        }
+                        values[$(this).attr('name')] = $(this).val();
+                    } else {
+                        values[$(this).attr('name')] = $(this).val();
+                    }
+                }
             });
-
             return values;
         },
 
@@ -85,12 +100,23 @@
         _setValues: function($_this, values) {
 
             for (attr in values) {
-console.log("[name=\""+attr+"\"]" + "(" + this.find("[name=\""+attr+"\"]").length + ")");
-                if (this.find("[name=\""+attr+"\"]").length != 0) {
-                    //hodnoty vlozim do formulare
-                    this.find("[name=\""+attr+"\"]").val(values[attr]);
+                var $item = this.find("[name=\""+attr+"\"]");
+                if ($item.length != 0) {
+                    if ($item.is(':checkbox')) {
+                        if (values[attr] != '') {
+                            $item.attr('checked', true);
+                        } else {
+                            $item.attr('checked', false);
+                        }
+                    } else if ($item.is(':radio')) {
+                        var value = values[attr];
+                        // Find radio with given value
+                        $item.filter('[value="' + value + '"]').attr('checked', true);
+                    } else {
+                        //hodnoty vlozim do formulare
+                        $item.val(values[attr]);
+                    }
                 }
-
             }
 
         }

@@ -22,7 +22,6 @@ $(document).ready(function(){
 
         //inicializace fancyboxu
 
-
         //kliknutim na tlacitko cancel zrusim soubor - odstranim
         //vsechny prvky, ktere se ho tykaji ze stranky
         $photo.find('.cancel').click(function(){

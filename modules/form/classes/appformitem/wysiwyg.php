@@ -8,6 +8,8 @@ class AppFormItem_Wysiwyg extends AppFormItem_String
     protected $config = Array(
         'images_upload' => true,
         'formatting_tags' => NULL, // keep editor default setting
+        'buttons' => array('html', 'formatting', '|', 'bold', 'italic', '|','fontcolor','|',
+            'unorderedlist', 'orderedlist', 'outdent', 'indent', '|', 'link', '|', 'alignleft', 'aligncenter', 'alignright'),
     );
 
     /**
@@ -16,7 +18,9 @@ class AppFormItem_Wysiwyg extends AppFormItem_String
     public function init()
     {
         // Poskladame config prvku
-        $config = Array();
+        $config = Array(
+            'buttons' => $this->config['buttons'],
+        );
 
         // Pokud je povolen uplaod obrazku tak predame url na upload controller a dalsi parametry
         if ($this->config['images_upload']) {

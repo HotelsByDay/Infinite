@@ -24,8 +24,6 @@ class AppFormItem_PropertyAddress extends AppFormItem_Base
         'location_zoom' => 15,
     );
 
-
-
     /**
      * Zajistuje vlozeni potrebnych jquery pluginu do stranky
      */
