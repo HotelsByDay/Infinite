@@ -633,7 +633,8 @@ abstract class Filter_Base
 
         if ($page_index * $page_size >= $this->results_total_count)
         {
-            $this->filter_params[self::PAGE_INDEX_KEY] = (int)($this->results_total_count / $page_size) - 1;
+            $pi = (int)ceil(($this->results_total_count / $page_size)) - 1;
+            $this->filter_params[self::PAGE_INDEX_KEY] = $pi < 0 ? 0 : $pi;
         }
 
         //pokud existuje FilterState model, ktery byl pouzit pro ziskani parametru
