@@ -30,7 +30,7 @@ class Str
             return $this;
         }
         if (empty($this->string)) {
-            $this->string = $string.suffix;
+            $this->string = $string.$suffix;
         } else {
             $this->string .= $prefix.$string.$suffix;
         }

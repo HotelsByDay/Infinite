@@ -230,6 +230,11 @@ class Helper_Appurl
         return self::object_action($controller, 'overview_subcontent', array($subcontent_name, $item_id));
     }
 
+    static public function object_overview_header($controller, $item_id)
+    {
+        return self::object_action($controller, 'overview_header', $item_id);
+    }
+
     static public function object_change_attr($controller, $item_id)
     {
         return self::object_action($controller, 'change_attr', $item_id);

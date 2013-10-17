@@ -284,6 +284,7 @@ class Core_AppForm {
             }
         }
     }
+
     /**
      * Provede zapis do logu a navic prida informace o aktualnim objektu
      * a formularovych datech pro snadnejsi diagnozu problemu.

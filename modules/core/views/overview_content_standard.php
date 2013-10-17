@@ -6,13 +6,10 @@
 
 <div class="overview_container" id="<?= $overview_container_id;?>">
 
-    <?= $header; ?>
-    <br class="clear"/>
+    <div class="overview_header">
+        <?= $header ?>
+    </div><!-- overview_header -->
 
-    <div class="view-nav overview_submenu" >
-        <?= $submenu; ?>
-        <br class="clear"/>
-    </div>
     <div class="view-data data overview_subcontent">
 
     </div>

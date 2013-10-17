@@ -955,7 +955,7 @@ abstract class Controller_Base_Object extends Controller_Layout {
 
         // inicializace pluginu
         // Pokud model implementuje Slave_Compatible interface pak pluginu formulare predame seznam povolenych jazyku
-        $config = array();
+        $config = (array)arr::get($form_config, 'js_config');
         if ($this->model instanceof Interface_AppFormItemLang_SlaveCompatible) {
             // Get languages enabled for current model
             $enabled_languages = $this->model->getEnabledLanguagesList();
@@ -995,7 +995,6 @@ abstract class Controller_Base_Object extends Controller_Layout {
         //formulare prave vytvoreneho zaznamu
         catch (Exception_RedirToActionEdit $e)
         {
-
             //presmeruju na editacni stranku pozadovaneho zaznamu
             Request::instance()->redirect(appurl::object_edit($this->controller_name, $e->getItemID()));
         }
@@ -1159,6 +1158,70 @@ abstract class Controller_Base_Object extends Controller_Layout {
         return $class_instance;
     }
 
+
+    /**
+     * Return overview header html - used for ajax header refresh after form success event
+     * @param $item_id
+     */
+    public function action_overview_header($item_id)
+    {
+        //kontrola opravneni uzivatele na konkretni objekt tohoto kontroleru
+        if ( ! $this->user->HasPermission($this->object_name, 'overview'))
+        {
+            return $this->runUnauthorizedAccessEvent();
+        }
+        //nactu ORM pozadovaneho objektu
+        $this->model = ORM::factory($this->object_name, $item_id);
+
+        //pokud neexistuje tak...
+        //@TODO: presmerovat na /table nebo hodit 404 nebo nejakou stranku, ktera informuje o tom ze dany zaznam nefunguje ?
+        if ( ! $this->model->loaded())
+        {
+            throw new Kohana_Exception('Requested object not found!');
+        }
+
+        $this->template = $this->get_overview_header_view();
+    }
+
+    /**
+     * @return View - initialized overview header view
+     */
+    protected function get_overview_header_view()
+    {
+        // Get overview header layout (for object preview and submenu)
+        $header_with_submenu = $this->_view_overview_header_layout();
+
+        // Get custom object header view
+        $header = $this->_view_overview_header();
+
+        // Set header model
+        $header->model = $this->model;
+
+        //k odkazu pro editaci pridam jeste navratovy odkaz na vypis pokud je
+        //definovan
+        $header->edit_link = $this->user->HasPermission($this->object_name, 'edit')
+            ? appurl::object_edit($this->controller_name,
+                $this->model->pk(),
+                array(
+                    Request::instance()->get_retlink(),
+                    Request::instance()->get_retlink_label()
+                ))
+            : NULL;
+
+        // Get submenu view
+        $submenu = $this->_view_overview_submenu();
+        // Set submenu object_name
+        $submenu->object_name = $this->object_name;
+
+        // Put header and submenu into their layout
+        $header_with_submenu->header = $header;
+        $header_with_submenu->submenu = $submenu;
+
+        // Return layout
+        return $header_with_submenu;
+    }
+
+
     /**
      * Generuje prehledovou stranku pro zaznam s ID $item_id.
      * @param <int> $item_id
@@ -1182,7 +1245,7 @@ abstract class Controller_Base_Object extends Controller_Layout {
         //@TODO: presmerovat na /table nebo hodit 404 nebo nejakou stranku, ktera informuje o tom ze dany zaznam nefunguje ?
         if ( ! $this->model->loaded())
         {
-            throw new Kohana_Exception('TODO!');
+            throw new Kohana_Exception('Requested object not found!');
         }
 
         //nahodny identifikator (html id atribut), ktery bude pouzit pro inicializaci
@@ -1192,9 +1255,11 @@ abstract class Controller_Base_Object extends Controller_Layout {
         //dale pridam tyto JS soubory, ktere zajistuji zakladni funkce overview stranky
         Web::instance()->addCustomJSFile(View::factory('js/jquery.objectOverview.js'));
 
+        $config['overview_header_refresh_url'] = AppUrl::object_overview_header($this->object_name, $this->model->pk());
         //provede incializaci pluginu objectOverview
         Web::instance()->addMultipleCustomJSFile(View::factory('js/jquery.objectOverview-init.js', array(
-            'overview_container_id' => $overview_container_id
+            'overview_container_id' => $overview_container_id,
+            'config' => $config,
         )));
         
         //jQuery.objectDataPanel pro funkcnost panelu, ktere se budou nacitat do obsahove castu
@@ -1221,30 +1286,10 @@ abstract class Controller_Base_Object extends Controller_Layout {
         //vlozim nazev objektu do sablony aby podle toho bylo mozne stylovat
         $this->template->content->controller_name = $this->controller_name;
 
-        //doplnim jednotlive casti overview strnaky
-        $this->template->content->header = $this->_view_overview_header();
-        
-        //predam referenci na ORM model zaznamu
-        $this->template->content->header->model = $this->model;
-
-        //k odkazu pro editaci pridam jeste navratovy odkaz na vypis pokud je
-        //definovan
-        $this->template->content->header->edit_link = $this->user->HasPermission($this->object_name, 'edit')
-                                                        ? appurl::object_edit($this->controller_name,
-                                                                              $this->model->pk(),
-                                                                              array(
-                                                                                   Request::instance()->get_retlink(),
-                                                                                   Request::instance()->get_retlink_label()
-                                                                              ))
-                                                        : NULL;
+        // Set overview header (it contains custom object preview and standard submenu)
+        $this->template->content->header = $this->get_overview_header_view();
 
         $this->template->content->model = $this->model;
-
-        //sablona, ktera zobrazuje postrani menu
-        $this->template->content->submenu = $this->_view_overview_submenu();
-        
-        //predam potrebne parametry
-        $this->template->content->submenu->object_name = $this->object_name;
 
         //vyvolani globalni udalosti 'system.action_overview_post'
         Dispatcher::instance()->trigger_event('system.action_overview_post', Dispatcher::event(array('controller' => $this)));
@@ -1553,9 +1598,30 @@ abstract class Controller_Base_Object extends Controller_Layout {
      */
     protected function _view_overview_header($view_name = NULL)
     {
-        //nazev sablony, kterou budu nacitat
+        // nazev sablony, kterou budu nacitat
         empty($view_name) AND $view_name = $this->controller_name.'_overview_header';
         
+        return $this->_load_view($view_name);
+    }
+
+    /**
+     * Returns template with overview header layout - for custom object header and overview submenu.
+     *
+     * @params <String> $viewname V pripade ze je potreba v dedicim objektu
+     * nacist jinou sablonu tak staci jeji nazev predat timto parametrem.
+     * Tento mechanismus slouzi k tomu aby nebylo nutne celou logiku nacitani sablony
+     * re-implementovat vzdy kdyz je potreba nacist sablonu s jinym nazvem.
+     *
+     * @throws MissingObjectSubviewException v pripade ze pozadovanou sablonu
+     * nelze nacist.
+     *
+     * @returns <View>
+     */
+    protected function _view_overview_header_layout($view_name = NULL)
+    {
+        //nazev sablony, kterou budu nacitat
+        empty($view_name) AND $view_name = 'overview_header_layout_standard';
+
         return $this->_load_view($view_name);
     }
 

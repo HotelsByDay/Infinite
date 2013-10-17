@@ -498,6 +498,10 @@
 
                             $_this.trigger('objectFormSuccess');
 
+                            if (typeof (settings.force_overview_header_refresh) != 'undefined' && settings.force_overview_header_refresh) {
+                                $_this.trigger('overview_header_refresh');
+                            }
+
                         //pokud doslo k validacni chybe, tak uzivatele posunu
                         } else if (response['action_status'] == '<?= AppForm::ACTION_RESULT_FAILED;?>') {
 
