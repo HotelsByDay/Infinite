@@ -15,6 +15,9 @@ class Controller_Logs extends Controller {
 
     function before()
     {
+        if ( ! Auth::instance()->get_user()->IsAdmin()) {
+            die('');
+        }
         $this->layout = new View('logs/layout');
         $this->_logDir = Kohana::config('logviewer.log_path');
 
