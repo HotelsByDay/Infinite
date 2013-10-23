@@ -134,7 +134,7 @@ $(document).ready(function(){
                 });
                 //uzivateli se zobrazi info zprava - porad prvku bude
                 //zachovano jen kdyz se ulozi formular
-                $.userInfoMessage("<?= __('form.AppFormItemFile.order_update.info_message');?>");
+                $.userInfoMessage($('<div class="alert alert-info">' + "<?= $order_update_info_message; ?>" + '</div>'));
             }
         }).disableSelection();
         <?php endif ?>

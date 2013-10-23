@@ -113,7 +113,7 @@ class Upload_FileUploader
             finfo_close($finfo);
 
             //pokud se nejedna o jeden z povolenych typu tak vyhodim vyjimku
-            if ( ! empty($this->allowed_mimetypes) && ! in_array($file_mimetype, $this->allowed_mimetypes))
+            if ( ! empty($this->allowed_mimetypes) && ! in_array($file_mimetype, $this->allowed_mimetypes) && ! in_array($file_ext, $this->allowed_mimetypes))
             {
                 throw new Upload_Exception_UserError(__('upload.error.not_allowed_file_type'));
             }

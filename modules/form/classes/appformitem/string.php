@@ -56,6 +56,8 @@ class AppFormItem_String extends AppFormItem_Base
             $view->field_prefix = $this->config['field_prefix'];
         }
 
+        $view->input_class = arr::get($this->config, 'input_class', '');
+
         // Vratime $view
         return $view;
     }

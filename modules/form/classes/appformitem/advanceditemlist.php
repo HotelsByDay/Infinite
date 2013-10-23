@@ -47,6 +47,7 @@ class AppFormItem_AdvancedItemList extends AppFormItem_Base
             'sortable' => arr::get($this->config, 'sortable', NULL),
             'one_unsaved_most' => arr::get($this->config, 'one_unsaved_most', false),
             'highlight_new' => arr::get($this->config, 'highlight_new', false),
+            'order_update_info_message' => arr::get($this->config, 'order_update_info_message', __('form.AppFormItemAdvancedItemlist.order_update.info_message')),
         );
 
         //predam parametry sablone
@@ -93,7 +94,7 @@ class AppFormItem_AdvancedItemList extends AppFormItem_Base
         }
 
         //@TODO: nejak upravit
-        return empty($error_messages) ? NULL : $error_messages;
+        return empty($error_messages) ? NULL : 'error'; //$error_messages;
     }
 
 
@@ -107,7 +108,7 @@ class AppFormItem_AdvancedItemList extends AppFormItem_Base
     {
         if (empty($this->form_data))
         {
-            $model = $this->model->{$this->rel_object_name}->where($this->rel_object_name.'.deleted', 'IS', DB::Expr('NULL'));
+            $model = $this->model->{$this->rel_object_name}; //->where($this->rel_object_name.'.deleted', 'IS', DB::Expr('NULL'));
 
             //aplikace razeni (pokud je v konfiguraci definovan atribut, podle ktereho se ma radit)
             if (($sequence_field = arr::get($this->config, 'sortable')))
@@ -116,6 +117,8 @@ class AppFormItem_AdvancedItemList extends AppFormItem_Base
             }
 
             $rel_models = $model->find_all();
+
+            Kohana::$log->add(Kohana::INFO, $model->last_query());
 
             foreach ($rel_models as $rel_model)
             {

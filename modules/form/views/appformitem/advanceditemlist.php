@@ -1,9 +1,9 @@
 <div class="appformitemadvanceditemlist <?= $css ?>" id="<?= $uid;?>">
     <span class="add_loader" style="display:none"><?= __('appformitemadvanceditemlist.add_pi');?></span>
-    <a href="#" class="add button grey"><?= $add_button_label;?></a>
+    <a href="#" class="btn btn-success add button grey"><?= $add_button_label;?></a>
 
     <?php if (isset($hint) && !empty($hint)): ?>
-    <span class="hint"><?= $hint; ?></span>
+        <span class="hint"><?= $hint; ?></span>
     <?php endif ?>
 
     <ul class="list unstyled">

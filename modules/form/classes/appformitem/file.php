@@ -169,8 +169,14 @@ class AppFormItem_File extends AppFormItem_Base
             //najdu pozici posledniho lomitka
             $delimiter_pos = strrpos($mime_type, '/');
 
+            if ($delimiter_pos === false) {
+                $delimiter_pos = 0;
+            } else {
+                $delimiter_pos++;
+            }
+
             //koncovku vlozim do seznamu povolenych koncovek
-            $js_config['allowed_extensions'][] = substr($mime_type, - (strlen($mime_type) - $delimiter_pos - 1));
+            $js_config['allowed_extensions'][] = substr($mime_type, $delimiter_pos);
         }
 
         //dale si vytahnu maximalni povolenou velikost pro soubor
@@ -197,6 +203,7 @@ class AppFormItem_File extends AppFormItem_Base
         $js_file->params             = arr::get($this->config, 'params', array());
         $js_file->file_count         = arr::get($this->config, 'file_count', 0);
         $js_file->sortable           = arr::get($this->config, 'sortable', NULL);
+        $js_file->order_update_info_message = arr::get($this->config, 'order_update_info_message', __('form.AppFormItemFile.order_update.info_message'));
 
         //vlozim do stranky
         parent::addInitJS($js_file);
