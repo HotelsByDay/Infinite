@@ -250,12 +250,11 @@
                     } else {
                         zoom_out = 3;
                     }
-
                     map.setCenter(bounds.getCenter(), map.getBoundsZoomLevel(bounds) - zoom_out);
 
                     //pridam listener - kdyz skonci dragovani tak si chci ulozit nove souradnice
                     //timto uzivateli dovolim explicitne definovat souradnice
-                    GEvent.addListener(marker, "dragend", function() {
+                    if (marker) GEvent.addListener(marker, "dragend", function() {
 
                         var point = marker.getPoint();
 
