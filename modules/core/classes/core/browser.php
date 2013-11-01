@@ -18,6 +18,8 @@ class Core_Browser
      */
     static public function compatible()
     {
+    	return TRUE;
+    
         //retezec popisujici prohlizec uzivatele
         $user_agent = arr::get($_SERVER, 'HTTP_USER_AGENT', '');
 
