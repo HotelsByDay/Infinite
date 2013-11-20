@@ -185,13 +185,11 @@ class Core_Menu {
     {
         if (empty($subnavigation)) return '';
         return '<div id="sub-nav">
-        <ul class="unstyled pull-right">
-                    
+        <ul class="nav nav-pills">
                             '.$subnavigation.'
-                       
-                       
           </ul>
-                </div><!-- sub-nav -->';
+                </div><!-- sub-nav -->
+                ';
     }
     
     
@@ -199,10 +197,7 @@ class Core_Menu {
     protected function wrapSubNavigationNew($content)
     {
          // Ten pristup do jazykoveho soubrou nemusi vzdy fungovavt (!)
-         return '<span class="" style="display:none">'.__('object.add_new').'</span>
-                 
-                '.$content.'
-                 ';
+         return $content;
     }
  
 // Konec wraperu ==========================================================================
@@ -610,10 +605,8 @@ class Core_Menu {
                 // Pokud je polozka aktivni, pridame tridu a obsahem nebude odkaz, ale jen text
                 if ($this->subNavigationActive(arr::get($item, 'link', NULL))) {
                     $classes[] = $this->active_class_name;
-                    $content = $label;
-                } else {
-                    $content = isset($item['link']) ? $this->createLink($item['link'], $label) : $label;
                 }
+                $content = isset($item['link']) ? $this->createLink($item['link'], $label) : $label;
                 $this->subnavigation .= $this->createItem($content, $classes, arr::get($item, 'id', ''));
             }
         }
