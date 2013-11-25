@@ -31,6 +31,7 @@ return array(
     'main_menu.settings' => 'Settings',
 
     'object_data_panel.search' => 'Search',
+    'objectimageselector.manage_images_link' => 'Manage Images',
 
     'object.action.delete.message_ok' => ':count records were succesfully removed.',
     'object.action.delete.message_error' => 'There was an error when removing records:',

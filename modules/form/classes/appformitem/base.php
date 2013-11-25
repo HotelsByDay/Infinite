@@ -162,6 +162,10 @@ class AppFormItem_Base
     {
         if ( ! $this->virtual)
         {
+            // If item is nullable then convert empty values to NULL
+            if (arr::get($this->config, 'nullable', false) and empty($value)) {
+                $value = NULL;
+            }
             $this->model->{$this->attr} = $value;
         }
         else

@@ -6,6 +6,7 @@
 
     <input type="hidden" name="<?= $attr ?>[images_list]" value="" />
     <input type="hidden" name="<?= $attr ?>[id]" value="<?= $value ?>" />
+    <input type="hidden" name="<?= $attr ?>[rel_id]" value="<?= $rel_id ?>" />
 
     <style type="text/css">
 
@@ -56,6 +57,11 @@
             </div>
         <?php endforeach; ?>
     </div>
+
+    <?php if (isset($image_edit_url) and $image_edit_url): ?>
+        <a href="<?= $image_edit_url ?>" class="manage_images btn btn-primary btn-small"><?= __('objectimageselector.manage_images_link') ?></a>
+    <?php endif; ?>
+
     </div>
     <div class="clear"></div>
 
@@ -65,7 +71,6 @@
             <a href="" class="zoom" title=""><img src="" /></a>
         </div>
         <span class="preview"></span>
-        <br />
         <span class="select"><a href="javascript: ;"><?= __('objectimageselector.select_image') ?></a></span>
     </div>
 

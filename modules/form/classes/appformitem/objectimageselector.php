@@ -80,6 +80,16 @@ class AppFormItem_ObjectImageSelector extends AppFormItem_Base
     {
         $view = parent::Render($render_style, $error_messages);
         $view->images = $this->getImages();
+        $view->rel_id = $this->model->{$this->relobject}->pk();
+
+        if ($image_edit_url = arr::get($this->config, 'image_edit_url')) {
+            if (is_callable($image_edit_url)) {
+                $image_edit_url = call_user_func($image_edit_url, $this->model);
+            } else {
+                $image_edit_url = AppUrl::object_edit_ajax($this->relobject, $image_edit_url, '_ID');
+            }
+            $view->image_edit_url = $image_edit_url;
+        }
         return $view;
     }
 
