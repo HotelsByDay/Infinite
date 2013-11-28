@@ -1006,6 +1006,10 @@ class ORM extends Kohana_ORM {
      */
     public function is_unique_value($column, $value)
     {
+        // If value is NULL then we can consider it unique
+        if ($value === NULL) {
+            return true;
+        }
         $q = DB::select(array('COUNT("*")', 'total_count'))
 						->from($this->_table_name)
                         ->where($this->_primary_key, '!=', $this->pk())
