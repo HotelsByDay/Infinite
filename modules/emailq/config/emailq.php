@@ -7,10 +7,10 @@ return array(
 //        'port' => '465',
 //        'auth' => true,
 //        'username' => 'root',
-//        'password' => 'AhTai2aeGhai',
+//        'password' => 'aaa',
 //        'encryption' => 'tls',
 //        'debug'    => false,
-//        'sender_email' => 'info@fleet4u.cz',
-//        'sender_name'  => 'Fleet4U'
+        'sender_email' => AppConfig::instance()->get('application', 'from_email'),
+        'sender_name'  => AppConfig::instance()->get('application', 'from_name'),
     ),
 );
