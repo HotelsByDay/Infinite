@@ -22,7 +22,7 @@ function initObjectFilterAutocomplete($visible_input, $hidden_input, data_url) {
                 data: {
                     featureClass: "P",
                     style: "full",
-                    maxRows: 15,
+                    maxRows: 30,
                     <?= Filter_Base::FULLTEXT_QUERY_KEY;?>: request.term
                 },
                 success: function( data ) {

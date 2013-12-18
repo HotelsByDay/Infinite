@@ -42,7 +42,7 @@ abstract class Filter_Base
         'neighbour_items' => 2,
 
         //defaultni velikost stranky
-        'default_page_size' => 15,
+        'default_page_size' => 25,
         //povolit funkci pro ulozeni stavu filtru ?
         'save_filtere_state' => TRUE,
 
@@ -922,7 +922,7 @@ abstract class Filter_Base
      */
     protected function getPageSize()
     {
-        $default_page_size = arr::getifset($this->config, 'default_page_size', 15);
+        $default_page_size = arr::getifset($this->config, 'default_page_size', 25);
 
         return arr::getifset($this->filter_params, Filter_Base::PAGE_SIZE_KEY, $default_page_size);
     }
