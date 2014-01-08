@@ -70,6 +70,12 @@ class Model_Core_User extends Model_Auth_User {
         // nothing by default
     }
 
+    protected function getDefaults()
+    {
+        $defaults = parent::getDefaults();
+        $defaults['active'] = 1;
+        return $defaults;
+    }
 
     /**
      * Metoda testuje zda uzivatel ma roli s danym nazvem. Druha varianta pouziti

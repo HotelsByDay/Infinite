@@ -173,5 +173,6 @@ class AppFormItem_RelSelect extends AppFormItem_Base
             $view->name = $watermark;
             $view->watermark = TRUE; // rika ze se ma inputu pridat class watermark
         }
+        $view->input_class = arr::get($this->config, 'input_class');
     }
 }

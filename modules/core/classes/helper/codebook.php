@@ -59,7 +59,7 @@ class Helper_Codebook
         $values = self::readFromCache($codebook, 'value_list', $filter);
         // Pokud tam nebyl, nacteme z DB a ulozime do cache
         if ($values === FALSE) {
-            $values = ORM::factory($codebook)->get_codebook($filter);
+            $values = static::getCodebookModel($codebook)->get_codebook($filter);
             self::saveToCache($values, $codebook, 'value_list', $filter);
         }// else { echo "readed from cache - $codebook - <br>"; print_r($values); exit; }
         
@@ -79,13 +79,20 @@ class Helper_Codebook
         $values = self::readFromCache($codebook, 'value_list');
         // Pokud tam nebyl, nacteme z DB a ulozime do cache
         if ($values === FALSE) {
-            $values = ORM::factory($codebook)->get_codebook();
+            $values = static::getCodebookModel($codebook)->get_codebook();
             self::saveToCache($values, $codebook, 'value_list');
         }
         
         // Vratime nazev pozadovane polozky ciselniku
         return arr::get($values, $id, NULL);
     }
+
+
+    protected static function getCodebookModel($codebook_name)
+    {
+        return ORM::factory($codebook_name);
+    }
+
     
     
     /**
@@ -107,7 +114,7 @@ class Helper_Codebook
         $values = self::readFromCache($codebook, 'key_list');
         // Pokud tam nebyl, nacteme z DB a ulozime do cache
         if ($values === FALSE) {
-            $values = ORM::factory($codebook)->get_cb_keys();
+            $values = static::getCodebookModel($codebook)->get_cb_keys();
             self::saveToCache($values, $codebook, 'key_list');
         }
 

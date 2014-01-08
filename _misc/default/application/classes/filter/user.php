@@ -15,6 +15,9 @@ class Filter_User extends Filter_Base {
                     ->or_like('seller.surname', $value)
                 ->and_where_close();
         }
+
+
+
         return $this;
     }
     
@@ -25,6 +28,7 @@ class Filter_User extends Filter_Base {
 
         return $this;
     }
+
 }
 
 ?>

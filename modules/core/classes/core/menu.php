@@ -12,8 +12,7 @@
 class Core_Menu {
     
     // Konstanty pro specialni polozky menu
-    
-    
+
     // (!) Specialni typy lze pouzit pouze v 1. urovni menu (!)
     // Specialni typ polozky - odkaz DOMU
     const ITEM_TYPE_HOME = 1;
@@ -634,9 +633,15 @@ class Core_Menu {
                         // wrapSubmenu se nemuse volat primo v createSubmenu, kvuli rekurzi
                         $content .= $this->wrapSubmenu($this->createSubmenu($item['submenu']));
                     }
+
+                    $classes = $this->getItemClasses($item);
+                    // Pokud je polozka aktivni, pridame tridu a obsahem nebude odkaz, ale jen text
+                    if ($this->subNavigationActive(arr::get($item, 'link', NULL))) {
+                        $classes[] = $this->active_class_name;
+                    }
                     $subnavigation_new .= $this->createItem(
                                 $content,
-                                $this->getItemClasses($item),
+                                $classes,
                                 arr::get($item, 'id', '')
                             );
                 }
@@ -710,6 +715,7 @@ class Core_Menu {
         $classes = arr::get($item, 'css', array());
         // Pokud se precetl strin, prevedeme na pole
         if (is_string($classes)) $classes = explode(' ', $classes);
+
         // Vratime vysledne pole css trid
         return $classes;
     }

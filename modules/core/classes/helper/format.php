@@ -4,6 +4,24 @@ class Helper_Format {
 
 
     /**
+     * Returns human readable filesize with B / kB / MB units
+     * @param $file_size
+     * @return string
+     */
+    public static function fileSize($file_size)
+    {
+        if ($file_size < 1000) {
+            $file_size = (int)($file_size).'&nbsp;B';
+        } else if ($file_size < 1000*1000) {
+            $file_size = (int)($file_size / 1000).'&nbsp;KB';
+        } else {
+            $file_size = (int)($file_size / (1000*1000)).'&nbsp;MB';
+        }
+        //vracim vyslednou velikost souboru
+        return $file_size;
+    }
+
+    /**
      * @static
      * @param $fname
      * @param $width
