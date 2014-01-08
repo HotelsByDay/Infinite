@@ -150,6 +150,13 @@ class Model_Core_User extends Model_Auth_User {
     public function HasPermission($object_name, $function = NULL)
     {
 
+        /**
+         * PP 16.12.2013: added config settings to disable ACL on application level
+         */
+        if ( ! Kohana::config('application.acl_enabled', true)) {
+            return TRUE;
+        }
+
         //admin ma opravneni na vsecko
         if ($this->IsAdmin()) {
             return TRUE;
