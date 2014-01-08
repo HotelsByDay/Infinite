@@ -1,8 +1,4 @@
-
-    <h4><?= $headline;?></h4>
-   
-
-
+<h4><?= $headline;?></h4>
 
         <div class="filterstate_header hd" style="display:none;">
             <h2 class="name"></h2>
