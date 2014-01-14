@@ -275,7 +275,15 @@ class Validate extends Kohana_Validate {
 				}
 			}
 
-			if ($message = Kohana::message($file, "{$field}.{$error}") AND is_string($message))
+
+
+            // If custom message is defined in i18n file - use that
+            $custom_message = "$object.validation.{$field}.{$error}";
+            if (__($custom_message) != $custom_message)
+            {
+                $message = $custom_message;
+            }
+			elseif ($message = Kohana::message($file, "{$field}.{$error}") AND is_string($message))
 			{
 				// Found a message for this field and error
 			}
@@ -293,8 +301,10 @@ class Validate extends Kohana_Validate {
 			}
 			else
 			{
-				$message = "$object.validation.{$field}.{$error}";
+				$message = $custom_message;
 			}
+
+
 
 			if ($translate)
 			{
