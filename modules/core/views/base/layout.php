@@ -27,6 +27,10 @@
 
 <?= View::factory('noscript');?>
 
+<?php if (isset($flash_message) and ! empty($flash_message)): ?>
+    <div class="hidden" id="hfm"> <?= $flash_message ?></div>
+<?php endif; ?>
+
 <div id="header">
     <div id="header-in">
         <span class="logo"><?= AppConfig::instance()->get('system_header', 'application');?></span>

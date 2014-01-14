@@ -68,6 +68,9 @@ abstract class Controller_Layout extends Controller_AuthTemplate {
             //navigaci predm nazev aktualniho objektu (pokud nektery z dedicich kontroleru)
             //toto definuje a podle toho se nastavi aktivni polozka v menu
             $this->template->navigation = Menu::instance()->getMenu($this->menu_config);
+
+            // Session flash message
+            $this->template->flash_message = Session::instance()->flash();
         }
 
         //vyvolani globalni udalosti 'system.layout_after'
