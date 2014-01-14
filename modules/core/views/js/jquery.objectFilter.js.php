@@ -915,6 +915,8 @@
                                                 request_params: params
                                             });
 
+                                            $_this.trigger('tableDataReplaced');
+
                                         },
                                         error: function( jqXHR, textStatus, errorThrown ) {
 

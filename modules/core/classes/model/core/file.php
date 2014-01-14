@@ -6,6 +6,9 @@
  */
 abstract class Model_Core_File extends ORM
 {
+    const FILE_TYPE_FILE = 'file';
+    const FILE_TYPE_IMAGE = 'image';
+
     static public $allowed_image_dimension = array();
 
     /**
@@ -72,6 +75,17 @@ abstract class Model_Core_File extends ORM
     protected $_copy_source_filepath = NULL;
 
     protected $_temp_file = NULL;
+
+
+    /**
+     * Returns type of files managed by the model.
+     * Used to determine if images are managed to save their width & height
+     */
+    public function file_type()
+    {
+        // @todo - determine file type based on it's extension
+        return static::FILE_TYPE_FILE;
+    }
 
     public function pk()
     {
@@ -254,24 +268,19 @@ abstract class Model_Core_File extends ORM
      * Vraci velikost souboru, ktery tento model reprezentuje.
      * @return <string>
      */
-    public function getFileSize()
+    public function getFileSize($formatted=true)
     {
-        // kontrola existence souboru - pokud neexistuje vracime 0
-        if (!is_file($this->getFileDiskName())) {
-            return 0;
-        }
-        //pokud ma vice nez 1 MB tak zobrazim velikost v MB, jinak v KB
-        $file_size = filesize($this->getFileDiskName());
-
-        if ($file_size < 1000) {
-            $file_size = (int)($file_size).'&nbsp;B';
-        } else if ($file_size < 1000*1000) {
-            $file_size = (int)($file_size / 1000).'&nbsp;KB';
+        if ( ! empty($this->filesize)) {
+            $file_size = $this->filesize;
         } else {
-            $file_size = (int)($file_size / (1000*1000)).'&nbsp;MB';
+            // kontrola existence souboru - pokud neexistuje vracime 0
+            if (!is_file($this->getFileDiskName())) {
+                return 0;
+            }
+            //pokud ma vice nez 1 MB tak zobrazim velikost v MB, jinak v KB
+            $file_size = filesize($this->getFileDiskName());
         }
-        //vracim vyslednou velikost souboru
-        return $file_size;
+        return $formatted ? Format::fileSize($file_size) : $file_size;
     }
 
     /**
@@ -650,10 +659,24 @@ abstract class Model_Core_File extends ORM
                 mkdir($target_filedir, 0777, TRUE);
             }
 
-
             //provede kopii souboru
             copy($this->_copy_source_filepath, $target_filedir . DIRECTORY_SEPARATOR . $this->nicename );
         }
+
+
+        if ($this->hasAttr('file_size') and empty($this->file_size)) {
+            $this->file_size = $this->getFileSize(false);
+        }
+        if ($this->file_type() == static::FILE_TYPE_IMAGE
+            and $this->hasAttr('width')
+            and $this->hasAttr('height')
+            and (empty($this->width) or empty($this->height))
+        ) {
+            $img = Image::factory($this->getFileDiskName());
+            $this->width = $img->width;
+            $this->height = $img->height;
+        }
+        parent::save();
  
  		//vytvori se resize varianty dle nataveni modelu
         $this->createResizedVariants();

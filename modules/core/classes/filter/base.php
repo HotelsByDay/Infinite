@@ -1239,7 +1239,7 @@ abstract class Filter_Base
     public function view_table_data_container($view_name=NULL)
     {
         //nazev sablony, kterou budu nacitat
-        empty($view_name) AND $view_name = 'table_data_container';
+        empty($view_name) AND $view_name = arr::get($this->config, 'table_data_container', 'table_data_container');
 
         return View::factory($view_name);
     }

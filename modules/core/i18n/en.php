@@ -33,9 +33,28 @@ return array(
     'object_data_panel.search' => 'Search',
     'objectimageselector.manage_images_link' => 'Manage Images',
 
-    'object.action.delete.message_ok' => ':count records were succesfully removed.',
+
+    'object.inactive' => 'Inactive',
+    'object.active' => 'Active',
+
+    'object.activate_action' => 'Activate',
+    'object.action.activate.message_ok' => ':count records were successfully activated.',
+    'object.action.activate.message_error' => 'There was an error when activating records:',
+    'object.action.activate.undo_message_ok' => ':count records were successfully restored (inactivated).',
+    'object.action.activate.undo_message_error' => 'There was an error restoring (inactivating) these records:',
+    'object.action.activate.confirm' => 'Are you sure to activate selected records?',
+
+    'object.inactivate_action' => 'Inactivate',
+    'object.action.inactivate.message_ok' => ':count records were successfully inactivated.',
+    'object.action.inactivate.message_error' => 'There was an error when inactivating records:',
+    'object.action.inactivate.undo_message_ok' => ':count records were successfully restored (activated).',
+    'object.action.inactivate.undo_message_error' => 'There was an error restoring (activating) these records:',
+    'object.action.inactivate.confirm' => 'Are you sure to inactivate selected records?',
+
+
+    'object.action.delete.message_ok' => ':count records were successfully removed.',
     'object.action.delete.message_error' => 'There was an error when removing records:',
-    'object.action.delete.undo_message_ok' => ':count records were succesfully restored.',
+    'object.action.delete.undo_message_ok' => ':count records were successfully restored.',
     'object.action.delete.undo_message_error' => 'There was an error restoring these records:',
 
     //PRIHLASOVACI OBRAZOVKA

@@ -115,7 +115,8 @@ class Core_Panel {
             $link_attr = ' class="drop"';
         } else {
             $submenu = ''; // at nemusime testovat isset
-            $link_attr = ' class="action_button  btn action_button_'.$action.'" action="'.$action.'"';
+            $class = arr::get($item, 'button_class');
+            $link_attr = ' class="action_button btn action_button_'.$action.' '.$class.'" action="'.$action.'"';
         }
 
         if (arr::get($item, 'need_selection', true)) {

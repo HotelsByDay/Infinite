@@ -70,6 +70,12 @@ class Model_Core_User extends Model_Auth_User {
         // nothing by default
     }
 
+    protected function getDefaults()
+    {
+        $defaults = parent::getDefaults();
+        $defaults['active'] = 1;
+        return $defaults;
+    }
 
     /**
      * Metoda testuje zda uzivatel ma roli s danym nazvem. Druha varianta pouziti
@@ -143,6 +149,13 @@ class Model_Core_User extends Model_Auth_User {
      */
     public function HasPermission($object_name, $function = NULL)
     {
+
+        /**
+         * PP 16.12.2013: added config settings to disable ACL on application level
+         */
+        if ( ! Kohana::config('application.acl_enabled', true)) {
+            return TRUE;
+        }
 
         //admin ma opravneni na vsecko
         if ($this->IsAdmin()) {

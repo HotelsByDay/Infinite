@@ -131,7 +131,9 @@
                                 name = name.replace(default_params['attr'], attr_name)
                                            .replace('[name]', '[value]');
 
-                                $item_selector = $('input[name="'+name +'"]');
+                                console.log('looking for name: ' + name);
+
+                                var $item_selector = $('input[name="'+name +'"]');
                                 if ($item_selector.length != 0) {
                                     pom_data[attr_name] = $item_selector.val();
                                 }

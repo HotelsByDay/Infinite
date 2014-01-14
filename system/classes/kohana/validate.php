@@ -1149,7 +1149,6 @@ class Kohana_Validate extends ArrayObject {
 				// No message exists, display the path expected
 				$message = "{$file}.{$field}.{$error}";
 			}
-
 			if ($translate)
 			{
 				if (is_string($translate))
@@ -1168,7 +1167,6 @@ class Kohana_Validate extends ArrayObject {
 				// Do not translate, just replace the values
 				$message = strtr($message, $values);
 			}
-
 			// Set the message for this field
 			$messages[$field] = $message;
 		}

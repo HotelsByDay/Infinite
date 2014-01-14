@@ -1,11 +1,9 @@
-
-
-<div class="appformitemcontainer <?= $css ?>">
-    <?php if ( ! empty($error_message)): ?>
-        <span class="validation_error alert alert-error" style="color:red;"><?= $error_message;?></span>
-    <?php endif ?>
+<div class="appformitemcontainer <?= $css ?> control-group <?= empty($error_message) ? '' : 'error' ?>">
     <label for="<?= $attr ?>_id"><?= $label ?></label>
 
     <?= form::select($attr, $values, (string)$value, Array('id'=>$attr.'_id')) ?>
 
+    <?php if ( ! empty($error_message)): ?>
+        <span class="validation_error text-error"><?= $error_message; ?></span>
+    <?php endif ?>
 </div>

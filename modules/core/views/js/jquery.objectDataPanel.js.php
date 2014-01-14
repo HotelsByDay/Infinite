@@ -189,7 +189,7 @@
                 {
                     //vytvori tlacitko pro pridani noveho zaznamu
                     var $add_new_button = $( document.createElement('button') ).html(settings['newButtonLabel'])
-                                                                           .addClass('button btn btn-primary')
+                                                                           .addClass('button btn btn-success add_button')
                                                                            .appendTo($filter_container);
 
                     //otevreni a nacteni obsahu dialogu
