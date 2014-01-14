@@ -39,17 +39,24 @@ class Core_Menu {
     
     // Oddelovac nazvu urovni v menu
     protected $label_separator = '&nbsp;-&nbsp;';
-    
-    // Atributy nacitane v konstruktoru
-    protected $current_action = NULL;
-    
-    protected $current_controller = NULL;
+
     
     
     // Do techto atributu se postupne nageneruje menu a subnavigation 
     protected $main_menu = '';
     protected $subnavigation = '';
-    
+
+    // Current controller and action in URL - for permission controls
+    protected $controller = NULL;
+    protected $action = NULL;
+
+    // Controller - implies which menu item should be highlighted
+    protected $nav_controller = NULL;
+
+    // Subnav controller and action - implies which subnavigation item should be highlighted
+    protected $subnav_action = NULL;
+    protected $subnav_controller = NULL;
+
     
     // Neco jako globalni promenna pro ulozeni hloubky zanoreni pri generovani
     // submenu pomoci nepřímé rekurze - nevim jestli bude potřeba
@@ -75,7 +82,7 @@ class Core_Menu {
         
         // + array nam zajisti ze prava strana vyrazu bude vzdy pole s alespon jednim prvkem
         list($controller) = explode('/', $link) + array(NULL);
-        return ($controller == $this->controller);
+        return ($controller == $this->nav_controller);
     }
 
 
@@ -100,7 +107,7 @@ class Core_Menu {
         
         // + array(null, null) zajisti ze prava strana vzdy bude pole s alespon dvema prvky
         list($controller, $action) = explode('/', $link) + array(NULL, NULL);
-        return ($controller == $this->controller and $action == $this->action);
+        return ($controller == $this->subnav_controller and $action == $this->subnav_action);
     }
     
     
@@ -727,13 +734,36 @@ class Core_Menu {
         empty($instance) and $instance = new Menu();
         return $instance;
     }
-    
+
+
+    /**
+     * Manually sets the controller name to change active main menu item
+     * @param $ctrl
+     * @return $this
+     */
+    public function setActiveMenu($controller)
+    {
+        $this->nav_controller = $controller;
+        return $this;
+    }
+
+    /**
+     * Manually sets the action name to change active menu item
+     * @param $action
+     * @return $this
+     */
+    public function setActiveMenuItem($controller, $action)
+    {
+        $this->subnav_action = $action;
+        $this->subnav_controller = $controller;
+        return $this;
+    }
+
     protected function __construct()
     {        
         // Nacteni aktualniho controlleru a akce z Request tridy
-        $this->controller = Request::instance()->controller;
-        $this->action = Request::instance()->action;
-       
+        $this->controller = $this->nav_controller = $this->subnav_controller = Request::instance()->controller;
+        $this->action = $this->subnav_action = Request::instance()->action;
     }
     
     private function __clone() {}    
