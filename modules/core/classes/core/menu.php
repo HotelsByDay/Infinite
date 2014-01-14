@@ -401,7 +401,6 @@ class Core_Menu {
     {
         // Kontrola opravneni
         if ( ! $this->hasAccess($menu_item, true)){
-            
             return;
         };
         
