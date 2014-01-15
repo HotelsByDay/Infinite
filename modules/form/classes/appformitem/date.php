@@ -16,7 +16,7 @@ class AppFormItem_Date extends AppFormItem_String
     public function init()
     {
         $init_js = View::factory('js/jquery.AppFormItemDate-init.js');
-        $init_js->format = DateFormat::getDatePickerDateFormat();
+        $init_js->format = arr::get($this->config, 'js_date_format', DateFormat::getDatePickerDateFormat());
         parent::addInitJS($init_js);
         return parent::init();
     }
@@ -35,7 +35,7 @@ class AppFormItem_Date extends AppFormItem_String
         $value = parent::getValue();
 
         //trimovani kvuli tomu ze by time_format mohl byt prazdny
-        return DateFormat::getUserDate($value);
+        return DateFormat::getUserDate($value, arr::get($this->config, 'php_date_format'));
     }
 
     /**

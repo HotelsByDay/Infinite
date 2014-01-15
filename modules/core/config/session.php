@@ -3,6 +3,6 @@
 return array(
         'native' => array(
                 'name' => 'sessionX1',
-                'lifetime' => 86400,
+                'lifetime' => 0,
         ),
 );
