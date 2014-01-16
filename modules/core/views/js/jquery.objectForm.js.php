@@ -45,6 +45,8 @@
                     settings: settings
                 });
 
+                console.log(options);
+
                 //vytvorim si kopii defaultnich parametru - ta se pouzije v pripade
                 //ze uzivatel se vrati na stav url kdy je prazdny hash (defaultni stav
                 //po nacteni stranky)
@@ -498,6 +500,7 @@
 
                             $_this.trigger('objectFormSuccess');
 
+                            console.log(settings);
                             if (typeof (settings.force_overview_header_refresh) != 'undefined' && settings.force_overview_header_refresh) {
                                 $_this.trigger('overview_header_refresh');
                             }

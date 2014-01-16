@@ -20,9 +20,12 @@ return array(
 //	'min_length'    => 'validation_error.min_length',
 //	'max_length'    => 'validation_error.max_length',
 	'not_empty'     => 'validation_error.not_empty',
+	'required'     => 'validation_error.required',
 //	'numeric'       => 'validation_error.numeric',
 	'phone'         => 'validation_error.phone',
 //	'range'         => 'validation_error.range',
 //	'regex'         => 'validation_error.regex',
 	'url'           => 'validation_error.url',
+    'validation_unique' => 'validation_error.validation_unique',
+    'unique' => 'validation_error.unique',
 );

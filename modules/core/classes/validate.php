@@ -56,7 +56,7 @@ class Validate extends Kohana_Validate {
     {
         if ( ! is_array($lengths))
 	{
-            $lengths = array(9, 12);
+            $lengths = array(9, 10, 11, 12, 13, 14, 15, 16);
 	}
 
         //odstrani vsechny bile znaky

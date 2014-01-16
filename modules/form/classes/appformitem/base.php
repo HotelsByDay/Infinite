@@ -357,7 +357,7 @@ class AppFormItem_Base
         }
 
         // pokud je prvek required, tak se automaticky prida znacka k labelu
-        if ($this->isRequired())
+        if ($this->isRequired() or arr::get($this->config, 'force_required_symbol'))
         {
             //required znacka '*' nemusi byt vzdy zobrazena
             if (arr::get($this->config, 'display_required_symbol', TRUE))

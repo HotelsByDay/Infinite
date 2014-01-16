@@ -1028,7 +1028,8 @@ class ORM extends Kohana_ORM {
      * @param Validate $validate
      * @param $field
      */
-    public function validation_unique(Validate $validate, $field) {
+    public function validation_unique(Validate $validate, $field)
+    {
         if ( ! $this->is_unique_value($field, $this->{$field})) {
             $validate->error($field, 'validation_unique');
         }

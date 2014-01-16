@@ -25,12 +25,15 @@ return array(
 'validation_error.min_length' => '',
 'validation_error.max_length' => '',
 'validation_error.not_empty' => 'Value can not be empty.',
+'validation_error.required' => 'Value can not be empty.',
 'validation_error.numeric' => '',
 'validation_error.phone' => 'Given value is not a valid phone number.',
 'validation_error.range' => '',
 'validation_error.regex' => '',
 'validation_error.url' => 'Given value is not a valid URL.',
-    
+'validation_error.validation_unique' => 'Given value is already used in the system.',
+'validation_error.unique' => 'Given value is already used in the system.',
+
     
     'invalid_login_or_password' => 'Invalid username or password.',
     'footer_copyright' => 'Footer copyright...',
