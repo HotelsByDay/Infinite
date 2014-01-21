@@ -51,6 +51,12 @@ class Core_Web
     protected $multiple_custom_js_views = array();
 
     /**
+     * Inline javascript code
+     * @var string
+     */
+    protected $inline_js = '';
+
+    /**
      * Obsahuje retezce ktere obsahuji html kod, ktery ma byt vlozen do stranky.
      * Jedna se vetsinou o takove casti, ktere nejsou vkladany do stranky vzdy.
      * @var <array>
@@ -255,6 +261,17 @@ class Core_Web
         }
 
         return $js_include_block;
+    }
+
+
+    public function addInlineJS($string)
+    {
+        $this->inline_js .=  $string . ';';
+    }
+
+    public function renderInlineJS()
+    {
+        echo '<script type="text/javascript">$(function(){' . $this->inline_js . '});</script>';
     }
 
     /**

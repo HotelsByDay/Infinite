@@ -1,6 +1,6 @@
 <?php
 
-class html extends Kohana_HTML
+class HTML extends Kohana_HTML
 {
 
     public static function mailto($email, $title = NULL, array $attributes = NULL)
