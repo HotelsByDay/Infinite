@@ -240,6 +240,11 @@ class ORM extends Kohana_ORM {
         return $this->log_original_data;
     }
 
+    public function getLogOriginalValue($attr, $default=NULL)
+    {
+        return arr::get($this->log_original_data, $attr, $default);
+    }
+
     /**
      * Implementace virtualnich atributu pro ziskani uzivatelskych hodnot
      * ciselniku.
@@ -1723,6 +1728,29 @@ class ORM extends Kohana_ORM {
         return $this;
     }
 
+
+    public function order_by($column, $dir='ASC')
+    {
+        if (strpos($column, '.') !== FALSE) {
+            list($rel_object, $rel_column) = explode('.', $column, 2);
+
+            // Are we ordering by has_many objects count?
+            if (isset($this->_has_many[$rel_object]) and $rel_column == 'count')
+            {
+                $fk = arr::get($this->_has_many[$rel_object], 'foreign_key', $this->_primary_key);
+                $pk = $this->_primary_key;
+                $alias = $rel_object . '_count';
+                return $this
+                    ->join(array($rel_object, $alias), 'LEFT')
+                    ->on("{$alias}.{$fk}", '=', "{$this->_table_name}.{$pk}")
+                    ->group_by($this->_table_name . '.' . $pk)
+                    ->order_by(DB::expr("COUNT({$alias}.{$rel_object}id)"), $dir)
+                    ;
+            }
+        }
+        return parent::order_by($column, $dir);
+    }
+
     /**
      * Created a deep "copy" from a different model - loads values of the corresponding
      * attributes and copies all related models where aliases correspond.
@@ -1822,6 +1850,11 @@ class ORM extends Kohana_ORM {
     public function isModified()
     {
         return ! empty($this->_changed);
+    }
+
+    public function isChanged($attr)
+    {
+        return isset($this->_changed[$attr]);
     }
 
     protected function _rules()

@@ -457,7 +457,9 @@ abstract class Controller_Base_Object extends Controller_Layout {
         $table_data_container_view->data_table = $data_table_view;
 
         //do sablony vlozim panel pro ovladani hromadnych akci nad zaznamy
-        $table_data_container_view->item_action_panel = Panel::factory($this->controller_name)->getPanel();
+        if (arr::get($table_config, 'action_panel_enabled', true)) {
+            $table_data_container_view->item_action_panel = Panel::factory($this->controller_name)->getPanel();
+        }
 
         //formular pro ovladani strankovani
         $table_data_container_view->top_pager     = $filter_instance->getPager(TRUE);
@@ -1092,7 +1094,10 @@ abstract class Controller_Base_Object extends Controller_Layout {
             && ($closure = arr::get($form_config, 'on_success_redir')) != NULL)
         {
             $redirect_url = call_user_func($closure, $this->model);
-            return $this->request->redirect($redirect_url);
+            // Closure could have returned NULL or false
+            if ($redirect_url) {
+                return $this->request->redirect($redirect_url);
+            }
         }
 
         //do sablony vlozim vysledek provedene akce

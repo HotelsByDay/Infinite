@@ -84,6 +84,21 @@ class AppFormItem_Base
     }
 
     /**
+     * Reads value from item's config - if value is a lambda function then it's called with
+     * AppForm as a parameter and it's result is returned as desired config value.
+     * @param $config_key
+     * @param null $default
+     */
+    protected function getConfigValue($config_key, $default=NULL)
+    {
+        $value = arr::get($this->config, $config_key, $default);
+        if (is_callable($value)) {
+            $value = call_user_func($value, $this->form);
+        }
+        return $value;
+    }
+
+    /**
      * Metoda slouzici pro inicializaci objektu, predevsim v odvozenych tridach.
      * Resi se v ni predevsim pripojovani JS souboru, uprava configu atp.
      * Abychom nemuseli pretezovat konstruktor, ktery ma mnoho parametru, pretizime
@@ -219,7 +234,7 @@ class AppFormItem_Base
                 && $this->virtual               //prvek je virtualni
                 && ! Validate::not_empty($this->virtual_value)) //a nesplnil kontrolu
         {
-            return __($this->model->table_name().'.'.$this->attr.'.validation.required');
+            return ___($this->model->table_name().'.'.$this->attr.'.validation.required', 'validation_error.required');
         }
 
         //validace se provadi pouze virtualnich prvku

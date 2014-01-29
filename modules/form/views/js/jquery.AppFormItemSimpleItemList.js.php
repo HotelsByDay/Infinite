@@ -33,7 +33,7 @@
                 $_this.data('appformitemsimpleitemlist', {options : options});
 
                 //inicializace polozek
-                $_this.find('.list .item').each(function() {
+                $_this.find('.list .simple_list_item').each(function() {
                     methods._initTemplate($_this, $(this));
                 });
 
@@ -95,10 +95,11 @@
                 if (confirm("<?= __('form.AppFormItemSimplteItemList.confirm_delete');?>")) {
 
                     //id polozky (souboru ) je ulozeno v inputu, ktery v name atributu obsahuej "[id]"
-                    var $id_input = $template.find('input[name*="\[id\]"]');
+                    var $id_input = $template.find('input[name*="[id]"]');
 
                     //pokud $id_input ma prazdnou hodnotu, tak jeste dana polozka
                     //nebyla ulozena do DB a muzu rovnou odstranit z formulare
+
                     if ($id_input.length == 0 || $id_input.val() == '') {
 
                         //odstranim soubor ze stranky
@@ -107,6 +108,14 @@
                        //a ajax uz neni treba provadet
                         return false;
                     }
+
+                    // Changed to never perform an AJAX call - items will be deleted after the form is saved
+                    // #7624  [2014-01-29]
+                    $template.find('input[name*="[action]"]').val('d');
+                    $template.hide();
+                    return false;
+                    // End of Change
+
 
                     //zobrazim progress indicator nad polozkou souboru
                     $template.block({message: "<?= __('appformitemsimpleitemlist.delete_ptitle');?>"});

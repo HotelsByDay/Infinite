@@ -5,7 +5,6 @@
  */
 return array(
 
-
 'validation_error.alpha' => 'Value can contain letters only.',
 'validation_error.alpha_dash' => 'Value can contain only letters and dashes.',
 'validation_error.alpha_numeric' => 'Value must be alpha-numeric.',
@@ -144,7 +143,7 @@ return array(
     'object.action_delete.not_authorized_on_item' => 'You are not authorized to remove selected item.',
     'object.action_delete.error_occured' => 'An error occured when removing the item.',
     'object.delete_action_confirm' => 'Do you really want to delete selected item?',
-
+    'object.action.delete.confirm' => 'Are you sure to delete selected items?',
     'more.menu_name' => 'Next',
 
     'setting.menu_name' => 'Settings',

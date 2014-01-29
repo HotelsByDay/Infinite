@@ -4,6 +4,8 @@
  * Jazykovy soubor, ktery obsahuje hlasky spojene s prihlasovanim a opravnenim uzivatelu.
  */
 return array(
+
+    'object.action.delete.confirm' => 'Are you sure to delete selected items?',
     'invalid_login_or_password' => 'Neplatné uživatelské jméno nebo heslo.',
     'footer_copyright' => 'Copyright &copy; 2010 RealHit, provozovatel MotorHit EU s.r.o.<br />
                            Užíváním služeb portálu RealHit.cz souhlasíte s Obchodními podmínkami. Všechna práva vyhrazena.',

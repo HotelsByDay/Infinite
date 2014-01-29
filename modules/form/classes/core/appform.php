@@ -225,7 +225,11 @@ class Core_AppForm {
         }
         $this->_config = $this->_config_original;
 
-        //these values will be used as default
+        // Default values can be defined in form config
+        $config_defaults = (array)arr::get($this->_config, 'defaults');
+        $config_overwrite = (array)arr::get($this->_config, 'overwrite');
+
+        //these values will be used as default (higher priority then config defaults)
         $this->_form_data_defaults   = arr::get($this->_form_data_original, 'defaults', array());
         //these valus will overwrite whatever arrived from the form
         $this->_form_data_overwrites = arr::get($this->_form_data_original, 'overwrite', array());
@@ -236,6 +240,7 @@ class Core_AppForm {
         //initialize with the default data
         if ( ! $this->_model->loaded())
         {
+            $this->applyFormDataValues($config_defaults);
             $this->applyFormDataValues($this->_form_data_defaults);
         }
 
@@ -244,6 +249,11 @@ class Core_AppForm {
 
         //vlozi data do ORM modelu anebo do $this->_form_data
         $this->applyFormDataValues($this->_form_data_overwrites);
+
+        // Config overwrite - higher priority then request overwrite
+        if ( ! empty($config_overwrite)) {
+            $this->applyFormDataValues($config_overwrite);
+        }
 
         //detekce pozadovane akce
         $this->requested_action = arr::getifset($this->_form_data, self::ACTION_KEY, NULL);
@@ -257,6 +267,15 @@ class Core_AppForm {
         }
 
         return $this;
+    }
+
+
+    /**
+     * @return Kohana_ORM|null|ORM
+     */
+    public function model()
+    {
+        return $this->_model;
     }
 
     /**

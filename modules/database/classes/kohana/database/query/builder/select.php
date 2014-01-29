@@ -119,9 +119,7 @@ class Kohana_Database_Query_Builder_Select extends Database_Query_Builder_Where 
 	 */
 	public function join($table, $type = NULL)
 	{
-                //index polozky odpovida nazvu tabulky - zamezim tim duplicitnim
-                //joinum - posledni join na danou tabulky bude pouzity
-		$this->_join[$table] = $this->_last_join = new Database_Query_Builder_Join($table, $type);
+		$this->_join[] = $this->_last_join = new Database_Query_Builder_Join($table, $type);
 
 		return $this;
 	}

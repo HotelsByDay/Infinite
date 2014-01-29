@@ -8,14 +8,14 @@ return array(
             'label' => __('object.delete_action'),
             'message_ok'         => __('object.action.delete.message_ok'),
             'message_error'      => __('object.action.delete.message_error'),
+            'confirm'            => __('object.action.delete.confirm'),
             'undo_message_ok'    => __('object.action.delete.undo_message_ok'),
             'undo_message_error' => __('object.action.delete.undo_message_error'),
+            'button_class' => 'btn-danger',
             'do'    => function($model) {
                 $model->delete();
             },
-            'undo'  => function($model) {
-                $model->undelete();
-            }
+            'undo'  => NULL,
         )
     )
 );

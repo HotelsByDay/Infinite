@@ -1045,12 +1045,12 @@
                 var confirm_message = $(this).attr('confirm');
 
                 if (typeof confirm_message === 'string') {
-                    var $item_parent = $(this).parents('.item:first').addClass('to_be_actioned');
+                    var $item_parent = $(this).parents('.item:first').addClass('to_be_actioned to_be_actioned-'+action_name);
                     if ($.confirm(confirm_message)) {
                         methods._requestAction($_this, action_name, $(this).attr('item_id'));
                         return false;
                     }
-                    $item_parent.removeClass('to_be_actioned');
+                    $item_parent.removeClass('to_be_actioned to_be_actioned-'+action_name);
                 } else {
                     methods._requestAction($_this, action_name, $(this).attr('item_id'));
                 }

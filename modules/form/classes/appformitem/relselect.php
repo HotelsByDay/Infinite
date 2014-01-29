@@ -43,7 +43,7 @@ class AppFormItem_RelSelect extends AppFormItem_Base
 
         //url pro cteni dat - v parametrech se bude predavat i filtr, ktery je
         //nastaveny v konfiguraci prvku
-        $init_js->data_url = appurl::object_cb_data($this->config['relobject'], arr::get($this->config, 'filter', array()));
+        $init_js->data_url = appurl::object_cb_data($this->config['relobject'], $this->getConfigValue('filter', array()));
 
         //filter_by_parent definuje nazev atributu/prvku podle jehoz hodnoty se filtruje
         //na tomto prvku. Vetsinou se jedna o vazby typu firma - pobocky, nebo pobocka - pracovnici
