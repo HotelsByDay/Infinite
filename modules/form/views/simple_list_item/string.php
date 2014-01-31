@@ -1,6 +1,11 @@
 
 <div class="control-group <?= isset($error_message[$name]) ? 'error' : '' ?>">
-    <label><?= __('gift_firstname.form.firstname.label') ?></label>
+    <label>
+        <?= __($model->object_name().'.form.'.$name.'.label') ?>
+        <?php if (isset($required) and $required): ?>
+            <span class="required_label"></span>
+        <?php endif; ?>
+    </label>
     <input type="text" class="input-block-level" name="<?= $attr ?>[<?= $name ?>][]" value="<?= $model->{$name} ?>" />
 
 
@@ -10,3 +15,4 @@
         </div>
     <?php endif; ?>
 </div>
+

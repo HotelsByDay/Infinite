@@ -309,6 +309,7 @@ class AppFormItem_SimpleItemList extends AppFormItem_Base
             'attr'  => $this->attr,
             //defaultni akce
             'action' => 's',
+            'error_message' => NULL,
         );
 
         return View::factory($this->config['item_view_name'], $view_params);
