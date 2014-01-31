@@ -140,8 +140,10 @@ class AppFormItem_Password extends AppFormItem_Base
                 || arr::get($this->config, '_required'))
                 || $this->model->IsRequired($this->attr)) && ! $this->form->is_readonly())
         {
-            $view->label .= '<span class="required_label"></span>';
+            $view->css .= ' required';
         }
+
+        $view->label .= '<span class="required_label"></span>';
 
         // If placeholder is defined - add it into view
         if (isset($this->config['placeholder']) and ! empty($this->config['placeholder'])) {

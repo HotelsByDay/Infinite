@@ -371,15 +371,21 @@ class AppFormItem_Base
             $label = FormItem::getLabel($this->model->table_name(), $this->attr);
         }
 
+        $css = arr::get($this->config, 'css', '');
+
         // pokud je prvek required, tak se automaticky prida znacka k labelu
         if ($this->isRequired() or arr::get($this->config, 'force_required_symbol'))
         {
             //required znacka '*' nemusi byt vzdy zobrazena
             if (arr::get($this->config, 'display_required_symbol', TRUE))
             {
-                $label .= '<span class="required_label"></span>';
+                $css .= ' required';
             }
         }
+
+        // Always put required symbol to the label - it will be hidden in css for non-required items
+        // - this approach allows to easily show
+        $label .= '<span class="required_label"></span>';
 
         $view->label = $label;
 
@@ -387,7 +393,7 @@ class AppFormItem_Base
         $view->value = $this->getValue();
 
         // pokud ma mit prvek specialni css classu, tak ji predam sablone
-        $view->css = arr::get($this->config, 'css', '');
+        $view->css = $css;
 
         // do sablony bude vlozena textova napoveda k prvku, ktera muze byt
         // definovana v konfiguracnim souboru

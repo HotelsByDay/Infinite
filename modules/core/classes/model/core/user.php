@@ -551,9 +551,13 @@ class Model_Core_User extends Model_Auth_User {
         }
     }
 
+    /**
+     * Name displayed in top navigation panel.
+     * @return bool|mixed|ORM|string
+     */
     public function name()
     {
-        return $this->username;
+        return $this->name . ' ' . $this->surname;
     }
 
     public function contact_email()
