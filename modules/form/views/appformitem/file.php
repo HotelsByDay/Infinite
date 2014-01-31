@@ -1,4 +1,4 @@
-<div class="appformitemfile<?= $css ?> control-group <?= empty($error_message) ? '' : 'error' ?>" name="<?= $attr;?>_item" id="<?= $uid;?>">
+<div class="appformitemcontainer appformitemfile<?= $css ?> control-group <?= empty($error_message) ? '' : 'error' ?>" name="<?= $attr;?>_item" id="<?= $uid;?>">
 
     <span class=""><?=  $label;?></span>
 

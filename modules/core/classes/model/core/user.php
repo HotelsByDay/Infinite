@@ -557,7 +557,11 @@ class Model_Core_User extends Model_Auth_User {
      */
     public function name()
     {
-        return $this->name . ' ' . $this->surname;
+        $res = trim($this->name . ' ' . $this->surname);
+        if (empty($res)) {
+            $res = $this->username;
+        }
+        return $res;
     }
 
     public function contact_email()

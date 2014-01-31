@@ -1,4 +1,4 @@
-<div class="appformitemrelnnselect <?= $css ?>" id="<?= $uid;?>">
+<div class="appformitemcontainer appformitemrelnnselect <?= $css ?>" id="<?= $uid;?>">
 
     <?php if (!empty($error_message)): ?>
         <span class="validation_error alert alert-error" style="color:red;"><?= $error_message; ?></span>
