@@ -198,7 +198,7 @@ $(document).ready(function(){
                         //aby to bylo pripraveno pro dalsi zobrazeni
                         $(this).hide().css({opacity:1.0});
                     });
-                }, 30000);
+                }, 10000);
                 return false;
             },
             // events
