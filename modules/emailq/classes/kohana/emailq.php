@@ -29,20 +29,24 @@ class Kohana_Emailq {
 	 */
 	public function Kohana_Emailq()
 	{
-		require_once MODPATH . 'emailq/swiftmailer/swift_required.php';
+		require_once dirname(__FILE__) . '/../../swiftmailer/swift_required.php';
 
 		$this->config = Kohana::config('emailq');
 	}
 
-	/**
-	 * Add a message to the database;
-	 *
-	 * @param  $email
-	 * @param  $name
-	 * @param  $subject
-	 * @param  $body
-	 * @return boolean - returns wether the message was added to the database.
-	 */
+    /**
+     * Add a message to the database;
+     *
+     * @param $to
+     * @param $cc
+     * @param $bcc
+     * @param $from
+     * @param  $subject
+     * @param  $body
+     * @param array $attachments
+     * @param null $direct_attachements
+     * @return boolean - returns whether the message was added to the database.
+     */
 	public function add_email($to, $cc, $bcc, $from, $subject, $body, $attachments = array(), $direct_attachements = NULL)
 	{
 		$queue = ORM::factory('emailqueue');
@@ -99,13 +103,14 @@ class Kohana_Emailq {
 		return $queue->pk();
 	}
 
-	/**
-	 * Tries to send a batch of emails, removing them from the database if it
-	 * succedes.
-	 *
-	 * @param int $amount - Amount of messages it will try to send per request.
-	 * @return void
-	 */
+    /**
+     * Tries to send a batch of emails, removing them from the database if it
+     * succedes.
+     *
+     * @param int $amount - Amount of messages it will try to send per request.
+     * @param null $queueid
+     * @return void
+     */
 	public function send_emails($amount = 50, $queueid = NULL)
 	{
 		$config = $this->config->mail_options;
@@ -244,11 +249,12 @@ class Kohana_Emailq {
 	}
 
 
-	/**
-	 * Builds a table with the current queue
-	 *
-	 * @return string with an html table
-	 */
+    /**
+     * Builds a table with the current queue
+     *
+     * @param null $class
+     * @return string with an html table
+     */
 	public function queue_table($class = null)
 	{
 		$emails = ORM::factory('emailqueue')->find_all();
