@@ -62,6 +62,8 @@
                         return;
                     }
 
+                    $this.find('.validation_error').hide();
+
                     if ($password.val() != $password_confirm.val()) {
                         $passwords_dont_match_message.show();
                         $password_strength_info.hide();
