@@ -17,7 +17,6 @@ class Controller_Base_Login extends Controller_Template {
 
     /**
      * Kontroluje stav prihlaseni uzivatele.
-     *
      */
     public function before()
     {
@@ -74,7 +73,6 @@ class Controller_Base_Login extends Controller_Template {
         $this->template->flash_msg = Session::instance()->get_once('flash_msg', null);
     }
 
-
     protected function loginFailed($remember)
     { //Login se nezdaril, vypisu chybove hlaseni a zobrazi se
         //standardne prihlasovaci obrazovka
@@ -88,8 +86,6 @@ class Controller_Base_Login extends Controller_Template {
         Session::instance()->set('show_reset_password_option', '1');
     }
 
-
-
     /**
      * Metoda presmeruje uzivatele 'do systemu'. Ucel metody spociva v tom
      * ze je volana z nekolika mist a pouze zde je definovana adresa na kterou
@@ -102,4 +98,3 @@ class Controller_Base_Login extends Controller_Template {
 
 }
 
-?>

@@ -47,6 +47,15 @@
                     return false;
                 });
 
+                // If there are items about to delete/add (after validation error) then highlight them
+                $_this.find('input[name*="[id]"][value=""]').each(function(){
+                    $(this).parents('.simple_list_item').addClass('added');
+                });
+                $_this.find('input[name*="[action]"][value="d"]').each(function(){
+                    $(this).parents('.simple_list_item').addClass('deleted');
+                });
+                $_this.appFormItemSimpleItemList('updateInfoMessage');
+
             });
         },
 
@@ -66,6 +75,8 @@
             // jQuery objekt sablony prvku
             var $new_template = $(new_template);
 
+            $new_template.addClass('added');
+
             if (typeof values !== 'undefined') {
                 // Inicializujeme sablonu zadanymi hodnotami
                 for (var attr in values) {
@@ -79,11 +90,21 @@
             //pridam na konec seznam existujicich prvku
             $_this.find('.list').append($new_template);
 
+            $_this.appFormItemSimpleItemList('updateInfoMessage');
+
             //nastavim focus na prvni viditelny input
             $new_template.find('input:visible,select:visible,textarea:visible').filter(':first').focus();
         },
 
         _initTemplate: function($_this, $template) {
+
+
+            $template.find('.undelete').on('click', function(){
+                $template.find('input[name*="[action]"]').val('s');
+                $template.removeClass('deleted');
+                $_this.appFormItemSimpleItemList('updateInfoMessage');
+                return false;
+            });
 
             //pri kliknuti na tlacitko odstranit
             $template.find('.delete').click(function(){
@@ -92,7 +113,7 @@
                 //ktery soubor bude odstranen
                 $template.addClass('to_be_deleted');
 
-                if (confirm("<?= __('form.AppFormItemSimplteItemList.confirm_delete');?>")) {
+                if (true || confirm("<?= __('form.AppFormItemSimplteItemList.confirm_delete');?>")) {
 
                     //id polozky (souboru ) je ulozeno v inputu, ktery v name atributu obsahuej "[id]"
                     var $id_input = $template.find('input[name*="[id]"]');
@@ -105,6 +126,7 @@
                         //odstranim soubor ze stranky
                         $template.remove();
 
+                        $_this.appFormItemSimpleItemList('updateInfoMessage');
                        //a ajax uz neni treba provadet
                         return false;
                     }
@@ -112,7 +134,9 @@
                     // Changed to never perform an AJAX call - items will be deleted after the form is saved
                     // #7624  [2014-01-29]
                     $template.find('input[name*="[action]"]').val('d');
-                    $template.hide();
+                    $template.addClass('deleted');
+                    $_this.appFormItemSimpleItemList('updateInfoMessage');
+
                     return false;
                     // End of Change
 
@@ -157,6 +181,14 @@
 
         },
 
+        updateInfoMessage: function() {
+            var $_this = $(this);
+            if ($_this.find('.added, .deleted').length) {
+                $_this.find('.save_info_message').show();
+            } else {
+                $_this.find('.save_info_message').hide();
+            }
+        },
         _log: function( text ) {
             if ( typeof console !== 'undefined') {
             //    console.log( text );

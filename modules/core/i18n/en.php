@@ -5,33 +5,35 @@
  */
 return array(
 
-'validation_error.alpha' => 'Value can contain letters only.',
-'validation_error.alpha_dash' => 'Value can contain only letters and dashes.',
-'validation_error.alpha_numeric' => 'Value must be alpha-numeric.',
-'validation_error.color' => 'Given value is not a valid color.',
-'validation_error.credit_card' => 'Given value is not a valid credit card number.',
-'validation_error.date' => 'Given value is not a valid date.',
-'validation_error.decimal' => 'Given value is not a valid number.',
-'validation_error.digit' => 'Given value is not a valid digit.',
-'validation_error.email' => 'Given value is not a valid e-mail.',
-'validation_error.email_domain' => 'Given value is not a valid e-mail domain.',
-'validation_error.equals' => 'Given values are not equal.',
-// @todo - translate later - when needed (also uncomment in messages/validate.php)
-'validation_error.exact_length' => '',
-'validation_error.in_array' => '',
-'validation_error.ip' => 'Given value is not a valid IP.',
-'validation_error.matches' => '',
-'validation_error.min_length' => '',
-'validation_error.max_length' => '',
-'validation_error.not_empty' => 'Value can not be empty.',
-'validation_error.required' => 'Value can not be empty.',
-'validation_error.numeric' => '',
-'validation_error.phone' => 'Given value is not a valid phone number.',
-'validation_error.range' => '',
-'validation_error.regex' => '',
-'validation_error.url' => 'Given value is not a valid URL.',
-'validation_error.validation_unique' => 'Given value is already used in the system.',
-'validation_error.unique' => 'Given value is already used in the system.',
+    'validation_error.alpha' => 'Value can contain letters only.',
+    'validation_error.alpha_dash' => 'Value can contain only letters and dashes.',
+    'validation_error.alpha_numeric' => 'Value must be alpha-numeric.',
+    'validation_error.color' => 'Given value is not a valid color.',
+    'validation_error.credit_card' => 'Given value is not a valid credit card number.',
+    'validation_error.date' => 'Given value is not a valid date.',
+    'validation_error.decimal' => 'Given value is not a valid number.',
+    'validation_error.digit' => 'Given value is not a valid digit.',
+    'validation_error.email' => 'Given value is not a valid e-mail.',
+    'validation_error.email_domain' => 'Given value is not a valid e-mail domain.',
+    'validation_error.equals' => 'Given values are not equal.',
+    // @todo - translate later - when needed (also uncomment in messages/validate.php)
+    'validation_error.exact_length' => '',
+    'validation_error.in_array' => '',
+    'validation_error.ip' => 'Given value is not a valid IP.',
+    'validation_error.matches' => '',
+    'validation_error.min_length' => '',
+    'validation_error.max_length' => '',
+    'validation_error.not_empty' => 'Value can not be empty.',
+    'validation_error.required' => 'Value can not be empty.',
+    'validation_error.numeric' => '',
+    'validation_error.phone' => 'Given value is not a valid phone number.',
+    'validation_error.range' => '',
+    'validation_error.regex' => '',
+    'validation_error.url' => 'Given value is not a valid URL.',
+    'validation_error.validation_unique' => 'Given value is already used in the system.',
+    'validation_error.unique' => 'Given value is already used in the system.',
+
+
 
     
     'invalid_login_or_password' => 'Invalid username or password.',
@@ -150,6 +152,8 @@ return array(
 
     'filterstate_form.name.label' => 'Filter name',
 
+    'delete' => 'Delete',
+    'undelete' => 'Undelete',
     
     //LOGACTION
     'logaction.inserted_message' => 'New item ":preview" was created.',

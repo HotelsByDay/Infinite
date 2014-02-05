@@ -52,6 +52,7 @@ return array(
     'appformitem_serienumber.number_not_generated_yet' => 'Kód bude vygenerován při uložení.',
 
     //APP FORM SIMPLE ITEM LIST
+    'simpleitemlist.save_the_form.info_message' => 'Please save the form to apply your changes.',
     'form.AppFormItemSimplteItemList.confirm_delete' => 'Are you sure you want to delete the item?',
     'appformitemsimpleitemlist.delete_ptitle' => 'Deleting item...',
 
