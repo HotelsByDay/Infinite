@@ -1058,6 +1058,31 @@
                 return false;
             });
 
+            $data_container.find('.btn-table-export[href]').click(function(){
+                var $btn = $(this).addClass('btn-loading');
+                var current_filter_params = $.bbq.getState() || {};
+                $.ajax({
+                    url: $(this).attr('href'),
+                    type: 'POST',
+                    data: current_filter_params,
+                    dataType:'json',
+                    success: function(data){
+                        $btn.removeClass('btn-loading');
+                        if (typeof data === 'object' && data != null  && typeof data['f'] !== 'undefined') {
+                            window.location.href = data['f'];
+                        } else {
+                            alert(typeof data !== 'object' || data == null || typeof data['e'] === 'undefined'
+                                    ? "<?= __('object.data_export.error');?>"
+                                    : data['e']);
+                        }
+                    },
+                    error: function(){
+                        alert("<?= __('object.data_export.error');?>");
+                    }
+                });
+                return false;
+            });
+
             //inicializuje tlacitka pro vyvolani hromadnych akci nad zaznamy
             methods._bindItemActionControl( $_this, $data_container );
 

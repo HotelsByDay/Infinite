@@ -32,6 +32,7 @@
 
                 var $input = $('input[type="text"]', $this);
                 // @todo - uncomment after getting working farbtastic version
+                console.log('miniColors');
                 $input.miniColors({
                     change: function(hex, rgb) {
                         // @todo - refaktorizovat - prepsat na $end_input.trigger('changing');

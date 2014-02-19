@@ -384,11 +384,11 @@ abstract class Filter_Base
         //nacist
 
         if ($form_view === NULL) {
-            $form_view = View::factory('filter/'.arr::get($this->config, 'filter_view_name', $this->object_name),
-                                       array(
-                                           'defaults' => $this->filter_params,
-                                       )
-            );
+            $form_view = View::factory('filter/'.arr::get($this->config, 'filter_view_name', $this->object_name));;
+        }
+
+        if ($form_view instanceof View) {
+            $form_view->set('defaults', $this->filter_params);
         }
 
         //pole bude obsahovat defaultni hodnoty pro systemove parametry vyhledavani

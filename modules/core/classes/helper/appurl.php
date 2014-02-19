@@ -203,10 +203,8 @@ class Helper_Appurl
      * metodou _view_overview_submenu ciloveho kontroleru.
      * Primo se propisuje do URL.
      */
-    static public function object_overview($controller, $item_id, $return_link = NULL, $subsection = NULL)
+    static public function object_overview($controller, $item_id, $return_link = NULL, $subsection = NULL, array $get_params=array())
     {
-        $get_params = array();
-
         //navratovy odkaz muze byt retezec (jen odkaz) anebo indexovane pole
         //kde na indexu [0] je odkaz a na indexu [1] je popisek
         //typu "Vratit zpet na vypis nabidek" pod kterym bude odkaz zobrazen
@@ -225,9 +223,9 @@ class Helper_Appurl
         return self::object_action($controller, 'overview', $item_id, $get_params, $subsection);
     }
 
-    static public function object_overview_subcontent($controller, $subcontent_name, $item_id)
+    static public function object_overview_subcontent($controller, $subcontent_name, $item_id, array $get_params=array())
     {
-        return self::object_action($controller, 'overview_subcontent', array($subcontent_name, $item_id));
+        return self::object_action($controller, 'overview_subcontent', array($subcontent_name, $item_id), $get_params);
     }
 
     static public function object_overview_header($controller, $item_id)

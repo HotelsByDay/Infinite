@@ -4,7 +4,7 @@
   <?php endif ?>
 
     <label for="<?= $uid ?>_input"><?= $label ?></label>
-    <input type="text" id="<?= $uid ?>_input" name="<?= $attr ?>" value="<?= htmlspecialchars($value) ?>" />
+    <input type="text" id="<?= $uid ?>_input" name="<?= $attr ?>" class="<?= $input_class ?>" value="<?= htmlspecialchars($value) ?>" />
 
   <?php if (isset($hint) && !empty($hint)): ?>
     <span class="hint"><?= $hint; ?></span>

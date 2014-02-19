@@ -25,8 +25,8 @@ return array
 		),
 		'table_prefix' => '',
 		'charset'      => 'utf8',
-		'caching'      => FALSE,
-		'profiling'    => TRUE,
+		'caching'      => Kohana::$caching,
+		'profiling'    => Kohana::$profiling,
 	),
 	'alternate' => array(
 		'type'       => 'pdo',

@@ -293,16 +293,17 @@ abstract class Model_Core_File extends ORM
         {
             return $this->_temp_file->getFileDiskName();
         }
-        
-        //pokud je definovana pozadovana resize varianta fotky
-        if ( ! empty($resize_variant))
-        {
-        	$resize_variant .= '-'; 
+
+        $size = arr::get($this->resize_variants, $resize_variant);
+        $filename = $this->filename;
+        if ( ! empty($size) and is_array($size) and isset($size[0], $size[1])) {
+            $ext = pathinfo($this->filename, PATHINFO_EXTENSION);
+            $base_name = pathinfo($this->filename, PATHINFO_FILENAME);
+            $filename = $base_name . '_' . $size[0] . 'x' . $size[1] . '.' . $ext;
         }
-        
         //vracim nazev souboru na disku
         // 5.7. 2012 Dajc - DIRECTORY_SEPARATOR nahrazen znakem '/' ('\' dela problemy v URL pro jejiz generovani se tato metoda pouziva)
-        return $this->getDirName().'/'.($resize_variant).$this->filename;
+        return $this->getDirName().'/'.$filename;
     }
 
     /**

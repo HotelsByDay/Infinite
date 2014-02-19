@@ -1176,7 +1176,6 @@ class Core_AppForm {
     {
         if ( ! isset($this->_form_items[$attr]))
         {
-            //neexistujici prvek nebude vykreslen, provedu zapis do logu
             $this->_log('Unable to render AppFormItem for non-existing attr "'.$attr.'".');
             return NULL;
         }
