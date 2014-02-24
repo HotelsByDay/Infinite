@@ -83,7 +83,7 @@
          */
         _clear: function($_this) {
 
-            this.find('input[type="text"],input[type="hidden"],select,textarea').val('');
+            this.find('input[type="text"],input[type="hidden"],select,textarea').not('.prevent_clear').val('');
 
         },
 
