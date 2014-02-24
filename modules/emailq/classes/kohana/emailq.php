@@ -45,16 +45,30 @@ class Kohana_Emailq {
      * @param  $body
      * @param array $attachments
      * @param null $direct_attachements
+     * @param null $model_name
+     * @param null $model_id
+     * @param null $email_type
      * @return boolean - returns whether the message was added to the database.
      */
-	public function add_email($to, $cc, $bcc, $from, $subject, $body, $attachments = array(), $direct_attachements = NULL)
-	{
+	public function add_email($to, $cc, $bcc, $from, $subject, $body, $attachments = array(),
+                              $direct_attachements = NULL, $model_name = NULL, $model_id = NULL, $email_type = NULL
+    ) {
 		$queue = ORM::factory('emailqueue');
 		$queue->to      = implode(',', (array)$to);
         $queue->cc      = implode(',', (array)$cc);
         $queue->bcc      = implode(',', (array)$bcc);
 		$queue->subject = (string)$subject;
         $queue->attachements = $direct_attachements;
+
+        if ($model_name && $model_id) {
+            $queue->model_name = $model_name;
+            $queue->model_id = $model_id;
+        }
+
+        if ($email_type) {
+            $queue->email_type = $email_type;
+        }
+
         if (is_array($body) and count($body) == 2) {
             $queue->body = arr::get($body, 0);
             $queue->plain_body = arr::get($body, 1);
@@ -62,43 +76,43 @@ class Kohana_Emailq {
             $queue->body    = (string)$body;
         }
 
-                if (is_array($from))
-                {
-                    $queue->from_email = (string)arr::get($from, 0);
-                    $queue->from_name  = (string)arr::get($from, 1);
-                }
-                elseif ( ! empty($from))
-                {
-                    $queue->from_email = (string)$from;
-                    $queue->from_name = '';
-                }
-                else
-                {
-                    // Use default values from config
-                    $queue->from_email = AppConfig::instance()->get('from_email', 'application');
-                    $queue->from_name = AppConfig::instance()->get('from_name', 'application');
-                }
+        if (is_array($from))
+        {
+            $queue->from_email = (string)arr::get($from, 0);
+            $queue->from_name  = (string)arr::get($from, 1);
+        }
+        elseif ( ! empty($from))
+        {
+            $queue->from_email = (string)$from;
+            $queue->from_name = '';
+        }
+        else
+        {
+            // Use default values from config
+            $queue->from_email = AppConfig::instance()->get('from_email', 'application');
+            $queue->from_name = AppConfig::instance()->get('from_name', 'application');
+        }
 
 
-		        if ( ! $queue->save())
-                {
-                    return FALSE;
-                }
+        if ( ! $queue->save())
+        {
+            return FALSE;
+        }
 
-                //if any attachments were defined, add a relation (N:N type)
-                //to them
-                foreach ($attachments as $attachment)
-                {
-                    //new email attachment model
-                    $email_queue_attachment = ORM::factory('email_queue_attachment');
+        //if any attachments were defined, add a relation (N:N type)
+        //to them
+        foreach ($attachments as $attachment)
+        {
+            //new email attachment model
+            $email_queue_attachment = ORM::factory('email_queue_attachment');
 
-                    $email_queue_attachment->email_queueid = $queue->pk();
+            $email_queue_attachment->email_queueid = $queue->pk();
 
-                    $email_queue_attachment->reltype = $attachment->relType();
-                    $email_queue_attachment->relid   = $attachment->pk();
+            $email_queue_attachment->reltype = $attachment->relType();
+            $email_queue_attachment->relid   = $attachment->pk();
 
-                    $email_queue_attachment->save();
-                }
+            $email_queue_attachment->save();
+        }
 
 		return $queue->pk();
 	}
