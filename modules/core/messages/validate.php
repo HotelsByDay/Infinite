@@ -23,6 +23,7 @@ return array(
 	'required'     => 'validation_error.required',
 //	'numeric'       => 'validation_error.numeric',
 	'phone'         => 'validation_error.phone',
+	'phone_global'         => 'validation_error.phone',
 //	'range'         => 'validation_error.range',
 //	'regex'         => 'validation_error.regex',
 	'url'           => 'validation_error.url',
