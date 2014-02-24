@@ -98,11 +98,20 @@ class DataExport_Driver_CSV implements DataExport_iDriver
      */
     protected function getDataLineFromCallable($line_generator_function, $model = NULL)
     {
-        $csv_delimiter = $this->getDelimiter();
-        $csv_nl        = $this->getNL();
-
         //model may be NULL for the Header Line Generator, but that does not cause any issues
         $line_values_array = call_user_func($line_generator_function, $model);
+        return $this->getDataLineFromArray($line_values_array);
+    }
+
+    /**
+     *
+     * @param $line_values_array
+     * @return string
+     */
+    protected function getDataLineFromArray($line_values_array)
+    {
+        $csv_delimiter = $this->getDelimiter();
+        $csv_nl        = $this->getNL();
 
         $iconv_setting = arr::get($this->config, 'iconv');
 

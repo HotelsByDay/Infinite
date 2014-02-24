@@ -851,7 +851,7 @@ class Core_AppForm {
      */
     protected function validateModel()
     {
-        if ( ! $this->_model->check())
+        if (arr::get($this->_config, 'validate_model', true) and ! $this->_model->check())
         {
             //z ORM si vytahnu validacni chyby - chyby z form prvku vkladam do chyb
             //z ORM - chyby zachycene form prvky maji vyssi prioritu, a budou zobrazeny

@@ -30,7 +30,11 @@ $(document).ready(function(){
             //ktery soubor bude odstranen
             $photo.addClass('removed');
             
-            if (confirm("<?= __('appformitemfile.confirm_file_delete');?>")) {
+            var confirm_msg = $(this).attr('data-confirm');
+            if (typeof confirm_msg == 'undefined' || ! confirm_msg) {
+                confirm_msg = "<?= __('appformitemfile.confirm_file_delete');?>";
+            }
+            if (confirm(confirm_msg)) {
 
                 //id polozky (souboru ) je ulozeno v inputu, ktery v name atributu obsahuej "[id]"
                 var $id_input = $photo.find('input[name*="\[id\]"]');
@@ -52,6 +56,14 @@ $(document).ready(function(){
                     $form.objectForm('fireEvent', 'itemLayoutChanged', $item);
                     //item has been changed (form values has been changed)
                     $form.objectForm('fireEvent', 'change', $item);
+
+
+                    <?php if ($file_count != 0): ?>
+                    // Hide drop area and upload btn if files limit was reached (here show if limit is not reached)
+                    if ($item.find('.list .item:not(.removed)').length + $item.find('.qq_file_item:visible').length < <?= $file_count;?>) {
+                        $item.find('.button').show();
+                    }
+                    <?php endif; ?>
 
                     //a ajax uz neni treba provadet
                     return false;
@@ -96,6 +108,13 @@ $(document).ready(function(){
                 $photo.removeClass('removed');
             }
 
+            <?php if ($file_count != 0): ?>
+            // Hide drop area and upload btn if files limit was reached (here show if limit is not reached)
+            if ($item.find('.list .item:not(.removed)').length + $item.find('.qq_file_item:visible').length < <?= $file_count;?>) {
+                $item.find('.button').show();
+            }
+            <?php endif; ?>
+
             return false;
         });
         
@@ -108,6 +127,14 @@ $(document).ready(function(){
 
         //reference na rodicovsky formular
         var $form = $item.parents(".<?= AppForm::FORM_CSS_CLASS ?>:first");
+
+
+        <?php if ($file_count != 0): ?>
+        // Hide drop area and upload btn if files limit was reached (here show if limit is not reached)
+        if ($item.find('.list .item:not(.removed)').length + $item.find('.qq_file_item:visible').length >= <?= $file_count;?>) {
+            $item.find('.button').hide();
+        }
+        <?php endif; ?>
 
         // Inicializace fancyboxu
         appFormItemPhoto_InitFancybox($(this));
@@ -134,10 +161,10 @@ $(document).ready(function(){
                 });
                 //uzivateli se zobrazi info zprava - porad prvku bude
                 //zachovano jen kdyz se ulozi formular
-                $.userInfoMessage($('<div class="alert alert-info">' + "<?= $order_update_info_message; ?>" + '</div>'));
+                $.userInfoMessage("<?= __('form.AppFormItemFile.order_update.info_message');?>");
             }
         }).disableSelection();
-        <?php endif ?>
+    <?php endif ?>
 
         var uploader = new qq.FileUploader({
             // pass the dom node (ex. $(selector)[0] for jQuery users)
@@ -186,7 +213,7 @@ $(document).ready(function(){
                 clearTimeout(this.timer);
 
                 //zobrazim zpravu uzivateli
-                $ref = $item.find('.message_placeholder');
+                var $ref = $item.find('.message_placeholder');
                 $ref.find('div').html(message).parent().show();
 
                 //nastavim timer, ktery zpravu za definovany interval schova
@@ -206,7 +233,7 @@ $(document).ready(function(){
             onSubmit: function(id, fileName){
 
                 <?php if ($file_count != 0): ?>
-                if ($item.find('.list .item:not(.removed)').length >= <?= $file_count;?>) {
+                if ($item.find('.list .item:not(.removed)').length + $item.find('.qq_file_item:visible').length >= <?= $file_count;?>) {
 
                     if (<?= $file_count;?> == 1) {
                         this.showMessage("<?= __('appformitemfile.maximum_allowed_file_count_is_one');?>");
@@ -228,6 +255,7 @@ $(document).ready(function(){
                         $(this).hide();
                     }
                 });
+
 
                 //pokud prislo preview souboru tak pridam na konec seznamu uploadovanych
                 //souboru
@@ -264,6 +292,14 @@ $(document).ready(function(){
                     $item.trigger('fileAdded');
                 }
 
+
+                <?php if ($file_count != 0): ?>
+                    // Hide drop area and upload btn if files limit was reached
+                    if ($item.find('.list .item:not(.removed)').length + $item.find('.qq_file_item:visible').length >= <?= $file_count;?>) {
+                        $item.find('.button').hide();
+                    }
+                <?php endif; ?>
+
                 //the layout and dmensions of this form item may have changed
                 $item.trigger('itemLayoutChanged', $item);
             },
@@ -276,6 +312,14 @@ $(document).ready(function(){
                         $(this).hide();
                     }
                 });
+
+
+                <?php if ($file_count != 0): ?>
+                // Hide drop area and upload btn if files limit was reached
+                if ($item.find('.list .item:not(.removed)').length + $item.find('.qq_file_item:visible').length < <?= $file_count;?>) {
+                    $item.find('.button').show();
+                }
+                <?php endif; ?>
 
             }
 

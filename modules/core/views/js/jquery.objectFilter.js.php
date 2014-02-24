@@ -1060,7 +1060,7 @@
 
             $data_container.find('.btn-table-export[href]').click(function(){
                 var $btn = $(this).addClass('btn-loading');
-                var current_filter_params = $.bbq.getState() || {};
+                var current_filter_params = $_this.objectFilter('_getCurrentFilterParams', $_this);
                 $.ajax({
                     url: $(this).attr('href'),
                     type: 'POST',
