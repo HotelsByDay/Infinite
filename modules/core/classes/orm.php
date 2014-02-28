@@ -92,6 +92,13 @@ class ORM extends Kohana_ORM {
      */
     protected $_inherit_permission = '';
 
+    /**
+     * Are permissions checks enabled on this model?
+     * This can be disabled by calling disablePermissions() method.
+     * @var bool
+     */
+    protected $_permissions_enabled = true;
+
 
     protected $_save_performed = FALSE;
 
@@ -1154,6 +1161,10 @@ class ORM extends Kohana_ORM {
      */
     protected function applyUserInsertPermission()
     {
+        // If permission controls for this model are disabled.
+        if ( ! $this->_permissions_enabled) {
+            return true;
+        }
         //ziskam uroven opravneni uzivatele na akci 'db_select' na tomto objektu
         $insert_modificator = Auth::instance()->get_user()->HasPermission($this->permissionObjectName(), 'db_insert');
 
@@ -1220,6 +1231,10 @@ class ORM extends Kohana_ORM {
      */
     protected function applyUserUpdatePermission()
     {
+        // If permission controls for this model are disabled.
+        if ( ! $this->_permissions_enabled) {
+            return true;
+        }
         //ziskam uroven opravneni uzivatele na akci 'db_select' na tomto objektu
         $update_modificator = Auth::instance()->get_user()->HasPermission($this->permissionObjectName(), 'db_update');
 
@@ -1286,6 +1301,10 @@ class ORM extends Kohana_ORM {
      */
     protected function applyUserDeletePermission()
     {
+        // If permission controls for this model are disabled.
+        if ( ! $this->_permissions_enabled) {
+            return true;
+        }
         //ziskam uroven opravneni uzivatele na akci 'db_select' na tomto objektu
         $delete_modificator = Auth::instance()->get_user()->HasPermission($this->permissionObjectName(), 'db_delete');
 
@@ -1340,6 +1359,10 @@ class ORM extends Kohana_ORM {
      */
     protected function applyUserSelectPermission()
     {
+        // If permission controls for this model are disabled.
+        if ( ! $this->_permissions_enabled) {
+            return true;
+        }
         //ziskam uroven opravneni uzivatele na akci 'db_select' na tomto objektu
         $select_modificator = Auth::instance()->get_user()->HasPermission($this->permissionObjectName(), 'db_select');
 
@@ -1973,6 +1996,16 @@ class ORM extends Kohana_ORM {
         return $this->{$lang_object}->where('field', '=', $attr)
             ->where('locale', '=', $locale)
             ->find()->content;
+    }
+
+    /**
+     * Disables permissions checks for current instance.
+     * @return $this
+     */
+    public function disablePermissions()
+    {
+        $this->_permissions_enabled = false;
+        return $this;
     }
 
 } // End ORM
