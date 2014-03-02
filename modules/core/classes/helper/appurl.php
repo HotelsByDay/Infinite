@@ -43,7 +43,11 @@ class Helper_Appurl
      */
     static public function login_action()
     {
-        return url::base().'login';
+        if (defined('DOMAIN_ADMIN') && defined('BASE_URL_ADMIN')) {
+            return DOMAIN_ADMIN . BASE_URL_ADMIN . 'login';
+        } else {
+            return url::base().'login';
+        }
     }
 
     /**
