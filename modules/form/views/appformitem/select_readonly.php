@@ -4,5 +4,7 @@
 
 <div class="appformitemcontainer <?= $css ?>">
     <label for="<?= $attr ?>_id"><?= $label ?></label>
-    <input type="text" disabled="disabled" value="<?= arr::get($values, $value);?>" />
+    <select disabled="disabled">
+        <option value="<?= $value ?>"><?= arr::get($values, $value);?></option>
+    </select>
 </div>
