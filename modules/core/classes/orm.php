@@ -93,11 +93,17 @@ class ORM extends Kohana_ORM {
     protected $_inherit_permission = '';
 
     /**
-     * Are permissions checks enabled on this model?
+     * Are permissions checks enabled on this model instance?
      * This can be disabled by calling disablePermissions() method.
      * @var bool
      */
     protected $_permissions_enabled = true;
+
+    /**
+     * Are permissions checks enabled on this model class?
+     * @var bool
+     */
+    public static $permissions_enabled = true;
 
 
     protected $_save_performed = FALSE;
@@ -1162,7 +1168,7 @@ class ORM extends Kohana_ORM {
     protected function applyUserInsertPermission()
     {
         // If permission controls for this model are disabled.
-        if ( ! $this->_permissions_enabled) {
+        if ( ! $this->_permissions_enabled or ! static::$permissions_enabled) {
             return true;
         }
         //ziskam uroven opravneni uzivatele na akci 'db_select' na tomto objektu
@@ -1232,7 +1238,7 @@ class ORM extends Kohana_ORM {
     protected function applyUserUpdatePermission()
     {
         // If permission controls for this model are disabled.
-        if ( ! $this->_permissions_enabled) {
+        if ( ! $this->_permissions_enabled or ! static::$permissions_enabled) {
             return true;
         }
         //ziskam uroven opravneni uzivatele na akci 'db_select' na tomto objektu
@@ -1302,7 +1308,7 @@ class ORM extends Kohana_ORM {
     protected function applyUserDeletePermission()
     {
         // If permission controls for this model are disabled.
-        if ( ! $this->_permissions_enabled) {
+        if ( ! $this->_permissions_enabled or ! static::$permissions_enabled) {
             return true;
         }
         //ziskam uroven opravneni uzivatele na akci 'db_select' na tomto objektu
@@ -1360,7 +1366,7 @@ class ORM extends Kohana_ORM {
     protected function applyUserSelectPermission()
     {
         // If permission controls for this model are disabled.
-        if ( ! $this->_permissions_enabled) {
+        if ( ! $this->_permissions_enabled or ! static::$permissions_enabled) {
             return true;
         }
         //ziskam uroven opravneni uzivatele na akci 'db_select' na tomto objektu
