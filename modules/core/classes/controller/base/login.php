@@ -49,7 +49,6 @@ class Controller_Base_Login extends Controller_Template {
             $remember = (bool)arr::getifset($_POST, 'remember', FALSE);
 
             if (Auth::instance()->login($login, $password, $remember)) {
-
                 Auth::instance()->get_user()->afterLogin();
 
                 //prihlaseni uspesne
@@ -65,6 +64,8 @@ class Controller_Base_Login extends Controller_Template {
                 //pristoupit na stranku pro resetovani hesla
                 Session::instance()->delete('show_reset_password_option');
                 //presmerovani uzivatele do systemu
+
+
                 $this->sendUserAlong();
 
             } else {
