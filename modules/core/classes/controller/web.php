@@ -30,7 +30,10 @@ class Controller_Web extends Controller {
             list($_foo, $width, $height) = $matches;
 
             // Create image instance
-            $image = ORM::factory($object_name, $object_id);
+            $image = ORM::factory($object_name);
+            // Disable permission checking
+            $image::$permissions_enabled = false;
+            $image = $image->find($object_id);
             if ( ! $image instanceof Model_File) {
                 throw new Exception('Model for given object name ('.$object_name.') is not instance of Model_File class.');
             }
