@@ -516,25 +516,9 @@ class Helper_Appurl
      */
     static public function object_file($file, $resize_variant = NULL, $absolute_url = FALSE)
     {
-        if ( ! $file->IsTempFile() && ! empty($resize_variant))
-        {
-            $resize_variant .= '-';
-        }
-        else
-        {
-            $resize_variant = NULL;
-        }
-        
-        $filepath = str_replace(DIRECTORY_SEPARATOR,'/',$file->getFileDiskName());
-        $filename = basename($filepath);
-        $filedir  = dirname($filepath);
-
-        //nazev domeny - pro absolutni URL
-        $domain = AppConfig::instance()->get('domain', 'application');
-
-        return ($absolute_url ? $domain : '') . url::base() . $filedir . '/' . $resize_variant . $filename;
+        // DOMAIN_ADMIN introduced on Amli - defined in settings.php
+        return ($absolute_url ? DOMAIN_ADMIN : '') . $file->getUrl($resize_variant);
     }
-
 
     /**
      * Returns url for MASTER lang item. Item will send ajax requests with enabled languages list to this url.
