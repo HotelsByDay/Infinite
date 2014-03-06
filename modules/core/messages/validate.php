@@ -27,6 +27,7 @@ return array(
 //	'range'         => 'validation_error.range',
 //	'regex'         => 'validation_error.regex',
 	'url'           => 'validation_error.url',
+	'nonstrict_url'           => 'validation_error.url',
     'validation_unique' => 'validation_error.validation_unique',
     'unique' => 'validation_error.unique',
 );
