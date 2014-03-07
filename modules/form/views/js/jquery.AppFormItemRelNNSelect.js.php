@@ -41,15 +41,21 @@
 
 
                 $check_all.bind('click', function() {
-                    $this.find(':checkbox').each(function(){
+                    var changed = false;
+                    $this.find(':checkbox').not(':checked').each(function(){
                         $(this).attr('checked', true);
+                        changed = true;
                     });
+                    if (changed) $this.trigger('change');
                     return false;
                 });
                 $uncheck_all.bind('click', function(){
-                    $this.find(':checkbox').each(function(){
+                    var changed = false;
+                    $this.find(':checkbox:checked').each(function(){
                         $(this).removeAttr('checked');
+                        changed = true;
                     });
+                    if (changed) $this.trigger('change');
                     return false;
                 });
 
