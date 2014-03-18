@@ -238,6 +238,9 @@ abstract class Filter_Base
         //provedu mergnuti defaultni konfigurace a explicitne nastavene konfigurace
         $this->config = array_merge($this->default_config, $config);
 
+        // Load default js_config
+        $this->jquery_objectFilter_init_params = (array)arr::get($this->config, 'js_config');
+
         //ulozim si parametry vyhledavani - cleanParams, zaridi trimovani hodnot
         //zkontroluje orderby nastaveni apod.
         $this->filter_params = array_merge(

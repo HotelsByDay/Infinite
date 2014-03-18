@@ -37,6 +37,7 @@
      * Defaultni hodnoty pro parametry a nastaveni pluginu
      */
     var default_settings = {
+        initial_ajax_enabled: 1
     };
 
     /**
@@ -64,14 +65,16 @@
                 var default_params = $.extend(default_params, methods._getCurrentFilterParams($_this));
 
                 //vytvorim instanci objektu s nastavenim pro tuto instanci pluginu
-                var settings = {
-                    newUserExportFormUrl:  options['newUserExportFormUrl'] || default_settings['newUserExportFormUrl'],
-                    newFilterStateFormUrl: options['newFilterStateFormUrl'] || default_settings['newFilterStateFormUrl'],
-                    updateFilterStateUrl:  options['updateFilterStateUrl']  || default_settings['updateFilterStateUrl'],
-                    removeFilterStateUrl:  options['removeFilterStateUrl']  || default_settings['removeFilterStateUrl'],
-                    after_initDataContent: options['after_initDataContent'] || default_settings['after_initDataContent'],
-                    userExportUrl:         options['userExportUrl']         || default_settings['userExportUrl']
-                };
+//                var settings = {
+//                    newUserExportFormUrl:  options['newUserExportFormUrl'] || default_settings['newUserExportFormUrl'],
+//                    newFilterStateFormUrl: options['newFilterStateFormUrl'] || default_settings['newFilterStateFormUrl'],
+//                    updateFilterStateUrl:  options['updateFilterStateUrl']  || default_settings['updateFilterStateUrl'],
+//                    removeFilterStateUrl:  options['removeFilterStateUrl']  || default_settings['removeFilterStateUrl'],
+//                    after_initDataContent: options['after_initDataContent'] || default_settings['after_initDataContent'],
+//                    userExportUrl:         options['userExportUrl']         || default_settings['userExportUrl']
+//                };
+
+                var settings = $.extend(true, default_settings, options );
 
                 //ulozim si aktualni nastaveni pluginu
                 methods._setData( $_this , {
@@ -330,7 +333,9 @@
                     }
                  });
 
-                 $(window).trigger('hashchange');
+                 if (settings.initial_ajax_enabled) {
+                     $(window).trigger('hashchange');
+                 }
 
             });
         },
