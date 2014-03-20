@@ -434,6 +434,9 @@ abstract class Model_Core_File extends ORM
             //jinak ji vytvorim
             $image = Image::factory(DOCROOT.$filepath);
 
+            // Set transparent background
+            $image->background('#fff', 0);
+
             // Nechceme zvetsovat
             if ($no_upsize) {
                 // Oba rozmery jsou vetsi nez pozadovane
@@ -455,6 +458,7 @@ abstract class Model_Core_File extends ORM
 
             // Crop exact rectangle from the centre of the image
             $image->crop($width, $height);
+
 
             //pred vlastni nazev souboru vlozim prefix - nazev resize varianty
             $image->save($target_filepath);
