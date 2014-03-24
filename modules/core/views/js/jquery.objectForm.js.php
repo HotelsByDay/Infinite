@@ -213,19 +213,32 @@
                     e.preventDefault();
                     return false;
                 });
-            
             });
 
             //tlacitko pro zavreni formulare pouze stiskne tlacitko zpet
             $_this.find('.<?= AppForm::FORM_BUTTON_CLOSE_CSS_CLASS;?>').click(function(){
-                //pokud je definovany handler explicitne pres parametry pluginu,
-                //tak jej vyvolam, jinak se provede defaultni akce
-                if (typeof settings !== 'undefined' && typeof settings['onCloseButtonClick'] === 'function') {
-                    return settings['onCloseButtonClick']();
-                } else {
-                    window.history.back();
-                    return false;
+                var $b = $(this);
+                if ($b.attr('data-clicked')) {
+                    //pokud je definovany handler explicitne pres parametry pluginu,
+                    //tak jej vyvolam, jinak se provede defaultni akce
+                    if (typeof settings !== 'undefined' && typeof settings['onCloseButtonClick'] === 'function') {
+                        return settings['onCloseButtonClick']();
+                    } else {
+                        window.history.back();
+                        return false;
+                    }
                 }
+                $b.attr('data-orig_text', $b.text());
+                $b.text('<?= __('form.close_btn.confirm_label') ?>');
+                $b.attr('disabled', true);
+                setTimeout(function(){
+                    $b.attr('data-clicked', '1');
+                    $b.attr('disabled', false);
+                    setTimeout(function(){
+                        $b.attr('data-clicked', '');
+                        $b.text($b.attr('data-orig_text'));
+                    }, 2000);
+                }, 500);
             });
 
             //pokud je na formulari definovana custom inicializacni funkce,

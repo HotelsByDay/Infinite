@@ -31,8 +31,22 @@ $.widget("ui._dialog", $.ui.dialog, {
 
         //zavreni formulare
         $content.find('.<?= AppForm::FORM_BUTTON_CLOSE_CSS_CLASS;?>').click(function(){
-            //dialogove okno zavru
-            _this.close();
+            var $b = $(this);
+            if ($b.attr('data-clicked')) {
+                //dialogove okno zavru
+                _this.close();
+            }
+            $b.attr('data-orig_text', $b.text());
+            $b.text('<?= __('form.close_btn.confirm_label') ?>');
+            $b.attr('disabled', true);
+            setTimeout(function(){
+                $b.attr('data-clicked', '1');
+                $b.attr('disabled', false);
+                setTimeout(function(){
+                    $b.attr('data-clicked', '');
+                    $b.text($b.attr('data-orig_text'));
+                }, 2000);
+            }, 500);
         });
 
         //pokud se vyska formulare nastavuje podle obsahu, chci aby dialog zustaval vycentrovany

@@ -5,6 +5,7 @@
  */
 return array(
 
+    'form.close_btn.confirm_label' => 'Are you sure?',
     'validation_error.alpha' => 'Value can contain letters only.',
     'validation_error.alpha_dash' => 'Value can contain only letters and dashes.',
     'validation_error.alpha_numeric' => 'Value must be alpha-numeric.',
