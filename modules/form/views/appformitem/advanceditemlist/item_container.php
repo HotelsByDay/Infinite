@@ -8,11 +8,9 @@ $randid = 'b'.mt_rand();
 
 <div id="container<?= $randid;?>">
 
-    <?= $form->Render();?>
+    <?= $form->Render(); ?>
 
     <?php if ( ! $form->is_readonly()): ?>
-
-    <a href="<?= $model->loaded() ? appurl::object_delete($model->object_name(), $model->pk()) : '';?>" class="delete button red" item_id="<?= $model->pk();?>"><?= __('appformitemadvancedselect.delete_label');?></a>
-
+        <a href="<?= $model->loaded() ? appurl::object_delete($model->object_name(), $model->pk()) : '';?>" class="delete btn btn-danger btn-mini" item_id="<?= $model->pk();?>"><?= __('appformitemadvancedselect.delete_label');?></a>
     <?php endif ?>
 </div>

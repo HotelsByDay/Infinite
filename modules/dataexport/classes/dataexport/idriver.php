@@ -3,7 +3,7 @@
 interface DataExport_iDriver
 {
 
-    public function __construct($config, $data, DataExport_FileStorage $file_storage);
+    public function __construct($config, $data, DataExport_FileStorage $file_storage, $filter_params=array());
 
     /**
      * Generates a locally store file with the export data.

@@ -2,7 +2,7 @@
 
 class DataExport
 {
-    public static function Factory($config, $data)
+    public static function Factory($config, $data, $filter_params=array())
     {
         if ( ! isset($config['driver']))
         {
@@ -15,7 +15,7 @@ class DataExport
         {
             $reflected_class = new ReflectionClass($driver_class_name);
 
-            $driver_instance = $reflected_class->newInstance($config, $data, new DataExport_FileStorage());
+            $driver_instance = $reflected_class->newInstance($config, $data, new DataExport_FileStorage(), $filter_params);
         }
         catch (ReflectionException $e)
         {

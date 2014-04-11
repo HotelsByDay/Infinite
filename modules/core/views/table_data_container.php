@@ -2,15 +2,21 @@
 <div class="view-data row-fluid">
 
 
-<div class="line-data row-fluid">
-    <div class="records-found span3">
-        <?= __('object.totally_found_items', array(':total_found' => $total_found));?>
-    </div>
-    
-    <?= $top_pager;?>
+<?php if (isset($total_found) or $top_pager): ?>
+    <div class="line-data row-fluid">
 
-    <br class="clear">
-</div>
+        <?php if (isset($total_found)): ?>
+            <div class="records-found span3">
+                <?= __('object.totally_found_items', array(':total_found' => $total_found));?>
+            </div>
+        <?php endif; ?>
+
+        <?= $top_pager;?>
+
+        <br class="clear">
+    </div>
+<?php endif; ?>
+
 
 <?php if (isset($item_action_panel)): ?>
     <div class="line-data">

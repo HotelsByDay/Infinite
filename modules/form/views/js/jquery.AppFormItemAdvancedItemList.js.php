@@ -164,6 +164,7 @@
             });
         },
 
+
         _initTemplate: function($_this, $item_container) {
 
             //reference na rodicovsky formular

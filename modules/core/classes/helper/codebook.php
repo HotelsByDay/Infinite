@@ -57,6 +57,7 @@ class Helper_Codebook
 
         // Zkusime vytahnout ciselnik z cache
         $values = self::readFromCache($codebook, 'value_list', $filter);
+
         // Pokud tam nebyl, nacteme z DB a ulozime do cache
         if ($values === FALSE) {
             $values = static::getCodebookModel($codebook)->get_codebook($filter);

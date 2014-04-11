@@ -400,7 +400,7 @@ abstract class Controller_Base_Object extends Controller_Layout {
         }
 
         //nactu konfiguraci pro dany tabulkovy vypis
-        $table_config = $this->_config_object_table(Request::instance()->param('type'));
+        $table_config = $this->_config_object_table($table_type);
 
         //vytvori instanci tridy, ktera zajistuje logiku filtrovani
         $filter_instance = $this->loadAndInitFilterClassInstance($table_config);
@@ -467,7 +467,9 @@ abstract class Controller_Base_Object extends Controller_Layout {
        
 
         //do sablony vlozim i celkovy pocet nalezenych dat aby to mohlo byt zobrazeno uzivateli
-        $table_data_container_view->total_found = $total_found_results;
+        if (arr::get($table_config, 'show_total_found', true)) {
+            $table_data_container_view->total_found = $total_found_results;
+        }
 
         //vystup vracim ve forme JSONu tak aby jej bylo mozne dobre zpracovat
         //na strane klienta
@@ -1801,7 +1803,7 @@ abstract class Controller_Base_Object extends Controller_Layout {
             //Vraci ORM_Iterator predstavici vysledky vyhledavani
             list($results, $filter_state_id, $filter_state_stat) = $filter_instance->getResults(FALSE);
 
-            $export_filename = DataExport::Factory($export_config, $results)
+            $export_filename = DataExport::Factory($export_config, $results, $filter_instance->getFilterParams())
                 ->generateExport()
                 ->getFilePath();
 

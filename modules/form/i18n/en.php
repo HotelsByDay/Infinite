@@ -3,6 +3,7 @@
 
 return array(
 
+    'form.AppFormItemSimplteItemList.delete_ptitle' => 'Deleting...',
     'upload.error.temp_not_writeable' => 'An error occurred while uploading the file. Please contact the support.',
     'upload.error.file_not_defined' => 'There was an error while uploading the file.',
     'upload.error.file_empty' => 'An empty file cannot be uploaded.',

@@ -6,14 +6,16 @@ class DataExport_Driver_CSV implements DataExport_iDriver
     protected $data = NULL;
     protected $file_storage = NULL;
     protected $source_filename = NULL;
+    protected $filter_params = array();
 
     const DEFAULT_CSV_NL        = "\r\n";
     const DEFAULT_CSV_DELIMITER = ",";
 
-    public function __construct($config, $data, DataExport_FileStorage $file_storage)
+    public function __construct($config, $data, DataExport_FileStorage $file_storage, $filter_params=array())
     {
-        $this->config = $config;
-        $this->data   = $data;
+        $this->config        = $config;
+        $this->data          = $data;
+        $this->filter_params = $filter_params;
 
         $this->file_storage = $file_storage;
         $this->file_storage->Init($this->getUserFileName());

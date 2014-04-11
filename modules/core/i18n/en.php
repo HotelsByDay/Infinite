@@ -28,6 +28,7 @@ return array(
     'validation_error.required' => 'Value can not be empty.',
     'validation_error.numeric' => '',
     'validation_error.phone' => 'Given value is not a valid phone number.',
+    'validation_error.phone_prefix_not_empty' => 'Phone country code can not be empty.',
     'validation_error.range' => '',
     'validation_error.regex' => '',
     'validation_error.url' => 'Given value is not a valid URL.',
