@@ -288,7 +288,7 @@ abstract class Controller_Base_Object extends Controller_Layout {
         //vraci TRUE pokud nedoslo k zadnym chybam
         return empty($action_errors);
     }
-    
+
     /**
      * Generuje zakladni stranku s tabulkovy vypisem dat.
      * @return <type>
@@ -303,6 +303,9 @@ abstract class Controller_Base_Object extends Controller_Layout {
         {
             return $this->runUnauthorizedAccessEvent();
         }
+
+        // Log user action
+        LogAction::runControllerEvent('table.'.$this->request->action, $this->object_name);
 
         //do stranky vlozim obsahovou sablonu pro "/table" vypis
         $this->template->content = $this->_view_table_content();
@@ -950,6 +953,13 @@ abstract class Controller_Base_Object extends Controller_Layout {
             throw new Exception('Vytvorit sablonu, ktera informuje o tom ze uzivatel nema opravneni zaznam cist nebo neexistuje.');
         }
 
+        // Log user action
+        if ($item_id) {
+            LogAction::runControllerEvent('edit', $this->object_name, $item_id);
+        } else {
+            LogAction::runControllerEvent('new', $this->object_name);
+        }
+
         //nactu si konfiguracni soubor pro dany formular
         $form_config = $this->_config_form();
 
@@ -1049,6 +1059,9 @@ abstract class Controller_Base_Object extends Controller_Layout {
         //manipulovat s URL). Pokud je definvano v parametrech tak ma prednost
         //pred tim co prislo v URL
         $item_id  = arr::get($this->request_params, '_id', $item_id);
+
+        // Log user action
+        LogAction::runControllerEvent('edit.'.$form_type, $this->object_name, $item_id);
 
         //nactu ORM pozadovaneho objektu
         $this->model = ORM::factory($this->object_name, $item_id);
@@ -1356,6 +1369,9 @@ abstract class Controller_Base_Object extends Controller_Layout {
         {
             throw new Kohana_Exception('TODO!');
         }
+
+        // Log user action
+        LogAction::runControllerEvent('overview.'.$panel, $this->object_name, $item_id);
 
         $this->template = new View('overview_subcontent_response');
 
