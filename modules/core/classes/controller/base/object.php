@@ -1060,8 +1060,11 @@ abstract class Controller_Base_Object extends Controller_Layout {
         //pred tim co prislo v URL
         $item_id  = arr::get($this->request_params, '_id', $item_id);
 
-        // Log user action
-        LogAction::runControllerEvent('edit.'.$form_type, $this->object_name, $item_id);
+        // Log user action (access)
+        // Do not log if we are saving the data
+        if (empty($_POST)) {
+            LogAction::runControllerEvent('edit.'.$form_type, $this->object_name, $item_id);
+        }
 
         //nactu ORM pozadovaneho objektu
         $this->model = ORM::factory($this->object_name, $item_id);
