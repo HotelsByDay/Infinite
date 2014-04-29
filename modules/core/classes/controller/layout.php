@@ -87,4 +87,11 @@ abstract class Controller_Layout extends Controller_AuthTemplate {
         return parent::after();
     }
 
+    public function sendJson($data)
+    {
+        $this->request->headers['Content-Type'] = 'application/json';
+        $this->auto_render = false;
+        $this->request->response = json_encode($data);
+    }
+
 }
