@@ -215,6 +215,18 @@
                 });
             });
 
+            //tlacitko pro zavreni formulare pouze stiskne tlacitko zpet
+            $_this.find('.<?= AppForm::FORM_BUTTON_CLOSE_CSS_CLASS;?>').click(function(){
+                //pokud je definovany handler explicitne pres parametry pluginu,
+                //tak jej vyvolam, jinak se provede defaultni akce
+                if (typeof settings !== 'undefined' && typeof settings['onCloseButtonClick'] === 'function') {
+                    return settings['onCloseButtonClick']();
+                } else {
+                    window.history.back();
+                    return false;
+                }
+             });
+
             //pokud je na formulari definovana custom inicializacni funkce,
             //tak to muze byt pomoci input[type=hidden][name=_init_function],
             //jehoz hodnota je povazovana za funkci, ktera ma byt vyvolana
