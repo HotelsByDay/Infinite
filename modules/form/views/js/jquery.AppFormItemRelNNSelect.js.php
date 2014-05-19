@@ -39,6 +39,22 @@
                 var $check_all = $('a.check_all', $this);
                 var $uncheck_all = $('a.uncheck_all', $this);
 
+                var $search = $('input.fast_search', $this);
+
+                $search.on('keyup', function() {
+                    var query = $search.val().trim();
+                    var patt = new RegExp(query, 'gi');
+                    $this.find(':checkbox').each(function(){
+                        var $ch = $(this);
+                        if (patt.test($ch.parents('label:first').text())) {
+                            $ch.parents('.item:first').show();
+                        } else {
+//                            console.log('*' + $ch.parents('label:first').text() + '*');
+                            $ch.parents('.item:first').hide();
+                        }
+                    });
+                });
+
 
                 $check_all.bind('click', function() {
                     var changed = false;
