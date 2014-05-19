@@ -7,6 +7,15 @@
     <label><?= $label;?></label>
 
 
+    <?php if ($fast_search): ?>
+        <div class="fast_search">
+            <div class="input-append">
+                <input class="input-medium fast_search" type="text">
+                <span class="add-on"><i class="icon icon-search"></i></span>
+            </div>
+        </div>
+    <?php endif; ?>
+
     <?php if ($allow_check_all): ?>
         <div class="check_all">
             <a class="button blue check_all btn btn-mini "><?= __('relnnselect.check_all'); ?></a>
@@ -21,13 +30,13 @@
             $columns_count = 1;
         }
         ?>
-        <div class="column">
+        <div class="column" style="width: <?= $column_width ?>px">
 
         <?php
             // Spocteme velikost sloupce - v poctu polozek
             $items_count = count($items);
 
-            $column_size = (int)($items_count / $columns_count);
+            $column_size = max((int)($items_count / $columns_count), $min_column_size);
             if ($column_size and $items_count % $column_size) {
                 $column_size++;
             }
@@ -39,7 +48,7 @@
                 // Pokud je definovan pocet sloupcu a dovrsil se pocet prvku ve sloupci
                 if ($columns_count and $item_number >= $column_size) {
                     // Otevreme novy sloupec
-                    echo '</div><div class="column">';
+                    echo '</div><div class="column" style="width: '.$column_width.'px">';
                     $item_number = 0;
                 }
                 $item_number++;
