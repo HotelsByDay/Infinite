@@ -16,6 +16,11 @@ class AppFormItem_RelNNSelect extends AppFormItem_Base
         'columns_count' => 1,
         // Zda zobrazit tlacitka check/uncheck all
         'allow_check_all' => false,
+        // Show input to filter in large group of checkboxes
+        'fast_search' => false,
+
+        // Column width
+        'column_width' => 300,
     );
 
 
@@ -37,7 +42,7 @@ class AppFormItem_RelNNSelect extends AppFormItem_Base
         parent::init();
 
         // Plugin potrebujeme jen pokud jsou povoleny poznamky
-        if (arr::get($this->config, 'note', false) or arr::get($this->config, 'allow_check_all')) {
+        if (arr::get($this->config, 'note', false) or arr::get($this->config, 'allow_check_all') or arr::get($this->config, 'fast_search')) {
             // Pripojime JS soubor s pluginem
             Web::instance()->addCustomJSFile(View::factory('js/jquery.AppFormItemRelNNSelect.js'));
             // A jeho inicializaci
@@ -261,8 +266,15 @@ class AppFormItem_RelNNSelect extends AppFormItem_Base
         //vytahnu si z DB aktualni stav relace
         $view->selected = $this->getRelItems();
 
+        // Is fast search enabled?
+        $view->fast_search = arr::get($this->config, 'fast_search', false);
+
+        $view->min_column_size = arr::get($this->config, 'min_column_size', 0);
+
         // Pocet sloupcu - muze byt null
         $view->columns_count = arr::get($this->config, 'columns_count');
+
+        $view->column_width = arr::get($this->config, 'column_width');
 
         // Zda zobrazit check/uncheck all tlacitka
         $view->allow_check_all = arr::get($this->config, 'allow_check_all');
