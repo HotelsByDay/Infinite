@@ -17,7 +17,7 @@ return array(
                 'js/jquery.objectFilter.js',
                 'js/jquery.objectItemAction.js',
             ),
-            'filter' => NULL
+            'filter' => '#AppFormItem[^-]+\.#'
         )
     )
 );

@@ -218,7 +218,7 @@
             //tlacitko pro zavreni formulare pouze stiskne tlacitko zpet
             $_this.find('.<?= AppForm::FORM_BUTTON_CLOSE_CSS_CLASS;?>').click(function(){
                 var $b = $(this);
-                if ($b.attr('data-clicked')) {
+//                if ($b.attr('data-clicked')) {
                     //pokud je definovany handler explicitne pres parametry pluginu,
                     //tak jej vyvolam, jinak se provede defaultni akce
                     if (typeof settings !== 'undefined' && typeof settings['onCloseButtonClick'] === 'function') {
@@ -227,7 +227,8 @@
                         window.history.back();
                         return false;
                     }
-                }
+//                }
+                /*
                 $b.attr('data-orig_text', $b.text());
                 $b.text('<?= __('form.close_btn.confirm_label') ?>');
                 $b.attr('disabled', true);
@@ -239,6 +240,7 @@
                         $b.text($b.attr('data-orig_text'));
                     }, 2000);
                 }, 500);
+                */
             });
 
             //pokud je na formulari definovana custom inicializacni funkce,
