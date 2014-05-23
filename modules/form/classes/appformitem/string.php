@@ -55,6 +55,10 @@ class AppFormItem_String extends AppFormItem_Base
         if (isset($this->config['field_prefix'])) {
             $view->field_prefix = $this->config['field_prefix'];
         }
+        // If field_suffix is defined
+        if (isset($this->config['field_suffix'])) {
+            $view->field_suffix = $this->config['field_suffix'];
+        }
 
         $view->input_class = arr::get($this->config, 'input_class', 'input-block-level');
 

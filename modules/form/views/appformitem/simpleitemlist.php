@@ -1,6 +1,8 @@
-<div class="appformitemsimpleitemlist <?= $css ?>" id="<?= $uid;?>">
+<div class="appformitemsimpleitemlist appformitemcontainer <?= $css ?>" id="<?= $uid;?>">
 
-
+    <?php if (isset($label) and $label): ?>
+        <label class="main"><?= $label ?></label>
+    <?php endif; ?>
     <div class="list">
         <?php foreach ($rel_items as $rel_item): ?>
         <div class="simple_list_item">

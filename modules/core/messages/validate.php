@@ -21,7 +21,7 @@ return array(
 //	'max_length'    => 'validation_error.max_length',
 	'not_empty'     => 'validation_error.not_empty',
 	'required'     => 'validation_error.required',
-//	'numeric'       => 'validation_error.numeric',
+	'numeric'       => 'validation_error.numeric',
 	'phone'         => 'validation_error.phone',
 	'phone_global'         => 'validation_error.phone',
 //	'range'         => 'validation_error.range',

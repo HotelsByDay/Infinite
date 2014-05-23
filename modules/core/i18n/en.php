@@ -28,7 +28,7 @@ return array(
     'validation_error.max_length' => '',
     'validation_error.not_empty' => 'Value can not be empty.',
     'validation_error.required' => 'Value can not be empty.',
-    'validation_error.numeric' => '',
+    'validation_error.numeric' => 'Given value is not a valid number.',
     'validation_error.phone' => 'Given value is not a valid phone number.',
     'validation_error.phone_prefix_not_empty' => 'Phone country code can not be empty.',
     'validation_error.range' => '',
