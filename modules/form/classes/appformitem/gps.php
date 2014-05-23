@@ -18,6 +18,14 @@ class AppFormItem_Gps extends AppFormItem_Base
         'longitude_column' => 'longitude',
         'zoom' => 15,
         'required' => false,
+        'inputs_readonly' => false,
+        'inputs_hidden' => false,
+
+        'name_country' => null,
+        'name_state' => null,
+        'name_city' => null,
+        'name_zip' => null,
+        'name_address' => null,
     );
 
     /**
@@ -32,16 +40,7 @@ class AppFormItem_Gps extends AppFormItem_Base
 
         // provede inicializaci pro tuto specifickou instanci
         $js_file = View::factory('js/jquery.AppFormItemGPS-init.js');
-        $config = Array(
-            // Predame jquery pluginu informaci o tom, zda prihlaseny uzivatel ma mit cast pravku readonly
-            'readonly' => arr::get($this->config, 'readonly', 0),
-
-            // Predame nastaveni zoomu
-            'zoom' => $this->config['zoom'],
-        );
-
-
-        $js_file->config = $config;
+        $js_file->config = $this->config;
         //vlozim do stranky
         parent::addInitJS($js_file);
 
@@ -115,6 +114,12 @@ class AppFormItem_Gps extends AppFormItem_Base
 
         $view->lat_label = $lat_label;
         $view->lon_label = $lon_label;
+
+        $view->inputs_hidden = arr::get($this->config, 'inputs_hidden', false);
+        $view->inputs_readonly = arr::get($this->config, 'inputs_readonly', false);
+
+        $view->width = arr::get($this->config, 'width', 600);
+        $view->height = arr::get($this->config, 'height', 400);
         return $view;
     }
 }

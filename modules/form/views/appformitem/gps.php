@@ -8,31 +8,23 @@
         </div>
     <?php endif ?>
 
+    <div class="map">
+        <div class="map-canvas" style="width: <?= $width ?>px; height: <?= $height ?>px;"></div>
+    </div>
+    <a href="#" style="display: none;" class="show_original_position"><?= __('appformitemgps.show_original_position'); ?></a>
 
-            <div class="">
-<!--                <div style="padding: 10px; background-color: #FE7569;">-->
-                    <div class="pull-left">
-                        <span><?= $lat_label ?></span><br />
-                        <input style="width: 180px" type="text" name="<?= $attr ?>[latitude]" value="<?= $value['latitude'] ?>" />
-                    </div>
+    <div style="display: <?= $inputs_hidden ? 'none' : 'block' ?>;">
+        <div class="pull-left">
+            <span><?= $lat_label ?></span><br />
+            <input <?= $inputs_readonly ? 'readonly="readonly"' : '' ?> style="width: 180px" type="text" name="<?= $attr ?>[latitude]" value="<?= $value['latitude'] ?>" />
+        </div>
 
-                    <div class="pull-left" style="margin-left: 10px;">
-                        <span><?= $lon_label ?></span><br />
-                        <input style="width: 180px" type="text" name="<?= $attr ?>[longitude]" value="<?= $value['longitude'] ?>" />
-                    </div>
-<!--                </div>-->
-            </div>
+        <div class="pull-left" style="margin-left: 10px;">
+            <span><?= $lon_label ?></span><br />
+            <input <?= $inputs_readonly ? 'readonly="readonly"' : '' ?> style="width: 180px" type="text" name="<?= $attr ?>[longitude]" value="<?= $value['longitude'] ?>" />
+        </div>
+    </div>
 
-        <div class="row">
-            <div class="span6">
-                <div class="map">
-                    <div class="canvas" style="width:600px; height:400px;"></div>
-                </div>
-                <a href="#" style="display: none;" class="show_original_position"><?= __('appformitemgps.show_original_position'); ?></a>
-            </div>
-
-        </div><!-- row -->
-
-
-    <div class="clear"></div>
+    <div class="clearfix"></div>
 </div>
+

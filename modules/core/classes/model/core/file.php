@@ -294,15 +294,16 @@ abstract class Model_Core_File extends ORM
             return $this->_temp_file->getFileDiskName();
         }
 
-        $size = arr::get($this->resize_variants, $resize_variant);
+        // Not a tempfile - use filename from the model
         $filename = $this->filename;
+
+        // If resize variant is properly defined - use resize variant diskname
+        $size = arr::get($this->resize_variants, $resize_variant);
         if ( ! empty($size) and is_array($size) and isset($size[0], $size[1])) {
-            $ext = pathinfo($this->filename, PATHINFO_EXTENSION);
-            $base_name = pathinfo($this->filename, PATHINFO_FILENAME);
-            $filename = $base_name . '_' . $size[0] . 'x' . $size[1] . '.' . $ext;
+            $resize_type = arr::get($size, 2, 'auto');
+            $filename = Format::imageExactResizeVariantName($filename, $size[0], $size[1], $resize_type);
         }
-        //vracim nazev souboru na disku
-        // 5.7. 2012 Dajc - DIRECTORY_SEPARATOR nahrazen znakem '/' ('\' dela problemy v URL pro jejiz generovani se tato metoda pouziva)
+        // Return final path
         return $this->getDirName().'/'.$filename;
     }
 
@@ -337,72 +338,6 @@ abstract class Model_Core_File extends ORM
         return (Kohana::$environment === Kohana::TESTING) ? DOCROOT.$target_dir : $target_dir;
     }
 
-    /**
-     * Vytvorit resized varianty obrazku podle $resized_variants atributu.
-     *
-     * Nove vznikle soubory automaticky ulozi "vedle" originalniho souboru.
-     * Resized varianta ma prefix podle nazvu resize varianty, pak nasleudje
-     * znak '-' a zbytek nazvu souboru zustava stejny.
-     *
-     * Pokud resize varianta s danym nazvem jiz existuje (kontroluje pomoci
-     * file_exists), tak nevytvari novou.
-     * 
-     */
-    protected function createResizedVariants()
-    {
-        //nazev souboru na disku
-        $filepath = $this->getFileDiskName();
-
-        //nazev samotneho souboru
-        $filename = basename($filepath);
-        
-        //cesta k adresari
-        $filedir  = dirname($filepath);
-
-        //pro kazdou variantu vytvorim dalsi soubor na disku
-        foreach ($this->resize_variants as $variant_name => $variant_setting)
-        {
-            //cilovy nazev souboru ve variante
-            $target_filepath = DOCROOT.$filedir . DIRECTORY_SEPARATOR . $variant_name . '-' . $filename;
-
-            //pokud uz varianta existuje, tak ji nebudu znovu vytvaret
-            if (file_exists($target_filepath))
-            {
-                continue;
-            }
-
-            //pri vytvareni resize varianty muze dojit k chybam
-            try
-            {
-                //jinak ji vytvorim
-                $image = Image::factory(DOCROOT.$filepath);
-
-				//pokud jsou oba rozmery nedefinovane, tak se resize obrazku neprovede
-				if ( ! empty($variant_setting[0]) && ! empty($variant_setting[1]))
-				{
-					//provede vlastni resize obrazku
-                	$image->resize(arr::get($variant_setting, 0),
-                    	           arr::get($variant_setting, 1),
-                        	       arr::get($variant_setting, 2));
-				}
-
-                //pred ulozenim resize varianty se vyvola metoda, ktera muze byt
-                //pretizena v dedicich modelech a umozni udelat dalsi modifikace obrazku
-                $this->resizeVariant($variant_name, $image);
-
-                //pred vlastni nazev souboru vlozim prefix - nazev resize varianty
-                $image->save($target_filepath);
-            }
-            catch (Exception $e)
-            {
-                //chybu zaloguju a pokracuje se ve vytvareni dalsich resize variant
-                Kohana::$log->add(Kohana::ERROR, 
-                                 'Unable to create resize variant ":variant_name" with target path ":target_path" due to "'.$e->getMessage().'".',
-                                 array(':variant_name' => $variant_name, ':target_path' => $target_filepath));
-            }
-        }
-    }
-
 
     public function getExactVariantDiskName($width, $height)
     {
@@ -416,11 +351,11 @@ abstract class Model_Core_File extends ORM
      * @param $width
      * @param $height
      */
-    public function createExactResizeAndCroppedVariant($width, $height)
+    public function createExactResizeAndCroppedVariant($width, $height, $resize_type=NULL)
     {
         // nazev souboru na disku
         $filepath = $this->getFileDiskName();
-        $target_filepath = $this->getExactVariantDiskName($width, $height, $no_upsize=true);
+        $target_filepath = $this->getExactVariantDiskName($width, $height);
 
         //pokud uz varianta existuje, tak ji nebudu znovu vytvaret
         if (file_exists($target_filepath))
@@ -437,28 +372,8 @@ abstract class Model_Core_File extends ORM
             // Set transparent background
             $image->background('#fff', 0);
 
-            // Nechceme zvetsovat
-            if ($no_upsize) {
-                // Oba rozmery jsou vetsi nez pozadovane
-                if ($image->width > $width and $image->height > $height) {
-                    //provede vlastni resize obrazku - pote se jeste vyrizne stred
-                    $image->resize($width, $height, Image::INVERSE);
-                } elseif ($image->width > $width or $image->height > $height) {
-                    // Alespon jeden rozmer je vetsi nez pozadovany
-                    // - resize do pozadovaneho obdelniku se zachovanim pomeru stran
-                    // - vyrezavani jiz neprobehne, protoze nebude proc vyrezavat
-                    $image->resize($width, $height, Image::AUTO);
-                }
-
-            } else {
-                // Zvetsovani nam nevadi - zvetsime mensi rozmer na pozadovany a pak vyrizneme stred
-                $image->resize($width, $height, Image::INVERSE);
-            }
-
-
-            // Crop exact rectangle from the centre of the image
-            $image->crop($width, $height);
-
+            // Zvetsovani nam nevadi - zvetsime mensi rozmer na pozadovany a pak vyrizneme stred
+            $image->resize($width, $height, $resize_type);
 
             //pred vlastni nazev souboru vlozim prefix - nazev resize varianty
             $image->save($target_filepath);
@@ -668,7 +583,6 @@ abstract class Model_Core_File extends ORM
             copy($this->_copy_source_filepath, $target_filedir . DIRECTORY_SEPARATOR . $this->nicename );
         }
 
-
         if ($this->hasAttr('file_size') and empty($this->file_size)) {
             $this->file_size = $this->getFileSize(false);
         }
@@ -681,15 +595,7 @@ abstract class Model_Core_File extends ORM
             $this->width = $img->width;
             $this->height = $img->height;
         }
-        parent::save();
- 
- 		//vytvori se resize varianty dle nataveni modelu
-        $this->createResizedVariants();
-
-        //vytvori se cropped varianty dle nastaveni modelu
-        $this->createCroppedVariants();
-
-        return $retval;
+        return parent::save();
     }
 
     /**

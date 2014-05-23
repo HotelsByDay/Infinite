@@ -4,6 +4,8 @@
  * Jazykovy soubor, ktery obsahuje hlasky spojene s prihlasovanim a opravnenim uzivatelu.
  */
 return array(
+    'appformitemgps.longitude' => 'Longitude:',
+    'appformitemgps.latitude' => 'Latitude:',
 
     'form.close_btn.confirm_label' => 'Are you sure?',
     'validation_error.alpha' => 'Value can contain letters only.',

@@ -1,5 +1,4 @@
 <div class="item">
-
     <i>(<?= $file->getFileType();?>)</i>&nbsp;
     <a href="<?= $file->getURL();?>"><?= $file->nicename;?></a>&nbsp;(<?= $file->getFileSize();?>)
 

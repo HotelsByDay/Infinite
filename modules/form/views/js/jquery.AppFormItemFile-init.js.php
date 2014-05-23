@@ -25,7 +25,6 @@ $(document).ready(function(){
         //kliknutim na tlacitko cancel zrusim soubor - odstranim
         //vsechny prvky, ktere se ho tykaji ze stranky
         $photo.find('.cancel').click(function(){
-
             //pridam classu, ktera prvek zvyrazni aby uzivatel videl
             //ktery soubor bude odstranen
             $photo.addClass('removed');

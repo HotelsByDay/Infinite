@@ -70,26 +70,8 @@
                         <div class="clear"></div>
                     </div>
                 </div>
-
             </div>
 
-            <div class="span3">
-                <div style="padding: 10px; background-color: #8CA1F7;">
-                    <label style="font-weight: bold;">Google GPS:</label>
-                    <div class="item-element">
-                        <label for="<?= $uid ?>-glatitude"><?= __('appformitempropertyaddress.latitude') ?></label>
-                        <input style="width: 180px" type="text" name="<?= $attr ?>[google_latitude]" value="<?= $value['google_latitude'] ?>" readonly="readonly" />
-                        <div class="clear"></div>
-                    </div>
-
-                    <div class="item-element">
-                        <label for="<?= $uid ?>-glongitude"><?= __('appformitempropertyaddress.longitude') ?></label>
-                        <input style="width: 180px" type="text" name="<?= $attr ?>[google_longitude]" value="<?= $value['google_longitude'] ?>" readonly="readonly" />
-                        <a href="javascript: ;" class="btn use_google">Use Google GPS</a>
-                        <div class="clear"></div>
-                    </div>
-                </div>
-            </div><!-- span3 -->
             </div><!-- row -->
         <div class="row">
             <div class="span6">

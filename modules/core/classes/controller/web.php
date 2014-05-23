@@ -21,13 +21,16 @@ class Controller_Web extends Controller {
 
         try {
             // Process requested filename - it have to contain width and height of the image
-            $pattern = '/.+_([0-9]+)x([0-9]+)\.[a-zA-Z]{2,5}$/';
+            $pattern = '/.+_([0-9]+)x([0-9]+)_(none|width|height|auto|inverse|)\.[a-zA-Z]{2,5}$/';
             $res = preg_match($pattern, $requested_filename, $matches);
-            if ( ! $res or count($matches) != 3) {
+            if ( ! $res or ! in_array(count($matches), array(3, 4))) {
                 throw new Exception('Requested filename ('.$requested_filename.') does not match the pattern: '.$pattern);
             }
             // Get width and height
             list($_foo, $width, $height) = $matches;
+            $resize_type = arr::get($matches, 3, 'auto');
+            // Transform string constant to it's internal value
+            $resize_type = constant('Image::' . strtoupper($resize_type));
 
             // Create image instance
             $image = ORM::factory($object_name);
@@ -42,7 +45,7 @@ class Controller_Web extends Controller {
             }
 
             // Generate resize variant
-            $resized = $image->createExactResizeAndCroppedVariant($width, $height);
+            $resized = $image->createExactResizeAndCroppedVariant($width, $height, $resize_type);
             if ( ! $resized) {
                 throw new Exception('Unable to create resize_variant '.$width.'x'.$height.' ('.$object_name.' : '.$object_id);
             }
@@ -54,7 +57,7 @@ class Controller_Web extends Controller {
 
         } catch (Exception $e) {
             Kohana::$log->add(Kohana::ERROR, 'Unable to create resize_variant: '.$e->getMessage());
-            echo "Error while generating image resize variant. See log for more details.";
+            echo "Error while generating image resize variant - {$e->getMessage()}";
         }
     }
 

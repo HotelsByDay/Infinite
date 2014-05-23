@@ -28,11 +28,11 @@ class Helper_Format {
      * @param $height
      * @return string
      */
-    static public function imageExactResizeVariantName($fname, $width, $height)
+    static public function imageExactResizeVariantName($fname, $width, $height, $resize_type='auto')
     {
         $filename = pathinfo($fname, PATHINFO_FILENAME);
         $ext = pathinfo($fname, PATHINFO_EXTENSION);
-        return $filename. '_' .$width. 'x' .$height. '.' .$ext;
+        return $filename. '_' .$width. 'x' . $height . '_' . $resize_type . '.' .$ext;
     }
 
 
