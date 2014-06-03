@@ -25,25 +25,25 @@ class AppFormItem_RelSelect extends AppFormItem_Base
         Web::instance()->addCustomJSFile(View::factory('js/jquery.AppFormItemRelSelect.js'));
         // A jeho inicializaci
         $init_js = View::factory('js/jquery.AppFormItemRelSelect-init.js');
-        $init_js->attr    = $this->attr;
+        $config['attr']    = $this->attr;
         //pozadovane preview relacnich zaznamu
-        $init_js->preview = arr::get($this->config, 'preview', '');
+        $config['preview'] = arr::get($this->config, 'preview', '');
         //max pocet vysledku, ktery se ma nacitat do autocompletu
         //(fallback hodnota je 15)
-        $init_js->page_size = arr::get($this->config, 'page_size', 10);
+        $config['_ps'] = arr::get($this->config, 'page_size', 10);
 
         //pokud ma prvek umoznit vytvoreni noveho relacniho zaznamu, tak
         //jQuery pluginu predam URL pro nacteni editacniho formulare
         if (arr::get($this->config, 'new', ''))
         {
-            $init_js->add_new_url = appurl::object_new_ajax($this->config['relobject'], arr::getifset($this->config, 'relformconfig', NULL), arr::get($this->config, 'new_defaults'), arr::get($this->config, 'overwrite'));
+            $config['add_new_url'] = appurl::object_new_ajax($this->config['relobject'], arr::getifset($this->config, 'relformconfig', NULL), arr::get($this->config, 'new_defaults'), arr::get($this->config, 'overwrite'));
             //pridam konfiguraci dialogu
-            $init_js->dialog_config = arr::getifset($this->config, 'dialog', array());
+            $config['dialog'] = arr::getifset($this->config, 'dialog', array());
         }
 
         //url pro cteni dat - v parametrech se bude predavat i filtr, ktery je
         //nastaveny v konfiguraci prvku
-        $init_js->data_url = appurl::object_cb_data($this->config['relobject'], $this->getConfigValue('filter', array()));
+        $config['data_url'] = appurl::object_cb_data($this->config['relobject'], $this->getConfigValue('filter', array()));
 
         //filter_by_parent definuje nazev atributu/prvku podle jehoz hodnoty se filtruje
         //na tomto prvku. Vetsinou se jedna o vazby typu firma - pobocky, nebo pobocka - pracovnici
@@ -54,16 +54,23 @@ class AppFormItem_RelSelect extends AppFormItem_Base
             //bude se filtrovat podle tohoto nebo techto atributu - prvek musi na formulari
             //tento atribut najit a vzit si aktualni hodnotu - ocekava ze to
             //bude relselect
-            $init_js->filter_parent_attr = (array)$filter_parent;
+            $config['filter_parent_attr'] = (array)$filter_parent;
         }
 
         //filter_by_child zajistuje ze pri vyberu hodnoty tohoto prvku dojde
         //k vymazani hodnoty child prvku.
         if (($filter_child = arr::get($this->config, 'filter_child')) != FALSE)
         {
-            $init_js->filter_child_attr = (array)$filter_child;
+            $config['filter_child_attr'] = (array)$filter_child;
         }
 
+        // dynamic filtering by values in the form
+        if (($dynamic_filter = arr::get($this->config, 'dynamic_filter')) != FALSE)
+        {
+            $config['dynamic_filter'] = (array)$dynamic_filter;
+        }
+
+        $init_js->config = $config;
         //prida do sablony identifikator tohoto prvku a zajisti vlozeni do stranky
         parent::addInitJS($init_js);
     }

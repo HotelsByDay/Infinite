@@ -233,7 +233,9 @@ class AppFormItem_AdvancedItemList extends AppFormItem_Base
             $rel_items[] = View::factory('appformitem/advanceditemlist/'.$view_name, array(
                 'form'  => $item_form,
                 'model' => $model,
-                'attr'  => $this->attr
+                'attr'  => $this->attr,
+                'delete_label' => arr::get($this->config, 'delete_button_label', __('appformitemadvancedselect.delete_label')),
+                'delete_item_callback' => arr::get($this->config, 'delete_item_callback', false),
             ));
         }
 

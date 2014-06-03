@@ -18,7 +18,7 @@
  */
 class Kohana_ORM {
 
-        protected $_original_data = array();
+    protected $_original_data = array();
 
 	// Current relationships
 	protected $_has_one    = array();

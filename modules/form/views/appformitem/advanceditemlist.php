@@ -1,7 +1,5 @@
 <div class="appformitemadvanceditemlist <?= $css ?>" id="<?= $uid;?>">
 
-    <a href="#" class="btn btn-success add button grey"><?= $add_button_label;?></a>
-    <div class="clearfix cb"></div>
 
     <span class="add_loader" style="display:none"><?= __('appformitemadvanceditemlist.add_pi');?></span>
 
@@ -16,6 +14,10 @@
         </li>
         <?php endforeach ?>
     </ul>
+
+    <div class="clearfix cb"></div>
+
+    <a href="#" class="btn btn-success add button grey"><?= $add_button_label;?></a>
 
     <div class="clearfix cb"></div>
 </div>

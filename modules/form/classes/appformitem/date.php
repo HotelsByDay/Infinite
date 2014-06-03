@@ -16,7 +16,15 @@ class AppFormItem_Date extends AppFormItem_String
     public function init()
     {
         $init_js = View::factory('js/jquery.AppFormItemDate-init.js');
-        $init_js->format = arr::get($this->config, 'js_date_format', DateFormat::getDatePickerDateFormat());
+
+        $config = array(
+            'dateFormat' => arr::get($this->config, 'js_date_format', DateFormat::getDatePickerDateFormat()),
+            'showWeek' => true,
+            'changeMonth' => true,
+            'changeYear' => true,
+            'showAnim' => 'fadeIn',
+        );
+        $init_js->config = array_merge($config, (array)arr::get($this->config, 'js_config'));
         parent::addInitJS($init_js);
         return parent::init();
     }

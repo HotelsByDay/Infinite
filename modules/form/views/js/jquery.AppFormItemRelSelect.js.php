@@ -19,7 +19,8 @@
              * Defaultni hodnoty pro parametry a nastaveni pluginu
              */
             var settings = {
-                data_url : ""
+                data_url : "",
+                dynamic_filter: false
             };
             
             /**
@@ -46,6 +47,26 @@
 
                 // Ulozime si aktualni jmeno, abychom mohli detekovat jeho zmenu v inputu
                 $value.data('selected', $name.val());
+
+
+                var clear = function(){
+                    $name.val('');
+                    $value.val('');
+                    $name.trigger('change');
+                }
+                // Inicializace dynamic_filtru - pri zmene hodnoty na kterou se vaze filtr
+                // dojde ke smazani zdejsi hodnoty
+                if (settings.dynamic_filter) {
+                    // Projdeme config a na definovane hodnoty povesime event listener
+                    for (var col in settings.dynamic_filter) {
+                        var f = settings.dynamic_filter[col];
+                        var $item = $this.parents('.<?php echo AppForm::FORM_CSS_CLASS; ?>:first').find('*[name="'+f+'"]');
+                        // Pokud prvek nebyl nalezen, nic neudelame
+                        if (typeof($item) == 'undefined' || ! $item) continue;
+                        $item.change(clear);
+                    }
+                }
+
 
                 $name.change(function() {
                     //podivam se na hodnotu, ktera byla uzivatelem vybrana
@@ -117,7 +138,7 @@
                         //ze to bdue prvek relselect
                         if (typeof default_params['filter_parent_attr'] !== 'undefined') {
 
-                            for (k in default_params['filter_parent_attr']) {
+                            for (var k in default_params['filter_parent_attr']) {
                                 //nazev atributu
                                 var attr_name = default_params['filter_parent_attr'][k];
                                 //selector pro dany prvek
@@ -137,6 +158,28 @@
                                 if ($item_selector.length != 0) {
                                     pom_data[attr_name] = $item_selector.val();
                                 }
+                            }
+                        }
+
+                        if (settings.dynamic_filter) {
+                            // Projdeme config a zapiseme do postu dane hodnoty z formulare
+                            for (var col in settings.dynamic_filter) {
+                                var f = settings.dynamic_filter[col];
+                                var $item = $this.parents('.<?php echo AppForm::FORM_CSS_CLASS; ?>:first').find('*[name="'+f+'"]');
+                                // Pokud prvek nebyl nalezen, do postu nic nepridame
+                                if (typeof($item) == 'undefined' || ! $item || ! $item.length) {
+                                    continue;
+                                }
+
+                                // Pokud jde o radia, pak chceme jen to zatrzene
+                                if ($item.is(':radio')) {
+                                    $item = $item.filter(':checked');
+                                }
+                                var value = '';
+                                if ($item.length) {
+                                    value = $item.val();
+                                }
+                                pom_data[col] = value;
                             }
                         }
 
@@ -171,7 +214,6 @@
                         //zadal alespon neco a povoli mu pridat dalsi novou (prazdnou)
                         //polozku
                         $value.val(ui.item.id);
-
 
                         //polozka muze obsahovat hodnoty, ktere maji byt
                         //dovyplneny na formulari

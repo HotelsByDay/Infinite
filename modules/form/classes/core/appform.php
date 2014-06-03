@@ -1190,6 +1190,17 @@ class Core_AppForm {
         return $this->_form_items[$attr]->Render($style, $this->_error_messages);
     }
 
+
+    /**
+     * Whether the buttons should be displayed in a form
+     * @return mixed
+     */
+    public function showButtons()
+    {
+        return arr::get($this->_config, 'show_buttons', true);
+    }
+
+
     /**
      * Metoda generuje kompletni formular.
      *

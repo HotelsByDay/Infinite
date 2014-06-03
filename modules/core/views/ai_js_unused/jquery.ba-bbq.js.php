@@ -1,4 +1,4 @@
-/*! <script>
+/*!<script>
  * jQuery BBQ: Back Button & Query Library - v1.2.1 - 2/17/2010
  * http://benalman.com/projects/jquery-bbq-plugin/
  * 
@@ -894,4 +894,3 @@
   });
   
 })(jQuery,this);
-

@@ -66,7 +66,7 @@
                                 var $item_container = $( document.createElement('li') ).addClass('item new');
 
                                 //pridam na konec seznam existujicich prvku itemlistu
-                                $_this.find('.list:first').prepend($item_container);
+                                $_this.find('.list:first').append($item_container);
 
                                 //aktualizuje se poradi prvku
                                 if (options['sortable']) {
