@@ -212,6 +212,13 @@ $._ajax = function(arg1, arg2)
             return;
         }
 
+        // Pokud se maji nahradit nejake casti DOMu, tak to udelame
+        if (typeof data !== 'undefined' && typeof data._fill_dom === 'object') {
+            for (var selector in data._fill_dom) {
+                $(selector).html(data._fill_dom[selector]);
+            }
+        }
+
         if (typeof originalCallback === 'function') {
             originalCallback(data, status, jqXHR);
         }

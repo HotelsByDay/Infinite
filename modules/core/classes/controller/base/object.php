@@ -1069,14 +1069,12 @@ abstract class Controller_Base_Object extends Controller_Layout {
         //nactu ORM pozadovaneho objektu
         $this->model = ORM::factory($this->object_name, $item_id);
 
-        //chci pouzit custom sablonu, ktera zajisti vystup ve formatu JSON v pozadovanem tvaru
-        $this->template = $this->_view_edit_ajax_template();
-
+        $data = array();
         //do stranky vlozim obsahovou sablonu pro "/edit_ajax" vypis
-        $this->template->content = $this->_view_edit_ajax_content();
+        $content = $this->_view_edit_ajax_content();
 
         //pro stylovani predam nazev kontroleru
-        $this->template->content->controller_name = $this->controller_name;
+        $content->controller_name = $this->controller_name;
 
         //nactu pozadovanou konfiguraci formulare
         $form_config = Kohana::config($form_type);
@@ -1119,27 +1117,32 @@ abstract class Controller_Base_Object extends Controller_Layout {
         }
 
         //do sablony vlozim vysledek provedene akce
-        $this->template->action_name   = $form->getRequestedAction();
-        $this->template->action_result = $form->getActionResult();
-        $this->template->action_status = $form->getActionResultStatus();
+        $data['action_name']   = $form->getRequestedAction();
+        $data['action_result'] = $form->getActionResult();
+        $data['action_status'] = $form->getActionResultStatus();
         //predam i ID ulozeneho zaznamu
-        $this->template->id = $this->model->pk();
+        $data['id'] = $this->model->pk();
         //dale i preview zaznamu - format preview muze byt explicitne definovan
         //v parametrech pozadavku
-        $this->template->preview = $this->model->preview(arr::get($this->request_params, '__preview'));
+        $data['preview'] = $this->model->preview(arr::get($this->request_params, '__preview'));
 
         //vlastni formular bude vlozen do sablony
-        $this->template->content->form = $form->Render();
+        $content->form = $form->Render();
 
         //hlavni nadpise ve strance generuje trida formulare
-        $this->template->headline = $form->getHeadline();
+        $data['headline'] = (string)$form->getHeadline();
 
         //do sablony vlozim pouze ty soubory, ktere mohou byt vlozeny vicekrat
         $script_include_tag = Web::instance()->getJSFiles(TRUE);
         $script_include_tag.= '<script type="text/javascript">$(document).ready(function(){if(typeof $.waypoints !== "undefined"){$.waypoints("refresh");}});</script>';
 
         //vlozim do sablony aby doslo k nacteni prislusnych souboru do stranky
-        $this->template->content->script_include_tag = $script_include_tag;
+        $content->script_include_tag = $script_include_tag;
+
+        $data['content'] = (string)$content;
+
+        // Send json response
+        $this->sendJson($data);
     }
 
     /**
@@ -1664,18 +1667,6 @@ abstract class Controller_Base_Object extends Controller_Layout {
         empty($view_name) AND $view_name = 'edit_content_standard';
         
         return $this->_load_view($view_name);
-    }
-
-    protected function _view_edit_ajax_template($view_name = NULL)
-    {
-        empty($view_name) AND $view_name = 'edit_ajax_template';
-
-        $view = $this->_load_view($view_name);
-
-        //pridam definici specialni kotev, ktere se pouzivaji k predani
-        $view->extra = array();
-
-        return $view;
     }
 
     protected function _view_delete_ajax_template($view_name = NULL)

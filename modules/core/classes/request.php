@@ -2,6 +2,16 @@
 
 class Request extends Kohana_Request {
 
+    // Seznam DOM elementu, jejichz obsah ma byt nahrazen
+    // '#selector' => '<html content>'
+    protected $_fill_dom = array();
+
+    public function fillDom($selector, $content)
+    {
+        $this->_fill_dom[$selector] = $content;
+    }
+
+
     /**
      * Vraci kompletni URL aktualniho hlavniho pozadavku vcetne GET argumentu,
      * kterou bere primo z $_SERVER['REQUEST_URI'].
@@ -133,6 +143,16 @@ class Request extends Kohana_Request {
         if (Kohana::$environment !== Kohana::TESTING) {
             exit;
         }
+    }
+
+
+    public function sendJson(array $data)
+    {
+        if ( ! empty($this->_fill_dom)) {
+            $data['_fill_dom'] = $this->_fill_dom;
+        }
+        $this->headers['Content-Type'] = 'application/json';
+        $this->response = json_encode($data);
     }
 
 

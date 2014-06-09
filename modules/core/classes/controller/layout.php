@@ -87,11 +87,74 @@ abstract class Controller_Layout extends Controller_AuthTemplate {
         return parent::after();
     }
 
-    public function sendJson($data)
+    public function sendJson(array $data)
     {
-        $this->request->headers['Content-Type'] = 'application/json';
         $this->auto_render = false;
-        $this->request->response = json_encode($data);
+        $this->request->sendJson($data);
+    }
+
+    /**
+     * Zasle predany pohled/string jako PDF do prohlizece - s uplatnenim aktualniho CSS
+     * Dokumentace mPDF: http://mpdf1.com/manual/index.php
+     * @param string $view - pohled nebo string ktery se prevede na pdf, pokud se nezada, pouzije se $this->view
+     * @param string $filename - nazev pod kterym bude pdf zaslano
+     * @param string|array $css - css ktere bude predano do pdf generatoru
+     */
+    protected $mpdf = null;
+    protected function sendPdf($view=NULL, $filename=NULL, $css=NULL, $inline=false)
+    {
+        $this->auto_render = false;
+
+        // Pokud neni zadan pohled, pouzije se $this->view
+        if (empty($view)) {
+            $view = $this->view;
+        }
+
+        // Pokud neni zadan nazev souboru, pouzije se timestamp
+        if (empty($filename)) {
+            $filename = date('Y-m-d H:i:s').'.pdf';
+        }
+
+        if (substr($filename, -3, 3) != 'pdf') {
+            $filename .= '.pdf';
+        }
+
+        // vlozeni souboru
+        require_once MODPATH . '../mpdf/mpdf.php';
+
+        if ( ! $this->mpdf instanceof mPDF) {
+            // Vytvoreni instance tridy a nastaveni
+            $this->mpdf = new mPDF('utf-8','A4');
+            $this->mpdf->useOnlyCoreFonts = true;
+            $this->mpdf->SetDisplayMode('fullpage');
+            $this->mpdf->SetAutoFont(0);
+        }
+
+        // Zapiseme pripadne CSS
+        if ( ! empty($css)) {
+            if ( ! is_array($css)) {
+                $css = array((string)$css);
+            }
+
+            foreach($css as $style) {
+                $this->mpdf->WriteHTML($style, 1);
+            }
+        }
+
+        $this->mpdf->WriteHTML((string) $view, 2);
+
+        // Clear output buffer
+        ob_end_clean();
+
+        // Send proper headers
+        $this->headers['Content-Type'] = 'application/pdf';
+
+        // Get binary PDF data
+        $data = $this->mpdf->Output('', 'S');
+
+        // Send response
+        $this->request->response = $data;
+        $this->request->send_file(TRUE, $filename, Array('inline'=>$inline));
     }
 
 }
