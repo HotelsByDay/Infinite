@@ -53,6 +53,8 @@
                 //inicializace funkci formulare
                 methods._initForm($_this);
 
+                // Init tooltips (hints)
+                $('*[rel="tooltip"]', $_this).tooltip();
                 //inicializace funkce autosave - pri detekci 'change' na urovni formulare
                 //dojde automaticky k ulozeni
                 if (typeof settings['autosave'] !== 'undefined' && settings['autosave'] !== false) {

@@ -5,11 +5,17 @@
   <?php endif ?>
 
     <input type="hidden" name="<?= $attr ?>" value="0" />
-    <label class="checkbox"><?= $label ?>
+
+    <div>
+    <label class="checkbox pull-left">
        <input class="checkbox" type="checkbox" name="<?= $attr ?>" value="1" <?php if ($value) echo 'checked="checked"'; ?> />
+
+        <?= $label ?>
     </label>
 
-  <?php if (isset($hint) && !empty($hint)): ?>
-    <span class="hint"><?= $hint; ?></span>
-  <?php endif ?>
+        <?php if (isset($hint) && !empty($hint)): ?>
+            &nbsp; <i class="icon icon-question-sign" rel="tooltip" title="<?= $hint ?>"></i>
+        <?php endif ?>
+    </div>
+
 </div>
