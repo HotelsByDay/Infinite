@@ -62,6 +62,12 @@ class Validate extends Kohana_Validate {
         //odstrani vsechny bile znaky
         $number = preg_replace('/\s/', '', $number);
 
+        //remove any dashes
+        $number = preg_replace('/\-/', '', $number);
+
+        //remove any brackets
+        $number = preg_replace('/(\(|\))/', '', $number);
+
         //ze zacatku odstranim znak '+'
         $number = preg_replace('/^\+/', '', $number);
 
@@ -96,6 +102,7 @@ class Validate extends Kohana_Validate {
 
         //remove any dashes
         $number = preg_replace('/\-/', '', $number);
+
         //remove any brackets
         $number = preg_replace('/(\(|\))/', '', $number);
 
