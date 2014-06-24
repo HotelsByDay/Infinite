@@ -26,7 +26,7 @@ if ( ! defined('KOHANA_START_MEMORY'))
  * language is defined by [I18n::$source].
  *
  * @uses    I18n::get
- * @param   string  text to translate
+ * @param   string  string text to translate
  * @param   array   values to replace in the translated text
  * @param   string  source language
  * @return  string

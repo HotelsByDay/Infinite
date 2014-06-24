@@ -639,7 +639,7 @@ class Kohana_ORM {
 	 * can be nested using 'object1:object2' syntax
 	 *
 	 * @param   string  target model to bind to
-	 * @return  void
+	 * @return  ORM
 	 */
 	public function with($target_path)
 	{

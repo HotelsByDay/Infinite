@@ -67,7 +67,7 @@ class Kohana_I18n {
 	 *
 	 *     $hello = I18n::get('Hello friends, my name is :name');
 	 *
-	 * @param   string   text to translate
+	 * @param   string   string text to translate
 	 * @param   string   target language
 	 * @return  string
 	 */
