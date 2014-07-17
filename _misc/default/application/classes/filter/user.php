@@ -17,7 +17,6 @@ class Filter_User extends Filter_Base {
         }
 
 
-
         return $this;
     }
     

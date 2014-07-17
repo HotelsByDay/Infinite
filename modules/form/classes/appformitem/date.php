@@ -109,7 +109,7 @@ class AppFormItem_Date extends AppFormItem_String
             $value = $this->getValue();
 
             $view->value = empty($value)
-                            ? ''
+                            ? arr::get($this->config, 'default', '')
                             : $value;
         }
 
