@@ -60,6 +60,7 @@
                     var changed = false;
                     $this.find(':checkbox').not(':checked').each(function(){
                         $(this).attr('checked', true);
+                        $(this).trigger('change');
                         changed = true;
                     });
                     if (changed) $this.trigger('change');
@@ -69,6 +70,7 @@
                     var changed = false;
                     $this.find(':checkbox:checked').each(function(){
                         $(this).removeAttr('checked');
+                        $(this).trigger('change');
                         changed = true;
                     });
                     if (changed) $this.trigger('change');

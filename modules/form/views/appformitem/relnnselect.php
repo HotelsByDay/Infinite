@@ -88,6 +88,10 @@
                            name="<?= $attr ?>[<?= $additional_data ?>][<?= $item->pk() ?>]"
                            value="<?= $checked ? arr::get($selected[$additional_data], $item->pk()) : '' ?>"
                         <?= $checked ? '' : 'disabled="disabled"' ?> />
+
+                    <?php if (is_array($error_message) and ($em = arr::get($error_message, $item->pk()))): ?>
+                        <span class="validation_error text-error"><?= $em; ?></span>
+                    <?php endif; ?>
                 </div>
             <?php endif ?>
 
@@ -98,7 +102,7 @@
     </div>
 
 
-    <?php if (!empty($error_message)): ?>
+    <?php if ( ! empty($error_message) and ! is_array($error_message)): ?>
         <div class="clearfix"></div>
         <div class="validation_error text-error" style="margin-top: 5px;"><?= $error_message; ?></div>
     <?php endif ?>

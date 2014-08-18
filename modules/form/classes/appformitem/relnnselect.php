@@ -39,7 +39,6 @@ class AppFormItem_RelNNSelect extends AppFormItem_Base
     );
 
 
-
     public function __construct($attr, $config, Kohana_ORM $model, ORM_Proxy $loaded_model, $form_data, $form)
     {
 
