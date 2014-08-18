@@ -16,12 +16,7 @@
 ?>
 <div class="appformitemcontainer appformitemrelnnselect <?= $css ?>" id="<?= $uid;?>">
 
-    <?php if (!empty($error_message)): ?>
-        <span class="validation_error alert alert-error" style="color:red;"><?= $error_message; ?></span>
-    <?php endif ?>
-
     <label><?= $label;?></label>
-
 
     <?php if ($fast_search): ?>
         <div class="fast_search">
@@ -101,6 +96,12 @@
 
         </div>
     </div>
+
+
+    <?php if (!empty($error_message)): ?>
+        <div class="clearfix"></div>
+        <div class="validation_error text-error" style="margin-top: 5px;"><?= $error_message; ?></div>
+    <?php endif ?>
 
 
 </div>

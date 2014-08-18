@@ -218,7 +218,7 @@ class Validate extends Kohana_Validate {
 			list($error, $params) = $set;
 
 			// Get the label for this field
-			$label = $this->_labels[$field];
+			$label = arr::get($this->_labels, $field);
 
 			if ($translate)
 			{
@@ -237,7 +237,7 @@ class Validate extends Kohana_Validate {
 			// Start the translation values list
 			$values = array(
 				':field' => $label,
-				':value' => $this[$field],
+				':value' => arr::get($this, $field),
 			);
 
 			if (is_array($values[':value']))
