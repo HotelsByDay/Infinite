@@ -1,3 +1,19 @@
+<?php
+/** @var $attr string */
+/** @var $label string */
+/** @var $css string */
+/** @var $fast_search boolean */
+/** @var $allow_check_all boolean */
+/** @var $note boolean */
+/** @var $additional_data boolean */
+/** @var $column_width integer */
+/** @var $min_column_size integer */
+/** @var $items ORM[] */
+/** @var $selected array */
+/** @var $link string */
+/** @var $additional_data_label string */
+/** @var $preview_format string */
+?>
 <div class="appformitemcontainer appformitemrelnnselect <?= $css ?>" id="<?= $uid;?>">
 
     <?php if (!empty($error_message)): ?>
@@ -56,7 +72,11 @@
 
         <div class="item">
 
-            <label for="item_<?= $attr;?>_<?=$item->pk();?>" class="check checkbox"><?= $item->preview();?><input type="checkbox" <?= $checked ? 'checked="checked"' : '';?> id="item_<?= $attr;?>_<?=$item->pk();?>" value="<?= $item->pk();?>" name="<?= $attr;?>[id][<?= $item->pk() ?>]" /></label>
+            <label for="item_<?= $attr;?>_<?=$item->pk();?>" class="check checkbox"><?
+                echo $item->preview($preview_format);
+                if ($link) { ?>&nbsp;<a href="<?= AppUrl::object_overview($item->object_name(), $item->pk()) ?>" target="_blank"><?= $link ?></a><? }
+                ?><input type="checkbox" <?= $checked ? 'checked="checked"' : '';?> id="item_<?= $attr;?>_<?=$item->pk();?>" value="<?= $item->pk();?>" name="<?= $attr;?>[id][<?= $item->pk() ?>]" />
+            </label>
 
             <?php if ($note): ?>
                 <div class="note_outer" <?= $checked ? '' : 'style="display: none;"' ?>>
@@ -65,6 +85,16 @@
                            <?= $checked ? '' : 'disabled="disabled"' ?> />
                 </div>
             <?php endif; ?>
+
+            <?php if ($additional_data): ?>
+                <div class="note_outer" <?= $checked ? '' : 'style="display: none;"' ?>>
+                    <label><?= $additional_data_label ?></label>
+                    <input type="text"
+                           name="<?= $attr ?>[<?= $additional_data ?>][<?= $item->pk() ?>]"
+                           value="<?= $checked ? arr::get($selected[$additional_data], $item->pk()) : '' ?>"
+                        <?= $checked ? '' : 'disabled="disabled"' ?> />
+                </div>
+            <?php endif ?>
 
         </div>
         <?php endforeach ?>
