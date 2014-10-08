@@ -7,7 +7,16 @@ $uid = 'o'.mt_rand();
 </div>
 
 <script type="text/javascript">
-$(document).ready(function(){
-    $("#<?= $uid;?>").objectDataPanel(<?= text::json_encode($conf);?>);
-});
+    var init = function()
+    {
+        $("#<?= $uid;?>").objectDataPanel(<?= text::json_encode($conf);?>);
+    }
+
+    if (typeof $ != 'undefined')
+    {
+        $(document).ready(init);
+    } else {
+        window.onload = init;
+    }
+
 </script>

@@ -844,6 +844,38 @@ abstract class Controller_Base_Object extends Controller_Layout {
     }
 
     /**
+     * Tato akce slouzi k vytvoreni noveho zaznamu nad objektem pomoci vicekrokoveho formulare.
+     * Pripadne pro editaci objeku ve vicekrokovem formulari - pokud objekt zatim nebyl dovytvoren.
+     * Zajistuje pouze kontrolu opravneni 'new' a pak vola akci edit
+     * s argumentem $item_id=NULL.
+     *
+     * @return <type>
+     */
+    public function action_multistep($form_name, $objectid=NULL)
+    {
+        //kontrola opravneni na danou akci
+        //kontrola zda ma uzivatel pozadovane opravneni na danou akci
+        if ( ! $this->user->HasPermission($this->object_name, 'new'))
+        {
+            return $this->runUnauthorizedAccessEvent();
+        }
+
+        //jQuery.objectDataPanel pro funkcnost panelu, ktere se budou nacitat do obsahove castu
+        Web::instance()->addCustomJSFile(View::factory('js/jquery.objectDataPanel.js'));
+
+        //do stranky dale vlozim JS Set 'table' - do tohoto setu jsou vlozeny JS
+        //soubory ktere mohou byt potreba ve strance
+        Web::instance()->addJSFileSet('overview');
+
+        // Vynutime pouziti zadane formularove tridy
+        $this->forced_form_class_name = 'Form_' . $form_name;
+        if (Request::$is_ajax) {
+            return $this->action_edit_ajax($foo = $form_name, $objectid);
+        }
+        return $this->action_edit($objectid);
+    }
+
+    /**
      * Tato akce slouzi k vytvoreni noveho zaznamu nad objektem.
      * Zajistuje pouze kontrolu opravneni 'new' a pak vola akci edit
      * s argumentem $item_id=NULL.
@@ -991,7 +1023,7 @@ abstract class Controller_Base_Object extends Controller_Layout {
 
         //metoda vraci nazev tridy, ktera implementuje praci s formulari
         //jedna se bud o bazovou tridu AppForm nebo nejakou z ni dedici
-        $form_class_name = arr::get($form_config, 'class', $this->_action_edit_form_class_name());
+        $form_class_name = $this->_get_form_class_name($form_config);
 
         $form = FormFactory::Get($form_class_name, $this->model, $form_config, $this->request_params, FALSE);
 
@@ -1038,6 +1070,16 @@ abstract class Controller_Base_Object extends Controller_Layout {
         Dispatcher::instance()->trigger_event('system.action_edit_post', Dispatcher::event(array('controller' => $this)));
     }
 
+    protected $forced_form_class_name = NULL;
+    protected function _get_form_class_name($form_config)
+    {
+        if ($this->forced_form_class_name) {
+            return $this->forced_form_class_name;
+        }
+        return arr::get($form_config, 'class', $this->_action_edit_form_class_name());
+    }
+
+
     /**
      * Generuje variantu editacniho formulare, ktera se pouziva v jQuery.dialog
      * a je nacitana ajaxem. Znamena to predevsim nacteni jinych sablon a
@@ -1081,7 +1123,7 @@ abstract class Controller_Base_Object extends Controller_Layout {
 
         //metoda vraci nazev tridy, ktera implementuje praci s formulari
         //jedna se bud o bazovou tridu AppForm nebo nejakou z ni dedici
-        $form_class_name = arr::get($form_config, 'class', $this->_action_edit_form_class_name());
+        $form_class_name = $this->_get_form_class_name($form_config);
 
         $form = FormFactory::Get($form_class_name, $this->model, $form_config, $this->request_params, TRUE);
 
@@ -1467,6 +1509,7 @@ abstract class Controller_Base_Object extends Controller_Layout {
         
         return $this->_load_view($view_name, array('model' => $this->model));
     }
+
 
     /**
      * Metoda vraci nactenou 'hlavni' sablonu, ktera definuje rozlozeni prvku na /table

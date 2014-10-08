@@ -304,6 +304,27 @@ class Helper_Appurl
     }
 
     /**
+     * Vraci odkaz ktery vede na vicekrokovy formular pro vytvoreni noveho zaznamu
+     * na danem kontroleru. Umoznuje formulari poslat defaultni hodnoty - pro formular v prvnim kroku.
+     * @param <string> $controller Nazev kontroleru
+     * @param <array> $defaults Defaultni hodnoty, ktere budou nastaveny do
+     * prislusneho ORM modelu
+     * @param <string> $action Akce, ktera bude na kontroleru vyvolana. Pokud
+     * neni explicitne definovano, tak je nastaveno na hodnotu 'edit'.
+     * @return <string>
+     */
+    static public function object_new_multistep($controller, $form_name, $objectid=NULL, $defaults = array())
+    {
+        //je akce explicitne definovana ?
+        $action = 'multistep';
+
+        //defaultni hodnoty pro formular
+        $get_params['defaults'] = $defaults;
+
+        return self::object_action($controller, $action, array($form_name, $objectid), $get_params);
+    }
+
+    /**
      * Vraci odkaz ktery vede na editacni formular pro vytvoreni noveho zaznamu
      * na danem kontroleru. Umoznuje formulari poslat defaultni hodnoty.
      * @param <string> $controller Nazev kontroleru

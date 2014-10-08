@@ -206,7 +206,7 @@
                     var form_data = $_this.find('form').serialize();
 
                     //pripojim identifikaci stisknuteho formularoveho tlacitka
-                    form_data += '&'+$(this).attr('name')+'='+$(this).val();
+                    form_data += '&'+$(this).attr('name')+'='+$(this).attr('value');
 
                     //odeslani formulare
                     methods._submitForm($_this, form_data, $(this).attr('ptitle'));

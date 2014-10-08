@@ -45,7 +45,7 @@
                 //protoze budu dynamicky vkladat do stranky prvky, tak cely element
                 //skryju abych nezpusobil reflow
                 //a odstranim jakykoli obsah prvku
-                $content_container = $(document.createElement('div')).addClass('odp-content odp-content-initializing');
+                var $content_container = $(document.createElement('div')).addClass('odp-content odp-content-initializing');
 
                 $this.append( $content_container );
 
@@ -148,7 +148,7 @@
                                                .click(function(){
                                                    //poslu pozadavek na hledani dat spolesne s parametry
                                                    methods._sendQuery( $this );
-
+                                                   return false;
                                                })
                                                .appendTo($filter_container);
                 }
@@ -156,7 +156,6 @@
                 //preset_filter_container neste seznam prednstavenych filtru
                 if ( has_preset_filters ) {
                     $preset_filter_container.appendTo( $filter_container );
-
                 }
 
                 //vytvorim instanci jQuery.dialogu spolecnou pro vsechny instance
@@ -193,8 +192,9 @@
                                                                            .appendTo($filter_container);
 
                     //otevreni a nacteni obsahu dialogu
-                    $add_new_button.click(function(){
+                    $add_new_button.click(function() {
                         methods._loadForm($this, settings.newUrl, $(this).html());
+                        return false;
                     });
                 }
 
