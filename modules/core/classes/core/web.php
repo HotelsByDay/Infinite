@@ -17,6 +17,7 @@
 class Core_Web
 {
 
+
     /**
      * Konfigurace teto tridy. Nacita se ze standardnich kohanich konfiguracnich
      * souboru v konstruktoru.

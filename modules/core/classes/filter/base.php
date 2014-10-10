@@ -623,7 +623,7 @@ abstract class Filter_Base
         //vraci celkovy pocet zaznamu co vyhovuji,
         //ukladam do atributu objektu, protoze pri generovani odkazu na strankovani
         //tuto hodnotu pouziju
-        $this->results_total_count = $orm->count_all();
+        $this->calculateResultsTotalCount($orm);
 
         //pokud uzivatel pozaduje stranku, ktera uz jakoby presahuje pocet nalezenych
         //vysledku tak index stranky upravim tak aby obsahovala posledni nalezeny
@@ -686,6 +686,11 @@ abstract class Filter_Base
             $orm->find_all(),
             $filter_state_id,
             $filter_state_stats);
+    }
+
+    protected function calculateResultsTotalCount($orm)
+    {
+        $this->results_total_count = $orm->count_all();
     }
 
     public function getFilterParams()
