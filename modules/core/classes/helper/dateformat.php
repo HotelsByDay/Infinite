@@ -18,6 +18,29 @@ class Helper_DateFormat {
 
 
 
+    public static function getLastDateOfTheMonth($mysql_date)
+    {
+        return date('Y-m-t', strtotime($mysql_date));
+    }
+
+    public static function getLastDateOfTheWeek($mysql_date)
+    {
+        $day = date('w', strtotime($mysql_date));
+        if ($day == 0) $day = 7;
+        $day -= 1;
+        return date('Y-m-d', strtotime($mysql_date.' +'.(6-$day).' days'));
+    }
+
+    public static function getFirstDateOfTheWeek($mysql_date)
+    {
+        $day = date('w', strtotime($mysql_date));
+        if ($day == 0) $day = 7;
+        $day -= 1;
+        return date('Y-m-d', strtotime($mysql_date.' -'.$day.' days'));
+    }
+
+
+
     /**
      * @static
      * @param $string date string

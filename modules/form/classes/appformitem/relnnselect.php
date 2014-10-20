@@ -212,12 +212,15 @@ class AppFormItem_RelNNSelect extends AppFormItem_Base
                 $data_id = (array)arr::get((array)$this->form_data, 'id');
                 $data_note = (array)arr::get((array)$this->form_data, 'note');
 
-                //odstranim vsechny 'prebyvajici' vazby
-                foreach ($this->model->{$rel}->find_all() as $model)
-                {
-                    if ( ! in_array($model->pk(), $data_id))
+                //odstranim vsechny 'prebyvajici' vazby - pokud to neni u prvku vypnute
+                // (treba v pripade, ze vazby nastavuji 2 prvky v jednom formulari - 1. prvek smaze vazby a tento je jiz pouze prida)
+                if ( ! arr::get($this->config, 'no_delete', false)) {
+                    foreach ($this->model->{$rel}->find_all() as $model)
                     {
-                        $this->removeRelItem($rel, $model);
+                        if ( ! in_array($model->pk(), $data_id))
+                        {
+                            $this->removeRelItem($rel, $model);
+                        }
                     }
                 }
 

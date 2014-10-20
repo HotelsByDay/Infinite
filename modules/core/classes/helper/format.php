@@ -4,6 +4,49 @@ class Helper_Format {
 
 
     /**
+     * Useful for populating form select fields
+     * @param $start
+     * @param $end
+     * @param $step
+     * @param string $format
+     * @param bool $prepend
+     * @return array array with time values
+     */
+    public static function generateTimeRange($start, $end, $step, $format='H:i', $prepend=false)
+    {
+        $res = array();
+        if ($prepend) {
+            $res[''] = '';
+        }
+        $time = strtotime("2012-01-01 ".$start);
+        $end_time = strtotime("2012-01-01 ".$end);
+        while ($time <= $end_time) {
+            $formatted_time = date('H:i', $time);
+            $res[$formatted_time] = date($format, $time);
+            $time += 60*$step;
+        }
+        return $res;
+    }
+
+
+    public static function mysqlDateRange($start_date, $end_date)
+    {
+        $cur_time = strtotime($start_date.' 06:00:00');
+        $end_time = strtotime($end_date.' 10:00:00');
+        $res = array();
+        while ($cur_time <= $end_time) {
+            $date = date('Y-m-d', $cur_time);
+            $res[] = "SELECT '$date' AS date";
+            $cur_time += 86600;
+        }
+
+        if (empty($res)) {
+            return '(SELECT NULL)';
+        }
+        return '(' . implode(' UNION ', $res) . ')';
+    }
+
+    /**
      * Returns human readable filesize with B / kB / MB units
      * @param $file_size
      * @return string
