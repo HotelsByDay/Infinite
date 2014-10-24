@@ -316,6 +316,15 @@ class AppFormItem_Base
     }
 
     /**
+     * To be used in form templates to bind custom JS
+     * @return null|string
+     */
+    public function uid()
+    {
+        return $this->uid;
+    }
+
+    /**
      * Metoda vraci nazev sablony pro vykresleni na zaklade pozadovaneho 
      * zpusobu zobrazeni.
      *

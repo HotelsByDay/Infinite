@@ -599,8 +599,8 @@
 
                                                 //ze zpravy si vytvrim span prvek - odpoed muze obsahovat tlacitko
                                                 //"undo"
-                                                $message = $( document.createElement('span') ).html(data['action_result']);
-
+                                                var $message = $( document.createElement('div') ).html(data['action_result']);
+                                                $message.addClass('alert alert-warning');
                                                 //do vysledku akce muze patrit tlacitko 'zpet', ktere akci vrati
                                                 $message.find('.undo').click(function(){
 

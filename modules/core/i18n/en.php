@@ -4,6 +4,8 @@
  * Jazykovy soubor, ktery obsahuje hlasky spojene s prihlasovanim a opravnenim uzivatelu.
  */
 return array(
+    'welcome_new_user.email.subject' => 'Welcome to the '.PROJECT_NAME.'!',
+
     'appformitemgps.longitude' => 'Longitude:',
     'appformitemgps.latitude' => 'Latitude:',
 

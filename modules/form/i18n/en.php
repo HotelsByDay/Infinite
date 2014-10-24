@@ -2,6 +2,7 @@
 
 
 return array(
+    'afi_sendpassword.password_will_be_generated_msg' => 'Password will be automatically generated and sent to the user\'s e-mail',
 
     'form.AppFormItemSimplteItemList.delete_ptitle' => 'Deleting...',
     'upload.error.temp_not_writeable' => 'An error occurred while uploading the file. Please contact the support.',

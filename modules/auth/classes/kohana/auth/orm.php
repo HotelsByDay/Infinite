@@ -119,11 +119,7 @@ class Kohana_Auth_ORM extends Auth {
 			$username = $user;
 
 			// Load the user
-			$user = ORM::factory('user');
-			$user->where($user->unique_key($username), '=', $username)
-                             //uzivatel musi byt aktivni
-                             ->where('active', '=', '1')
-                             ->find();
+            $user = $this->findUserToLogin($username);
 		}
 
 		// If the passwords match, perform a login
@@ -147,6 +143,11 @@ class Kohana_Auth_ORM extends Auth {
 		// Login failed
 		return FALSE;
 	}
+
+    protected function findUserToLogin($username)
+    {
+        return ORM::factory('user')->findUserToLogin($username);
+    }
 
 	/**
 	 * Forces a user to be logged in, without specifying a password.

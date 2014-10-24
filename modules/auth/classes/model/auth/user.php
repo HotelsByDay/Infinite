@@ -108,6 +108,8 @@ class Model_Auth_User extends ORM {
 		return $status;
 	}
 
+
+
 	/**
 	 * Validates an array for a matching password and password_confirm field,
 	 * and optionally redirects after a successful save.

@@ -743,7 +743,7 @@ abstract class Controller_Base_Object extends Controller_Layout {
         {
             //metoda do teto promenne vlozi sablonu, ktera predstavuje vysledek akce
             //(pres referenci)
-            $action_result_view_ref = NULL;
+            $action_result_view_ref = TRUE;
 
             try
             {

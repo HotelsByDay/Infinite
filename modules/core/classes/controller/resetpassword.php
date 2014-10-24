@@ -75,28 +75,11 @@ class Controller_ResetPassword extends Controller_Template {
 
                 //zahashovane heslo se zapise do modelu uzivatele
                 $user->password = $plaintext_password;
-
-                //zmeny budou ulozeny
                 $user->save();
-
-                //informace o odesilateli emailu se berou z hlavniho konfigu
-                $from_name  = AppConfig::instance()->get('from_name', 'application');
-                $from_email = AppConfig::instance()->get('from_email', 'application');
-
-                //nove heslo bude odeslano na e-mail
-                $to      = $user->email;
-                $subject = __('resetpassword.email.subject');
-                $message = view::factory('email/resetpassword', array(
-                    'user' => $user,
-                    'new_password' => $plaintext_password
-                ));
-                
-                //doplnujici hlavicka, ktera explicitne specifikuje odesilatele
-                $headers = 'From: '.$from_name.' <'.$from_email.'>'. "\r\n";
 
                 try {
                     // Send mail via emailq
-                    Emailq::factory()->add_email($to, NULL, NULL, array($from_email, $from_name), $subject, $message);
+                    Mailer::resetPassword($user, $plaintext_password);
                 } catch (Exception $e) {
                     Kohana::$log->add(Kohana::ERROR, $e->getMessage());
                 }

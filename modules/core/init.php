@@ -2,6 +2,13 @@
 
 
 
+Route::set('afi_sendpassword_action', '<controller>/<action>/<id>',
+    array(
+        'controller' => 'sendpassword',
+        'action'     => 'reset',
+        'id' => '[0-9]+',
+    ));
+
 Route::set('polymorphic_cb_data', '<controller>/<action>/<object_name>/<object_id>/<config_key>',
     array(
         'controller'  => 'polymorphicnnselect',

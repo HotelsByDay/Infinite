@@ -1176,7 +1176,7 @@ class Core_AppForm {
     {
         if ( ! isset($this->_form_items[$attr]))
         {
-            $this->_log('Unable to render AppFormItem for non-existing attr "'.$attr.'".');
+            $this->_log('Unable to render AppFormItem for non-existing attr "'.$attr.'".' . json_encode(array_keys($this->_form_items)));
             return NULL;
         }
 
