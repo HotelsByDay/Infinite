@@ -161,17 +161,15 @@ class Core_Menu {
      * @param string $subnavigation - kompletni obsah subnavigation - obaleny svou wrap metodou
      */
     
-    protected function wrapMenu($main_menu, $subnavigation)
+    protected function wrapMenu($main_menu)
     {
-        return '<div id="nav">
-                    <div id="nav-in">
-                        <ul id="menu"  class="nav nav-tabs">
+        return '<div id="page-leftbar">
+                    <div>
+                        <ul id="sidebar">
                             '.$main_menu.'
                         </ul>
-                        <br class="clear">
-                    </div><!-- nav-in -->
-                </div><!-- nav -->
-                '.$subnavigation;
+                    </div>
+                </div><!-- page-leftbar -->';
     }
     
     
@@ -190,11 +188,10 @@ class Core_Menu {
     protected function wrapSubNavigation($subnavigation)
     {
         if (empty($subnavigation)) return '';
-        return '<div id="sub-nav">
-        <ul class="nav nav-pills">
-                            '.$subnavigation.'
-          </ul>
-                </div><!-- sub-nav -->
+        return '
+        <ul>
+            '.$subnavigation.'
+        </ul>
                 ';
     }
     
@@ -332,25 +329,8 @@ class Core_Menu {
         }
         $this->config = $config;
 
-//        //pokud neni zakazano cachovani menu
-//        if (arr::get($this->config, 'cache') != FALSE)
-//        {
-//            // Zkusime nacist z cache
-//            $cache_key = $this->countCacheKey();
-//
-//            $menu = Cache::instance()->get($cache_key, NULL);s
-//        }
-
-        // Pokud nebylo v cache
-//        if ($menu == NULL) {
-//            // Vygenerujeme
-            $menu = $this->parseMenu();
-//            // Ulozime do cache
-//            Cache::instance()->set($cache_key, $menu);
-//        }
-
-        // odstranit
-        // $menu = $this->parseMenu();
+        // Vygenerujeme
+        $menu = $this->parseMenu();
 
         // Vratime menu
         return $menu;
@@ -370,19 +350,10 @@ class Core_Menu {
         // Leva cast menu
         $left_menu = arr::get($this->config, 'items_left', Array());
         $this->createMenu($left_menu);
-        
-        // Prava cast menu
-        // protoze prvky budou float:right tak pole reversuju - v konfiguraku
-        // jsou definovane z leva do prava, tak jako leva cast menu
-        $right_menu = array_reverse(arr::get($this->config, 'items_right', Array()));
-        $this->createMenu($right_menu, array('pull-right'));
-        
+
         // Predani argumentu neni nutne - zustavame v kontextu objektu
         // ale myslim se pro pretezovani to bude takhle jasnejsi
-        return $this->wrapMenu(
-                    $this->main_menu, 
-                    $this->wrapSubNavigation($this->subnavigation)
-               );
+        return $this->wrapMenu($this->main_menu);
     }
     
     /**
@@ -515,8 +486,8 @@ class Core_Menu {
 
 
         // Nyni mame kompletni obsah polozky - odkaz a mozna i submenu, vygenerujeme vlastni polozku - LI element
-        $this->main_menu .= $this->createItem($content, $classes, arr::get($menu_item, 'id', ''));
-    
+        $this->main_menu .= $this->createItem($content, $classes, arr::get($menu_item, 'id', '')) . $this->wrapSubnavigation($this->subnavigation);
+        $this->subnavigation = '';
     }    
     
     

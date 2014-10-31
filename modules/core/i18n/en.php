@@ -61,7 +61,7 @@ return array(
     'jquery-ui._dialog.message_window_ok_button_label' => 'Close',
     'general.submit_comment' => 'Question',
     'general.my_profile' => 'My profile',
-    'general.logout' => 'Logout',
+    'general.logout' => 'Sign Out',
 
     'general.bool_yes' => 'Yes',
     'general.bool_no' => 'No',

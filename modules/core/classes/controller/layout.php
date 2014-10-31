@@ -3,7 +3,6 @@
 /**
  * Tento kontroler zajistuje zobrazeni domovske stranky v administraci.
  *
- * 
  *
  * @author: Jiri Melichar
  */

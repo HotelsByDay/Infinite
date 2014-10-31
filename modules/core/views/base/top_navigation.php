@@ -1,12 +1,14 @@
-<div class="btn-group">
-  <a class="btn btn-danger" data-toggle="dropdown" href="#"><i class="icon-user icon-white"></i><?= Auth::instance()->get_user()->name(); ?></a>
-  <a class="btn btn-danger dropdown-toggle" data-toggle="dropdown" href="#"><span class="caret"></span></a>
-  <ul class="dropdown-menu">
-    <li><a href="<?= appurl::user_profile();?>"><i class="icon-user"></i><?= __('general.my_profile');?></a></li>
-    <li><a href="<?= appurl::logout_action();?>"><i class="icon-off"></i><?= __('general.logout');?></a></li>
-  </ul>
-</div>
-
-<div class="cb"></div>
-
-<?= isset($anchor_1) ? $anchor_1 : '';?>
+<ul class="nav navbar-nav pull-right toolbar">
+    <li class="dropdown">
+        <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="hidden-xs"><?= Auth::instance()->get_user()->name(); ?> <i class="fa fa-user"></i></span></a>
+        <ul class="dropdown-menu userinfo arrow" role="menu">
+            <li class="userlinks">
+                <ul class="dropdown-menu">
+                    <li><a href="<?= appurl::user_profile();?>"><?= __('general.my_profile');?> <i class="pull-right fa fa-fw fa-pencil"></i></a></li>
+                    <li class="divider"></li>
+                    <li><a href="<?= appurl::logout_action();?>" class="text-right"><?= __('general.logout');?></a></li>
+                </ul>
+            </li>
+        </ul>
+    </li>
+</ul>
