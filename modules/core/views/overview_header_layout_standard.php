@@ -3,7 +3,6 @@
 
 <br class="clear" />
 
-<div class="view-nav overview_submenu" >
+<!-- <div class="view-nav overview_submenu"> -->
     <?= $submenu; ?>
-    <br class="clear" />
-</div>
+<!-- </div> -->

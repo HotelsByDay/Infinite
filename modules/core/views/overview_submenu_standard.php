@@ -1,4 +1,4 @@
-<ul class="searchNav nav nav-pills">
+<ul class="searchNav nav nav-tabs">
 <?php
 //To ze tady je volani metody appurl::object_action a tedy logika pro vygenerovani
 //konecne URL adresy pro odkazy submenu je spatne - melo by to byt v kontroleru,

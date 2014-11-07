@@ -56,7 +56,7 @@
                 var filter_container_empty = true;
 
                 //vytvorim si blok ktery bude drzet ve ohledne filtru
-                var $filter_container = $( document.createElement('div') ).addClass('odp-filter-container');
+                var $filter_container = $( document.createElement('div') ).addClass('odp-filter-container form-inline');
 
 
                 //pred fulltext input vlozi tags container, ale pouze vpripade
@@ -107,7 +107,7 @@
                     //dale si vlozim input pro fulltextove vyhledavani
                     //vlozim do containeru pro filtr
                     var $fulltext_input_container = $( document.createElement('div') )
-                                                    .addClass('odp-fulltext-input-container input-append')
+                                                    .addClass('odp-fulltext-input-container input-group')
                                                     .appendTo($filter_container);
 
 
@@ -118,13 +118,13 @@
                                                 if (e.which == 13) {
                                                     methods._sendQuery($this);
                                                 }
-                                            }).addClass('odp-fulltext-input')
+                                            }).addClass('odp-fulltext-input form-control')
                                             .appendTo($fulltext_input_container);
 
                     //vytvorim si tlacitko pro vymazani obsahu filtru
                     //a nabnduju click udalost
-                    var $clear_input_button = $( document.createElement('input')).attr('type', 'button').addClass('odp-fulltext-input-clear-button btn')
-                        .val('x')
+                    var $clear_input_button = $( document.createElement('span')).addClass('odp-fulltext-input-clear-button input-group-addon')
+                        .html('x')
                         .click(function() {
                             $fulltext_input.val('').focus();
                             methods._removeTag( $this, true );
@@ -141,10 +141,11 @@
                 if ( ! filter_container_empty ) {
 
                     //vytvorim si input
+                    $filter_container.append(' ');
                     var $submit_input = $( document.createElement('button') )
                                                .attr('type', 'submit')
-                                               .html('<?= __('object_data_panel.search');?>')
-                                               .addClass('odp-submit-input button btn btn-primary')
+                                               .html(' <?= __('object_data_panel.search');?>')
+                                               .addClass('odp-submit-input button btn btn-primary form-group')
                                                .click(function(){
                                                    //poslu pozadavek na hledani dat spolesne s parametry
                                                    methods._sendQuery( $this );
@@ -187,6 +188,7 @@
                 if (typeof settings.newUrl !== 'undefined')
                 {
                     //vytvori tlacitko pro pridani noveho zaznamu
+                    $filter_container.append(' ');
                     var $add_new_button = $( document.createElement('button') ).html(settings['newButtonLabel'])
                                                                            .addClass('button btn btn-success add_button')
                                                                            .appendTo($filter_container);
@@ -392,10 +394,11 @@
 
 
             $dialog._dialog('loadForm', url, {}, function(response) {
+
                 if (response['action_status'] == '<?= AppForm::ACTION_RESULT_SUCCESS;?>') {
                     $dialog._dialog('close');
                     //vyvolam refresh dat
-                    methods._updateQuery($this);
+                    methods._updateQuery($this)
                 }
             });
         },

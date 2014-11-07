@@ -31,7 +31,7 @@
      * Defaultni hodnoty pro parametry a nastaveni pluginu
      */
     var settings = {
-        submenu_item_selector: '.overview_submenu .submenu_item',
+        submenu_item_selector: 'ul .submenu_item',
         subcontent_selector: '.overview_subcontent',
         use_hash: true,
         overview_header_refresh_url: ''
@@ -64,8 +64,11 @@
 
                 // On overview_header_refresh event reload overview header
                 $_this.on('overview_header_refresh', function() {
+                    return; // @todo - not supported in ForzaTheme
                     // Keep active item active
-                    var active_item_id = $_this.find('.overview_submenu li.active a.submenu_item').attr('id');
+                    var active_item_id = $_this.find('ul>li.active a.submenu_item').attr('id');
+//                    var $res = $.get(settings.overview_header_refresh_url);
+//                    console.log($res);
                     $_this.find('.overview_header').load(settings.overview_header_refresh_url, function(){
                         $_this.find('#' + active_item_id).parents('li:first').addClass('active');
                     });

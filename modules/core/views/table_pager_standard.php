@@ -11,8 +11,8 @@
 <?php endif ?>
 
 
-<div class="paginator fr pagination span5 pull-right">
-    <ul class="pull-right">
+<nav>
+    <ul class="pull-right pagination paginator fr pagination span5 pull-right">
     <li <?php if ($current_page_index == 0): ?> class="disabled" <?php endif; ?>>
             <a href="#" class="pager_button" <?= $prev_page_index !== FALSE ? 'pi="' . $prev_page_index . '"' : ''; ?>>
             <?= '&lt;';//__('general.pager_goto_previous_page'); ?>
@@ -23,19 +23,19 @@
     <?php
           foreach ($page_item_list as $i => $data):
 
-            list($pi, $label) = $data
+            list($pi, $label) = $data;
     ?>
-    <li class="<?= ($pi === FALSE && is_numeric($label) ) ? "active" : ""; ?><?php if ($pi === FALSE): ?> disabled<?php endif; ?> ">
-              <a href="#" class="pager_button pager_button" pi="<?= $pi; ?>"><?= $label; ?></a>
+    <li class="<?= ($pi === FALSE && is_numeric($label) ) ? "active" : ""; ?><?php if ($pi === FALSE && ! is_numeric($label)): ?> disabled<?php endif; ?> ">
+              <a href="#" class="pager_button" pi="<?= $pi === false ? $current_page_index : $pi; ?>"> <?= $label; ?></a>
     </li>
     <?php endforeach ?>
 
 
     <li <?php if ($current_page_index >= $total_page_count - 1): ?>class="disabled" <?php endif; ?>>
             <a href="#" <?= $next_page_index !== FALSE ? 'pi="' . $next_page_index . '"' : ''; ?> class="pager_button">
-        <?= '&gt;';//__('general.pager_goto_next_page'); ?>
+        <?= '&gt;'; ?>
         </a>
     </li>
   </ul>
 
-</div>
+</nav>

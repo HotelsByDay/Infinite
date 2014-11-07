@@ -1,4 +1,4 @@
-<div  class="appformitemcontainer <?= $css; ?> control-group <?= empty($error_message) ? '' : 'error' ?>" name="<?= $attr ?>_item" id="<?= $uid;?>">
+<div  class="appformitemcontainer <?= $css; ?> form-group <?= empty($error_message) ? '' : 'has-error' ?>" name="<?= $attr ?>_item" id="<?= $uid;?>">
 
 
 <label for="<?= $attr ?>_date"><?= $label ?></label>

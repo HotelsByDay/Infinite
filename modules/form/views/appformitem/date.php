@@ -1,8 +1,8 @@
 
-<div  class="appformitemcontainer appformitemdate <?= $css; ?>" name="<?= $attr ?>_item" id="<?= $uid; ?>">
+<div  class="appformitemcontainer appformitemdate form-group <?= $css; ?>" name="<?= $attr ?>_item" id="<?= $uid; ?>">
 
     <label for="<?= $attr ?>"><?= $label ?></label>
-    <input type="text" id="<?= $attr ?>" name="<?= $attr ?>" value="<?= htmlspecialchars($value) ?>" class="date_picker" />
+    <input type="text" id="<?= $attr ?>" name="<?= $attr ?>" value="<?= htmlspecialchars($value) ?>" class="form-control date_picker" />
     <?php if (isset($hint) && !empty($hint)): ?>
         <span class="hint"><?= $hint; ?></span>
     <?php endif ?>

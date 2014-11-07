@@ -57,7 +57,7 @@
 
 
 
-    <div class="info alert" id="table_result_placeholder" style="display:none; text-align: center">
+    <div class="info alert alert-info" id="table_result_placeholder" style="display:none; text-align: center">
         <span class="msg2">
         </span>
     </div>

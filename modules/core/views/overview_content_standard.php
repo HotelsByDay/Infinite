@@ -4,13 +4,14 @@
     <?php endif ?>
 </div>
 
-<div class="overview_container" id="<?= $overview_container_id;?>">
+<div class="overview_container tab-container tab-sky tab-normal" id="<?= $overview_container_id;?>">
 
-    <div class="overview_header">
+<!--        <div class="overview_header">-->
         <?= $header ?>
-    </div><!-- overview_header -->
+<!--    </div>-->
+<!-- overview_header -->
 
-    <div class="view-data data overview_subcontent">
+    <div class="view-data tab-content data overview_subcontent">
 
     </div>
     <br class="clear"/>

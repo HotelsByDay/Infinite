@@ -22,8 +22,7 @@
     <?php if ($form->showButtons()): ?>
     <div class="form_control_panel_wrapper">
         <div class="form_control_panel">
-            <div class="form_control_panel_content form-actions">
-                <div class="cb hr"></div>
+            <div class="form_control_panel_content form-group">
                 <div class="pull-left">
                     <?php foreach (arr::getifset($form_buttons, 'l', array()) as $params): ?>
                     <?= form::button($params[0], $params[1], arr::get($params, 2));?>
@@ -35,7 +34,7 @@
                     <?= form::button($params[0], $params[1], arr::get($params, 2));?>
                     <?php endforeach ?>
                 </div>
-                <br class="clearfix"/>
+                <div class="clearfix"></div>
             </div>
 
         </div>

@@ -1,5 +1,5 @@
 
-<div class="control-group <?= isset($error_message[$name]) ? 'error' : '' ?>">
+<div class="form-group <?= isset($error_message[$name]) ? 'error' : '' ?>">
     <label>
         <?= __($model->object_name().'.form.'.$name.'.label') ?>
         <?php if (isset($required) and $required): ?>

@@ -1,4 +1,4 @@
-<div class="appformitemcontainer <?= $css?> control-group <?= empty($error_message) ? '' : 'error' ?>" id="<?= $uid; ?>">
+<div class="appformitemcontainer <?= $css?> form-group <?= empty($error_message) ? '' : 'has-error' ?>" id="<?= $uid; ?>">
 <?php
     if (isset($disabled)) {
         $name = ''; $disabled = ' disabled="disabled"';

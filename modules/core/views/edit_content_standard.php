@@ -4,7 +4,7 @@
 
 <div id="edit_content" class="edit_content_<?= $controller_name;?>">
     <div class="content-title">
-        <h3><?= $headline;?></h3>
+        <h1><?= $headline;?></h1>
         <br class="clear"/>
     </div>
   <div class="form_content form-pg">

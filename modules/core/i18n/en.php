@@ -105,8 +105,8 @@ return array(
     'resetpassword_page.email' => 'E-mail:',
     'resetpassword_page.reset_action' => 'Send me new password',
     'resetpassword.validation.email' => 'The e-mail address is invalid.',
-    'resetpasswod.help' => 'Please submit e-mail address associated with you account and you password will be reset and sent to you.',
-    'resetpassword.processed' => 'Your password has been reset and sent to your email.',
+    'resetpasswod.help' => 'Please submit e-mail address associated with your account.',
+    'resetpassword.processed' => 'Your password has been reset and sent to your e-mail.',
     'resetpassword.goback_to_login' => 'Go back to login page',
 
     //OBJECT/TABLE VYPIS DAT

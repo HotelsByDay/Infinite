@@ -1,4 +1,4 @@
-<div class="appformitemcontainer <?= $css ?> control-group <?= empty($error_message) ? '' : 'error' ?>">
+<div class="appformitemcontainer <?= $css ?> form-group <?= empty($error_message) ? '' : 'has-error' ?>">
     <label for="<?= $attr ?>_id"><?= $label ?></label>
 
     <?php if (isset($country_codes)): ?>

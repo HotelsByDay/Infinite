@@ -1,4 +1,4 @@
-<div class="appformitemcontainer appformpassword <?= $css ?> control-group <?= empty($error_message) ? '' : 'error' ?>" id="<?= $uid; ?>">
+<div class="appformitemcontainer appformpassword <?= $css ?> form-group <?= empty($error_message) ? '' : 'has-error' ?>" id="<?= $uid; ?>">
 
             <label for="<?= $attr; ?>-password"><?= $label;?></label>
 
