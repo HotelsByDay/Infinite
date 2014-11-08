@@ -313,6 +313,7 @@ abstract class Model_Core_File extends ORM
      */
     public function getURL($resize_variant=NULL)
     {
+        if ( ! $this->loaded()) return '';
         return url::base() . $this->getFileDiskName($resize_variant);
     }
 
@@ -334,7 +335,6 @@ abstract class Model_Core_File extends ORM
         $target_dir .= '/'.$this->pk();
 
         // Tohle je pouzito zaroven pro generovani URl, takze nemuzeme docroot pridat vzdy
-        // @todo - udelat samostatnou metodu pro ziskani URL souboru
         return (Kohana::$environment === Kohana::TESTING) ? DOCROOT.$target_dir : $target_dir;
     }
 
@@ -372,8 +372,11 @@ abstract class Model_Core_File extends ORM
             // Set transparent background
             $image->background('#fff', 0);
 
-            // Zvetsovani nam nevadi - zvetsime mensi rozmer na pozadovany a pak vyrizneme stred
-            $image->resize($width, $height, $resize_type);
+            //provede vlastni resize obrazku - pote se jeste vyrizne stred
+            $image->resize($width, $height, Image::INVERSE);
+
+            // Crop exact rectangle from the centre of the image
+            $image->crop($width, $height);
 
             //pred vlastni nazev souboru vlozim prefix - nazev resize varianty
             $image->save($target_filepath);
