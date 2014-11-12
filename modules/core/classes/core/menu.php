@@ -259,6 +259,10 @@ class Core_Menu {
                     return $i;
                 }
             }
+
+            if (isset($i['submenu']) and $this->getActiveSubmenuItem($i) !== NULL) {
+                return $i;
+            }
         }
         return NULL;
     }
@@ -411,6 +415,10 @@ class Core_Menu {
 
             $current_item_active = $this->subNavigationActive(arr::get($item, 'link'));
 
+            if ($this->getActiveSubmenuItem($item) !== NULL) {
+                $current_item_active = true;
+            }
+
             // Css classy aktualni polozky submenu
             $classes = $this->getItemClasses($item);
 
@@ -426,7 +434,7 @@ class Core_Menu {
             }
 
 
-            if ($current_item_active or $this->getActiveSubmenuItem(arr::get($item, 'submenu')) !== NULL) {
+            if ($current_item_active) {
                 $is_active = true;
                 $classes[] = 'active';
             }
@@ -437,7 +445,6 @@ class Core_Menu {
                 arr::get($item, 'id', ''),
                 $submenu
             );
-
         }
 
         // Vratime vygenerovane polozky submenu - obaleni zajisti volajici metoda
