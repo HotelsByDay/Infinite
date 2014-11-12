@@ -18,7 +18,7 @@ class Core_Panel {
      */
     protected function wrapPanel($panel) 
     {
-        return '<div class="filter-nav btn-group">'.$panel.'</div>';
+        return '<div class="col-md-12"><div class="filter-nav btn-group btn-group-sm">'.$panel.'</div></div>';
     }
     
     /**

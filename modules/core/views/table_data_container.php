@@ -6,7 +6,7 @@
     <div class="row">
 
         <?php if (isset($total_found)): ?>
-            <div class="records-found span3">
+            <div class="records-found col-md-6">
                 <?= __('object.totally_found_items', array(':total_found' => $total_found));?>
             </div>
         <?php endif; ?>

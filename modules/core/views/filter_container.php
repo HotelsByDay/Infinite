@@ -1,4 +1,4 @@
-<h4><?= $headline;?></h4>
+<h1><?= $headline;?></h1>
 
         <div class="filterstate_header hd" style="display:none;">
             <h2 class="name"></h2>
@@ -14,30 +14,24 @@
 
             <?= $filter_form; ?>
      
-          
-<div class="row show-grid">
-<div class="span4" style="margin-top:10px;">
+
+            <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-6" style="margin-top:10px;margin-bottom:10px;">
                     <button class="submit_filter button btn btn-primary red btn"><?= __('filter.submit_filter'); ?></button>
                     <button href="#" class="reset_filter btn button blue"><?= __('filter.reset_filter_state'); ?></button>
 
                     <?php if ($user_filters_enabled): ?>
                         <a href="#" class="button_2 save_filter btn"><?= __('filter.save_filter_state');?></a>
                     <?php endif ?>
-    
-            
-            
-           
-            
-            
-            
-                <div style="display:none;">
-                    <button class="button_3 save_filter btn" ><?= __('filter.save_filter_state'); ?></button>
-                    <a href="#" class="cancel_edit_filter btn" ><?= __('object.cancel_edit_filter'); ?></a>
+
+                    <div style="display:none;">
+                        <button class="button_3 save_filter btn" ><?= __('filter.save_filter_state'); ?></button>
+                        <a href="#" class="cancel_edit_filter btn" ><?= __('object.cancel_edit_filter'); ?></a>
+                    </div>
                 </div>
-           
-			
-  </div> 
-  </div>    
+            </div>
+            </div>
         </form>
     
     <?php if ($export_enabled): ?>
