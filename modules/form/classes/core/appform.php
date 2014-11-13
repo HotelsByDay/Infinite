@@ -330,6 +330,9 @@ class Core_AppForm {
      */
     protected function setActionResult($action, $result = NULL, $message = NULL)
     {
+        //ulozim si vysledek akce
+        $this->action_result_status = $result;
+
         //pokud je exlicitne definovano v konfiguraci ze se nema zobrazovat vysledek akce,
         //tak se do dane promenne vlozi prazdna hodnota
         if ( ! arr::get($this->_config, 'display_action_result', TRUE))
@@ -338,9 +341,6 @@ class Core_AppForm {
 
             return;
         }
-
-        //ulozim si vysledek akce
-        $this->action_result_status = $result;
 
         //pokud ma argument pro zpravu hodnotu NULL, tak doplnim defaultni zpravu
         if ($message === NULL)

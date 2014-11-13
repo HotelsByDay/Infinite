@@ -21,7 +21,7 @@ class Controller_Web extends Controller {
 
         try {
             // Process requested filename - it have to contain width and height of the image
-            $pattern = '/.+_([0-9]+)x([0-9]+)_(none|width|height|auto|inverse|)\.[a-zA-Z]{2,5}$/';
+            $pattern = '/.+_([0-9]+)x([0-9]+)_?(none|width|height|auto|inverse|)\.[a-zA-Z]{2,5}$/';
             $res = preg_match($pattern, $requested_filename, $matches);
             if ( ! $res or ! in_array(count($matches), array(3, 4))) {
                 throw new Exception('Requested filename ('.$requested_filename.') does not match the pattern: '.$pattern);

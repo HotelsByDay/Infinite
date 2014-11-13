@@ -83,7 +83,7 @@ class Validate extends Kohana_Validate {
         if ( ! is_array($lengths))
         {
             //alowed lengths of numbers
-            $lengths = array(10, 11, 12, 13, 14, 15, 16, 17, 18, 19);
+            $lengths = array(9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19);
 
             //00420 724 763 532 [14]
             //  420 724 763 532 [12]
