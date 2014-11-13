@@ -30,7 +30,7 @@
             $columns_count = 1;
         }
         ?>
-        <div class="column" style="width: <?= $column_width ?>px">
+        <div class="column" style="float: left; width: <?= $column_width ?>px">
 
         <?php
             // Spocteme velikost sloupce - v poctu polozek
@@ -48,15 +48,18 @@
                 // Pokud je definovan pocet sloupcu a dovrsil se pocet prvku ve sloupci
                 if ($columns_count and $item_number >= $column_size) {
                     // Otevreme novy sloupec
-                    echo '</div><div class="column" style="width: '.$column_width.'px">';
+                    echo '</div><div class="column" style="float: left; width: '.$column_width.'px">';
                     $item_number = 0;
                 }
                 $item_number++;
         ?>
 
-        <div class="item">
+        <div class="item checkbox">
 
-            <label for="item_<?= $attr;?>_<?=$item->pk();?>" class="check checkbox"><?= $item->preview();?><input type="checkbox" <?= $checked ? 'checked="checked"' : '';?> id="item_<?= $attr;?>_<?=$item->pk();?>" value="<?= $item->pk();?>" name="<?= $attr;?>[id][<?= $item->pk() ?>]" /></label>
+            <label for="item_<?= $attr;?>_<?=$item->pk();?>" class="check">
+                <input type="checkbox" <?= $checked ? 'checked="checked"' : '';?> id="item_<?= $attr;?>_<?=$item->pk();?>" value="<?= $item->pk();?>" name="<?= $attr;?>[id][<?= $item->pk() ?>]" />
+                <?= $item->preview();?>
+            </label>
 
             <?php if ($note): ?>
                 <div class="note_outer" <?= $checked ? '' : 'style="display: none;"' ?>>
