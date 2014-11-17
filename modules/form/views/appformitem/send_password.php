@@ -1,5 +1,5 @@
 
-<div class="appformitemcontainer appformitemsendpassword <?= $css; ?>" name="<?= $attr ?>_item" id="<?= $uid; ?>">
+<div class="appformitemcontainer appformitemsendpassword form-group <?= $css; ?>" name="<?= $attr ?>_item" id="<?= $uid; ?>">
 
     <label><?= $label ?></label>
     <?php if ($allow_reset): ?>

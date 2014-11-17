@@ -313,7 +313,7 @@ abstract class Model_Core_File extends ORM
      */
     public function getURL($resize_variant=NULL)
     {
-        if ( ! $this->loaded()) return '';
+//        if ( ! $this->loaded()) return '';
         return url::base() . $this->getFileDiskName($resize_variant);
     }
 
