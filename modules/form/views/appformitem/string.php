@@ -17,10 +17,8 @@
         <span class="field_suffix"><?= $field_suffix ?></span>
     <?php endif; ?>
 
-
     <?php if (!empty($error_message)): ?>
         <span class="validation_error text-error"><?= $error_message; ?></span>
     <?php endif ?>
-
 
 </div>
