@@ -2,6 +2,10 @@
 
 class Helper_Format {
 
+    public static function bigLetter($index=0)
+    {
+        return chr(65+$index);
+    }
 
     /**
      * Useful for populating form select fields

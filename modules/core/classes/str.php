@@ -66,7 +66,7 @@ class Str
      */
     function __toString()
     {
-        return $this->string;
+        return (string)$this->string;
     }
 
 

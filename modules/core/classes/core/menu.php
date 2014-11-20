@@ -69,7 +69,7 @@ class Core_Menu {
      * @param string $link URL testovane polozky
      * @return bool
      */
-    protected function menuActive($link) 
+    protected function menuActive($link, $check_action_to_activate=false)
     {
         // Odstranime pripadny query string
         if (($_link = strstr($link, '?', TRUE)) !== FALSE) {
@@ -81,7 +81,12 @@ class Core_Menu {
         if (substr($link, 0, strlen($base)) == $base) $link = substr($link, strlen($base));
         
         // + array nam zajisti ze prava strana vyrazu bude vzdy pole s alespon jednim prvkem
-        list($controller) = explode('/', $link) + array(NULL);
+        list($controller, $action) = explode('/', $link) + array(NULL, NULL);
+        if ($check_action_to_activate) {
+            if ($action != $this->subnav_action) {
+                return false;
+            }
+        }
         return ($controller == $this->nav_controller);
     }
 
@@ -366,7 +371,7 @@ class Core_Menu {
         $classes = array_merge($classes, $this->getItemClasses($menu_item));
 
         // Pokud je polozka aktivni, pridame ji CSS class a zaroven vygenerujeme subnavigation
-        if ($this->menuActive(arr::get($menu_item, 'link', NULL)))
+        if ($this->menuActive(arr::get($menu_item, 'link', NULL), arr::get($menu_item, 'check_action_to_activate', false)))
         {
             // Vygenerujeme subnavigaci
             $this->createSubNavigation(arr::get($menu_item, 'subnavigation', array()));
