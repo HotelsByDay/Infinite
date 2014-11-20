@@ -18,8 +18,8 @@
 
     <?php if ($allow_check_all): ?>
         <div class="check_all">
-            <a class="button blue check_all btn btn-mini "><?= __('relnnselect.check_all'); ?></a>
-            <a class="button blue uncheck_all btn btn-mini "><?= __('relnnselect.uncheck_all'); ?></a>
+            <a class="check_all btn btn-default btn-xs"><?= __('relnnselect.check_all'); ?></a>
+            <a class="uncheck_all btn btn-default btn-xs "><?= __('relnnselect.uncheck_all'); ?></a>
         </div>
     <?php endif; ?>
 
