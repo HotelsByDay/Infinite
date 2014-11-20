@@ -1,4 +1,6 @@
-<h1><?= $headline;?></h1>
+<div class="content-title">
+    <h1><?= $headline; ?></h1>
+</div>
 
         <div class="filterstate_header hd" style="display:none;">
             <h2 class="name"></h2>
