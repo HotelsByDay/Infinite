@@ -12,7 +12,7 @@ $randid = 'b'.mt_rand();
 
     <?php if ( ! $form->is_readonly() and ( ! $delete_item_callback or $delete_item_callback($model))) : ?>
         <div class="remove_link">
-            <a href="<?= $model->loaded() ? appurl::object_delete($model->object_name(), $model->pk()) : '';?>" class="delete btn btn-danger btn-xs" item_id="<?= $model->pk();?>"><?= $delete_label ?></a>
+            <a href="<?= $model->loaded() ? appurl::object_delete($model->object_name(), $model->pk()) : '';?>" class="delete btn btn-danger btn-sm" item_id="<?= $model->pk();?>"><?= $delete_label ?></a>
         </div>
     <?php endif ?>
 </div>
