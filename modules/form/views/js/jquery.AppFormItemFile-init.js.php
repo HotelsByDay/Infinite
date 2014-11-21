@@ -150,12 +150,12 @@ $(document).ready(function(){
         //ma fungovat serazeni prvku pomoci drag&drop ?
         //inicializace razeni prvku
         $(this).find('.list').sortable({
-            placeholder: "ui-state-highlight",
-            handle: ".drag_handler",
+            placeholder: "file-sortable-placeholder",
+//            handle: ".drag_handler",
             update: function (event, ui) {
                 //tento atribut slouzi k ulozeni poradi daneho prvku
                 var i = 0;
-                $item.find('.list .list_item').each(function(){
+                $item.find('.list .file_item').each(function(){
                     $(this).find('input[name$="[<?= $sortable;?>][]"]').val(i++);
                 });
                 //uzivateli se zobrazi info zprava - porad prvku bude

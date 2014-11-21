@@ -15,4 +15,5 @@ $randid = 'b'.mt_rand();
             <a href="<?= $model->loaded() ? appurl::object_delete($model->object_name(), $model->pk()) : '';?>" class="delete btn btn-danger btn-sm" item_id="<?= $model->pk();?>"><?= $delete_label ?></a>
         </div>
     <?php endif ?>
+
 </div>

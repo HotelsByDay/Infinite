@@ -193,7 +193,7 @@ class AppFormItem_AdvancedItemList extends AppFormItem_Base
         $rel_form_config = Kohana::config($this->config['rel_form']);
 
         //pass the readonly parameter
-        if ($this->form->is_readonly($this->attr))
+        if ($this->form->is_readonly($this->attr) or arr::get($this->config, 'readonly', false))
         {
             $rel_form_config['readonly'] = TRUE;
         }

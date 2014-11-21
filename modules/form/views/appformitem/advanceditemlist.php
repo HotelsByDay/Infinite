@@ -9,9 +9,9 @@
 
     <ul class="list unstyled">
         <?php foreach ($rel_items as $rel_item): ?>
-        <li class="item">
-            <?= (string)$rel_item;?>
-        </li>
+            <li class="item">
+                <?= (string)$rel_item;?>
+            </li>
         <?php endforeach ?>
     </ul>
 

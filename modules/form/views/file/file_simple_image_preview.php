@@ -8,5 +8,6 @@
     <br />
     <span class="cancel btn btn-danger btn-xs"><?= __('form_action_button.delete_label'); ?></span>
 
+    <input type="hidden" name="<?= $attr; ?>[<?= $type_key ?>][sequence][]" value="<?= isset($file->sequence) ? $file->sequence : 0 ?>" />
     <input type="hidden" name="<?= $attr; ?>[<?= $type_key; ?>][id][]" value="<?= $file->pk(); ?>"/>
 </div>
