@@ -723,7 +723,7 @@ abstract class Controller_Base_Object extends Controller_Layout {
     public function action_table_obd_panel($table_type)
     {
         //kontrola opravneni uzivatele na konkretni akci tohoto kontroleru
-        if ( ! $this->user->HasPermission($this->object_name, 'table'))
+        if ( ! $this->user->HasPermission($this->object_name, $table_type))
         {
             return $this->runUnauthorizedAccessEvent();
         }

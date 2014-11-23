@@ -241,6 +241,8 @@ class AppFormItem_AdvancedItemList extends AppFormItem_Base
 
         $view->rel_items = $rel_items;
 
+        $view->readonly = ($this->form->is_readonly($this->attr) or arr::get($this->config, 'readonly', false));
+
         return $view;
     }
 }

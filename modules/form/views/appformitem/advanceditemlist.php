@@ -17,7 +17,9 @@
 
     <div class="clearfix cb"></div>
 
-    <a href="#" class="btn btn-success add button grey"><?= $add_button_label;?></a>
+    <?php if ( ! $readonly): ?>
+        <a href="#" class="btn btn-success add button grey"><?= $add_button_label;?></a>
+    <?php endif; ?>
 
     <div class="clearfix cb"></div>
 </div>
