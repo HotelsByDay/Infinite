@@ -8,17 +8,33 @@ class Google
 
     public static $strict = true;
 
-    public static function geocode($address, $lat=NULL, $lng=NULL)
+    protected static $url = 'http://maps.googleapis.com/maps/api/geocode/json';
+
+    public static function geocode($address)
     {
-        $url = 'http://maps.google.com/maps/api/geocode/json';
-        $url = 'http://maps.googleapis.com/maps/api/geocode/json';
         $params = array(
             'address' => $address,
             'sensor' => 'false',
         );
-        $response = Curl::get_contents($url, $params, false);
 
-        $response = (array)@json_decode($response);
+        return static::runQuery($params);
+    }
+
+    public static function reverseGeocode($lat, $lng)
+    {
+        $params = array(
+            'latlng' => $lat.','.$lng,
+            'sensor' => 'false',
+        );
+
+        return static::runQuery($params);
+    }
+
+
+    public static function runQuery($params, $lat=NULL, $lng=NULL)
+    {
+        $response = Curl::get_contents(self::$url, $params, false);
+        $response = (array)@json_decode($response, true);
         self::$results = (array)arr::get($response, 'results');
 
         // If no results return 0
@@ -46,6 +62,7 @@ class Google
                 break;
             }
         }
+
         return ( ! empty(self::$result));
     }
 
@@ -103,6 +120,11 @@ class Google
             'southwest_lat' => arr::get($southwest, 'lat'),
             'southwest_lng' => arr::get($southwest, 'lng'),
         );
+    }
+
+    public static function getFormattedAddress()
+    {
+        return arr::get(self::$result, 'formatted_address');
     }
 
 
