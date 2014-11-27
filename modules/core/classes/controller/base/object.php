@@ -1111,7 +1111,7 @@ abstract class Controller_Base_Object extends Controller_Layout {
         if ($form->getRequestedActionResult() == Core_AppForm::ACTION_RESULT_SUCCESS
             && ($closure = arr::get($form_config, 'on_success_redir')) != NULL)
         {
-            $redirect_url = call_user_func($closure, $this->model);
+            $redirect_url = call_user_func($closure, $form);
             // Closure could have returned NULL or false
             if ($redirect_url) {
                 return $this->request->redirect($redirect_url);
