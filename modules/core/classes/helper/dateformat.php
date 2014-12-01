@@ -146,7 +146,7 @@ class Helper_DateFormat {
      * @param string $user_datetime_format
      * @return Returns similar value as getUserDateTime but each of date and time is closed in <span> with class
      */
-    public static function getUserDateTimeFormatted($mysql_datetime, $time_format='H:i')
+    public static function getUserDateTimeFormatted($mysql_datetime, $time_format='g:i A')
     {
         return '<span class="date">' . static::getUserDate($mysql_datetime) . '</span>&nbsp;<span class="time">' . static::getUserDate($mysql_datetime, $time_format) . '</span>';
     }
@@ -160,7 +160,7 @@ class Helper_DateFormat {
      * @param null $date_format string - date time format
      * @return string date in desired format
      */
-    public static function getUserDateTime($mysql_datetime, $datetime_format='@date H:i')
+    public static function getUserDateTime($mysql_datetime, $datetime_format='@date g:i A')
     {
         if (empty($mysql_datetime) or $mysql_datetime == '0000-00-00' or $mysql_datetime == '0000-00-00 00:00:00') {
             return null;
