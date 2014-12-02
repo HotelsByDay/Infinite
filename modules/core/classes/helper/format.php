@@ -256,7 +256,7 @@ class Helper_Format {
      */
     static public function price($price)
     {
-        return number_format($price, 2, '.', ' ');
+        return '$' . number_format($price, 2, '.', ' ');
     }
     
     /**
