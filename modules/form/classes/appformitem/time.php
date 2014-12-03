@@ -11,7 +11,7 @@ class AppFormItem_Time extends AppFormItem_Base {
         'time_start' => '00:00',
         'time_end'  => '23:59',
         'time_step' => 15,
-        'time_format' => 'H:i',
+        'time_format' => 'g:ia',
     );
 
     // Local cache
