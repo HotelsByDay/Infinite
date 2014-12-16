@@ -47,7 +47,7 @@ class Controller_Web extends Controller {
             // Generate resize variant
             $resized = $image->createExactResizeAndCroppedVariant($width, $height, $resize_type);
             if ( ! $resized) {
-                throw new Exception('Unable to create resize_variant '.$width.'x'.$height.' ('.$object_name.' : '.$object_id);
+                throw new Exception('Unable to create resize_variant '.$width.'x'.$height.' ('.$object_name.' : '.$object_id .') ');
             }
 
             // Get resize variant file diskname and send the file as response

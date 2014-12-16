@@ -387,6 +387,7 @@ abstract class Model_Core_File extends ORM
             Kohana::$log->add(Kohana::ERROR,
                 'Unable to create resize variant ":variant_name" with target path ":target_path" due to "'.$e->getMessage().'".',
                 array(':target_path' => $target_filepath));
+            throw $e;
             return false;
         }
         return true;

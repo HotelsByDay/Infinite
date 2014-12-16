@@ -20,7 +20,7 @@ class Helper_Format {
     {
         $res = array();
         if ($prepend) {
-            $res[''] = '';
+            $res[''] = __('select.select');
         }
         $time = strtotime("2012-01-01 ".$start);
         $end_time = strtotime("2012-01-01 ".$end);
