@@ -1035,7 +1035,7 @@ class ORM extends Kohana_ORM {
 
         if ($this->hasAttr('deleted'))
         {
-            $q->where('deleted', 'IS', DB::Expr('NULL'));
+            $q->where('deleted', 'IS', NULL);
         }
 
         return (bool) ! $q->execute($this->_db)->get('total_count');

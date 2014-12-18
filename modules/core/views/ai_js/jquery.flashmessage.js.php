@@ -20,6 +20,8 @@
         if (append) {
             $('body').append($this);
         }
+
+        $this.show();
         $this.click(function() {
             $this.fadeOut('medium', function(){$this.remove()});
         });

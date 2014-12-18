@@ -187,7 +187,7 @@ $(document).ready(function() {
     $(".jq-datepicker").datepicker({ dateFormat: 'd.m.yy' });
 
     if ($('#hfm #flash_message').length) {
-        $('<div></div>').FlashMessage($('#hfm').html());
+        $('#hfm').FlashMessage();
     }
 
 });
