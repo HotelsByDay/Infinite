@@ -82,7 +82,7 @@
                         //pokud je definovany dceriny prvek - tak jeho hodnotu vymazu
                         //pri zmene hodnoty tohoto prvku
                         if (typeof default_params.filter_child_attr !== 'undefined') {
-                            for (k in default_params.filter_child_attr) {
+                            for (var k in default_params.filter_child_attr) {
                                 var attr_name = default_params.filter_child_attr[k];
 
                                 //vezmu si hodnotu atributu 'name' tohoto prvku
@@ -102,7 +102,7 @@
                         }
 
                         // Pokud nektere prvky byly auto-filled tak je take smazu
-                        for (i in filled_input_names) {
+                        for (var i in filled_input_names) {
                             var name = filled_input_names[i];
                             // 5.7.2012 - Dajc
                             // - pridan change trigger nad danym prvkem po zapsani hodnoty do nej - spoleha na to
@@ -197,7 +197,8 @@
                                         id:    data_item.value,
                                         //hodnoty, ktere maji byt 'dovyplneny' na formulari
                                         //pri vyberu teto polozky
-                                        fill:  data_item.fill
+                                        fill:  data_item.fill,
+                                        silent_fill: data_item.silent_fill
                                     }
 
                                     return item;
@@ -228,9 +229,14 @@
                                 //   prvek ObjectImageSelect
                                 $('input[type="text"][name="'+k+'"],input[type="hidden"][name="'+k+'"],textarea[name="'+k+'"],select[name="'+k+'"]').each(function(){
                                     // Ulozime si info o tom ze prvek byl automaticky vyplnen
-                                    filled_input_names[filled_input_names.length] = k;
+                                    filled_input_names.push(k);
+                                    console.log(ui.item.fill);
+                                    console.log(ui.item);
                                     $(this).val(ui.item.fill[k]);
-                                    $(this).trigger('change');
+
+                                    if (typeof ui.item.silent_fill === 'undefined' || ! ui.item.silent_fill) {
+                                        $(this).trigger('change');
+                                    }
                                 });
                                 // Pokud je prvek radio, tak zvolime to s danou hodnotou
                                 $('input:radio[name="'+ k +'"]').each(function(){
