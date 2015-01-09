@@ -379,7 +379,7 @@ abstract class Model_Core_File extends ORM
             $image->crop($width, $height);
 
             //pred vlastni nazev souboru vlozim prefix - nazev resize varianty
-            $image->save($target_filepath);
+            $image->save($target_filepath, 80);
         }
         catch (Exception $e)
         {
