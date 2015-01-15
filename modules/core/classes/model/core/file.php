@@ -680,9 +680,8 @@ abstract class Model_Core_File extends ORM
             $img = Image::factory($this->getFileDiskName());
             $this->width = $img->width;
             $this->height = $img->height;
-            parent::save();
         }
-
+        parent::save();
         if ($this->file_type() == static::FILE_TYPE_IMAGE) {
             //vytvori se resize varianty dle nataveni modelu
             $this->createResizedVariants();
