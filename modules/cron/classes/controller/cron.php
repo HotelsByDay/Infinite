@@ -27,7 +27,6 @@ class Controller_Cron extends Controller {
 
         return parent::before();
     }
-
     /**
      * Spousti CRON udalosti na zaklade hodnoty jejich lastran atributu a
      * definovaneho intervalu.

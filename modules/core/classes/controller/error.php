@@ -48,3 +48,5 @@ class Controller_Error extends Controller_Template
         Kohana::$log->add(Kohana::ERROR, 'JS: '.$msg.' ['.$url.':'.$line.']');
     }
 }
+
+
