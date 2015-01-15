@@ -12,6 +12,13 @@ class Model_TempFile extends Model_File {
      */
     protected $_table_name = 'temp_file';
 
+
+    public function file_type()
+    {
+        return static::FILE_TYPE_FILE;
+    }
+
+
     /**
      * Tento model reprezentuje pouze docasne soubory.
      *

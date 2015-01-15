@@ -403,11 +403,11 @@ class Helper_Appurl
      * @param <array> $parameters Parametry pozadavku
      * @return <string>
      */
-    static public function object_table($controller, $parameters = NULL)
+    static public function object_table($controller, $parameters = NULL, $get_parameters=NULL)
     {
         $url_hash = http_build_query((array)$parameters);
         
-        return self::object_action($controller, 'table', NULL, NULL, $url_hash);
+        return self::object_action($controller, 'table', NULL, $get_parameters, $url_hash);
     }
 
     /**

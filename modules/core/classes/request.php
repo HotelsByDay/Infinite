@@ -29,6 +29,12 @@ class Request extends Kohana_Request {
         return (array)$requested_data;
     }
 
+    public function get_param($key, $default=NULL)
+    {
+        $requested_data = $this->get_request_data();
+        return arr::get($requested_data, $key, $default);
+    }
+
     /**
      * Z parametru pozadavku vytahne navratovy odkaz a ten vraci.
      * @return <string> Vraci navratovy odkaz. Pokud neni definovany tak NULL.

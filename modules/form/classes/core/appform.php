@@ -1190,6 +1190,12 @@ class Core_AppForm {
         return $this->_form_items[$attr]->Render($style, $this->_error_messages);
     }
 
+
+    public function actionPanelEnabled()
+    {
+        return arr::get($this->_config, 'action_panel_enabled', true);
+    }
+
     /**
      * Metoda generuje kompletni formular.
      *

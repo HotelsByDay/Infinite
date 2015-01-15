@@ -50,6 +50,11 @@ abstract class Controller_Base_Object extends Controller_Layout {
     protected $user = NULL;
 
     /**
+     * @var array
+     */
+    protected $request_params = array();
+
+    /**
      * Provadi inicializaci kontroleru.
      *
      */
@@ -432,6 +437,7 @@ abstract class Controller_Base_Object extends Controller_Layout {
         //nejdrive si nactu sablonu, ktera pouze zobrazuje tabulku s daty - ta je
         //custom pro kazdy poradac
         $data_table_view = $filter_instance->_view_table_data();
+
 
         //sablona dostava referenci na instanci filtru
         $data_table_view->filter_params = $filter_instance->getFilterParams();
@@ -1152,7 +1158,7 @@ abstract class Controller_Base_Object extends Controller_Layout {
      * pro filtry.
      *
      *
-     * @return <FilterBase> V pripade uspechu vraci referenci na vytvorenou
+     * @return Filter_Base V pripade uspechu vraci referenci na vytvorenou
      * instanci tridy dedici z FilterBase, ktera implementuje logiku filtrovani
      * dat na danem proadaci.
      */

@@ -18,6 +18,7 @@
             
     <?= $form_view;?>
 
+    <?php if ($form->actionPanelEnabled()): ?>
     <div class="form_control_panel_wrapper">
         <div class="form_control_panel">
             <div class="form_control_panel_content form-actions">
@@ -38,5 +39,5 @@
 
         </div>
     </div>
-
+    <?php endif; ?>
 </form>

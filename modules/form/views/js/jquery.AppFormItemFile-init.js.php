@@ -1,5 +1,6 @@
 //<script>
 $(document).ready(function(){
+
     function appFormItemPhoto_InitFancybox($uploader) {
 
         if ($uploader.find('a.fancybox').length != 0) {
