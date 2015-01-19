@@ -173,7 +173,7 @@ class Helper_UrlStorage
                 // Make sure currently stored url_name will be the latest version
                 $url_name->{static::$latest_column} = 1;
 
-                $url_name->save();
+                $url_name->disablePermissions()->save();
 
                 // Other sotered url names for current object are not the latest
                 DB::query(Database::UPDATE, "UPDATE ".static::$storrage_model." SET ".static::$latest_column."=0 WHERE ".static::$object_id_column."=:object_id AND ".static::$object_name_column."=:object_name AND ".static::$url_name_column." <> :url_name")
