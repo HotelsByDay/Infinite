@@ -3,6 +3,7 @@ $.confirm = function(message){
     return confirm(message);
 }
 
+
 $.userInfoMessage = function(message) {
 
     //pokud ma argument message hodnotu false, tak se aktualni zprava schova
@@ -186,9 +187,12 @@ $.showTipHelp = function($element, helpid) {
 $(document).ready(function() {
     $(".jq-datepicker").datepicker({ dateFormat: 'd.m.yy' });
 
-    if ($('#hfm #flash_message').length) {
-        $('<div></div>').FlashMessage($('#hfm').html());
+    var $flash = $('#hfm');
+    if ($flash.length && $flash.html()) {
+        $.userInfoMessage($flash.html());
     }
+
+
 
 });
 
