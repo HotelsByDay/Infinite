@@ -24,6 +24,12 @@
         </div>
     </div>
 
-<script type="text/javascript">
-$("#<?= $form_config;?>").objectForm(<?= json_encode($js_config) ?>);
-</script>
+    <script type="text/javascript">
+        if (typeof $ != 'undefined') {
+            $("#<?= $form_config;?>").objectForm(<?= json_encode($js_config) ?>);
+        } else {
+            window.onload = function(){
+                $("#<?= $form_config;?>").objectForm(<?= json_encode($js_config) ?>);
+            }
+        }
+    </script>

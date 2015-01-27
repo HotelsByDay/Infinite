@@ -32,6 +32,7 @@ class AppFormItem_Text extends AppFormItem_String
         $view = parent::Render($render_style, $error_message);
         // Predame dalsi atributy
         $view->disabled = arr::get($this->config, 'disabled');
+        $view->rows = arr::get($this->config, 'rows');
         // Vratime $view
         return $view;
     }
