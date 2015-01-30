@@ -217,6 +217,7 @@
                     width:400,
                     height:300,
                     draggable:true,
+                    modal:true,
                     resizable:false,
                     position:'center'
                 });
