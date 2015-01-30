@@ -27,7 +27,7 @@ abstract class Session extends Kohana_Session {
         }
         else {
             $icon = $this->getIconForFlashType($type);
-            return '<div id="flash_message" class="alert alert-'.$type.'">'.$icon.$msg.'</div>';
+            return '<div id="flash_message" class="flash-'.$type.'">'.$icon.$msg.'</div>';
         }
     }
 
