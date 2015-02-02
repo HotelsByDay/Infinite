@@ -7,4 +7,7 @@ class Model_emailqueue extends ORM_Authorized
     protected $_has_many = array(
         'email_queue_attachment' => array('model' => 'email_queue_attachment', 'foreign_key' => 'email_queueid')
     );
+
+    protected $update_on_delete = true;
+
 }

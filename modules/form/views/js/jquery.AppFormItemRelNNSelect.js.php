@@ -13,7 +13,7 @@
     var methods = {
         
         init: function( options ) {
-            
+
             /**
              * Defaultni hodnoty pro parametry a nastaveni pluginu
              */
@@ -34,6 +34,30 @@
 
                 //Pokud prislo nastaveni, tak mergnu s defaultnimi hodnotami
                 var params = $.extend(true, settings, options);
+
+                // Tlacitka check/uncheck all
+                var $check_all = $('a.check_all', $this);
+                var $uncheck_all = $('a.uncheck_all', $this);
+
+
+                $check_all.bind('click', function() {
+                    var changed = false;
+                    $this.find(':checkbox').not(':checked').each(function(){
+                        $(this).attr('checked', true);
+                        changed = true;
+                    });
+                    if (changed) $this.trigger('change');
+                    return false;
+                });
+                $uncheck_all.bind('click', function(){
+                    var changed = false;
+                    $this.find(':checkbox:checked').each(function(){
+                        $(this).removeAttr('checked');
+                        changed = true;
+                    });
+                    if (changed) $this.trigger('change');
+                    return false;
+                });
 
                 $(":checkbox", $this).each(function(){
                     var $c = $(this);

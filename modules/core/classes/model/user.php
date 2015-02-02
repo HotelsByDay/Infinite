@@ -3,4 +3,6 @@
 class Model_User extends Model_Core_User
 {
 
+
+
 } // End User Model

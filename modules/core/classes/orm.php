@@ -92,6 +92,19 @@ class ORM extends Kohana_ORM {
      */
     protected $_inherit_permission = '';
 
+    /**
+     * Are permissions checks enabled on this model instance?
+     * This can be disabled by calling disablePermissions() method.
+     * @var bool
+     */
+    protected $_permissions_enabled = true;
+
+    /**
+     * Are permissions checks enabled on this model class?
+     * @var bool
+     */
+    public static $permissions_enabled = true;
+
 
     protected $_save_performed = FALSE;
 
@@ -126,6 +139,9 @@ class ORM extends Kohana_ORM {
      */
     public function __set($column, $value) 
     {
+        if ( ! isset($this->_object_name)) {
+            return parent::__set($column, $value);
+        }
         /**
          * Log action - pokud __set zpusobi ZMENU hodnoty databazoveho atributu
          * A jedna se o hodnotu, ktera se ma logovat, pak se ulozi puvodni hodnota
@@ -235,6 +251,11 @@ class ORM extends Kohana_ORM {
     public function getLogOriginalData()
     {
         return $this->log_original_data;
+    }
+
+    public function getLogOriginalValue($attr, $default=NULL)
+    {
+        return arr::get($this->log_original_data, $attr, $default);
     }
 
     /**
@@ -410,6 +431,17 @@ class ORM extends Kohana_ORM {
         return $this;
     }
 
+
+    /**
+     * Volano z AppForm tridy po uspesnem provedeni ActionSave
+     */
+    public function afterFormSaved()
+    {
+        // nothing by default
+    }
+
+
+
     public function savePerformed()
     {
         return $this->_save_performed;
@@ -512,8 +544,6 @@ class ORM extends Kohana_ORM {
         parent::__construct($id);
 
         //pokud se vytvari novy model, tak dojde k nastaveni defaultnich hodnot
-        //@TODO - je toto potreba kdyz je nastaveni defaultnicho hodnot implementovano
-        //v metode clear ?
         if ( ! $this->loaded())
 	    {
             foreach ($this->getDefaults($this->getDefaultsModificators()) as $column => $value)
@@ -523,6 +553,7 @@ class ORM extends Kohana_ORM {
             }
         }
     }
+
 
     /**
      * Provadi nastaveni defaultnich hodnot modelu, ktere vraci metoda
@@ -537,7 +568,10 @@ class ORM extends Kohana_ORM {
 
         foreach ($this->getDefaults($this->getDefaultsModificators()) as $column => $value)
         {
-            $this->_changed[] = $column;
+            // (!) @todo - it does not make sense to have non-empty _changed columns list after clear call (!)
+            //             there is a problem with this in StyleHotels property.modified flag - after update triggers
+            //             (update is fired even if there is no real change)
+        //    $this->_changed[] = $column; // COMMENTED 21.1.2013
             $this->_object[$column] = $value;
         }
 
@@ -575,7 +609,7 @@ class ORM extends Kohana_ORM {
      * @param <string> $value
      * @return <array>
      */
-    /*
+
     public function get_cb($key, $value=NULL)
     {
         // Zajisti ze PK dane tabulky bude defaultnim klicem
@@ -594,7 +628,7 @@ class ORM extends Kohana_ORM {
             $codebook[$result->{$key}] = $result->{$value};
         }
         return $codebook;
-    } */
+    }
     
     
     /** 
@@ -990,6 +1024,10 @@ class ORM extends Kohana_ORM {
      */
     public function is_unique_value($column, $value)
     {
+        // If value is NULL then we can consider it unique
+        if ($value === NULL) {
+            return true;
+        }
         $q = DB::select(array('COUNT("*")', 'total_count'))
 						->from($this->_table_name)
                         ->where($this->_primary_key, '!=', $this->pk())
@@ -1001,6 +1039,18 @@ class ORM extends Kohana_ORM {
         }
 
         return (bool) ! $q->execute($this->_db)->get('total_count');
+    }
+
+    /**
+     * Validation callback for uniqueness
+     * @param Validate $validate
+     * @param $field
+     */
+    public function validation_unique(Validate $validate, $field)
+    {
+        if ( ! $this->is_unique_value($field, $this->{$field})) {
+            $validate->error($field, 'validation_unique');
+        }
     }
 
     /**
@@ -1017,7 +1067,7 @@ class ORM extends Kohana_ORM {
             throw new Exception_UnauthorisedAction('Unauthorised db action "select" on object "'.$this->_object_name.'" ('.$this->permissionObjectName().').');
         }
 
-        if ( ! $deleted_too && array_key_exists('deleted', $this->_object))
+        if ( ! $deleted_too && $this->update_on_delete && array_key_exists('deleted', $this->_object))
         {
             $this->where($this->table_name().'.deleted', 'IS', DB::Expr('NULL'));
         }
@@ -1038,7 +1088,7 @@ class ORM extends Kohana_ORM {
             throw new Exception_UnauthorisedAction('Unauthorised db action "select (all)" on object "'.$this->_object_name.'" ('.$this->permissionObjectName().').');
         }
 
-        if ( ! $deleted_too && array_key_exists('deleted', $this->_object))
+        if ( ! $deleted_too && $this->update_on_delete && array_key_exists('deleted', $this->_object))
         {
             $this->where($this->table_name().'.deleted', 'IS', DB::Expr('NULL'));
         }
@@ -1062,7 +1112,7 @@ class ORM extends Kohana_ORM {
             throw new Exception_UnauthorisedAction('Unauthorised db action "count (all)" on object "'.$this->_object_name.'".');
         }
 
-        if (array_key_exists('deleted', $this->_object))
+        if ($this->update_on_delete and array_key_exists('deleted', $this->_object))
         {
             $this->where($this->table_name().'.deleted', 'IS', DB::Expr('NULL'));
         }
@@ -1117,6 +1167,10 @@ class ORM extends Kohana_ORM {
      */
     protected function applyUserInsertPermission()
     {
+        // If permission controls for this model are disabled.
+        if ( ! $this->_permissions_enabled or ! static::$permissions_enabled) {
+            return true;
+        }
         //ziskam uroven opravneni uzivatele na akci 'db_select' na tomto objektu
         $insert_modificator = Auth::instance()->get_user()->HasPermission($this->permissionObjectName(), 'db_insert');
 
@@ -1183,6 +1237,10 @@ class ORM extends Kohana_ORM {
      */
     protected function applyUserUpdatePermission()
     {
+        // If permission controls for this model are disabled.
+        if ( ! $this->_permissions_enabled or ! static::$permissions_enabled) {
+            return true;
+        }
         //ziskam uroven opravneni uzivatele na akci 'db_select' na tomto objektu
         $update_modificator = Auth::instance()->get_user()->HasPermission($this->permissionObjectName(), 'db_update');
 
@@ -1249,6 +1307,10 @@ class ORM extends Kohana_ORM {
      */
     protected function applyUserDeletePermission()
     {
+        // If permission controls for this model are disabled.
+        if ( ! $this->_permissions_enabled or ! static::$permissions_enabled) {
+            return true;
+        }
         //ziskam uroven opravneni uzivatele na akci 'db_select' na tomto objektu
         $delete_modificator = Auth::instance()->get_user()->HasPermission($this->permissionObjectName(), 'db_delete');
 
@@ -1303,6 +1365,10 @@ class ORM extends Kohana_ORM {
      */
     protected function applyUserSelectPermission()
     {
+        // If permission controls for this model are disabled.
+        if ( ! $this->_permissions_enabled or ! static::$permissions_enabled) {
+            return true;
+        }
         //ziskam uroven opravneni uzivatele na akci 'db_select' na tomto objektu
         $select_modificator = Auth::instance()->get_user()->HasPermission($this->permissionObjectName(), 'db_select');
 
@@ -1691,6 +1757,29 @@ class ORM extends Kohana_ORM {
         return $this;
     }
 
+
+    public function order_by($column, $dir='ASC')
+    {
+        if (strpos($column, '.') !== FALSE) {
+            list($rel_object, $rel_column) = explode('.', $column, 2);
+
+            // Are we ordering by has_many objects count?
+            if (isset($this->_has_many[$rel_object]) and $rel_column == 'count')
+            {
+                $fk = arr::get($this->_has_many[$rel_object], 'foreign_key', $this->_primary_key);
+                $pk = $this->_primary_key;
+                $alias = $rel_object . '_count';
+                return $this
+                    ->join(array($rel_object, $alias), 'LEFT')
+                    ->on("{$alias}.{$fk}", '=', "{$this->_table_name}.{$pk}")
+                    ->group_by($this->_table_name . '.' . $pk)
+                    ->order_by(DB::expr("COUNT({$alias}.{$rel_object}id)"), $dir)
+                    ;
+            }
+        }
+        return parent::order_by($column, $dir);
+    }
+
     /**
      * Created a deep "copy" from a different model - loads values of the corresponding
      * attributes and copies all related models where aliases correspond.
@@ -1790,6 +1879,11 @@ class ORM extends Kohana_ORM {
     public function isModified()
     {
         return ! empty($this->_changed);
+    }
+
+    public function isChanged($attr)
+    {
+        return isset($this->_changed[$attr]);
     }
 
     protected function _rules()
@@ -1908,6 +2002,16 @@ class ORM extends Kohana_ORM {
         return $this->{$lang_object}->where('field', '=', $attr)
             ->where('locale', '=', $locale)
             ->find()->content;
+    }
+
+    /**
+     * Disables permissions checks for current instance.
+     * @return $this
+     */
+    public function disablePermissions()
+    {
+        $this->_permissions_enabled = false;
+        return $this;
     }
 
 } // End ORM

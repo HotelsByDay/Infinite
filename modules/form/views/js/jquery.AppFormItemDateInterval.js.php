@@ -47,6 +47,11 @@
                         dateFormat: params.date_format,
                         onSelect: function( selectedDate ) {
                             $to_input.datepicker( "option", "minDate", selectedDate );
+                        },
+                        beforeShow: function (input, inst) {
+                            if (params.hide_year && ! inst.dpDiv.hasClass('hide_year')) {
+                                inst.dpDiv.addClass('hide_year');
+                            }
                         }
                     });
                     $to_input.datepicker({
@@ -55,6 +60,11 @@
                         dateFormat: params.date_format,
                         onSelect: function( selectedDate ) {
                             $from_input.datepicker( "option", "maxDate", selectedDate );
+                        },
+                        beforeShow: function (input, inst) {
+                            if (params.hide_year && ! inst.dpDiv.hasClass('hide_year')) {
+                                inst.dpDiv.addClass('hide_year');
+                            }
                         }
                     });
                 });

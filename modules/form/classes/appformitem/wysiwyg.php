@@ -7,6 +7,9 @@ class AppFormItem_Wysiwyg extends AppFormItem_String
 
     protected $config = Array(
         'images_upload' => true,
+        'formatting_tags' => NULL, // keep editor default setting
+        'buttons' => array('html', 'formatting', '|', 'bold', 'italic', '|','fontcolor','|',
+            'unorderedlist', 'orderedlist', 'outdent', 'indent', '|', 'link', '|', 'alignleft', 'aligncenter', 'alignright'),
     );
 
     /**
@@ -15,7 +18,9 @@ class AppFormItem_Wysiwyg extends AppFormItem_String
     public function init()
     {
         // Poskladame config prvku
-        $config = Array();
+        $config = Array(
+            'buttons' => $this->config['buttons'],
+        );
 
         // Pokud je povolen uplaod obrazku tak predame url na upload controller a dalsi parametry
         if ($this->config['images_upload']) {
@@ -24,6 +29,10 @@ class AppFormItem_Wysiwyg extends AppFormItem_String
                 'relid'   => $this->model->pk(),
             );
             $config['images_upload'] = AppUrl::directupload_file_action('wysiwyg.images_upload', $get_params);
+        }
+
+        if (is_array($this->config['formatting_tags'])) {
+            $config['formatting_tags'] = $this->config['formatting_tags'];
         }
 
         //inicializace pluginu na teto instanci form prvku

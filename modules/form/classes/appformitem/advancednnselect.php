@@ -42,7 +42,17 @@ class AppFormItem_AdvancedNNSelect extends AppFormItem_Base
         // A jeho inicializaci
         $init_js = View::factory('js/jquery.AppFormItemAdvancedNNSelect-init.js');
         $init_js->attr    = $this->attr;
-      
+
+        //pokud ma prvek umoznit vytvoreni noveho relacniho zaznamu, tak
+        //jQuery pluginu predam URL pro nacteni editacniho formulare
+        if (arr::get($this->config, 'new', ''))
+        {
+            $relobject = (isset($this->config['new_relobject'])) ? $this->config['new_relobject'] : $this->config['rel'];
+            $init_js->add_new_url = appurl::object_new_ajax($relobject, arr::getifset($this->config, 'relformconfig', NULL), arr::get($this->config, 'new_defaults'), arr::get($this->config, 'overwrite'));
+            //pridam konfiguraci dialogu
+            $init_js->dialog_config = arr::getifset($this->config, 'dialog', array());
+        }
+
         //url pro cteni dat - v parametrech se bude predavat i filtr, ktery je
         //nastaveny v konfiguraci prvku
         $init_js->data_url = appurl::object_cb_data($this->config['rel'], arr::get($this->config, 'filter', array()));
@@ -70,6 +80,7 @@ class AppFormItem_AdvancedNNSelect extends AppFormItem_Base
     {
         if ($this->form_data !== NULL)
         {
+        //    Kohana::$log->add(Kohana::INFO, 'advancednnselect form data: '.json_encode($this->form_data));
             // Ziskame nazev relacniho modelu
             $rel_model = $this->model->{$this->config['rel']}->object_name();
             // Vyprazdnime - pro jistotu
@@ -136,6 +147,8 @@ class AppFormItem_AdvancedNNSelect extends AppFormItem_Base
             // Hodnat bude zaznam v relacni tabulce (ten potrebuje pro data mini-formulare)
             $list[$model->{$rel.'id'}] = $model;
         }
+
+    //    Kohana::$log->add(Kohana::INFO, 'advancednnselect getRelItems returning: '.json_encode(array_keys($list)));
         return $list;
     }
 
@@ -188,8 +201,8 @@ class AppFormItem_AdvancedNNSelect extends AppFormItem_Base
             }
         }
 
-        
-        foreach ($model->find_all() as $model)
+        $items = $model->find_all();
+        foreach ($items as $model)
         {
             $rel_models[] = $model;
         }
@@ -266,6 +279,13 @@ class AppFormItem_AdvancedNNSelect extends AppFormItem_Base
         $view->selected = $selected;
         
         $view->show_items = $this->config['show_items'];
+
+        $relobject = $this->config['rel'];
+
+        //pokud ma byt umozneno pridat relacni zaznam v ramci tohoto form. prvku
+        //tak se zobrazi tlacitko pro to
+        $view->new = arr::get($this->config, 'new', '');
+        $view->new_label = arr::get($this->config, 'new_label', __($relobject.'.new_'.$relobject));
         
         // Predame nazev sablony s min-formularem
         $form_view_name = arr::get($this->config, 'form', false);
@@ -278,7 +298,6 @@ class AppFormItem_AdvancedNNSelect extends AppFormItem_Base
         }
 
         $view->form = $form_view_name;
-
         // Vratime $view
         return $view;
     }

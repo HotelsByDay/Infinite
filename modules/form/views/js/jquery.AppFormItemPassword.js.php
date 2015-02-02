@@ -53,7 +53,7 @@
                 var password_change_handler = function() {
 
                     //odeberu vsechny classy, ktere informovaly o predchozi urovni hesla
-                    $password_strength_info.removeClass('level1 level2 level3 level4');
+                    $password_strength_info.removeClass('alert-info alert-success alert-warning');
 
                     //pokud jsou obe pole prazdne tak nebudou zobrazeny zadne hlasky
                     if ($password.val().length == 0 && $password_confirm.val().length == 0) {
@@ -61,6 +61,8 @@
                         $passwords_dont_match_message.hide();
                         return;
                     }
+
+                    $this.find('.validation_error').hide();
 
                     if ($password.val() != $password_confirm.val()) {
                         $passwords_dont_match_message.show();
@@ -78,18 +80,22 @@
                         switch (pwd_level) {
                             case 1:
                                 $password_strength_message.html("<?= __('appformitempassword.pwd_strength_level_1_message');?>");
+                                $password_strength_info.removeClass('alert-info alert-success alert-warning').addClass('alert-danger');
                             break;
 
                             case 2:
                                 $password_strength_message.html("<?= __('appformitempassword.pwd_strength_level_2_message');?>");
+                                $password_strength_info.removeClass('alert-info alert-success alert-warning').addClass('alert-danger');
                             break;
 
                             case 3:
                                 $password_strength_message.html("<?= __('appformitempassword.pwd_strength_level_3_message');?>");
+                                $password_strength_info.removeClass('alert-danger alert-success alert-warning').addClass('alert-info');
                             break;
 
                             case 4:
                                 $password_strength_message.html("<?= __('appformitempassword.pwd_strength_level_4_message');?>");
+                                $password_strength_info.removeClass('alert-danger alert-info alert-warning').addClass('alert-success');
                             break;
                         }
                     }

@@ -3,6 +3,7 @@
 
 return array(
 
+    'form.AppFormItemSimplteItemList.delete_ptitle' => 'Deleting...',
     'upload.error.temp_not_writeable' => 'An error occurred while uploading the file. Please contact the support.',
     'upload.error.file_not_defined' => 'There was an error while uploading the file.',
     'upload.error.file_empty' => 'An empty file cannot be uploaded.',
@@ -52,6 +53,7 @@ return array(
     'appformitem_serienumber.number_not_generated_yet' => 'Kód bude vygenerován při uložení.',
 
     //APP FORM SIMPLE ITEM LIST
+    'simpleitemlist.save_the_form.info_message' => 'Please save the form to apply your changes.',
     'form.AppFormItemSimplteItemList.confirm_delete' => 'Are you sure you want to delete the item?',
     'appformitemsimpleitemlist.delete_ptitle' => 'Deleting item...',
 

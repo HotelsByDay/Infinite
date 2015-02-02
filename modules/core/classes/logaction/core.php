@@ -1,6 +1,33 @@
 <?php
 
 class LogAction_Core {
+
+    public static function runControllerEvent($action, $object_name, $object_id=NULL)
+    {
+        $relAtype = LogNumber::getTableNumber($object_name);
+        if (empty($relAtype)) {
+            return;
+        }
+
+        $object_preview = '';
+        if ( ! empty($object_id)) {
+            $object = ORM::factory($object_name, $object_id);
+            $object_preview = $object->preview();
+        }
+        $relAid = $object_id;
+
+        $logaction = ORM::factory('logaction');
+        // Cislo tabulky
+        $logaction->relAid = $relAid;
+        // ID updatovaneho zaznamu
+        $logaction->relAtype = $relAtype;
+        // text
+        $logaction->text = __('logaction.access.'.$object_name.'.'.$action, array(':user' => Auth::instance()->get_user()->preview(), ':object' => $object_preview));
+        // Action name
+        $logaction->action = $action;
+        // Ulozeni log_action zaznamu
+        $logaction->save();
+    }
     
     /**
      * Volá se v případě výskytu události v modelu.

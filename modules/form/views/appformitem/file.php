@@ -1,6 +1,6 @@
-<div class="appformitemfile<?= $css ?>" name="<?= $attr;?>_item" id="<?= $uid;?>">
+<div class="appformitemcontainer appformitemfile<?= $css ?> control-group <?= empty($error_message) ? '' : 'error' ?>" name="<?= $attr;?>_item" id="<?= $uid;?>">
 
-    <span class="label"><?=  $label;?></span>
+    <span class=""><?=  $label;?></span>
 
     <style type="text/css">
             /* pro otestovani funkcnosti jquery pluginy */
@@ -12,12 +12,12 @@
 
     <?= $tooltip; ?>
 
-    <?php if (!empty($error_message)):?>
-        <span class="validation_error" style="color:red;"><?= $error_message; ?></span>
+    <?php if ( ! empty($error_message)): ?>
+        <span class="validation_error text-error"><?= $error_message; ?></span>
     <?php endif ?>
 
     <?php if ($table_header): ?>
-        <table class="list">
+        <table class="list table">
 
             <?= $table_header; ?>
 
@@ -29,19 +29,18 @@
         </table>
         <div class="clearfix cb"></div>
     <?php else: ?>
-        <ul class="list">
+        <ul class="list unstyled">
             <?php foreach ($files as $file): ?>
             <li class="list_item">
             <?=(string)$file;?>
             <li class="list_item">
             <?php endforeach ?>
-           <div class="clearfix cb"></div>
         </ul>
         <div class="clearfix cb"></div>
     <?php endif ?>
 
     <div class="message_placeholder" style="display:none;">
-        <div class="msg3"></div>
+        <div class="validation_error"></div>
     </div>
 
     <div class="button">

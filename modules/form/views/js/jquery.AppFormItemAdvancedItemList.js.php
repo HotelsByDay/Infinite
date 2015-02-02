@@ -154,7 +154,7 @@
                             });
                             //uzivateli se zobrazi info zprava - porad prvku bude
                             //zachovano jen kdyz se ulozi formular
-                            $.userInfoMessage("<?= __('form.AppFormItemAdvancedItemlist.order_update.info_message');?>");
+                            $.userInfoMessage($('<div class="alert alert-info">' + options.order_update_info_message + '</div>'));
                         }
                     });
                     //disable selection only on the dragHandler
@@ -163,6 +163,7 @@
                 }
             });
         },
+
 
         _initTemplate: function($_this, $item_container) {
 

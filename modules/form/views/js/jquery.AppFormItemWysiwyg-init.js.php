@@ -1,13 +1,12 @@
 // <script>
-$(document).ready(function(){
+$(document).ready(function() {
     var config = <?= json_encode($config) ?>;
     var settings = {
         path: '<?= url::base();?>redactor/',
         autoresize: true,
         resize: false,
         // See http://redactorjs.com/docs/toolbar/
-        buttons: ['formatting', '|', 'bold', 'italic', '|','fontcolor','|',
-            'unorderedlist', 'orderedlist', 'outdent', 'indent', '|', 'link'],
+        buttons: config.buttons,
         focus: false,
         callback: function() {
             // Find parent form
@@ -20,14 +19,12 @@ $(document).ready(function(){
 
     if (config.images_upload) {
         settings.imageUpload = config.images_upload;
-        settings.buttons[redactor_settings.buttons.length] = 'image';
+        settings.buttons[settings.buttons.length] = 'image';
     }
 
-    //options to align text
-    settings.buttons.push('|');
-    settings.buttons.push('alignleft');
-    settings.buttons.push('aligncenter');
-    settings.buttons.push('alignright');
+    if (typeof config.formatting_tags != 'undefined') {
+        settings.formattingTags = config.formatting_tags;
+    }
 
     $("#<?= $uid;?> textarea").redactor(settings);
 });

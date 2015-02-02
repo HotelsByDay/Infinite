@@ -7,7 +7,6 @@
      */
     var plugin_name_space = 'AppFormItemRelSelect';
 
-   
 
     /**
      * Metody pro tento plugin.
@@ -93,45 +92,15 @@
                             });
                         }
                         filled_input_names = [];
-
                     }
                 });
                 
-                
+
                 var onFocusHandler = function(){
                     if (this.value == "") {
                         $(this).autocomplete('search', '');
                     }
                 };
-//                var onChangeHandler = function(){
-//
-//                    return;
-//
-//                    $name.val('');
-//                    $value.val('');
-//console.log('onChangeHandler');
-//                        //pokud je definovany dceriny prvek - tak jeho hodnotu vymazu
-//                        //pri zmene hodnoty tohoto prvku
-//                        if (typeof default_params.filter_child_attr !== 'undefined') {
-//                            for (k in default_params.filter_child_attr) {
-//                                var attr_name = default_params.filter_child_attr[k];
-//
-//                                //vezmu si hodnotu atributu 'name' tohoto prvku
-//                                var name = $name.attr('name');
-//                                //vlastni nazev atributu replacnu za ten cilovy - ten podle ktereho se ma filtrovat
-//                                //tento zpusob je kvuli pouziti na appformitemadvanceditemlist, protoze
-//                                //potrebuju sahat na formular modelu nad kterym je tato instance prvku
-//                                //a ne na ostatni formulare - v name atributu je i ID daneho formulare/modelu
-//                                name = name.replace(default_params['attr'], attr_name)
-//
-//                                var input_name = name;
-//                                var input_value = name.replace('[name]', '[value]');
-//
-//                                $('input[name="'+input_name+'"]').val('');
-//                                $('input[name="'+input_value+'"]').val('');
-//                            }
-//                        }
-//                };
                 
                 //defaultni parametry, ktere se budou posilat s kazdym pozadavkem
                 var pom_data = {
@@ -162,7 +131,9 @@
                                 name = name.replace(default_params['attr'], attr_name)
                                            .replace('[name]', '[value]');
 
-                                $item_selector = $('input[name="'+name +'"]');
+                                console.log('looking for name: ' + name);
+
+                                var $item_selector = $('input[name="'+name +'"]');
                                 if ($item_selector.length != 0) {
                                     pom_data[attr_name] = $item_selector.val();
                                 }
@@ -189,7 +160,7 @@
                                     return item;
                                 }));
                             }
-			});
+                        });
                     },
                     autoFocus: true,
                     minLength: 0,
@@ -209,15 +180,25 @@
                         // a myslim ze je logicke aby prvek vyvolal svou change udalost az dokonci vsechny zmeny v DOM
                         // mazani hodnot dcerinych prvku jsem vsak nepresunul, abych nezpusobil nechtene vedlejsi efekty
                         if (typeof ui.item.fill !== 'undefined') {
-                            for (k in ui.item.fill) {
+                            for (var k in ui.item.fill) {
                                 // 5.7.2012 - Dajc
                                 // - pridan change trigger nad danym prvkem po zapsani hodnoty do nej - spoleha na to
                                 //   prvek ObjectImageSelect
-                                $('input[name="'+k+'"],textarea[name="'+k+'"],select[name="'+k+'"]').each(function(){
+                                $('input[type="text"][name="'+k+'"],input[type="hidden"][name="'+k+'"],textarea[name="'+k+'"],select[name="'+k+'"]').each(function(){
                                     // Ulozime si info o tom ze prvek byl automaticky vyplnen
                                     filled_input_names[filled_input_names.length] = k;
                                     $(this).val(ui.item.fill[k]);
                                     $(this).trigger('change');
+                                });
+                                // Pokud je prvek radio, tak zvolime to s danou hodnotou
+                                $('input:radio[name="'+ k +'"]').each(function(){
+                                    // Pokud je value radia shodna s nastavovanou hodnotou
+                                    // - neni to v selectoru, protoze hodnota muze obsahovat nepovolene znaky - apostrofy a uvozovky
+                                    //   kvuli kterym pak selector havaruje -> exception
+                                    if ($(this).val() == ui.item.fill[k]) {
+                                        $(this).attr('checked', true);
+                                        $(this).trigger('change');
+                                    }
                                 });
                             }
                         }
@@ -250,6 +231,8 @@
                                 $('input[name="'+attr+'[value]"]').val('');
                             }
                         }
+
+                        $value.trigger('change');
                     },
                     open: function(){
                         $(this).unbind('focus', onFocusHandler);
@@ -260,6 +243,23 @@
                         //$(this).bind('change', onChangeHandler);
                     }
                 }).focus(onFocusHandler);//.change(onChangeHandler);
+
+
+
+                // Addresses jQuery 1.8.16 bug 7555: http://bugs.jqueryui.com/ticket/7555
+                $('.ui-autocomplete-input', $this).each(function (idx, elem) {
+                    var autocomplete = $(elem).data('autocomplete');
+                    if ('undefined' !== typeof autocomplete) {
+                        var blur = autocomplete.menu.options.blur;
+                        autocomplete.menu.options.blur = function (evt, ui) {
+                            if (autocomplete.pending === 0) {
+                                blur.apply(this,  arguments);
+                            }
+                        };
+                    }
+                });
+
+
 
 
                 //pokud je v nastaveni povoleno pridani nove relacni polozky

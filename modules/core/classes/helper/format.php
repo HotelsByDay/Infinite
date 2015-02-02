@@ -1,7 +1,57 @@
 <?php defined('SYSPATH') OR die('No direct access allowed.');
 
 class Helper_Format {
-    
+
+
+    /**
+     * Returns human readable filesize with B / kB / MB units
+     * @param $file_size
+     * @return string
+     */
+    public static function fileSize($file_size)
+    {
+        if ($file_size < 1000) {
+            $file_size = (int)($file_size).'&nbsp;B';
+        } else if ($file_size < 1000*1000) {
+            $file_size = (int)($file_size / 1000).'&nbsp;KB';
+        } else {
+            $file_size = (int)($file_size / (1000*1000)).'&nbsp;MB';
+        }
+        //vracim vyslednou velikost souboru
+        return $file_size;
+    }
+
+    /**
+     * @static
+     * @param $fname
+     * @param $width
+     * @param $height
+     * @return string
+     */
+    static public function imageExactResizeVariantName($fname, $width, $height)
+    {
+        $filename = pathinfo($fname, PATHINFO_FILENAME);
+        $ext = pathinfo($fname, PATHINFO_EXTENSION);
+        return $filename. '_' .$width. 'x' .$height. '.' .$ext;
+    }
+
+
+
+    static public function absoluteUrl($url)
+    {
+        return (strpos($url, 'http') !== 0) ? 'http://'.$url : $url;
+    }
+
+    /**
+     * Nahradi alfanumericke znaky za hvezdicky
+     * @static
+     * @param $string
+     */
+    static public function starOut($string)
+    {
+        return preg_replace('/[^_ @#?!-]/', '*', $string);
+    }
+
     /**
      * Formatuje cislo jako telefoni cislo ve formatu platnem pro CR.
      * @param <string> $number Cislo k naformatovani
@@ -29,6 +79,14 @@ class Helper_Format {
         }
 
         return $orig_number;
+    }
+
+    static public function phone_us($number)
+    {
+        //return $number;
+        $number = preg_replace('/[^0-9]/', '', $number);
+        $number = preg_replace('/^(.*?)(.{1,3})(.{3})(.{4})$/', '$1 ($2) $3-$4', $number);
+        return $number;
     }
     
     

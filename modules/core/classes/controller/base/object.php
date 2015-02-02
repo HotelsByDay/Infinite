@@ -50,6 +50,11 @@ abstract class Controller_Base_Object extends Controller_Layout {
     protected $user = NULL;
 
     /**
+     * @var array
+     */
+    protected $request_params = array();
+
+    /**
      * Provadi inicializaci kontroleru.
      *
      */
@@ -143,7 +148,7 @@ abstract class Controller_Base_Object extends Controller_Layout {
      * V opacnem pripade bude provedena 'undo' varianta akce.
      * @return <bool> 
      */
-    protected function process_action($action_name, $items, $do = TRUE, & $action_result_ref = NULL)
+    protected function process_action($action_name, $items=NULL, $do = TRUE, & $action_result_ref = NULL)
     {
         //nactu si konfiguracni soubor objektu tohoto kontroleru a vyhledam
         //pozadovanou akci - k tomu pridavam jeste konfiguraci zakladnich systemovych
@@ -202,6 +207,29 @@ abstract class Controller_Base_Object extends Controller_Layout {
 
         //do tohoto pole budou vlozeny chyby ke kterym dojde pri provadeni akci
         $action_errors = array();
+
+        // Pokud nejsou zvoleny zadne zaznamy pro pozadovanou akci
+        if (empty($item_id_list)) {
+            // A v configu je receno ze akce se neprovadi nad zvolenymi zaznamy
+            if ( ! arr::get($action_config, 'need_selection', true)) {
+                // Provedeme akci
+                try
+                {
+                    call_user_func($action_function);
+                }
+                catch (Exception $e)
+                {
+                    //k popisu chyby pridam preview zaznamu i popis chyby
+                    $action_errors['no_selection'] = array(
+                        '',
+                        $e->getMessage()
+                    );
+                }
+            } else {
+                // Akce ktera je urcena k volani nad zvolenymy zaznamy byla zavolana bez zvolenych zaznamu
+                throw new AppException('Table action called with empty selection.');
+            }
+        }
 
         foreach ($item_id_list as $id)
         {
@@ -265,7 +293,7 @@ abstract class Controller_Base_Object extends Controller_Layout {
         //vraci TRUE pokud nedoslo k zadnym chybam
         return empty($action_errors);
     }
-    
+
     /**
      * Generuje zakladni stranku s tabulkovy vypisem dat.
      * @return <type>
@@ -280,6 +308,9 @@ abstract class Controller_Base_Object extends Controller_Layout {
         {
             return $this->runUnauthorizedAccessEvent();
         }
+
+        // Log user action
+        LogAction::runControllerEvent('table.'.$this->request->action, $this->object_name);
 
         //do stranky vlozim obsahovou sablonu pro "/table" vypis
         $this->template->content = $this->_view_table_content();
@@ -344,7 +375,7 @@ abstract class Controller_Base_Object extends Controller_Layout {
         $items       = trim(arr::get($this->request_params, 'i'), ' ,');
         $do          = (bool)arr::get($this->request_params, 'd', TRUE);
 
-        if ( ! empty($action_name) && ! empty($items))
+        if ( ! empty($action_name))
         {
             //metoda do teto promenne vlozi sablonu, ktera predstavuje vysledek akce
             //(pres referenci)
@@ -377,7 +408,7 @@ abstract class Controller_Base_Object extends Controller_Layout {
         }
 
         //nactu konfiguraci pro dany tabulkovy vypis
-        $table_config = $this->_config_object_table(Request::instance()->param('type'));
+        $table_config = $this->_config_object_table($table_type);
 
         //vytvori instanci tridy, ktera zajistuje logiku filtrovani
         $filter_instance = $this->loadAndInitFilterClassInstance($table_config);
@@ -394,18 +425,19 @@ abstract class Controller_Base_Object extends Controller_Layout {
         {
             //dale nactu sablonu, ktera tvori obal pro sablonu s daty
             //pridava strankovani, hromadne akce, apod
-            $table_data_container_view = $this->_view_table_data_container();
+            $table_data_container_view = $filter_instance->view_table_data_container();
         }
         else
         {
             //tato sablona slouzi k informovani uzivatele o tom ze podle
             //daneho filtru nebyly nalezeny zadne zaznamy
-            $table_data_container_view = $this->_view_table_empty_data_container();
+            $table_data_container_view = $filter_instance->view_empty_table_data_container();
         }
 
         //nejdrive si nactu sablonu, ktera pouze zobrazuje tabulku s daty - ta je
         //custom pro kazdy poradac
         $data_table_view = $filter_instance->_view_table_data();
+
 
         //sablona dostava referenci na instanci filtru
         $data_table_view->filter_params = $filter_instance->getFilterParams();
@@ -434,7 +466,9 @@ abstract class Controller_Base_Object extends Controller_Layout {
         $table_data_container_view->data_table = $data_table_view;
 
         //do sablony vlozim panel pro ovladani hromadnych akci nad zaznamy
-        $table_data_container_view->item_action_panel = Panel::factory($this->controller_name)->getPanel();
+        if (arr::get($table_config, 'action_panel_enabled', true)) {
+            $table_data_container_view->item_action_panel = Panel::factory($this->controller_name)->getPanel();
+        }
 
         //formular pro ovladani strankovani
         $table_data_container_view->top_pager     = $filter_instance->getPager(TRUE);
@@ -442,7 +476,9 @@ abstract class Controller_Base_Object extends Controller_Layout {
        
 
         //do sablony vlozim i celkovy pocet nalezenych dat aby to mohlo byt zobrazeno uzivateli
-        $table_data_container_view->total_found = $total_found_results;
+        if (arr::get($table_config, 'show_total_found', true)) {
+            $table_data_container_view->total_found = $total_found_results;
+        }
 
         //vystup vracim ve forme JSONu tak aby jej bylo mozne dobre zpracovat
         //na strane klienta
@@ -888,6 +924,7 @@ abstract class Controller_Base_Object extends Controller_Layout {
 
             $this->template->output = array('error' => __('object.action_delete.error_occured'));
             return;
+
         }
 
         //prazdny vystup - akce provedena uspesne
@@ -922,6 +959,13 @@ abstract class Controller_Base_Object extends Controller_Layout {
             throw new Exception('Vytvorit sablonu, ktera informuje o tom ze uzivatel nema opravneni zaznam cist nebo neexistuje.');
         }
 
+        // Log user action
+        if ($item_id) {
+            LogAction::runControllerEvent('edit', $this->object_name, $item_id);
+        } else {
+            LogAction::runControllerEvent('new', $this->object_name);
+        }
+
         //nactu si konfiguracni soubor pro dany formular
         $form_config = $this->_config_form();
 
@@ -931,7 +975,7 @@ abstract class Controller_Base_Object extends Controller_Layout {
 
         // inicializace pluginu
         // Pokud model implementuje Slave_Compatible interface pak pluginu formulare predame seznam povolenych jazyku
-        $config = array();
+        $config = (array)arr::get($form_config, 'js_config');
         if ($this->model instanceof Interface_AppFormItemLang_SlaveCompatible) {
             // Get languages enabled for current model
             $enabled_languages = $this->model->getEnabledLanguagesList();
@@ -955,8 +999,10 @@ abstract class Controller_Base_Object extends Controller_Layout {
         //jedna se bud o bazovou tridu AppForm nebo nejakou z ni dedici
         $form_class_name = arr::get($form_config, 'class', $this->_action_edit_form_class_name());
 
+        $form = FormFactory::Get($form_class_name, $this->model, $form_config, $this->request_params, FALSE);
+
         //vytvorim si novy objekt formulare
-        $form = new $form_class_name($this->model, $form_config, $this->request_params, FALSE);
+//        $form = new $form_class_name($this->model, $form_config, $this->request_params, FALSE);
 
         //metoda muze vyhodit vyjimku, ktera muze zaridit presmerovani na jinou stranku
         try
@@ -969,7 +1015,6 @@ abstract class Controller_Base_Object extends Controller_Layout {
         //formulare prave vytvoreneho zaznamu
         catch (Exception_RedirToActionEdit $e)
         {
-
             //presmeruju na editacni stranku pozadovaneho zaznamu
             Request::instance()->redirect(appurl::object_edit($this->controller_name, $e->getItemID()));
         }
@@ -1021,6 +1066,12 @@ abstract class Controller_Base_Object extends Controller_Layout {
         //pred tim co prislo v URL
         $item_id  = arr::get($this->request_params, '_id', $item_id);
 
+        // Log user action (access)
+        // Do not log if we are saving the data
+        if (empty($_POST)) {
+            LogAction::runControllerEvent('edit.'.$form_type, $this->object_name, $item_id);
+        }
+
         //nactu ORM pozadovaneho objektu
         $this->model = ORM::factory($this->object_name, $item_id);
 
@@ -1040,8 +1091,10 @@ abstract class Controller_Base_Object extends Controller_Layout {
         //jedna se bud o bazovou tridu AppForm nebo nejakou z ni dedici
         $form_class_name = arr::get($form_config, 'class', $this->_action_edit_form_class_name());
 
+        $form = FormFactory::Get($form_class_name, $this->model, $form_config, $this->request_params, TRUE);
+
         //vytvorim si novy objekt formulare
-        $form = new $form_class_name($this->model, $form_config, $this->request_params, TRUE);
+//        $form = new $form_class_name($this->model, $form_config, $this->request_params, TRUE);
 
         //metoda muze vyhodit vyjimku, ktera muze zaridit presmerovani na jinou stranku
         try
@@ -1057,6 +1110,18 @@ abstract class Controller_Base_Object extends Controller_Layout {
         catch (Exception_Redir $e)
         {
             //presmerovani v tomto pripade ignoruji
+        }
+
+        //pokud je definovana v konfiguraci volba pro presmerovani po uspesnem
+        //prvedeni fomrularo akce tak presmerujeme
+        if ($form->getRequestedActionResult() == Core_AppForm::ACTION_RESULT_SUCCESS
+            && ($closure = arr::get($form_config, 'on_success_redir')) != NULL)
+        {
+            $redirect_url = call_user_func($closure, $this->model);
+            // Closure could have returned NULL or false
+            if ($redirect_url) {
+                return $this->request->redirect($redirect_url);
+            }
         }
 
         //do sablony vlozim vysledek provedene akce
@@ -1079,14 +1144,6 @@ abstract class Controller_Base_Object extends Controller_Layout {
         $script_include_tag = Web::instance()->getJSFiles(TRUE);
         $script_include_tag.= '<script type="text/javascript">$(document).ready(function(){if(typeof $.waypoints !== "undefined"){$.waypoints("refresh");}});</script>';
 
-        //pokud je definovana v konfiguraci volba pro presmerovani po uspesnem
-        //prvedeni fomrularo akce tak bude do dat pro klienta pridana i cilova URL
-        if ($form->getRequestedActionResult() == Core_AppForm::ACTION_RESULT_SUCCESS
-                && ($closure = arr::get($form_config, 'on_success_redir')) != NULL)
-        {
-            $this->template->redir = call_user_func($closure, $this->model);
-        }
-
         //vlozim do sablony aby doslo k nacteni prislusnych souboru do stranky
         $this->template->content->script_include_tag = $script_include_tag;
     }
@@ -1101,7 +1158,7 @@ abstract class Controller_Base_Object extends Controller_Layout {
      * pro filtry.
      *
      *
-     * @return <FilterBase> V pripade uspechu vraci referenci na vytvorenou
+     * @return Filter_Base V pripade uspechu vraci referenci na vytvorenou
      * instanci tridy dedici z FilterBase, ktera implementuje logiku filtrovani
      * dat na danem proadaci.
      */
@@ -1130,6 +1187,70 @@ abstract class Controller_Base_Object extends Controller_Layout {
         return $class_instance;
     }
 
+
+    /**
+     * Return overview header html - used for ajax header refresh after form success event
+     * @param $item_id
+     */
+    public function action_overview_header($item_id)
+    {
+        //kontrola opravneni uzivatele na konkretni objekt tohoto kontroleru
+        if ( ! $this->user->HasPermission($this->object_name, 'overview'))
+        {
+            return $this->runUnauthorizedAccessEvent();
+        }
+        //nactu ORM pozadovaneho objektu
+        $this->model = ORM::factory($this->object_name, $item_id);
+
+        //pokud neexistuje tak...
+        //@TODO: presmerovat na /table nebo hodit 404 nebo nejakou stranku, ktera informuje o tom ze dany zaznam nefunguje ?
+        if ( ! $this->model->loaded())
+        {
+            throw new Kohana_Exception('Requested object not found!');
+        }
+
+        $this->template = $this->get_overview_header_view();
+    }
+
+    /**
+     * @return View - initialized overview header view
+     */
+    protected function get_overview_header_view()
+    {
+        // Get overview header layout (for object preview and submenu)
+        $header_with_submenu = $this->_view_overview_header_layout();
+
+        // Get custom object header view
+        $header = $this->_view_overview_header();
+
+        // Set header model
+        $header->model = $this->model;
+
+        //k odkazu pro editaci pridam jeste navratovy odkaz na vypis pokud je
+        //definovan
+        $header->edit_link = $this->user->HasPermission($this->object_name, 'edit')
+            ? appurl::object_edit($this->controller_name,
+                $this->model->pk(),
+                array(
+                    Request::instance()->get_retlink(),
+                    Request::instance()->get_retlink_label()
+                ))
+            : NULL;
+
+        // Get submenu view
+        $submenu = $this->_view_overview_submenu();
+        // Set submenu object_name
+        $submenu->object_name = $this->object_name;
+
+        // Put header and submenu into their layout
+        $header_with_submenu->header = $header;
+        $header_with_submenu->submenu = $submenu;
+
+        // Return layout
+        return $header_with_submenu;
+    }
+
+
     /**
      * Generuje prehledovou stranku pro zaznam s ID $item_id.
      * @param <int> $item_id
@@ -1153,7 +1274,7 @@ abstract class Controller_Base_Object extends Controller_Layout {
         //@TODO: presmerovat na /table nebo hodit 404 nebo nejakou stranku, ktera informuje o tom ze dany zaznam nefunguje ?
         if ( ! $this->model->loaded())
         {
-            throw new Kohana_Exception('TODO!');
+            throw new Kohana_Exception('Requested object not found!');
         }
 
         //nahodny identifikator (html id atribut), ktery bude pouzit pro inicializaci
@@ -1163,9 +1284,11 @@ abstract class Controller_Base_Object extends Controller_Layout {
         //dale pridam tyto JS soubory, ktere zajistuji zakladni funkce overview stranky
         Web::instance()->addCustomJSFile(View::factory('js/jquery.objectOverview.js'));
 
+        $config['overview_header_refresh_url'] = AppUrl::object_overview_header($this->object_name, $this->model->pk());
         //provede incializaci pluginu objectOverview
         Web::instance()->addMultipleCustomJSFile(View::factory('js/jquery.objectOverview-init.js', array(
-            'overview_container_id' => $overview_container_id
+            'overview_container_id' => $overview_container_id,
+            'config' => $config,
         )));
         
         //jQuery.objectDataPanel pro funkcnost panelu, ktere se budou nacitat do obsahove castu
@@ -1192,30 +1315,10 @@ abstract class Controller_Base_Object extends Controller_Layout {
         //vlozim nazev objektu do sablony aby podle toho bylo mozne stylovat
         $this->template->content->controller_name = $this->controller_name;
 
-        //doplnim jednotlive casti overview strnaky
-        $this->template->content->header = $this->_view_overview_header();
-        
-        //predam referenci na ORM model zaznamu
-        $this->template->content->header->model = $this->model;
-
-        //k odkazu pro editaci pridam jeste navratovy odkaz na vypis pokud je
-        //definovan
-        $this->template->content->header->edit_link = $this->user->HasPermission($this->object_name, 'edit')
-                                                        ? appurl::object_edit($this->controller_name,
-                                                                              $this->model->pk(),
-                                                                              array(
-                                                                                   Request::instance()->get_retlink(),
-                                                                                   Request::instance()->get_retlink_label()
-                                                                              ))
-                                                        : NULL;
+        // Set overview header (it contains custom object preview and standard submenu)
+        $this->template->content->header = $this->get_overview_header_view();
 
         $this->template->content->model = $this->model;
-
-        //sablona, ktera zobrazuje postrani menu
-        $this->template->content->submenu = $this->_view_overview_submenu();
-        
-        //predam potrebne parametry
-        $this->template->content->submenu->object_name = $this->object_name;
 
         //vyvolani globalni udalosti 'system.action_overview_post'
         Dispatcher::instance()->trigger_event('system.action_overview_post', Dispatcher::event(array('controller' => $this)));
@@ -1276,6 +1379,9 @@ abstract class Controller_Base_Object extends Controller_Layout {
             throw new Kohana_Exception('TODO!');
         }
 
+        // Log user action
+        LogAction::runControllerEvent('overview.'.$panel, $this->object_name, $item_id);
+
         $this->template = new View('overview_subcontent_response');
 
         $subcontent_panel = $this->_view_overview_subcontent_panel($panel);
@@ -1286,7 +1392,8 @@ abstract class Controller_Base_Object extends Controller_Layout {
 
         //po vykresleni formulare:
         //do sablony vlozim pouze ty soubory, ktere mohou byt vlozeny vicekrat
-        $html .= Web::instance()->getJSFiles(TRUE);
+
+       $html .= Web::instance()->getJSFiles(TRUE);
 
         $this->template->content = array(
                                        'html' => $html,
@@ -1523,9 +1630,30 @@ abstract class Controller_Base_Object extends Controller_Layout {
      */
     protected function _view_overview_header($view_name = NULL)
     {
-        //nazev sablony, kterou budu nacitat
+        // nazev sablony, kterou budu nacitat
         empty($view_name) AND $view_name = $this->controller_name.'_overview_header';
         
+        return $this->_load_view($view_name);
+    }
+
+    /**
+     * Returns template with overview header layout - for custom object header and overview submenu.
+     *
+     * @params <String> $viewname V pripade ze je potreba v dedicim objektu
+     * nacist jinou sablonu tak staci jeji nazev predat timto parametrem.
+     * Tento mechanismus slouzi k tomu aby nebylo nutne celou logiku nacitani sablony
+     * re-implementovat vzdy kdyz je potreba nacist sablonu s jinym nazvem.
+     *
+     * @throws MissingObjectSubviewException v pripade ze pozadovanou sablonu
+     * nelze nacist.
+     *
+     * @returns <View>
+     */
+    protected function _view_overview_header_layout($view_name = NULL)
+    {
+        //nazev sablony, kterou budu nacitat
+        empty($view_name) AND $view_name = 'overview_header_layout_standard';
+
         return $this->_load_view($view_name);
     }
 
@@ -1674,5 +1802,49 @@ abstract class Controller_Base_Object extends Controller_Layout {
             default:
                 return parent::__call($name, $arguments);
         }
+    }
+
+    /**
+     * Processes data export Ajax requests (see DataExport module for more info)
+     */
+    public function action_table_data_export()
+    {
+        //kontrola opravneni uzivatele na konkretni akci tohoto kontroleru
+        if ( ! $this->user->HasPermission($this->object_name, 'table_data_export'))
+        {
+            return $this->runUnauthorizedAccessEvent();
+        }
+
+        $table_config_group  = $this->request->param('table_config');
+        $export_config_group = $this->request->param('export_config');
+
+        $table_config  = kohana::config($table_config_group);
+        $export_config = kohana::config($export_config_group);
+
+        try{
+            //vytvori instanci tridy, ktera zajistuje logiku filtrovani
+            $filter_instance = $this->loadAndInitFilterClassInstance($table_config);
+
+            //Vraci ORM_Iterator predstavici vysledky vyhledavani
+            list($results, $filter_state_id, $filter_state_stat) = $filter_instance->getResults(FALSE);
+
+            $export_filename = DataExport::Factory($export_config, $results, $filter_instance->getFilterParams())
+                ->generateExport()
+                ->getFilePath();
+
+            $response = array(
+                'f' => URL::site(str_replace(DIRECTORY_SEPARATOR, '/', $export_filename)),
+            );
+        }
+        catch (Exception $e)
+        {
+            kohana::$log->add(KOHANA::ERROR, $e->getMessage());
+
+            $response = array(
+                'e' => __('object.data_export.server_side_error')
+            );
+        }
+
+        die(json_encode($response,  JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP));
     }
 }

@@ -106,8 +106,8 @@
 
                     //dale si vlozim input pro fulltextove vyhledavani
                     //vlozim do containeru pro filtr
-                    $fulltext_input_container = $( document.createElement('div') )
-                                                    .addClass('odp-fulltext-input-container')
+                    var $fulltext_input_container = $( document.createElement('div') )
+                                                    .addClass('odp-fulltext-input-container input-append')
                                                     .appendTo($filter_container);
 
 
@@ -120,17 +120,17 @@
                                                 }
                                             }).addClass('odp-fulltext-input')
                                             .appendTo($fulltext_input_container);
-                                            
 
                     //vytvorim si tlacitko pro vymazani obsahu filtru
                     //a nabnduju click udalost
-                    $clear_input_button = $( document.createElement('span') ).addClass('odp-fulltext-input-clear-button')
-                                                                             .html('x')
-                                                                             .click(function(){
-                                                                                    $fulltext_input.val('').focus();
-                                                                                    methods._removeTag( $this, true );
-                                                                             })
-                                                                             .appendTo($filter_container);
+                    var $clear_input_button = $( document.createElement('input')).attr('type', 'button').addClass('odp-fulltext-input-clear-button btn')
+                        .val('x')
+                        .click(function() {
+                            $fulltext_input.val('').focus();
+                            methods._removeTag( $this, true );
+                        })
+                        .appendTo($fulltext_input_container);
+
                                                                              
                     //filter_container bude obshovat minimalne fulltextovy filtry
                     filter_container_empty = false;
@@ -141,14 +141,14 @@
                 if ( ! filter_container_empty ) {
 
                     //vytvorim si input
-                    $submit_input = $( document.createElement('button') )
+                    var $submit_input = $( document.createElement('button') )
                                                .attr('type', 'submit')
                                                .html('<?= __('object_data_panel.search');?>')
-                                               .addClass('odp-submit-input button blue')
+                                               .addClass('odp-submit-input button btn btn-primary')
                                                .click(function(){
                                                    //poslu pozadavek na hledani dat spolesne s parametry
                                                    methods._sendQuery( $this );
-                                                   
+
                                                })
                                                .appendTo($filter_container);
                 }
@@ -188,8 +188,8 @@
                 if (typeof settings.newUrl !== 'undefined')
                 {
                     //vytvori tlacitko pro pridani noveho zaznamu
-                    $add_new_button = $( document.createElement('button') ).html(settings['newButtonLabel'])
-                                                                           .addClass('button red')
+                    var $add_new_button = $( document.createElement('button') ).html(settings['newButtonLabel'])
+                                                                           .addClass('button btn btn-success add_button')
                                                                            .appendTo($filter_container);
 
                     //otevreni a nacteni obsahu dialogu
@@ -736,7 +736,6 @@
             //moznost editace, pres Ajax-loaded formularu v dialogovem okne
             $data_container.find('.edit_ajax[href]').each(function(){
                 $(this).click(function(){
-
                     var settings = methods._getData($_this, 'settings');
                     var $clicked_item = $(this);
                     if (typeof settings['onEditAjaxClick'] === 'function') {

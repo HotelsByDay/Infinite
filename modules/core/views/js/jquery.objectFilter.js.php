@@ -37,6 +37,7 @@
      * Defaultni hodnoty pro parametry a nastaveni pluginu
      */
     var default_settings = {
+        initial_ajax_enabled: 1
     };
 
     /**
@@ -64,14 +65,16 @@
                 var default_params = $.extend(default_params, methods._getCurrentFilterParams($_this));
 
                 //vytvorim instanci objektu s nastavenim pro tuto instanci pluginu
-                var settings = {
-                    newUserExportFormUrl:  options['newUserExportFormUrl'] || default_settings['newUserExportFormUrl'],
-                    newFilterStateFormUrl: options['newFilterStateFormUrl'] || default_settings['newFilterStateFormUrl'],
-                    updateFilterStateUrl:  options['updateFilterStateUrl']  || default_settings['updateFilterStateUrl'],
-                    removeFilterStateUrl:  options['removeFilterStateUrl']  || default_settings['removeFilterStateUrl'],
-                    after_initDataContent: options['after_initDataContent'] || default_settings['after_initDataContent'],
-                    userExportUrl:         options['userExportUrl']         || default_settings['userExportUrl']
-                };
+//                var settings = {
+//                    newUserExportFormUrl:  options['newUserExportFormUrl'] || default_settings['newUserExportFormUrl'],
+//                    newFilterStateFormUrl: options['newFilterStateFormUrl'] || default_settings['newFilterStateFormUrl'],
+//                    updateFilterStateUrl:  options['updateFilterStateUrl']  || default_settings['updateFilterStateUrl'],
+//                    removeFilterStateUrl:  options['removeFilterStateUrl']  || default_settings['removeFilterStateUrl'],
+//                    after_initDataContent: options['after_initDataContent'] || default_settings['after_initDataContent'],
+//                    userExportUrl:         options['userExportUrl']         || default_settings['userExportUrl']
+//                };
+
+                var settings = $.extend(true, default_settings, options );
 
                 //ulozim si aktualni nastaveni pluginu
                 methods._setData( $_this , {
@@ -160,11 +163,17 @@
                 }
                 
                 //potrebuji odchytit kliknuti na tlacitko 'vyhledat'
-                $(".submit_filter", $_this).click(function(e){
-
+                $(".submit_filter", $_this).click(function(e) {
+                    // Ignorujeme kliknuti na selecty - o ty se postara change handler
+                    if ($(this).is('select')) return;
                     //metoda zorbazi progress indicator a odesle pozadavek na nactenidat
                     methods._setState( $_this, methods._getCurrentFilterParams($_this) );
 
+                    return false;
+                });
+                $("select.submit_filter", $_this).change(function(e){
+                    //metoda zorbazi progress indicator a odesle pozadavek na nactenidat
+                    methods._setState( $_this, methods._getCurrentFilterParams($_this) );
                     return false;
                 });
 
@@ -173,7 +182,7 @@
                 //s naseptavacem protoze tam se hodnota uklada v data() a je
                 //potreba aby po resetovani se vyvolala change udalost, coz by
                 //zajistilo ze se vymazou i data().
-                $(".reset_filter", $_this).click(function(){
+                $(".reset_filter", $_this).click(function() {
                     //volam primo na JavaScript DOM element
 
                     //formular vycistim
@@ -208,6 +217,7 @@
                     width:400,
                     height:300,
                     draggable:true,
+                    modal:true,
                     resizable:false,
                     position:'center'
                 });
@@ -324,7 +334,9 @@
                     }
                  });
 
-                 $(window).trigger('hashchange');
+                 if (settings.initial_ajax_enabled) {
+                     $(window).trigger('hashchange');
+                 }
 
             });
         },
@@ -344,12 +356,17 @@
 
                 var selected = methods._getSelectedItems();
 
+                var $link = $(this);
+
                 //pokud nejsou vybrane zadne nabidky, tak uzivatele upozornim
                 //na to ze musi nejake nabidky vybrat
                 if (selected == '') {
-                    //zobrazim zpravu - bude automaticky skryta za 60s
-                    methods._showMessage($_this, "<?= __('filter.no_items_selected');?>", 60000);
-                    return false;
+                    // Pokud akci lze volat pouze nad zvolenymi zaznamy, oznamime uzivateli ze nejake musi vybrat
+                    if ($link.attr('need_selection')) {
+                        //zobrazim zpravu - bude automaticky skryta za 60s
+                        methods._showMessage($_this, "<?= __('filter.no_items_selected');?>", 60000);
+                        return false;
+                    }
                 }
 
                 //nazev akce, kterou budu vyvolavat
@@ -904,6 +921,8 @@
                                                 request_params: params
                                             });
 
+                                            $_this.trigger('tableDataReplaced');
+
                                         },
                                         error: function( jqXHR, textStatus, errorThrown ) {
 
@@ -1000,7 +1019,18 @@
                 //url pro nacteni editacniho formulare
                 var edit_url = $(this).attr('href');
 
-                $dialog._dialog('loadForm',edit_url, {}, function(response){
+                var $clicked_item = $(this);
+                var options = {};
+                var width = $clicked_item.attr('data-dialog-width');
+                var height = $clicked_item.attr('data-dialog-height');
+                if (typeof width != 'undefined' && width) {
+                    $dialog._dialog('option', 'width', width);
+                }
+                if (typeof height != 'undefined' && height) {
+                    $dialog._dialog('option', 'height', height);
+                }
+                // @todo - tady je problem s predanim options
+                $dialog._dialog('loadForm',edit_url, {}, function(response) {
                     if (response['action_status'] == '<?= AppForm::ACTION_RESULT_SUCCESS;?>') {
                         //zavru dialogove okno
                         $dialog._dialog('close');
@@ -1021,16 +1051,41 @@
                 var confirm_message = $(this).attr('confirm');
 
                 if (typeof confirm_message === 'string') {
-                    var $item_parent = $(this).parents('.item:first').addClass('to_be_actioned');
+                    var $item_parent = $(this).parents('.item:first').addClass('to_be_actioned to_be_actioned-'+action_name);
                     if ($.confirm(confirm_message)) {
                         methods._requestAction($_this, action_name, $(this).attr('item_id'));
                         return false;
                     }
-                    $item_parent.removeClass('to_be_actioned');
+                    $item_parent.removeClass('to_be_actioned to_be_actioned-'+action_name);
                 } else {
                     methods._requestAction($_this, action_name, $(this).attr('item_id'));
                 }
 
+                return false;
+            });
+
+            $data_container.find('.btn-table-export[href]').click(function(){
+                var $btn = $(this).addClass('btn-loading');
+                var current_filter_params = $_this.objectFilter('_getCurrentFilterParams', $_this);
+                $.ajax({
+                    url: $(this).attr('href'),
+                    type: 'POST',
+                    data: current_filter_params,
+                    dataType:'json',
+                    success: function(data){
+                        $btn.removeClass('btn-loading');
+                        if (typeof data === 'object' && data != null  && typeof data['f'] !== 'undefined') {
+                            window.location.href = data['f'];
+                        } else {
+                            alert(typeof data !== 'object' || data == null || typeof data['e'] === 'undefined'
+                                    ? "<?= __('object.data_export.error');?>"
+                                    : data['e']);
+                        }
+                    },
+                    error: function(){
+                        alert("<?= __('object.data_export.error');?>");
+                    }
+                });
                 return false;
             });
 

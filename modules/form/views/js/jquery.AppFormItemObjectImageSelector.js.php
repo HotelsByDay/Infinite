@@ -20,7 +20,7 @@
              * Defaultni hodnoty pro parametry a nastaveni pluginu
              */
             var settings = {
-                
+                image_edit_url: false
             };
             //Pokud prislo nastaveni, tak mergnu s defaultnimi hodnotami
             $.extend( settings, options );
@@ -45,7 +45,11 @@
                 var $images_list = $("input[name*='[images_list]']", $this);
 
                 // Skryty div s ID aktualne zvoleneho obrazku
-                var $selected_image = $("input[name*='[id]']")
+                var $selected_image = $("input[name*='[id]']");
+
+                var $manage_link = $this.find('a.manage_images');
+
+                var $rel_id = $this.find('input[name*="[rel_id]"]');
 
 
                 /**
@@ -121,6 +125,38 @@
                 }
 
 
+                $manage_link.click(function(){
+                    var url = $(this).attr('href');
+                    url = url.replace('_ID', $this.find('input[name*="[rel_id]"]').val());
+                    var $dialog = $( document.createElement('div') ).addClass('obd-dialog_object')
+                        .appendTo($('body'));
+
+                    //defaultni parametry dialogu
+                    var dialog_options = {
+                        modal:true,
+                        draggable:true,
+                        autoOpen: false
+                    };
+
+                    //vezmu defaultni nastaveni dialogu z argumentu metody
+                    var dialog_options = $.extend(dialog_options, settings['dialog']);
+
+                    //inicializace jQuery dialogu
+                    $dialog._dialog(dialog_options);
+
+                    $dialog._dialog('loadForm', url, {}, function(response) {
+                        if (response['action_status'] == '<?= AppForm::ACTION_RESULT_SUCCESS;?>') {
+                            if (typeof (response.extra) != 'undefined' && typeof (response.extra.images_list) != 'undefined') {
+                                $images_list.val(response.extra.images_list);
+                                loadImagesFromInput();
+                            }
+                            $dialog._dialog('close');
+                        }
+                    });
+                    return false;
+                });
+
+
                 // po zmene hodnoty v hidden inputu se seznamem obrazku se obrazky nactou podle nej
                 $images_list.on('change', loadImagesFromInput);
 
@@ -136,6 +172,17 @@
 
                 // Pokud je v inputu id zvoleneho obrazku - aktivujeme ho
                 $("div[image_id='" + $selected_image.val() + "']", $images_placeholder).addClass('selected');
+
+                var relObjectChanged = function(){
+                    if ($rel_id.val()) {
+                        $manage_link.show();
+                    } else {
+                        $manage_link.hide();
+                    }
+                }
+                // Show/hide manage link if rel object is / is not selected
+                $rel_id.change(relObjectChanged);
+                relObjectChanged();
 
 
             });

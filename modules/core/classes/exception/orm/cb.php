@@ -66,7 +66,7 @@ class ORM_CB extends Kohana_ORM {
         $results = $this->find_all();
         $codebook = array();
         foreach ($results as $result) {
-            $codebook[$result->key] = $result->pk();
+            $codebook[$result->code] = $result->pk();
         }
         return $codebook;
     }

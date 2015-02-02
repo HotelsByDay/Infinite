@@ -84,6 +84,21 @@ class AppFormItem_Base
     }
 
     /**
+     * Reads value from item's config - if value is a lambda function then it's called with
+     * AppForm as a parameter and it's result is returned as desired config value.
+     * @param $config_key
+     * @param null $default
+     */
+    protected function getConfigValue($config_key, $default=NULL)
+    {
+        $value = arr::get($this->config, $config_key, $default);
+        if (is_callable($value)) {
+            $value = call_user_func($value, $this->form);
+        }
+        return $value;
+    }
+
+    /**
      * Metoda slouzici pro inicializaci objektu, predevsim v odvozenych tridach.
      * Resi se v ni predevsim pripojovani JS souboru, uprava configu atp.
      * Abychom nemuseli pretezovat konstruktor, ktery ma mnoho parametru, pretizime
@@ -162,6 +177,10 @@ class AppFormItem_Base
     {
         if ( ! $this->virtual)
         {
+            // If item is nullable then convert empty values to NULL
+            if (arr::get($this->config, 'nullable', false) and empty($value)) {
+                $value = NULL;
+            }
             $this->model->{$this->attr} = $value;
         }
         else
@@ -215,7 +234,7 @@ class AppFormItem_Base
                 && $this->virtual               //prvek je virtualni
                 && ! Validate::not_empty($this->virtual_value)) //a nesplnil kontrolu
         {
-            return __($this->model->table_name().'.'.$this->attr.'.validation.required');
+            return ___($this->model->table_name().'.'.$this->attr.'.validation.required', 'validation_error.required');
         }
 
         //validace se provadi pouze virtualnich prvku
@@ -352,20 +371,21 @@ class AppFormItem_Base
             $label = FormItem::getLabel($this->model->table_name(), $this->attr);
         }
 
+        $css = arr::get($this->config, 'css', '');
+
         // pokud je prvek required, tak se automaticky prida znacka k labelu
-        if (((arr::get($this->config, 'required')
-                // nektere prvky pouzivaji spcialne tento atribut aby se vyhly standardnimu zpracovani
-                // a mohli udelat svoje custom (napr. AppFormItemFile)
-                // @TODO: Tohle by asi slo vyresit lepe, ale neni na to ted cas (31.1.2012)
-                || arr::get($this->config, '_required'))
-                || $this->model->IsRequired($this->attr)) && ! $this->form->is_readonly())
+        if ($this->isRequired() or arr::get($this->config, 'force_required_symbol'))
         {
             //required znacka '*' nemusi byt vzdy zobrazena
             if (arr::get($this->config, 'display_required_symbol', TRUE))
             {
-                $label .= '<span class="required_label">*</span>';
+                $css .= ' required';
             }
         }
+
+        // Always put required symbol to the label - it will be hidden in css for non-required items
+        // - this approach allows to easily show
+        $label .= '<span class="required_label"></span>';
 
         $view->label = $label;
 
@@ -373,7 +393,7 @@ class AppFormItem_Base
         $view->value = $this->getValue();
 
         // pokud ma mit prvek specialni css classu, tak ji predam sablone
-        $view->css = arr::get($this->config, 'css', '');
+        $view->css = $css;
 
         // do sablony bude vlozena textova napoveda k prvku, ktera muze byt
         // definovana v konfiguracnim souboru
@@ -414,6 +434,19 @@ class AppFormItem_Base
 
         //vracim inicializovanou sablonu
         return $view;
+    }
+
+    /**
+     * @return bool - true if the field is required in current form
+     */
+    public function isRequired()
+    {
+        return (((arr::get($this->config, 'required')
+                // nektere prvky pouzivaji spcialne tento atribut aby se vyhly standardnimu zpracovani
+                // a mohli udelat svoje custom (napr. AppFormItemFile)
+                // @TODO: Tohle by asi slo vyresit lepe, ale neni na to ted cas (31.1.2012)
+                || arr::get($this->config, '_required'))
+            || $this->model->IsRequired($this->attr)) && ! $this->form->is_readonly());
     }
 
     /**

@@ -1,4 +1,4 @@
-<table class="comment_panel">
+<table class="comment_panel table">
     <tbody>
         <?php foreach ($results as $i => $row):?>
         <tr>

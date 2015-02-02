@@ -28,7 +28,7 @@
             <a class="btn danger" href="<?php echo URL::site("logs/delete/$active_month/$active_report") ?>" onclick="return confirm('Are you sure to delete?')">delete this file</a>
         </form>
     </div>
-    <table class="zebra-striped" width="100%">
+    <table class="zebra-striped table" width="100%">
         <?php if($mode != 'raw'): ?>
         <thead>
             <tr>

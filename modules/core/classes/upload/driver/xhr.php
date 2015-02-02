@@ -36,7 +36,7 @@ class Upload_Driver_Xhr {
      */
     function getName()
     {
-        return text::webalize($_GET['file'], '.');
+        return text::webalize($_GET['file'], '.A-Z+_', false);
     }
 
     /**

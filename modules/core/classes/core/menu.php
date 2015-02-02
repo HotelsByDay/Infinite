@@ -12,8 +12,7 @@
 class Core_Menu {
     
     // Konstanty pro specialni polozky menu
-    
-    
+
     // (!) Specialni typy lze pouzit pouze v 1. urovni menu (!)
     // Specialni typ polozky - odkaz DOMU
     const ITEM_TYPE_HOME = 1;
@@ -40,17 +39,24 @@ class Core_Menu {
     
     // Oddelovac nazvu urovni v menu
     protected $label_separator = '&nbsp;-&nbsp;';
-    
-    // Atributy nacitane v konstruktoru
-    protected $current_action = NULL;
-    
-    protected $current_controller = NULL;
+
     
     
     // Do techto atributu se postupne nageneruje menu a subnavigation 
     protected $main_menu = '';
     protected $subnavigation = '';
-    
+
+    // Current controller and action in URL - for permission controls
+    protected $controller = NULL;
+    protected $action = NULL;
+
+    // Controller - implies which menu item should be highlighted
+    protected $nav_controller = NULL;
+
+    // Subnav controller and action - implies which subnavigation item should be highlighted
+    protected $subnav_action = NULL;
+    protected $subnav_controller = NULL;
+
     
     // Neco jako globalni promenna pro ulozeni hloubky zanoreni pri generovani
     // submenu pomoci nepřímé rekurze - nevim jestli bude potřeba
@@ -76,7 +82,7 @@ class Core_Menu {
         
         // + array nam zajisti ze prava strana vyrazu bude vzdy pole s alespon jednim prvkem
         list($controller) = explode('/', $link) + array(NULL);
-        return ($controller == $this->controller);
+        return ($controller == $this->nav_controller);
     }
 
 
@@ -101,7 +107,7 @@ class Core_Menu {
         
         // + array(null, null) zajisti ze prava strana vzdy bude pole s alespon dvema prvky
         list($controller, $action) = explode('/', $link) + array(NULL, NULL);
-        return ($controller == $this->controller and $action == $this->action);
+        return ($controller == $this->subnav_controller and $action == $this->subnav_action);
     }
     
     
@@ -159,7 +165,7 @@ class Core_Menu {
     {
         return '<div id="nav">
                     <div id="nav-in">
-                        <ul id="menu">
+                        <ul id="menu"  class="nav nav-tabs">
                             '.$main_menu.'
                         </ul>
                         <br class="clear">
@@ -174,7 +180,7 @@ class Core_Menu {
     {
         // Tim ze umoznime volat wrap s prazdnym submenu zjednodusime kod v neprehlednych castech tridy
         if (empty($submenu)) return '';
-        return '<ul>
+        return '<ul class="dropdown-menu">
                     '.$submenu.'
                 </ul>';
     }
@@ -185,13 +191,11 @@ class Core_Menu {
     {
         if (empty($subnavigation)) return '';
         return '<div id="sub-nav">
-                    <div id="sub-nav-in">
-                        <ul>
+        <ul class="nav nav-pills">
                             '.$subnavigation.'
-                        </ul>
-                        <br class="clear">
-                    </div><!-- sub-nav-in -->
-                </div><!-- sub-nav -->';
+          </ul>
+                </div><!-- sub-nav -->
+                ';
     }
     
     
@@ -199,10 +203,7 @@ class Core_Menu {
     protected function wrapSubNavigationNew($content)
     {
          // Ten pristup do jazykoveho soubrou nemusi vzdy fungovavt (!)
-         return '<span class="label">'.__('object.add_new').'</span>
-                 <ul>
-                '.$content.'
-                 </ul>';
+         return $content;
     }
  
 // Konec wraperu ==========================================================================
@@ -247,17 +248,33 @@ class Core_Menu {
 
                 if ( ! empty($active_submenu_item))
                 {
-                    return '<a href="#" class="active_submenu">'.$label.$this->label_separator.'<span class="active">'.arr::get($active_submenu_item, 'label').'</span></a>';
+                    return '<a href="#" class="active_submenu dropdown-toggle" data-toggle="dropdown">'.$label.$this->label_separator.'<span class="active">'.arr::get($active_submenu_item, 'label').'</span><b class="caret"></b></a>';
                 }
                 else
                 {
-                    return '<a href="#">'.$label.'</a>';
+                    return '<a href="#" class="dropdown-toggle" data-toggle="dropdown">'.$label.'<b class="caret"></b></a>';
                 }
                 
             break;
             
             default:
-                return $label;
+
+                if (arr::get($item, 'submenu'))
+                {
+                    if ( ! empty($active_submenu_item))
+                    {
+                        return '<a href="#" class="active_submenu dropdown-toggle" data-toggle="dropdown">'.$label.$this->label_separator.'<span class="active">'.arr::get($active_submenu_item, 'label').'</span><b class="caret"></b></a>';
+                    }
+                    else
+                    {
+                        return '<a href="#" class="dropdown-toggle" data-toggle="dropdown">'.$label.'<b class="caret"></b></a>';
+                    }
+                }
+                else
+                {
+                    return $label;
+                }
+
         }
     }
     
@@ -358,7 +375,7 @@ class Core_Menu {
         // protoze prvky budou float:right tak pole reversuju - v konfiguraku
         // jsou definovane z leva do prava, tak jako leva cast menu
         $right_menu = array_reverse(arr::get($this->config, 'items_right', Array()));
-        $this->createMenu($right_menu, array('right'));
+        $this->createMenu($right_menu, array('pull-right'));
         
         // Predani argumentu neni nutne - zustavame v kontextu objektu
         // ale myslim se pro pretezovani to bude takhle jasnejsi
@@ -390,7 +407,6 @@ class Core_Menu {
     {
         // Kontrola opravneni
         if ( ! $this->hasAccess($menu_item, true)){
-            
             return;
         };
         
@@ -451,11 +467,11 @@ class Core_Menu {
             $link_classes[] = 'drop';
         }
 
+
         // Pokud je nastaven link
         if (isset($menu_item['link'])) {
-            $content = $this->createLink($menu_item['link'], $label, $link_classes);
+            $content = $this->createLink(arr::get($menu_item, 'link', '#'), $label, $link_classes);
         } else {
-
             // Pokud link neni nastaven, tak se negeneruje odkaz (<a></a>)
             $content = $label;
         }
@@ -480,7 +496,7 @@ class Core_Menu {
             //pokud ma menu polozka submenu, tak dostane speicalni css tridu
             if ( ! empty($submenu))
             {
-                $classes[] = 'has_submenu';
+                $classes[] = 'has_submenu dropdown';
             }
 
             // At je submenu prazdne nebo ne, muzeme ho pridat za odkaz
@@ -594,10 +610,8 @@ class Core_Menu {
                 // Pokud je polozka aktivni, pridame tridu a obsahem nebude odkaz, ale jen text
                 if ($this->subNavigationActive(arr::get($item, 'link', NULL))) {
                     $classes[] = $this->active_class_name;
-                    $content = $label;
-                } else {
-                    $content = isset($item['link']) ? $this->createLink($item['link'], $label) : $label;
                 }
+                $content = isset($item['link']) ? $this->createLink($item['link'], $label) : $label;
                 $this->subnavigation .= $this->createItem($content, $classes, arr::get($item, 'id', ''));
             }
         }
@@ -625,9 +639,15 @@ class Core_Menu {
                         // wrapSubmenu se nemuse volat primo v createSubmenu, kvuli rekurzi
                         $content .= $this->wrapSubmenu($this->createSubmenu($item['submenu']));
                     }
+
+                    $classes = $this->getItemClasses($item);
+                    // Pokud je polozka aktivni, pridame tridu a obsahem nebude odkaz, ale jen text
+                    if ($this->subNavigationActive(arr::get($item, 'link', NULL))) {
+                        $classes[] = $this->active_class_name;
+                    }
                     $subnavigation_new .= $this->createItem(
                                 $content,
-                                $this->getItemClasses($item),
+                                $classes,
                                 arr::get($item, 'id', '')
                             );
                 }
@@ -675,12 +695,16 @@ class Core_Menu {
      */
     protected function createLink($href, $content, $classes=Array())
     {
+        $attr = '';
         // Pokud jsou tridy predane jako pole, prevedeme na retezec
-        if (is_array($classes)) $classes = implode(' ', $classes);
-        
-        // At vysledek neobsahuje zbytecne class=""
-        $attr = empty($classes) ? '' : ' class="'.$classes.'"';
-        
+        if (is_array($classes)) {
+            if (in_array('drop', $classes)) {
+                $attr .= ' data-toggle="dropdown"';
+            }
+            $classes = implode(' ', $classes);
+            $attr .= ' class="'.$classes.'"';
+        }
+
         // Vratime odkaz
         return '<a href="'.$href.'"'.$attr.'>'.$content.'</a>';
     }
@@ -697,6 +721,7 @@ class Core_Menu {
         $classes = arr::get($item, 'css', array());
         // Pokud se precetl strin, prevedeme na pole
         if (is_string($classes)) $classes = explode(' ', $classes);
+
         // Vratime vysledne pole css trid
         return $classes;
     }
@@ -709,13 +734,36 @@ class Core_Menu {
         empty($instance) and $instance = new Menu();
         return $instance;
     }
-    
+
+
+    /**
+     * Manually sets the controller name to change active main menu item
+     * @param $ctrl
+     * @return $this
+     */
+    public function setActiveMenu($controller)
+    {
+        $this->nav_controller = $controller;
+        return $this;
+    }
+
+    /**
+     * Manually sets the action name to change active menu item
+     * @param $action
+     * @return $this
+     */
+    public function setActiveMenuItem($controller, $action)
+    {
+        $this->subnav_action = $action;
+        $this->subnav_controller = $controller;
+        return $this;
+    }
+
     protected function __construct()
     {        
         // Nacteni aktualniho controlleru a akce z Request tridy
-        $this->controller = Request::instance()->controller;
-        $this->action = Request::instance()->action;
-       
+        $this->controller = $this->nav_controller = $this->subnav_controller = Request::instance()->controller;
+        $this->action = $this->subnav_action = Request::instance()->action;
     }
     
     private function __clone() {}    

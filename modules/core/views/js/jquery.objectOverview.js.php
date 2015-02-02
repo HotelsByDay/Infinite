@@ -33,7 +33,8 @@
     var settings = {
         submenu_item_selector: '.overview_submenu .submenu_item',
         subcontent_selector: '.overview_subcontent',
-        use_hash: true
+        use_hash: true,
+        overview_header_refresh_url: ''
     };
 
     /**
@@ -43,7 +44,7 @@
 
         init: function( options ) {
 
-            this.each(function(){
+            this.each(function() {
 
                 var $_this = $(this);
 
@@ -56,10 +57,19 @@
 
                 //budu odchytavat kliknuti na polozky submenu
                 $(settings.submenu_item_selector, $_this).click(function(e) {
-
                     methods._activateSubmenuItem( $_this, $(this) );
 
                     return false;
+                });
+
+                // On overview_header_refresh event reload overview header
+                $_this.on('overview_header_refresh', function() {
+                    // Keep active item active
+                    var active_item_id = $_this.find('.overview_submenu li.active a.submenu_item').attr('id');
+                    $_this.find('.overview_header').load(settings.overview_header_refresh_url, function(){
+                        $_this.find('#' + active_item_id).parents('li:first').addClass('active');
+                    });
+
                 });
 
                 //na overview strance ocekavam nektere standardni prvky:
