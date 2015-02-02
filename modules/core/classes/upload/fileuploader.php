@@ -88,7 +88,7 @@ class Upload_FileUploader
         //z nazvu souboru chci odstranit vsechny znaky, ktere by mohli delat problemy
         //v URL nebo na disku
         $file_name =
-        $orig_file_name = text::webalize($path_info['filename']);
+        $orig_file_name = text::webalize($path_info['filename'], 'A-Z+_', false);
 
         //pripona souboru
         $file_ext  = $path_info['extension'];
