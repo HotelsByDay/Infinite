@@ -153,19 +153,19 @@ $.widget("ui._dialog", $.ui.dialog, {
         var options                = typeof arg1 !== 'undefined' ? arg1 : undefined;
         var action_result_callback = typeof arg2 === 'function'  ? arg2 : undefined;
 
-        //otevru dialog
-        this.open();
         //zablokovani UI
         this.blockUI();
         //zpristupneni uvnitr callbacku ve funkci getJSON
         var _this = this;
+
+        //otevru dialog
+        _this.open();
         //nacteni obsahu
         $._ajax({
             type:'POST',
             url:url,
             data: options,
             success: function(response){
-
                 //na klici 'preview' ocekavam retezec pro title dialogu
                 if (typeof response['headline'] !== 'undefined')
                 {
@@ -207,7 +207,7 @@ $(document).ready(function(){
 
         var $dialog = $( document.createElement('div') )
             .addClass('popupform_dialog')
-//            .hide()
+            .hide()
             .appendTo('body');
 
         //inicializace dialogoveho okna
