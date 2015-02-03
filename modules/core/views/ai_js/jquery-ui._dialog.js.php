@@ -94,7 +94,7 @@ $.widget("ui._dialog", $.ui.dialog, {
                                 }
 
                                 // dialogove okno zavru - pokud callback jeho zavreni nezakazal
-                                if (typeof callbackResult.autoClose === 'undefined' || callbackResult.autoClose != false) {
+                                if (typeof callbackResult !== 'undefined' && (typeof callbackResult.autoClose === 'undefined' || callbackResult.autoClose != false)) {
                                     _this.close();
                                 }
 
@@ -108,30 +108,6 @@ $.widget("ui._dialog", $.ui.dialog, {
 
                         //odblokuju UI
                         _this.unblockUI();
-
-
-                        /*else {
-
-                            //uzivateli bude zobrazena chybova zprava
-                            $.userDialogMessage(response['action_result'], [
-                                {
-                                    text: "<? __('jquery-ui._dialog.message_window_ok_button_label');?>",
-                                    click: function(){
-                                        //zavru dialog
-                                        $(this).dialog('close');
-
-                                        //vyvolam callback pokud je definovan
-                                        if (typeof action_result_callback !== 'undefined')
-                                        {
-                                            action_result_callback(response);
-                                        }
-
-                                        //odblokuju UI
-                                        _this.unblockUI();
-                                    }
-                                }
-                            ]);
-                        }*/
 
                     } else {
 
@@ -221,4 +197,46 @@ $.widget("ui._dialog", $.ui.dialog, {
             dataType: 'json'
         });
     }
+});
+
+$(document).ready(function(){
+
+    // Dialogovy formular kdekoli v kodu
+    $(document).on('click', '.popupform', function() {
+
+        var $dialog = $( document.createElement('div') )
+//            .hide()
+            .appendTo('body');
+
+        //inicializace dialogoveho okna
+        $dialog._dialog({
+            modal:true,
+            autoResize: true,
+            width: 'auto',
+            height: 'auto',
+            position: 'center',
+            resizable: false,
+            draggable:true,
+            closeOnEscape:true,
+            close: function () {
+                $(this).dialog('destroy').empty();
+                $dialog.remove();
+            }
+        });
+
+        //url pro nacteni editacniho formulare
+        var edit_url = $(this).attr('href');
+        var $clicked_item = $(this);
+
+
+        $dialog._dialog('loadForm', edit_url, {}, function(response) {
+            if (response['action_status'] == '<?= AppForm::ACTION_RESULT_SUCCESS;?>') {
+                //zavru dialogove okno
+                $dialog._dialog('close');
+                $clicked_item.trigger('dialogSuccess');
+            }
+        });
+
+        return false;
+    });
 });
