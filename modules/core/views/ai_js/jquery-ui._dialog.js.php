@@ -32,6 +32,7 @@ $.widget("ui._dialog", $.ui.dialog, {
         //zavreni formulare
         $content.find('.<?= AppForm::FORM_BUTTON_CLOSE_CSS_CLASS;?>').click(function(){
             _this.close();
+            return false;
         });
 
         //pokud se vyska formulare nastavuje podle obsahu, chci aby dialog zustaval vycentrovany
@@ -205,6 +206,7 @@ $(document).ready(function(){
     $(document).on('click', '.popupform', function() {
 
         var $dialog = $( document.createElement('div') )
+            .addClass('popupform_dialog')
 //            .hide()
             .appendTo('body');
 
@@ -215,7 +217,7 @@ $(document).ready(function(){
             width: 'auto',
             height: 'auto',
             position: 'center',
-            resizable: false,
+            resizable: true,
             draggable:true,
             closeOnEscape:true,
             close: function () {
@@ -238,5 +240,9 @@ $(document).ready(function(){
         });
 
         return false;
+    });
+
+    $(window).resize(function() {
+        $(".popupform_dialog")._dialog("option", "position", "center");
     });
 });
