@@ -306,36 +306,6 @@
                     methods._bindExportControl( $_this , $(".export_control", $_this) );
                 }
 
-                //ve vypsanych datech muzou byt tlacitka pro vyvolani editace v
-                //ajaxem nactenem formulari - ty standardne inicializuji
-                $_this.find(".edit_ajax[href]").click(function(){
-
-                    //url pro nacteni editacniho formulare
-                    var edit_url = $(this).attr('href');
-
-                    var $clicked_item = $(this);
-                    var options = {};
-                    var width = $clicked_item.attr('data-dialog-width');
-                    var height = $clicked_item.attr('data-dialog-height');
-                    if (typeof width != 'undefined' && width) {
-                        $dialog._dialog('option', 'width', width);
-                    }
-                    if (typeof height != 'undefined' && height) {
-                        $dialog._dialog('option', 'height', height);
-                    }
-                    // @todo - tady je problem s predanim options
-                    $dialog._dialog('loadForm',edit_url, {}, function(response) {
-                        if (response['action_status'] == '<?= AppForm::ACTION_RESULT_SUCCESS;?>') {
-                            //zavru dialogove okno
-                            $dialog._dialog('close');
-                            //refresh dat
-                            methods._updateState( $_this );
-                        }
-                    });
-
-                    return false;
-                });
-
                 // Dialogova okna zobrazena odkazem v table containeru mohou emitovat tuto udalost nad svym odkazem
                 $_this.parents('.tableview:first').on('dialogSuccess', function() {
                     $_this.objectFilter('refresh');
