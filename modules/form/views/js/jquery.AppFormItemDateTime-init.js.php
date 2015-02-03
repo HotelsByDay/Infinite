@@ -1,9 +1,8 @@
 
 // <script>
-    
 
-$(document).ready(function(){
-    $("#<?= $uid;?>").AppFormItemDateTime();
+$(document).ready(function() {
+    $("#<?= $uid;?>").AppFormItemDateTime(<?= json_encode($config) ?>);
 });
 
 

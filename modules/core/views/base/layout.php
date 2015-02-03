@@ -14,7 +14,6 @@
     
         <meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0;">
 
-        <link rel="stylesheet" media="handheld" href="<?= url::base();?>css/handheld.css?v=1"/>
         <link href="<?=url::base();?>css/jquery-ui-1.8.7.custom.css" rel="stylesheet" type="text/css" ></link>
         <link rel="stylesheet" href="<?= url::base();?>css/style.css?v=1"/>
         <?= View::factory('base/ga_tracker');?>
@@ -28,9 +27,13 @@
 
 <?= View::factory('noscript');?>
 
+<?php if (isset($flash_message) and ! empty($flash_message)): ?>
+    <div class="hidden" id="hfm"> <?= $flash_message ?></div>
+<?php endif; ?>
+
 <div id="header">
     <div id="header-in">
-        <span style="font-size: 24px;"><?= AppConfig::instance()->get('system_header', 'application');?></span>
+        <span class="logo"><?= AppConfig::instance()->get('system_header', 'application');?></span>
 
         <div class="log-nav">
         <?= $top_navigation;?>
@@ -46,6 +49,7 @@
 
 <div id="content">
     <div id="content-in">
+
         <?=$content;?>
     </div><!-- end .content-in -->
 </div><!-- end .content -->

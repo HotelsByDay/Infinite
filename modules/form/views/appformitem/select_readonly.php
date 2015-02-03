@@ -1,8 +1,10 @@
 <?php if ( ! empty($error_message)): ?>
-<span class="validation_error"><?= $error_message;?></span>
+    <span class="validation_error alert alert-error"><?= $error_message;?></span>
 <?php endif ?>
 
 <div class="appformitemcontainer <?= $css ?>">
-<label for="<?= $attr ?>_id"><?= $label ?></label>
-<span class="value"><?= arr::get($values, $value);?></span>
+    <label for="<?= $attr ?>_id"><?= $label ?></label>
+    <select disabled="disabled">
+        <option value="<?= $value ?>"><?= arr::get($values, $value);?></option>
+    </select>
 </div>

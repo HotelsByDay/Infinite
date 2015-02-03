@@ -10,11 +10,11 @@
  */
 class AppFormItem_String extends AppFormItem_Base
 {
+
     //Nazev sablony pro tento formularovy prvek
     protected $view_name = 'appformitem/string';
 
     /**
-     * 
      */
     public function init()
     {
@@ -56,9 +56,10 @@ class AppFormItem_String extends AppFormItem_Base
             $view->field_prefix = $this->config['field_prefix'];
         }
 
+        $view->input_class = arr::get($this->config, 'input_class', 'input-block-level');
+
         // Vratime $view
         return $view;
     }
-    
-    
+
 }

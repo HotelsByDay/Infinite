@@ -1,0 +1,20 @@
+{
+    "name": "appnostic/infinite",
+    "description": "The best admin engine",
+    "license": "proprietary",
+    "keywords": ["infinite"],
+    "homepage": "https://github.com/Appnostic/Infinite",
+    "authors": [
+        {
+            "name": "Jirka Melichar",
+            "email": "jiri.melichar.cz@gmail.com",
+            "role": "Developer"
+        }
+    ],
+    "type": "kohana-module",
+    "require": {
+        "php": ">=5.3.3",
+	"composer/installers": "dev-master"
+    }
+}
+

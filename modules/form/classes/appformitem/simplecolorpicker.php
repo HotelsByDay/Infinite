@@ -5,11 +5,9 @@
  */
 class AppFormItem_SimpleColorPicker extends AppFormItem_String
 {
+
     //Nazev sablony pro tento formularovy prvek
     protected $view_name = 'appformitem/simplecolorpicker';
-
-
-
 
     /**
      * Inicializace objektu - volano v konstruktoru AppFormItem_Base
@@ -41,6 +39,5 @@ class AppFormItem_SimpleColorPicker extends AppFormItem_String
     {
         return strtoupper(parent::getValue());
     }
-
 
 }

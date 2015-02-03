@@ -1,4 +1,4 @@
-<div class="form_action_result_failed msg info err ">
+<div class="form_action_result_failed info err">
 <span>
     <?= $user_message;?>
     <?php if (isset($error_messages) && ! empty($error_messages)): ?>

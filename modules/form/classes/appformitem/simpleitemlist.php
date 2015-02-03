@@ -4,9 +4,9 @@
  * Tento formularovy prvek slouzi k editaci jednoduchy relacnich zaznamu.
  *
  * Oznaceni jednoduche znamena ze pro editaci relacniho zaznamu se nenacita
- * editacni formular do dialogu, ale ve strance je vlozena sablona, ktera
+ * editacni formular do dialogu, le ve strance je vlozena sablona, ktera
  * obsahuje vstupni pole pro zadani hodnot. Tento prvek je tedy uzivatecny
- * v pripade ze relacni prvek obsahuje maly pocet atributu, napr. Telefonni cislo a
+ * v pripade ze relacni prvek obsahuje maly pocet atributu, naapr. Telefonni cislo a
  * poznamku.
  *
  * Prvek ocekava vstupni data z formulare, ktera si prevede do vnitrni podoby
@@ -14,7 +14,15 @@
  * vytvorni instanci relacniho modelu a tu ulozi do $this->rel_models. Indexy
  * v techto dvou polich si odpovidaji.
  *
- *
+
+ConfigExample:
+    'some_items' => array(
+        'type' => 'SimpleItemList',
+        'model' => 'hotel_contact_person',
+        'item_view_name' => 'form/simple_hotel_contact_person',
+        'add_button_label' => __('hotel_contact_person.add'),
+
+    ),
  */
 class AppFormItem_SimpleItemList extends AppFormItem_Base
 {
@@ -53,8 +61,11 @@ class AppFormItem_SimpleItemList extends AppFormItem_Base
         //inicializacnimu souboru predam sablonu relacniho zaznamu, protoze
         //ji nehci vkladat do sablony prvku - obsahuje totiz inputy, takze by
         //se dostala do formularovych dat. Sablonu generuju nad prazdnym modelem.
+        $new_template = '<div class="simple_list_item">';
+        $new_template .= (string)$this->loadRelModelView($this->config['item_view_name'], ORM::factory($this->rel_model_name));
+        $new_template .= '</div>';
         $params = array(
-            'new_template' => (string)$this->loadRelModelView($this->config['item_view_name'], ORM::factory($this->rel_model_name))
+            'new_template' => $new_template,
         );
 
         //predam parametry sablone
@@ -139,12 +150,12 @@ class AppFormItem_SimpleItemList extends AppFormItem_Base
                 if ( ! $rel_model->check())
                 {
                     //z ORM si vytahnu validacni chyby
-                    $error_messages[$i] = $rel_model->validate()->errors($rel_model->table_name());
+                    $error_messages[$i] = $rel_model->getValidationErrors();
                 }
             }
         }
 
-        return $error_messages;
+        return (empty($error_messages)) ? NULL : array($this->attr => $error_messages);
     }
 
     /**
@@ -158,7 +169,6 @@ class AppFormItem_SimpleItemList extends AppFormItem_Base
         if (empty($this->form_data))
         {
             $this->rel_models = ORM::factory($this->rel_model_name)->where($this->model->primary_key(), '=', $this->model->pk())
-                                                               ->where('deleted', 'IS', DB::Expr('NULL'))
                                                                ->find_all();
 
             $this->form_data = array();
@@ -299,6 +309,7 @@ class AppFormItem_SimpleItemList extends AppFormItem_Base
             'attr'  => $this->attr,
             //defaultni akce
             'action' => 's',
+            'error_message' => NULL,
         );
 
         return View::factory($this->config['item_view_name'], $view_params);
@@ -312,6 +323,8 @@ class AppFormItem_SimpleItemList extends AppFormItem_Base
     public function Render($render_style = NULL, $error_message = NULL)
     {
         $view = parent::Render($render_style, $error_message);
+
+        $error_message = (array)arr::get($error_message, $this->attr, array());
 
         //do sablony vlozim popisek na tlacitko pro pridani noveho zaznamu
         $view->add_button_label = $this->add_button_label;
@@ -348,6 +361,8 @@ class AppFormItem_SimpleItemList extends AppFormItem_Base
         }
         
         $view->rel_items = $rel_items;
+
+        $view->add_enabled = (bool)arr::get($this->config, 'add_enabled', true);
 
         return $view;
     }

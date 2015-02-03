@@ -13,6 +13,8 @@
  */
 class Model_LogAction extends ORM_Authorized {
 
+    protected $_preview = '@text';
+
     /**
      * Nazev DB tabulky nad kterou stoji tento model.
      * @var <string>
@@ -38,6 +40,11 @@ class Model_LogAction extends ORM_Authorized {
     protected $_rel_cb = array(
         'cb_log_action_category'
     );
+
+    public function getPreview()
+    {
+        return $this->text;
+    }
 
     public function __get($column)
     {

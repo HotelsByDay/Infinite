@@ -238,6 +238,9 @@ abstract class Filter_Base
         //provedu mergnuti defaultni konfigurace a explicitne nastavene konfigurace
         $this->config = array_merge($this->default_config, $config);
 
+        // Load default js_config
+        $this->jquery_objectFilter_init_params = (array)arr::get($this->config, 'js_config');
+
         //ulozim si parametry vyhledavani - cleanParams, zaridi trimovani hodnot
         //zkontroluje orderby nastaveni apod.
         $this->filter_params = array_merge(
@@ -384,11 +387,11 @@ abstract class Filter_Base
         //nacist
 
         if ($form_view === NULL) {
-            $form_view = View::factory('filter/'.arr::get($this->config, 'filter_view_name', $this->object_name),
-                                       array(
-                                           'defaults' => $this->filter_params,
-                                       )
-            );
+            $form_view = View::factory('filter/'.arr::get($this->config, 'filter_view_name', $this->object_name));;
+        }
+
+        if ($form_view instanceof View) {
+            $form_view->set('defaults', $this->filter_params);
         }
 
         //pole bude obsahovat defaultni hodnoty pro systemove parametry vyhledavani
@@ -566,7 +569,8 @@ abstract class Filter_Base
      */
     protected function _filter_container_view()
     {
-        return View::factory('filter_container');
+        $filter_container = arr::get($this->config, 'filter_container', 'filter_container');
+        return View::factory($filter_container);
     }
 
     /**
@@ -622,7 +626,7 @@ abstract class Filter_Base
         //vraci celkovy pocet zaznamu co vyhovuji,
         //ukladam do atributu objektu, protoze pri generovani odkazu na strankovani
         //tuto hodnotu pouziju
-        $this->results_total_count = $orm->count_all();
+        $this->results_total_count = $this->countResults($orm);
 
         //pokud uzivatel pozaduje stranku, ktera uz jakoby presahuje pocet nalezenych
         //vysledku tak index stranky upravim tak aby obsahovala posledni nalezeny
@@ -630,9 +634,10 @@ abstract class Filter_Base
         $page_index = $this->getCurrentPageIndex();
         $page_size  = $this->getPageSize();
 
-        if ($page_index * $page_size > $this->results_total_count)
+        if ($page_index * $page_size >= $this->results_total_count)
         {
-            $this->filter_params[self::PAGE_INDEX_KEY] = (int)($this->results_total_count / $page_size);
+            $pi = (int)ceil(($this->results_total_count / $page_size)) - 1;
+            $this->filter_params[self::PAGE_INDEX_KEY] = $pi < 0 ? 0 : $pi;
         }
 
         //pokud existuje FilterState model, ktery byl pouzit pro ziskani parametru
@@ -687,6 +692,11 @@ abstract class Filter_Base
             $filter_state_stats);
     }
 
+    protected function countResults($orm)
+    {
+        return $orm->count_all();
+    }
+
     public function getFilterParams()
     {
         return $this->filter_params;
@@ -720,6 +730,18 @@ abstract class Filter_Base
     abstract protected function applyFilter($orm);
     
     abstract protected function applyFulltextFilter($orm, $query);
+
+    /**
+     * Wrapper pro applyFulltextFilter - ta je protected a my ji potrebujeme volat i z vnejsku
+     * @param $orm
+     * @param $query
+     * @return mixed
+     */
+    public function staticApplyFulltextQuery($orm, $query)
+    {
+        $this->applyFulltextFilter($orm, $query);
+        return $orm;
+    }
 
     /**
      * Metoda provadi aplikaci ODP (Object Data Panel) filtru, ktere jsou definovany
@@ -1214,6 +1236,25 @@ abstract class Filter_Base
         
         return $html;
     }
+
+
+
+    public function view_table_data_container($view_name=NULL)
+    {
+        //nazev sablony, kterou budu nacitat
+        empty($view_name) AND $view_name = arr::get($this->config, 'table_data_container', 'table_data_container');
+
+        return View::factory($view_name);
+    }
+
+    public function view_empty_table_data_container($view_name=NULL)
+    {
+        //nazev sablony, kterou budu nacitat
+        empty($view_name) AND $view_name = 'table_empty_data_container';
+
+        return View::factory($view_name);
+    }
+
 }
 
 ?>

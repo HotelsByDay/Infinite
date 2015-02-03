@@ -24,7 +24,7 @@ class Core_Browser
         $user_agent = arr::get($_SERVER, 'HTTP_USER_AGENT', '');
 
         //prohlizece safara, chrome, firefox a operu podporujeme ve vsech verzich
-        if (preg_match('#applewebkit|safari|chrome|firefox|opera|MSIE 7|MSIE 8|MSIE 9#i', $user_agent) == TRUE)
+        if (preg_match('#applewebkit|BrowserKit|safari|chrome|firefox|opera|MSIE 7|MSIE 8|MSIE 9#i', $user_agent) == TRUE)
         {
             return TRUE;
         }

@@ -56,7 +56,7 @@ class Validate extends Kohana_Validate {
     {
         if ( ! is_array($lengths))
 	{
-            $lengths = array(9, 12);
+            $lengths = array(9, 10, 11, 12, 13, 14, 15, 16);
 	}
 
         //odstrani vsechny bile znaky
@@ -83,7 +83,7 @@ class Validate extends Kohana_Validate {
         if ( ! is_array($lengths))
         {
             //alowed lengths of numbers
-            $lengths = array(7, 9, 10, 11, 12, 14);
+            $lengths = array(11, 12, 13, 14, 15, 16, 17, 18, 19);
 
             //00420 724 763 532 [14]
             //  420 724 763 532 [12]
@@ -96,6 +96,8 @@ class Validate extends Kohana_Validate {
 
         //remove any dashes
         $number = preg_replace('/\-/', '', $number);
+        //remove any brackets
+        $number = preg_replace('/(\(|\))/', '', $number);
 
         //remove any leading '+'
         $number = ltrim($number, '+');
@@ -273,7 +275,15 @@ class Validate extends Kohana_Validate {
 				}
 			}
 
-			if ($message = Kohana::message($file, "{$field}.{$error}") AND is_string($message))
+
+
+            // If custom message is defined in i18n file - use that
+            $custom_message = "$object.validation.{$field}.{$error}";
+            if (__($custom_message) != $custom_message)
+            {
+                $message = $custom_message;
+            }
+			elseif ($message = Kohana::message($file, "{$field}.{$error}") AND is_string($message))
 			{
 				// Found a message for this field and error
 			}
@@ -291,8 +301,10 @@ class Validate extends Kohana_Validate {
 			}
 			else
 			{
-				$message = "$object.validation.{$field}.{$error}";
+				$message = $custom_message;
 			}
+
+
 
 			if ($translate)
 			{

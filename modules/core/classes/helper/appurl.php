@@ -15,6 +15,19 @@ class Helper_Appurl
     //Pokud je pouzitova kodovani parametru pozadavku tak zakodovana data jsou na tomto klici
     const ENCODED_PACK_KEY = 'ed';
 
+
+    /**
+     * @param $object_name
+     * @param $object_id
+     * @param $config_key
+     * @return string
+     */
+    static public function polymorphic_cb_data($object_name, $object_id, $config_key)
+    {
+        return url::site("polymorphicnnselect/cb_data/$object_name/$object_id/$config_key");
+    }
+
+
     /**
      * Vraci odkaz na prihlasovaci stranku.
      * @return <string>
@@ -30,7 +43,11 @@ class Helper_Appurl
      */
     static public function login_action()
     {
-        return url::base().'login';
+        if (defined('DOMAIN_ADMIN') && defined('BASE_URL_ADMIN')) {
+            return DOMAIN_ADMIN . BASE_URL_ADMIN . 'login';
+        } else {
+            return url::base().'login';
+        }
     }
 
     /**
@@ -190,10 +207,8 @@ class Helper_Appurl
      * metodou _view_overview_submenu ciloveho kontroleru.
      * Primo se propisuje do URL.
      */
-    static public function object_overview($controller, $item_id, $return_link = NULL, $subsection = NULL)
+    static public function object_overview($controller, $item_id, $return_link = NULL, $subsection = NULL, array $get_params=array())
     {
-        $get_params = array();
-
         //navratovy odkaz muze byt retezec (jen odkaz) anebo indexovane pole
         //kde na indexu [0] je odkaz a na indexu [1] je popisek
         //typu "Vratit zpet na vypis nabidek" pod kterym bude odkaz zobrazen
@@ -212,9 +227,14 @@ class Helper_Appurl
         return self::object_action($controller, 'overview', $item_id, $get_params, $subsection);
     }
 
-    static public function object_overview_subcontent($controller, $subcontent_name, $item_id)
+    static public function object_overview_subcontent($controller, $subcontent_name, $item_id, array $get_params=array())
     {
-        return self::object_action($controller, 'overview_subcontent', array($subcontent_name, $item_id));
+        return self::object_action($controller, 'overview_subcontent', array($subcontent_name, $item_id), $get_params);
+    }
+
+    static public function object_overview_header($controller, $item_id)
+    {
+        return self::object_action($controller, 'overview_header', $item_id);
     }
 
     static public function object_change_attr($controller, $item_id)
@@ -383,11 +403,11 @@ class Helper_Appurl
      * @param <array> $parameters Parametry pozadavku
      * @return <string>
      */
-    static public function object_table($controller, $parameters = NULL)
+    static public function object_table($controller, $parameters = NULL, $get_parameters=NULL)
     {
         $url_hash = http_build_query((array)$parameters);
         
-        return self::object_action($controller, 'table', NULL, NULL, $url_hash);
+        return self::object_action($controller, 'table', NULL, $get_parameters, $url_hash);
     }
 
     /**
@@ -496,25 +516,9 @@ class Helper_Appurl
      */
     static public function object_file($file, $resize_variant = NULL, $absolute_url = FALSE)
     {
-        if ( ! $file->IsTempFile() && ! empty($resize_variant))
-        {
-            $resize_variant .= '-';
-        }
-        else
-        {
-            $resize_variant = NULL;
-        }
-        
-        $filepath = str_replace(DIRECTORY_SEPARATOR,'/',$file->getFileDiskName());
-        $filename = basename($filepath);
-        $filedir  = dirname($filepath);
-
-        //nazev domeny - pro absolutni URL
-        $domain = AppConfig::instance()->get('domain', 'application');
-
-        return ($absolute_url ? $domain : '') . url::base() . $filedir . '/' . $resize_variant . $filename;
+        // DOMAIN_ADMIN introduced on Amli - defined in settings.php
+        return ($absolute_url ? DOMAIN_ADMIN : '') . $file->getUrl($resize_variant);
     }
-
 
     /**
      * Returns url for MASTER lang item. Item will send ajax requests with enabled languages list to this url.

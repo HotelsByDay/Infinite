@@ -18,7 +18,10 @@ class AppFormItem_BoolCheckbox extends AppFormItem_Base
      */
     protected function assignValue()
     {
-        $this->setValue((bool)$this->form_data);
+        if ($this->form_data !== NULL) {
+            $this->setValue($this->form_data);
+        }
     }
+
 
 }

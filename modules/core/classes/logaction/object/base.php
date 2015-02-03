@@ -11,23 +11,10 @@ class LogAction_Object_Base {
     
     
     public function updated($orm, $message = NULL, $log_action_categoryid = NULL, $overwrite = array())
-    {        
-        // Vytvorime pole se detaily zmen
-        $details = Array();
-        // Precteme puvodni hodnoty sloupcu na kterych doslo ke zmene hodnoty
-        $original_data = $orm->getLogOriginalData();
-        // Projdeme sledované sloupce
-        foreach ($this->watch_update as $column) {
-            // Pokud na sloupci doslo ke smene hodnoty, vytvori se o tom zaznam - detail
-            if (isset($original_data[$column])) {
-                $details[] = Array(
-                    'attr' => LogNumber::getColNumber($orm->object_name(), $column),
-                    'old_value' => $original_data[$column],
-                    'new_value' => $orm->{$column},
-                );
-            }
-        }
-        
+    {
+        $details = $this->getDetails($orm);
+
+
         //pokud neni explicitne definovana zprava, tak vytvorim defaultni (obecnou)
         if ($message === NULL)
         {
@@ -145,5 +132,29 @@ class LogAction_Object_Base {
             }
         }
     }
-    
+
+    /**
+     * @param $orm
+     * @return array
+     */
+    public function getDetails($orm)
+    {
+        // Vytvorime pole se detaily zmen
+        $details = Array();
+        // Precteme puvodni hodnoty sloupcu na kterych doslo ke zmene hodnoty
+        $original_data = $orm->getLogOriginalData();
+        // Projdeme sledované sloupce
+        foreach ($this->watch_update as $column) {
+            // Pokud na sloupci doslo ke smene hodnoty, vytvori se o tom zaznam - detail
+            if (isset($original_data[$column])) {
+                $details[] = Array(
+                    'attr' => LogNumber::getColNumber($orm->object_name(), $column),
+                    'old_value' => $original_data[$column],
+                    'new_value' => $orm->{$column},
+                );
+            }
+        }
+        return $details;
+    }
+
 }

@@ -11,6 +11,13 @@ class AppFormItem_RelNNSelect extends AppFormItem_Base
     // Nazev mapovaci tabulky/modelu
     protected $map = NULL;
 
+    protected $config = array(
+        // Pocet sloupcu ve kterych maji byt checkboxy zobrazeny
+        'columns_count' => 1,
+        // Zda zobrazit tlacitka check/uncheck all
+        'allow_check_all' => false,
+    );
+
 
 
     public function __construct($attr, $config, Kohana_ORM $model, ORM_Proxy $loaded_model, $form_data, $form)
@@ -30,12 +37,14 @@ class AppFormItem_RelNNSelect extends AppFormItem_Base
         parent::init();
 
         // Plugin potrebujeme jen pokud jsou povoleny poznamky
-        if (arr::get($this->config, 'note', false)) {
+        if (arr::get($this->config, 'note', false) or arr::get($this->config, 'allow_check_all')) {
             // Pripojime JS soubor s pluginem
             Web::instance()->addCustomJSFile(View::factory('js/jquery.AppFormItemRelNNSelect.js'));
             // A jeho inicializaci
             $init_js = View::factory('js/jquery.AppFormItemRelNNSelect-init.js');
-            $init_js->config = Array();
+            $init_js->config = Array(
+                'allow_check_all' => $this->config
+            );
             //prida do sablony identifikator tohoto prvku a zajisti vlozeni do stranky
             parent::addInitJS($init_js);
         }
@@ -251,6 +260,12 @@ class AppFormItem_RelNNSelect extends AppFormItem_Base
 
         //vytahnu si z DB aktualni stav relace
         $view->selected = $this->getRelItems();
+
+        // Pocet sloupcu - muze byt null
+        $view->columns_count = arr::get($this->config, 'columns_count');
+
+        // Zda zobrazit check/uncheck all tlacitka
+        $view->allow_check_all = arr::get($this->config, 'allow_check_all');
 
         $view->note = arr::get($this->config, 'note', false);
         // Vratime $view

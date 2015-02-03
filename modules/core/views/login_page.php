@@ -15,7 +15,6 @@
   <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 
   <link rel="stylesheet" href="<?= url::base();?>css/style.css?v=1">
-  <link rel="stylesheet" media="handheld" href="css/handheld.css?v=1">
 
 </head>
 
@@ -34,20 +33,25 @@
 	<form method="post" action="<?= appurl::login_action();?>">
 
             <?php if (isset($err_msg)): ?>
-            <div id="err_msg">
+            <div class="alert alert-error">
                 <?php echo $err_msg;?>
             </div>
             <?php endif ?>
 
             <fieldset><label for="username"><?= __('login_page.login');?></label><input id="username" type="text" name="username" value="" tabindex="1"/></fieldset>
             <fieldset><label for="password"><?= __('login_page.password');?></label><input id="password" type="password" name="password" value="" tabindex="2"/></fieldset>
-            <input type="submit" class="button blue" value="<?= __('login_page.login_action');?>"/>
 
-            <fieldset class="small"><input <?= isset($remember) && (bool)$remember ? 'checked="checked"' : '';?> type="checkbox" name="remember" value="1" id="remember" /><label for="remember"><?= __('login_page.remember');?></label></fieldset>
+        <label class="checkbox">
+            <input <?= isset($remember) && (bool)$remember ? 'checked="checked"' : '';?> type="checkbox" name="remember" value="1"  />
+            <?= __('login_page.remember');?>
+        </label>
 
-	</form>
+        <input type="submit" class="btn btn-primary" value="<?= __('login_page.login_action');?>"/>
 
-        <?php if (AppConfig::instance()->get('reset_password_option', 'system') && Session::instance()->get('show_reset_password_option')): ?>
+
+    </form>
+
+        <?php if (AppConfig::instance()->get('reset_password_option', 'system')): ?>
         <a href="<?= appurl::object_action('resetpassword', 'index');?>">Lost my password</a>
         <?php endif ?>
 

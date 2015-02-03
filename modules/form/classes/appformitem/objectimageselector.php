@@ -16,6 +16,8 @@ class AppFormItem_ObjectImageSelector extends AppFormItem_Base
     // Object for which we will find images
     protected $relobject = null;
 
+    protected $image_object = NULL;
+
     /**
      * Nacteme config
      */
@@ -26,6 +28,8 @@ class AppFormItem_ObjectImageSelector extends AppFormItem_Base
 
         // Ulozime si relobject do local atributu
         $this->relobject = arr::get($this->config, 'relobject');
+
+        $this->image_object = arr::get($this->config, 'image_object', $this->relobject.'_image');
     }
 
     /**
@@ -56,7 +60,7 @@ class AppFormItem_ObjectImageSelector extends AppFormItem_Base
         $resize_variant = arr::get($this->config, 'image_resize_variant');
         $zoomed_resize_variant = arr::get($this->config, 'zoomed_resize_variant', null);
         // precteme obrazky pres relace modelu
-        $images = $this->model->{$this->relobject}->{$this->relobject.'_image'}->find_all();
+        $images = $this->model->{$this->relobject}->{$this->image_object}->find_all();
         // Projdeme obrazky a ulozime si potrebne info do pole
         $result = Array();
         foreach ($images as $image) {
@@ -76,6 +80,16 @@ class AppFormItem_ObjectImageSelector extends AppFormItem_Base
     {
         $view = parent::Render($render_style, $error_messages);
         $view->images = $this->getImages();
+        $view->rel_id = $this->model->{$this->relobject}->pk();
+
+        if ($image_edit_url = arr::get($this->config, 'image_edit_url')) {
+            if (is_callable($image_edit_url)) {
+                $image_edit_url = call_user_func($image_edit_url, $this->model);
+            } else {
+                $image_edit_url = AppUrl::object_edit_ajax($this->relobject, $image_edit_url, '_ID');
+            }
+            $view->image_edit_url = $image_edit_url;
+        }
         return $view;
     }
 

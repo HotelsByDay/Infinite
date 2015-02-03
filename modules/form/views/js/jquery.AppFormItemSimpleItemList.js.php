@@ -30,33 +30,82 @@
                 //v nastavenich ocekavam sablonu pro novy relacni prvek
                 var new_template = options['new_template'];
 
+                $_this.data('appformitemsimpleitemlist', {options : options});
+
                 //inicializace polozek
-                $_this.find('.list .item').each(function(){
+                $_this.find('.list .simple_list_item').each(function() {
                     methods._initTemplate($_this, $(this));
                 });
 
                 //tlacitko pro pridani noveho zaznamu
-                $_this.find(".add_new").click(function(){
+                $_this.find(".add_new").click(function() {
 
-                    $new_template = $(new_template);
+                    var $new_template = $(new_template);
                     
-                    //template incializuju (obsauje tlacitko pro odstraneni
-                    methods._initTemplate($_this, $new_template);
-
-                    //pridam na konec seznam existujicich prvku
-                    $_this.find('.list').append($new_template);
-
-                    //nastavim focus na prvni viditelny input
-                    $new_template.find('input:visible,select:visible,textarea:visible').filter(':first').focus();
+                    $_this.appFormItemSimpleItemList('append');
 
                     return false;
                 });
 
+                // If there are items about to delete/add (after validation error) then highlight them
+                $_this.find('input[name*="[id]"][value=""]').each(function(){
+                    $(this).parents('.simple_list_item').addClass('added');
+                });
+                $_this.find('input[name*="[action]"][value="d"]').each(function(){
+                    $(this).parents('.simple_list_item').addClass('deleted');
+                });
+                $_this.appFormItemSimpleItemList('updateInfoMessage');
+
             });
         },
 
+        /**
+         * Public metoda - prida polozku do seznamu, s tim, ze ji inicializuje hodnotami ve values
+         * @param foo
+         * @param values
+         */
+        append: function(foo, values) {
+            var $_this = $(this);
+
+            var data = $_this.data('appformitemsimpleitemlist');
+            var options = data.options;
+
+            // HTML kod sablony prvku
+            var new_template = options['new_template'];
+            // jQuery objekt sablony prvku
+            var $new_template = $(new_template);
+
+            $new_template.addClass('added');
+
+            if (typeof values !== 'undefined') {
+                // Inicializujeme sablonu zadanymi hodnotami
+                for (var attr in values) {
+                    $new_template.find('input[name*="[' + attr + ']"]').val(values[attr]);
+                }
+            }
+
+            //template incializuju (obsauje tlacitko pro odstraneni
+            methods._initTemplate($_this, $new_template);
+
+            //pridam na konec seznam existujicich prvku
+            $_this.find('.list').append($new_template);
+
+            $_this.appFormItemSimpleItemList('updateInfoMessage');
+
+            //nastavim focus na prvni viditelny input
+            $new_template.find('input:visible,select:visible,textarea:visible').filter(':first').focus();
+        },
+
         _initTemplate: function($_this, $template) {
-            
+
+
+            $template.find('.undelete').on('click', function(){
+                $template.find('input[name*="[action]"]').val('s');
+                $template.removeClass('deleted');
+                $_this.appFormItemSimpleItemList('updateInfoMessage');
+                return false;
+            });
+
             //pri kliknuti na tlacitko odstranit
             $template.find('.delete').click(function(){
 
@@ -64,27 +113,33 @@
                 //ktery soubor bude odstranen
                 $template.addClass('to_be_deleted');
 
-                if (confirm("<?= __('form.AppFormItemSimplteItemList.confirm_delete');?>")) {
+                if (true || confirm("<?= __('form.AppFormItemSimplteItemList.confirm_delete');?>")) {
 
                     //id polozky (souboru ) je ulozeno v inputu, ktery v name atributu obsahuej "[id]"
-                    var $id_input = $template.find('input[name*="\[id\]"]');
-
-                    //pokud nebyl input nalezen, tak nelze se souborem pracovat
-                    if ($id_input.length == 0) {
-                        alert("<?= __('appformitemfile.cannot_delete');?>");
-                        return false;
-                    }
+                    var $id_input = $template.find('input[name*="[id]"]');
 
                     //pokud $id_input ma prazdnou hodnotu, tak jeste dana polozka
                     //nebyla ulozena do DB a muzu rovnou odstranit z formulare
-                    if ($id_input.val() == '') {
+
+                    if ($id_input.length == 0 || $id_input.val() == '') {
 
                         //odstranim soubor ze stranky
                         $template.remove();
 
+                        $_this.appFormItemSimpleItemList('updateInfoMessage');
                        //a ajax uz neni treba provadet
                         return false;
                     }
+
+                    // Changed to never perform an AJAX call - items will be deleted after the form is saved
+                    // #7624  [2014-01-29]
+                    $template.find('input[name*="[action]"]').val('d');
+                    $template.addClass('deleted');
+                    $_this.appFormItemSimpleItemList('updateInfoMessage');
+
+                    return false;
+                    // End of Change
+
 
                     //zobrazim progress indicator nad polozkou souboru
                     $template.block({message: "<?= __('appformitemsimpleitemlist.delete_ptitle');?>"});
@@ -126,6 +181,14 @@
 
         },
 
+        updateInfoMessage: function() {
+            var $_this = $(this);
+            if ($_this.find('.added, .deleted').length) {
+                $_this.find('.save_info_message').show();
+            } else {
+                $_this.find('.save_info_message').hide();
+            }
+        },
         _log: function( text ) {
             if ( typeof console !== 'undefined') {
             //    console.log( text );

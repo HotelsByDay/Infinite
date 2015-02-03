@@ -169,8 +169,14 @@ class AppFormItem_File extends AppFormItem_Base
             //najdu pozici posledniho lomitka
             $delimiter_pos = strrpos($mime_type, '/');
 
+            if ($delimiter_pos === false) {
+                $delimiter_pos = 0;
+            } else {
+                $delimiter_pos++;
+            }
+
             //koncovku vlozim do seznamu povolenych koncovek
-            $js_config['allowed_extensions'][] = substr($mime_type, - (strlen($mime_type) - $delimiter_pos - 1));
+            $js_config['allowed_extensions'][] = substr($mime_type, $delimiter_pos);
         }
 
         //dale si vytahnu maximalni povolenou velikost pro soubor
@@ -197,6 +203,7 @@ class AppFormItem_File extends AppFormItem_Base
         $js_file->params             = arr::get($this->config, 'params', array());
         $js_file->file_count         = arr::get($this->config, 'file_count', 0);
         $js_file->sortable           = arr::get($this->config, 'sortable', NULL);
+        $js_file->order_update_info_message = arr::get($this->config, 'order_update_info_message', __('form.AppFormItemFile.order_update.info_message'));
 
         //vlozim do stranky
         parent::addInitJS($js_file);
@@ -403,7 +410,8 @@ class AppFormItem_File extends AppFormItem_Base
 
         $file_models = ORM::factory($this->model_name)
             ->where($this->getForeignKeyColumn(), '=', $this->getForeignKeyValue())
-            ->where('deleted', 'IS', DB::Expr('NULL'))->find_all();
+            // ->where('deleted', 'IS', DB::Expr('NULL')) // WTF - this is implemented in ORM layer
+            ->find_all();
 
         foreach ($file_models as $model)
         {
@@ -654,7 +662,7 @@ class AppFormItem_File extends AppFormItem_Base
                                 // If content is empty
                                 if (empty($content)) {
                                     // translation removal from Db will be processed after foreach
-                                    // Skip futher processing
+                                    // Skip further processing
                                     continue;
                                 }
 
@@ -680,7 +688,6 @@ class AppFormItem_File extends AppFormItem_Base
                         }
                         $del_model->delete_all();
                     }
-
                 }
 
                 //modely k odstraneni odstranim
@@ -752,7 +759,10 @@ class AppFormItem_File extends AppFormItem_Base
         //ma se vykreslovat seznam souboru jako tabulka ?
         if (($view_name = arr::get($this->config, 'as_table')))
         {
-            $view->table_header = View::factory($view_name);
+            $view->table_header = ($render_style == AppForm::RENDER_STYLE_READONLY)
+                ? View::factory($view_name.'_readonly')
+                : View::factory($view_name);
+
             // pokud je definovan seznam jazyku pro popisky, predame ho do hlavicky tabulky
             if ($this->is_languable) {
                 // Set locales list into table header - for select creation

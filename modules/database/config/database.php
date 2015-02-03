@@ -17,16 +17,16 @@ return array
 			 *
 			 * Ports and sockets may be appended to the hostname.
 			 */
-			'hostname'   => AppConfig::instance()->get('host', 'database'),
-			'database'   => AppConfig::instance()->get('name', 'database'),
-			'username'   => AppConfig::instance()->get('user', 'database'),
-			'password'   => AppConfig::instance()->get('pass', 'database'),
+			'hostname'   => DB_HOSTNAME,
+			'database'   => DB_NAME,
+			'username'   => DB_USERNAME,
+			'password'   => DB_PASSWORD,
 			'persistent' => FALSE,
 		),
 		'table_prefix' => '',
 		'charset'      => 'utf8',
-		'caching'      => FALSE,
-		'profiling'    => TRUE,
+		'caching'      => Kohana::$caching,
+		'profiling'    => Kohana::$profiling,
 	),
 	'alternate' => array(
 		'type'       => 'pdo',

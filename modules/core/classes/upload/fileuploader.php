@@ -19,7 +19,7 @@ class Upload_FileUploader
     protected $image_dimension_limit = array();
 
     /**
-     * 
+     *
      * @param <type> $file Instance tridy Upload_Driver_Form nebo Upload_Driver_Xhr
      * reprezentujici uploadovany souboru
      * @param <array> $allowed_mimetypes Vycet povolenych MIME-TYPU pro soubor
@@ -35,7 +35,7 @@ class Upload_FileUploader
 
         //limit na povolene mimetypy
         $this->allowed_mimetypes = $allowed_mimetypes;
-        
+
         //ulozim si limit na velikost obrazku
         $this->image_dimension_limit = $image_dimension_limit;
     }
@@ -88,7 +88,7 @@ class Upload_FileUploader
         //z nazvu souboru chci odstranit vsechny znaky, ktere by mohli delat problemy
         //v URL nebo na disku
         $file_name =
-        $orig_file_name = text::webalize($path_info['filename']);
+        $orig_file_name = text::webalize($path_info['filename'], 'A-Z+_', false);
 
         //pripona souboru
         $file_ext  = $path_info['extension'];
@@ -108,10 +108,12 @@ class Upload_FileUploader
 
             $file_mimetype = strtolower(finfo_file($finfo, $filepath));
 
+            Kohana::$log->add(Kohana::INFO, 'File mime: '.$file_mimetype.'  allowed types: '.json_encode($this->allowed_mimetypes));
+
             finfo_close($finfo);
 
             //pokud se nejedna o jeden z povolenych typu tak vyhodim vyjimku
-            if ( ! empty($this->allowed_mimetypes) && ! in_array($file_mimetype, $this->allowed_mimetypes))
+            if ( ! empty($this->allowed_mimetypes) && ! in_array($file_mimetype, $this->allowed_mimetypes) && ! in_array($file_ext, $this->allowed_mimetypes))
             {
                 throw new Upload_Exception_UserError(__('upload.error.not_allowed_file_type'));
             }
@@ -139,7 +141,7 @@ class Upload_FileUploader
                     {
                         throw new Upload_Exception_UserError(__('upload.error.invalid_image_dimension.max_width', array(
                             ':width'     => $image->width,
-                            ':max_width' => $min_width
+                            ':max_width' => $max_width
                         )));
                     }
                 }
@@ -150,7 +152,7 @@ class Upload_FileUploader
                     {
                         throw new Upload_Exception_UserError(__('upload.error.invalid_image_dimension.min_height', array(
                             ':height'     => $image->height,
-                            ':min_height' => $min_width
+                            ':min_height' => $min_height
                         )));
                     }
                 }
@@ -161,7 +163,7 @@ class Upload_FileUploader
                     {
                         throw new Upload_Exception_UserError(__('upload.error.invalid_image_dimension.max_height', array(
                             ':height'     => $image->height,
-                            ':max_height' => $max_width
+                            ':max_height' => $max_height
                         )));
                     }
                 }

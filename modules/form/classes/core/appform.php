@@ -38,7 +38,7 @@
  * ***********************************************************
  * V metode Process se do techto atributu zapise typ pozadovane akce a jeji vysledek.
  * Na konci metody se tyto hodnoty poslou do setActionResult, aby se podle nich
- * vygenerovala defaultni zprava pro uzivatele.
+ * vygenerovala defaultni F pro uzivatele.
  * Navic pri generovani formulare v metode Render() se kontroluje zda prave
  * nedoslo k uspesnemu odstraneni zaznamu - pokud ano tak se vlastni formular
  * nevykresluje.
@@ -127,8 +127,13 @@ class Core_AppForm {
     //Formularova data, ktera jsou urcena k ulozeni
     protected $_form_data = array();
 
+
+    protected $_form_data_original = array();
+
     //Zde budou ulozeny jednotlive formularove prvky ve forme ReflectionClass
     protected $_form_items = array();
+
+    protected $_config_original;
 
     //slouzi k ulozeni konfigurace pro tento formular - jsou tady fallback hodnoty
     protected $_config = array(
@@ -179,24 +184,33 @@ class Core_AppForm {
         //ulozim si referenci na ORM model nad kterym formular stoji
         $this->_model = $model;
 
-        //tato reference bude predana do jednotlivych formitemu a v pripade
-        //uspesneho ulozeni nebo odstraneni $this->_model ji potrebuji prepsat
-        //coz zaridim pomoci Proxy navrhoveho vzoru.
-        //@TODO: Odmena 500Kc pro toho kdo tohle dokaze vyresit bez Proxy
-        $this->_loaded_model = ORM_Proxy::factory(clone $model);
+        $this->_config_original = $config;
 
-        //je formular nacitan do itemlistu
-        $this->in_itemlist = arr::get($form_data, 'itemlist', FALSE);
+        $this->_form_data_original = $form_data;
 
         //ulozim si hodnotu, ktera rika ze je instance formulare pouzita
         //v ajax pozadavku
         $this->is_ajax = $is_ajax;
 
+        $this->init();
+    }
+
+    public function init()
+    {
+        //tato reference bude predana do jednotlivych formitemu a v pripade
+        //uspesneho ulozeni nebo odstraneni $this->_model ji potrebuji prepsat
+        //coz zaridim pomoci Proxy navrhoveho vzoru.
+        //@TODO: Odmena 500Kc pro toho kdo tohle dokaze vyresit bez Proxy
+        $this->_loaded_model = ORM_Proxy::factory(clone $this->_model);
+
+        //je formular nacitan do itemlistu
+        $this->in_itemlist = arr::get($this->_form_data_original, 'itemlist', FALSE);
+
         if ($this->in_itemlist)
         {
             $this->_config['container_view_name'] = 'form_container_itemlist';
         }
-        //pokud je formular v ajax rezimu tak se pouzije jina defaultni 
+        //pokud je formular v ajax rezimu tak se pouzije jina defaultni
         //sablona pro form container
         else if ($this->is_ajax)
         {
@@ -207,29 +221,39 @@ class Core_AppForm {
         // udelam to rucne, protoze chci zachovat Kohana_ConfigFile
         foreach ($this->_config as $key => $value)
         {
-            $config->set($key, $value);
+            $this->_config_original->set($key, $value);
         }
-        $this->_config = $config;
+        $this->_config = $this->_config_original;
 
-        //these values will be used as default
-        $this->_form_data_defaults   = arr::get($form_data, 'defaults', array());
+        // Default values can be defined in form config
+        $config_defaults = (array)arr::get($this->_config, 'defaults');
+        $config_overwrite = (array)arr::get($this->_config, 'overwrite');
+
+        //these values will be used as default (higher priority then config defaults)
+        $this->_form_data_defaults   = arr::get($this->_form_data_original, 'defaults', array());
         //these valus will overwrite whatever arrived from the form
-        $this->_form_data_overwrites = arr::get($form_data, 'overwrite', array());
+        $this->_form_data_overwrites = arr::get($this->_form_data_original, 'overwrite', array());
 
         //wont be needed anymore
-        unset($form_data['defaults'], $form_data['overwrite']);
+        unset($this->_form_data_original['defaults'], $this->_form_data_original['overwrite']);
 
         //initialize with the default data
         if ( ! $this->_model->loaded())
         {
+            $this->applyFormDataValues($config_defaults);
             $this->applyFormDataValues($this->_form_data_defaults);
         }
 
         //load form data
-        $this->_form_data = arr::merge($this->_form_data, $form_data);
+        $this->_form_data = arr::merge($this->_form_data, $this->_form_data_original);
 
         //vlozi data do ORM modelu anebo do $this->_form_data
         $this->applyFormDataValues($this->_form_data_overwrites);
+
+        // Config overwrite - higher priority then request overwrite
+        if ( ! empty($config_overwrite)) {
+            $this->applyFormDataValues($config_overwrite);
+        }
 
         //detekce pozadovane akce
         $this->requested_action = arr::getifset($this->_form_data, self::ACTION_KEY, NULL);
@@ -238,9 +262,20 @@ class Core_AppForm {
         $this->loadFormItems();
 
         // Pokud je vyzadovano v configu, automaticky ulozime non-loaded model
-        if (arr::get($config, 'autosave_model', false) and ! $this->_model->loaded()) {
+        if (arr::get($this->_config, 'autosave_model', false) and ! $this->_model->loaded()) {
             $this->_model->save();
         }
+
+        return $this;
+    }
+
+
+    /**
+     * @return Kohana_ORM|null|ORM
+     */
+    public function model()
+    {
+        return $this->_model;
     }
 
     /**
@@ -253,6 +288,7 @@ class Core_AppForm {
      */
     public function applyFormDataValues($values)
     {
+    //    Kohana::$log->add(Kohana::INFO, 'applyFormDatavalues: '.json_encode($values));
         foreach ($values as $attr => $value)
         {
             //if there is not Form Item for the attribute, then
@@ -267,6 +303,7 @@ class Core_AppForm {
             }
         }
     }
+
     /**
      * Provede zapis do logu a navic prida informace o aktualnim objektu
      * a formularovych datech pro snadnejsi diagnozu problemu.
@@ -341,6 +378,15 @@ class Core_AppForm {
         $this->_action_result_view->error_messages = $foreign_error_messages;
     }
 
+
+    /**
+     * This comes handy in form items. (PolymorphicNNSelect)
+     */
+    public function getConfigGroupName()
+    {
+        return $this->_config->get_group_name();
+    }
+
     /**
      * Nacte vsechny formularove prvky podle konfigurace formulare.
      */
@@ -382,6 +428,13 @@ class Core_AppForm {
 
             //vyvola incializaci prvku
             $form_item_class->init();
+
+            //non-virtual items need to be based on an attribute of the underlying model,
+            //otherwise they are ignored
+            if ( ! $form_item_class->isVirtual() && ! $this->_model->hasAttr($attr))
+            {
+                continue;
+            }
 
             //referenci na form prvek si ulozim
             $this->_form_items[$attr] = $form_item_class;
@@ -610,8 +663,9 @@ class Core_AppForm {
 
         //do ORM modelu vlozim defaultni hodnoty, ktere do nej byly vlozeni
         //pri inicializaci formulare
-        $this->applyDefaultValues();
-        $this->applyOverwriteValues();
+        // @todo - chybejici metody
+     //   $this->applyDefaultValues();
+     //   $this->applyOverwriteValues();
     }
 
     /**
@@ -702,6 +756,22 @@ class Core_AppForm {
         //validace uspesna, vyvolam formularovou udalost pred ulozenim
         $this->runFormEvent(self::FORM_EVENT_BEFORE_SAVE);
 
+        // Ulozime model
+        $this->saveModel();
+        
+        //vyvolam formularovou udalost po ulozeni
+        $this->runFormEvent(self::FORM_EVENT_AFTER_SAVE);
+
+        //akce probehla uspesne 
+        return self::ACTION_RESULT_SUCCESS;
+    }
+
+    /**
+     * Ulozi model
+     * @throws Exception_SaveActionFailed
+     */
+    protected function saveModel()
+    {
         //pri ukladani by mohlo dojit k neocekavane chybe
         try
         {
@@ -710,10 +780,10 @@ class Core_AppForm {
             $this->_model->save();
 
             //$this->_loaded_model je Proxy trida - po uspesnem ulozeni zaznamu
-            //chci aby "ukazovala" na aktualni model 
+            //chci aby "ukazovala" na aktualni model
             $this->_loaded_model->setORM($this->_model);
         }
-        //doslo k nejake chybe pri ukladani
+            //doslo k nejake chybe pri ukladani
         catch (Exception $e)
         {
             kohana::$log->add(Kohana::ERROR, 'Error while saving form: :text', array(
@@ -730,7 +800,7 @@ class Core_AppForm {
                 $this->runFormEvent(self::FORM_EVENT_SAVE_FAILED, $event_data);
 
                 //vyhodim vyjimku, ktera bude uzivatle informovat o problemu
-                    throw new Exception_SaveActionFailed('form_action_status.model_save_failed');
+                throw new Exception_SaveActionFailed('form_action_status.model_save_failed');
             }
             //zaznam byl ulozen, ale doslo k nejake chybe - uzivateli se zobrazi hlaseni
             //formularove prvky se o tomto nedozvi
@@ -740,12 +810,6 @@ class Core_AppForm {
                 throw new Exception_SaveActionFailed('form_action_status.model_saved_but_may_be_incosistent');
             }
         }
-        
-        //vyvolam formularovou udalost po ulozeni
-        $this->runFormEvent(self::FORM_EVENT_AFTER_SAVE);
-
-        //akce probehla uspesne 
-        return self::ACTION_RESULT_SUCCESS;
     }
 
     protected function ActionValidate()
@@ -769,13 +833,7 @@ class Core_AppForm {
         }
 
         //pustim validaci hlavniho ORM modelu
-        if ( ! $this->_model->check())
-        {
-            //z ORM si vytahnu validacni chyby - chyby z form prvku vkladam do chyb
-            //z ORM - chyby zachycene form prvky maji vyssi prioritu, a budou zobrazeny
-            //na formulari "pred" chybami z ORM validace
-            $this->_error_messages = arr::merge($this->_model->getValidationErrors(), $this->_error_messages);
-        }
+        $this->validateModel();
 
         //pokud jsme pri validaci ziskali nejake chybove hlasky, tak se nebude pokracovat v ulozeni zaznamu
         if ( ! empty($this->_error_messages))
@@ -786,6 +844,20 @@ class Core_AppForm {
 
         //vracim uspech - akce probehla uspesne
         return self::ACTION_RESULT_SUCCESS;
+    }
+
+    /**
+     * Zvaliduje model a pripadne validation errors pri-mergne do lokalniho atributu
+     */
+    protected function validateModel()
+    {
+        if (arr::get($this->_config, 'validate_model', true) and ! $this->_model->check())
+        {
+            //z ORM si vytahnu validacni chyby - chyby z form prvku vkladam do chyb
+            //z ORM - chyby zachycene form prvky maji vyssi prioritu, a budou zobrazeny
+            //na formulari "pred" chybami z ORM validace
+            $this->_error_messages = arr::merge($this->_model->getValidationErrors(), $this->_error_messages);
+        }
     }
 
     /**
@@ -809,6 +881,11 @@ class Core_AppForm {
 
             //odstranim nepotrebnou kopii
             unset($data_copy);
+        }
+
+        // Also call closure from the config - if defined
+        if ($type == self::FORM_EVENT_AFTER_SAVE and is_callable($callback = arr::get($this->_config, 'after_save_callback'))) {
+            call_user_func($callback, $this->_model);
         }
     }
 
@@ -878,7 +955,7 @@ class Core_AppForm {
                                                                 array(
                                                                     'confirm' => ___('form_action_button.'.$this->_config->get_group_name().'.update_action_confirm', array(), NULL),
                                                                     'value' => self::ACTION_SAVE,
-                                                                    'class' => self::FORM_BUTTON_CSS_CLASS.' button red',
+                                                                    'class' => self::FORM_BUTTON_CSS_CLASS.' button red btn btn-primary',
                                                                     //tento popisek bude zobrazen v progress indicatoru po kliknuti na toto tlacitko
                                                                     'ptitle'    => ___('form_action_button.'.$this->_config->get_group_name().'.update_ptitle',
                                                                                        'form_action_button.update_ptitle')
@@ -894,7 +971,7 @@ class Core_AppForm {
                                                                     array(
                                                                         'confirm' => ___('form_action_button.'.$this->_config->get_group_name().'.delete_action_confirm', array(), NULL),
                                                                         'value' => self::ACTION_DELETE,
-                                                                        'class' => self::FORM_BUTTON_CSS_CLASS.' button blue',
+                                                                        'class' => self::FORM_BUTTON_CSS_CLASS.' button blue btn btn-danger',
                                                                         //tento popisek bude zobrazen v progress indicatoru po kliknuti na toto tlacitko
                                                                         'ptitle'    => ___('form_action_button.'.$this->_config->get_group_name().'.delete_ptitle',
                                                                                            'form_action_button.delete_ptitle')
@@ -912,7 +989,7 @@ class Core_AppForm {
                                                                 array(
                                                                     'confirm' => ___('form_action_button.'.$this->_config->get_group_name().'.insert_action_confirm', NULL),
                                                                     'value' => self::ACTION_SAVE,
-                                                                    'class' => self::FORM_BUTTON_CSS_CLASS.' button red',
+                                                                    'class' => self::FORM_BUTTON_CSS_CLASS.' button red btn btn-primary',
                                                                     //tento popisek bude zobrazen v progress indicatoru po kliknuti na toto tlacitko
                                                                     'ptitle'    => ___('form_action_button.'.$this->_config->get_group_name().'.insert_ptitle',
                                                                                        'form_action_button.insert_ptitle'),
@@ -924,7 +1001,7 @@ class Core_AppForm {
         $buttons['l']['close'] = array('close',
                                          __('form_action_button.close_label'),
                                          array(
-                                            'class'     => self::FORM_BUTTON_CLOSE_CSS_CLASS.' button no-color',
+                                            'class'     => self::FORM_BUTTON_CLOSE_CSS_CLASS.' button no-color btn',
                                          ));
 
         //vyslednou definici tlacitek vratim
@@ -1099,7 +1176,6 @@ class Core_AppForm {
     {
         if ( ! isset($this->_form_items[$attr]))
         {
-            //neexistujici prvek nebude vykreslen, provedu zapis do logu
             $this->_log('Unable to render AppFormItem for non-existing attr "'.$attr.'".');
             return NULL;
         }
@@ -1110,9 +1186,14 @@ class Core_AppForm {
         {
             $style = AppForm::RENDER_STYLE_READONLY;
         }
-
         //prvek existuje - bude vykreslen
         return $this->_form_items[$attr]->Render($style, $this->_error_messages);
+    }
+
+
+    public function actionPanelEnabled()
+    {
+        return arr::get($this->_config, 'action_panel_enabled', true);
     }
 
     /**

@@ -1,4 +1,4 @@
-<div class="<?= $controller_name;?> <?= $action_name;?>">
+<div class="<?= $controller_name;?> <?= $action_name;?>view table_view">
 
     <?php if (isset($action_result)): ?>
         <?= $action_result;?>

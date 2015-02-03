@@ -71,7 +71,6 @@ class Core_Compiler {
             'output_format' => 'json', 
             'output_info' => 'compiled_code',
             'js_code' => urlencode($file),
-
         );
         // Pokud soubor presahne 1000kB, pak ho compiler odmitne
         $length = strlen($post_data['js_code']);

@@ -1,17 +1,20 @@
-
-<div name="<?= $attr ?>_item" class="appformitemcontainer <?= $css ?>" id="<?= $uid;?>">
-
-<?php if ( ! empty($error_message)): ?>
-<span class="validation_error" style="color:red;"><?= $error_message;?></span>
-<?php endif ?>
+<div name="<?= $attr ?>_item" class="appformitemcontainer appformitem_relselect <?= $css ?> control-group <?= empty($error_message) ? '' : 'error' ?>" id="<?= $uid;?>">
 
 <label for="<?= $attr ?>_name"><?= $label ?></label>
-<input type="text" id="<?= $attr ?>_name" name="<?= $name_attr ?>" value="<?= $name ?>" <?= isset($watermark) ? 'class="watermark"' : '' ?> />
+
+<div class="form-inline">
+<input type="text" id="<?= $attr ?>_name" name="<?= $name_attr ?>" value="<?= $name ?>" class="<?= isset($watermark) ? $watermark : '' ?> <?= isset($input_class) ? $input_class : '' ?>" />
 
 <input type="hidden" id="<?= $attr ?>_id" name="<?= $value_attr ?>" value="<?= (int)$value ?>" />
 
 <?php if (isset($new) && $new): ?>
-    <a href="#" class="add_new button red"><?= $new_label;?></a>
+    <a href="#" class="add_new btn btn-primary"><?= $new_label;?></a>
 <?php endif ?>
+</div>
+
+
+    <?php if ( ! empty($error_message)): ?>
+        <span class="validation_error text-error"><?= $error_message; ?></span>
+    <?php endif ?>
 
 </div>

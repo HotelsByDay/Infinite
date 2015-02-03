@@ -24,8 +24,6 @@ class AppFormItem_PropertyAddress extends AppFormItem_Base
         'location_zoom' => 15,
     );
 
-
-
     /**
      * Zajistuje vlozeni potrebnych jquery pluginu do stranky
      */
@@ -53,6 +51,7 @@ class AppFormItem_PropertyAddress extends AppFormItem_Base
             // Predame nastaveni zoomu
             'location_zoom' => $this->config['location_zoom'],
             'address_zoom' => $this->config['address_zoom'],
+            'gps_ok'       => (int)$this->model->gps_ok,
         );
 
 
@@ -74,7 +73,9 @@ class AppFormItem_PropertyAddress extends AppFormItem_Base
      */
     public function check()
     {
+        Kohana::$log->add(Kohana::INFO, 'check called in propertyAddress ');
         if ($this->config['required']) {
+            Kohana::$log->add(Kohana::INFO, 'item is required propertyAddress ');
             if ($this->isReadonly()) {
                 // V readonly rezimu kontrolujeme jen adresu
                 $key = 'address';
@@ -84,11 +85,14 @@ class AppFormItem_PropertyAddress extends AppFormItem_Base
                 }
             }
             else {
+
+                Kohana::$log->add(Kohana::INFO, 'check else in propertyAddress ');
                 // Jinak kontrolujeme vice prvku
-                foreach (array('address', 'value', 'postal_code') as $key) {
+                foreach (array('value') as $key) {
                     $value = arr::get($this->form_data, $key, NULL);
                     if (empty($value)) {
                         if ($key == 'value') $key = 'property_locationid';
+                        Kohana::$log->add(Kohana::INFO, 'validation_error in propertyAddress on '.$key);
                         return __($this->model->table_name().'.'.$key.'.validation.required');
                     }
                 }
@@ -112,6 +116,11 @@ class AppFormItem_PropertyAddress extends AppFormItem_Base
             $this->form_data['address'] = $this->model->address;
             $this->form_data['latitude']  = $this->model->latitude;
             $this->form_data['longitude'] = $this->model->longitude;
+            $this->form_data['google_latitude'] = $this->model->google_latitude;
+            $this->form_data['google_longitude'] = $this->model->google_longitude;
+            $this->form_data['arn_latitude'] = $this->model->arn_latitude;
+            $this->form_data['arn_longitude'] = $this->model->arn_longitude;
+            $this->form_data['gps_ok'] = $this->model->gps_ok;
             // $this->form_data['city'] = $this->model->city;
             $this->form_data['postal_code'] = $this->model->postal_code;
 
@@ -128,13 +137,14 @@ class AppFormItem_PropertyAddress extends AppFormItem_Base
             foreach ($this->form_data as $attr => $value)
             {
                 //do modelu chci vlozit pouze nektere polozky
-                if (in_array($attr, array('address', 'latitude', 'longitude', 'postal_code')))
+                if (in_array($attr, array('address', 'latitude', 'longitude', 'postal_code', 'gps_ok')))
                 {
                     $this->model->{$attr} = trim($value);
                 }
             }
             // value zapiseme do property_locationid
-            $this->model->{$this->location_object.'id'} = arr::get($this->form_data, 'value');
+            $locationid = arr::get($this->form_data, 'value');
+            $this->model->{$this->location_object.'id'} = empty($locationid) ? NULL : $locationid;
         }
 
         return parent::AssignValue();

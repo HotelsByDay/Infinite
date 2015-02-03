@@ -2,11 +2,10 @@
 
 <?php if (isset($banner)): ?>
 
-<?= $banner ;?>
+    <?= $banner ;?>
 
-<? endif ?>
+<?php endif ?>
 
 <div class="itemlist_form" <?= isset($banner) ? 'style="display:none;"' : ''; ?>>
 <?= $form_view;?>
 </div>
-

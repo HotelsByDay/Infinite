@@ -1,11 +1,38 @@
 <?php defined('SYSPATH') or die('No direct access allowed.');
 
 
+
+Route::set('polymorphic_cb_data', '<controller>/<action>/<object_name>/<object_id>/<config_key>',
+    array(
+        'controller'  => 'polymorphicnnselect',
+        'action'      => 'cb_data',
+        'object_name' => '[_a-zA-Z-]+',
+        'object_id'   => '[0-9]+',
+        'config_key'  => '.*',
+    ));
+
+
+Route::set('generate_image_resize_variant', '<controller>/<action>/<object_name>/<object_id>/<filename>',
+    array(
+        'controller' => 'web',
+        'action'     => 'resize_variant',
+        'filename'   => '.*',
+    ));
+
+
 Route::set('tip_help', '<controller>/<action>',
         array(
             'controller' => 'help',
             'action'     => 'tip',
         ));
+
+
+Route::set('reset_password', '<controller>/<action>',
+    array(
+        'controller' => 'resetpassword',
+        'action'     => 'index',
+    ));
+
 
 //Url pro nahlaseni JS chyby ke kterym dojde u klienta
 Route::set('js_error', '<controller>/<action>',

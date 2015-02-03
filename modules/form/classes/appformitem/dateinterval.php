@@ -39,7 +39,8 @@ class AppFormItem_DateInterval extends AppFormItem_Base
 
         $init_js = View::factory('js/jquery.AppFormItemDateInterval-init.js');
         $init_js->config = Array(
-            'date_format' => DateFormat::getDatePickerDateFormat(),
+            'date_format' => arr::get($this->config, 'js_date_format', DateFormat::getDatePickerDateFormat()),
+            'hide_year' => (int)arr::get($this->config, 'hide_year', 0),
             'months_count' => arr::get($this->config, 'months_count', 1),
         );
         parent::addInitJS($init_js);
@@ -62,8 +63,8 @@ class AppFormItem_DateInterval extends AppFormItem_Base
 
         // Return model data
         return Array(
-            'from' => DateFormat::getUserDate($this->model->{$this->from_attr}),
-            'to' => DateFormat::getUserDate($this->model->{$this->to_attr}),
+            'from' => DateFormat::getUserDate($this->model->{$this->from_attr}, arr::get($this->config, 'php_date_format')),
+            'to' => DateFormat::getUserDate($this->model->{$this->to_attr}, arr::get($this->config, 'php_date_format')),
         );
     }
 
@@ -75,8 +76,8 @@ class AppFormItem_DateInterval extends AppFormItem_Base
     {
         if (isset($value['from'], $value['to']))
         {
-            $this->model->{$this->from_attr} = DateFormat::getMysqlDate($value['from']);
-            $this->model->{$this->to_attr} = DateFormat::getMysqlDate($value['to']);
+            $this->model->{$this->from_attr} = DateFormat::getMysqlDate($value['from'], arr::get($this->config, 'php_date_format'));
+            $this->model->{$this->to_attr} = DateFormat::getMysqlDate($value['to'], arr::get($this->config, 'php_date_format'));
         }
     }
 

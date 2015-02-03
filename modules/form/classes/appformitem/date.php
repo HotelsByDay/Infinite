@@ -15,8 +15,9 @@ class AppFormItem_Date extends AppFormItem_String
      */
     public function init()
     {
-        parent::addInitJS(View::factory('js/jquery.AppFormItemDate-init.js'));
-
+        $init_js = View::factory('js/jquery.AppFormItemDate-init.js');
+        $init_js->format = arr::get($this->config, 'js_date_format', DateFormat::getDatePickerDateFormat());
+        parent::addInitJS($init_js);
         return parent::init();
     }
     
@@ -33,13 +34,8 @@ class AppFormItem_Date extends AppFormItem_String
     {
         $value = parent::getValue();
 
-        if (empty($value) || $value == "0000-00-00")
-        {
-            return NULL;
-        }
-
         //trimovani kvuli tomu ze by time_format mohl byt prazdny
-        return date('Y-m-d', strtotime($value));
+        return DateFormat::getUserDate($value, arr::get($this->config, 'php_date_format'));
     }
 
     /**
@@ -67,7 +63,7 @@ class AppFormItem_Date extends AppFormItem_String
         {
             //prevedu na mysql date format - pokud je vstupni format netozeznan
             //tak vraci FALSE
-            $formatted_value = Format::mysqlDateTime($value);
+            $formatted_value = DateFormat::getMysqlDate($value);
 
             //datum je ve spatnem formatu - ulozim si priznak, ze je spatna hodnota
             if ($formatted_value === FALSE)
@@ -106,7 +102,7 @@ class AppFormItem_Date extends AppFormItem_String
 
             $view->value = empty($value)
                             ? ''
-                            : date('j.n.Y', strtotime($value));
+                            : $value;
         }
 
         return $view;

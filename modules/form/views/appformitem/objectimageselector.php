@@ -1,11 +1,12 @@
 
 <div  class="appformitemcontainer appformitemobjectimageselector <?= $css; ?>" name="<?= $attr ?>_item" id="<?= $uid; ?>">
   <?php if (!empty($error_message)): ?>
-    <span class="validation_error"><?= $error_message; ?></span>
+    <span class="validation_error alert alert-error"><?= $error_message; ?></span>
   <?php endif ?>
 
     <input type="hidden" name="<?= $attr ?>[images_list]" value="" />
     <input type="hidden" name="<?= $attr ?>[id]" value="<?= $value ?>" />
+    <input type="hidden" name="<?= $attr ?>[rel_id]" value="<?= $rel_id ?>" />
 
     <style type="text/css">
 
@@ -36,7 +37,7 @@
         }
     </style>
 
-    <div><label for="<?= $attr; ?>-password"><?= $label ?></label><br /></div>
+    <div><label for="<?= $attr; ?>-password"><?= $label ?></label></div>
 
     <div class="images_preview_outer">
 
@@ -56,6 +57,11 @@
             </div>
         <?php endforeach; ?>
     </div>
+
+    <?php if (isset($image_edit_url) and $image_edit_url): ?>
+        <a href="<?= $image_edit_url ?>" class="manage_images btn btn-primary btn-small"><?= __('objectimageselector.manage_images_link') ?></a>
+    <?php endif; ?>
+
     </div>
     <div class="clear"></div>
 
@@ -65,7 +71,6 @@
             <a href="" class="zoom" title=""><img src="" /></a>
         </div>
         <span class="preview"></span>
-        <br />
         <span class="select"><a href="javascript: ;"><?= __('objectimageselector.select_image') ?></a></span>
     </div>
 

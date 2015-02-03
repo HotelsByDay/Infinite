@@ -4,6 +4,8 @@
  * Jazykovy soubor, ktery obsahuje hlasky spojene s prihlasovanim a opravnenim uzivatelu.
  */
 return array(
+
+    'object.action.delete.confirm' => 'Are you sure to delete selected items?',
     'invalid_login_or_password' => 'Neplatné uživatelské jméno nebo heslo.',
     'footer_copyright' => 'Copyright &copy; 2010 RealHit, provozovatel MotorHit EU s.r.o.<br />
                            Užíváním služeb portálu RealHit.cz souhlasíte s Obchodními podmínkami. Všechna práva vyhrazena.',
@@ -14,6 +16,8 @@ return array(
     'error.500.title' => 'Došlo k neočekávané chybě.',
     'error.500.message' => 'Kontaktuje prosím technickou podporu na e-mailove adrese <a href="mailto:aukce@porsche.cz">aukce@porsche.cz</a>.',
 
+    'error.unexpected_error.title' => 'Unexpected error',
+    'error.unexpected_error.message' => 'Unexpected error occurred.',
 
     //ZAKLADNI POPISKY
     'jquery-ui._dialog.message_window_ok_button_label' => 'Zavřít',

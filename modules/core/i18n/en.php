@@ -4,12 +4,50 @@
  * Jazykovy soubor, ktery obsahuje hlasky spojene s prihlasovanim a opravnenim uzivatelu.
  */
 return array(
+
+    'form.close_btn.confirm_label' => 'Are you sure?',
+    'validation_error.alpha' => 'Value can contain letters only.',
+    'validation_error.alpha_dash' => 'Value can contain only letters and dashes.',
+    'validation_error.alpha_numeric' => 'Value must be alpha-numeric.',
+    'validation_error.color' => 'Given value is not a valid color.',
+    'validation_error.credit_card' => 'Given value is not a valid credit card number.',
+    'validation_error.date' => 'Given value is not a valid date.',
+    'validation_error.decimal' => 'Given value is not a valid number.',
+    'validation_error.digit' => 'Given value is not a valid digit.',
+    'validation_error.email' => 'Given value is not a valid e-mail.',
+    'validation_error.email_domain' => 'Given value is not a valid e-mail domain.',
+    'validation_error.equals' => 'Given values are not equal.',
+    // @todo - translate later - when needed (also uncomment in messages/validate.php)
+    'validation_error.exact_length' => '',
+    'validation_error.in_array' => '',
+    'validation_error.ip' => 'Given value is not a valid IP.',
+    'validation_error.matches' => '',
+    'validation_error.min_length' => '',
+    'validation_error.max_length' => '',
+    'validation_error.not_empty' => 'Value can not be empty.',
+    'validation_error.required' => 'Value can not be empty.',
+    'validation_error.numeric' => '',
+    'validation_error.phone' => 'Given value is not a valid phone number.',
+    'validation_error.phone_prefix_not_empty' => 'Phone country code can not be empty.',
+    'validation_error.range' => '',
+    'validation_error.regex' => '',
+    'validation_error.url' => 'Given value is not a valid URL.',
+    'validation_error.validation_unique' => 'Given value is already used in the system.',
+    'validation_error.unique' => 'Given value is already used in the system.',
+
+
+
+    
     'invalid_login_or_password' => 'Invalid username or password.',
     'footer_copyright' => 'Footer copyright...',
+
+    'afi_url_name.uri_not_available' => 'Given URL name is already used for another object.',
 
     'error.404.title' => 'The requested page was not found.',
     'error.404.message' => '',
 
+    'error.unexpected_error.title' => 'Unexpected error',
+    'error.unexpected_error.message' => 'Unexpected error occurred.',
     'error.500.title' => 'Unexpected error occured.',
     'error.500.message' => 'Pleaase contact our support at <a href="mailto:support@infinite.cz">support@infinite.cz</a>.',
 
@@ -27,10 +65,30 @@ return array(
     'main_menu.settings' => 'Settings',
 
     'object_data_panel.search' => 'Search',
+    'objectimageselector.manage_images_link' => 'Manage Images',
 
-    'object.action.delete.message_ok' => ':count records were succesfully removed.',
+
+    'object.inactive' => 'Inactive',
+    'object.active' => 'Active',
+
+    'object.activate_action' => 'Activate',
+    'object.action.activate.message_ok' => ':count records were successfully activated.',
+    'object.action.activate.message_error' => 'There was an error when activating records:',
+    'object.action.activate.undo_message_ok' => ':count records were successfully restored (inactivated).',
+    'object.action.activate.undo_message_error' => 'There was an error restoring (inactivating) these records:',
+    'object.action.activate.confirm' => 'Are you sure to activate selected records?',
+
+    'object.inactivate_action' => 'Inactivate',
+    'object.action.inactivate.message_ok' => ':count records were successfully inactivated.',
+    'object.action.inactivate.message_error' => 'There was an error when inactivating records:',
+    'object.action.inactivate.undo_message_ok' => ':count records were successfully restored (activated).',
+    'object.action.inactivate.undo_message_error' => 'There was an error restoring (activating) these records:',
+    'object.action.inactivate.confirm' => 'Are you sure to inactivate selected records?',
+
+
+    'object.action.delete.message_ok' => ':count records were successfully removed.',
     'object.action.delete.message_error' => 'There was an error when removing records:',
-    'object.action.delete.undo_message_ok' => ':count records were succesfully restored.',
+    'object.action.delete.undo_message_ok' => ':count records were successfully restored.',
     'object.action.delete.undo_message_error' => 'There was an error restoring these records:',
 
     //PRIHLASOVACI OBRAZOVKA
@@ -88,13 +146,16 @@ return array(
     'object.action_delete.item_not_found' => 'The item was not found.',
     'object.action_delete.not_authorized_on_item' => 'You are not authorized to remove selected item.',
     'object.action_delete.error_occured' => 'An error occured when removing the item.',
-
+    'object.delete_action_confirm' => 'Do you really want to delete selected item?',
+    'object.action.delete.confirm' => 'Are you sure to delete selected items?',
     'more.menu_name' => 'Next',
 
     'setting.menu_name' => 'Settings',
 
     'filterstate_form.name.label' => 'Filter name',
 
+    'delete' => 'Delete',
+    'undelete' => 'Undelete',
     
     //LOGACTION
     'logaction.inserted_message' => 'New item ":preview" was created.',
@@ -108,12 +169,16 @@ return array(
     'logaction.th_useragent' => 'Typ přístupu',
     'logaction.th_locality' => 'Lokalita',
     'user_activity.filter_fulltext' => 'Obsahuje:',
-    'user_activity.filter_to_from' => 'Od:',
-    'user_activity.filter_to_to' => 'Do:',
+    'user_activity.filter_to_from' => 'From:',
+    'user_activity.filter_to_to' => 'To:',
 
     //obecne pomocne texty
     'codebook.default_prepend_value' => '-not selected-',
 
+
+    // Form items
+    'relnnselect.check_all' => 'Check All',
+    'relnnselect.uncheck_all' => 'Uncheck All',
 
     //TEMATA NAPOVEDY
     'tip_help.tip_title' => 'Help',
@@ -132,4 +197,18 @@ return array(
     'upload.error.invalid_image_dimension.max_width'  => 'The image width is :width px which exceeds the maximal width of :max_width px.',
     'upload.error.invalid_image_dimension.min_height' => 'The image height is :height px which does not meet the minimal required height of :min_height px.',
     'upload.error.invalid_image_dimension.max_height' => 'The image height is :height px which exceeds the maximal height of :max_height px.',
+
+    'month_1' => 'Jan',
+    'month_2' => 'Feb',
+    'month_3' => 'Mar',
+    'month_4' => 'Apr',
+    'month_5' => 'May',
+    'month_6' => 'Jun',
+    'month_7' => 'Jul',
+    'month_8' => 'Aug',
+    'month_9' => 'Sep',
+    'month_10' => 'Oct',
+    'month_11' => 'Nov',
+    'month_12' => 'Dec',
+
 );
