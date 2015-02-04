@@ -242,6 +242,29 @@ $(document).ready(function(){
         return false;
     });
 
+    $(document).on('click', '.show_dialog', function() {
+        var $dialog = $(document.createElement('div')).appendTo('body');
+        var $link = $(this);
+        $dialog.load($link.attr('href'), function(){
+            $dialog._dialog({
+                modal:true,
+                title: $link.attr('data-dialog_title'),
+                autoResize: true,
+                width: 'auto',
+                height: 'auto',
+                position: 'center',
+                resizable: true,
+                draggable:true,
+                closeOnEscape:true,
+                close: function () {
+                $(this).dialog('destroy').empty();
+                $dialog.remove();
+                }
+            });
+        });
+        return false;
+    });
+
     $(window).resize(function() {
         $(".popupform_dialog")._dialog("option", "position", "center");
     });
