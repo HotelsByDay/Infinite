@@ -189,30 +189,26 @@
             });
 
             //nabinduju akci na jednotlive tlacitka formulare
-            $_this.find(".form_button").each(function(){
-
-                $(this).click(function(e){
-
-                    //obsluha 'confirm' atributu
-                    if (typeof $(this).attr('confirm') !== 'undefined') {
-                        if ( ! confirm($(this).attr('confirm'))) {
-                            return false;
-                        }
+            $_this.on('click', ".form_button", function(e){
+                //obsluha 'confirm' atributu
+                if (typeof $(this).attr('confirm') !== 'undefined') {
+                    if ( ! confirm($(this).attr('confirm'))) {
+                        return false;
                     }
+                }
 
-                    //prectu aktualni formularova data
-                    var form_data = $_this.find('form').serialize();
+                //prectu aktualni formularova data
+                var form_data = $_this.find('form').serialize();
 
-                    //pripojim identifikaci stisknuteho formularoveho tlacitka
-                    form_data += '&'+$(this).attr('name')+'='+$(this).val();
+                //pripojim identifikaci stisknuteho formularoveho tlacitka
+                form_data += '&'+$(this).attr('name')+'='+$(this).val();
 
-                    //odeslani formulare
-                    methods._submitForm($_this, form_data, $(this).attr('ptitle'));
+                //odeslani formulare
+                methods._submitForm($_this, form_data, $(this).attr('ptitle'));
 
-                    //prevents default action
-                    e.preventDefault();
-                    return false;
-                });
+                //prevents default action
+                e.preventDefault();
+                return false;
             });
 
             //tlacitko pro zavreni formulare pouze stiskne tlacitko zpet
