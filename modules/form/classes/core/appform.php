@@ -1052,7 +1052,6 @@ class Core_AppForm {
      */
     public function getHeadline()
     {
-
         //nadpis se generuje podle toho zda je zaznam jiz ulozen
         return $this->_model->loaded()
                 ? ___($this->getFormType().'.form_edit_headline', array(':preview' => $this->_model->preview()), __($this->_model->object_name().'.form_edit_headline', array(':preview' => $this->_model->preview())))

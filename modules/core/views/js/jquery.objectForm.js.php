@@ -189,7 +189,7 @@
             });
 
             //nabinduju akci na jednotlive tlacitka formulare
-            $_this.on('click', ".form_button", function(e){
+            $_this.one('click', ".form_button", function(e){
                 //obsluha 'confirm' atributu
                 if (typeof $(this).attr('confirm') !== 'undefined') {
                     if ( ! confirm($(this).attr('confirm'))) {
