@@ -31,9 +31,9 @@ return array(
 
     'object_data_panel.search' => 'Search',
 
-    'object.action.delete.message_ok' => ':count records were succesfully removed.',
+    'object.action.delete.message_ok' => ':count records were successfully removed.',
     'object.action.delete.message_error' => 'There was an error when removing records:',
-    'object.action.delete.undo_message_ok' => ':count records were succesfully restored.',
+    'object.action.delete.undo_message_ok' => ':count records were successfully restored.',
     'object.action.delete.undo_message_error' => 'There was an error restoring these records:',
 
     //PRIHLASOVACI OBRAZOVKA

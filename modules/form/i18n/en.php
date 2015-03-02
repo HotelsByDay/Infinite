@@ -10,13 +10,13 @@ return array(
 
     'form_action_status.model_save_failed' => 'There was a validation error.',
     'form_action_result.message_save_failed' => 'An error occurred while saving the form.',
-    'form_action_result.message_process_success' => 'Saved succesfully',
+    'form_action_result.message_process_success' => 'Saved successfully',
     
     //ZAKLADNI HLASKY PRO FORMULAROVE FUNKCE
     'form_action_result.model_validation_failed' => 'There was a validation error. Please check marked fields on the form.',
     'form_action_result.model_save_failed' => 'There was an error while saving.',
-    'form_action_status.model_saved_but_may_be_incosistent' => 'Saved succesfully, but there was an error during the post processing.',
-    'form_action_result.message_save_success' => 'Saved succesfully',
+    'form_action_status.model_saved_but_may_be_incosistent' => 'Saved successfully, but there was an error during the post processing.',
+    'form_action_result.message_save_success' => 'Saved successfully',
 
     'form_action_button.update_label' => 'Save',
     'form_action_button.insert_label' => 'Save',
