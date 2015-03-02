@@ -77,12 +77,34 @@ class AppFormItem_UserRoleSelect extends AppFormItem_Base
         }
     }
 
+    /**
+     * @return Database_Result
+     */
+    protected function getCurrentRoles()
+    {
+        if ( ! empty($this->virtual_value)) {
+            $roles = (array)$this->virtual_value;
+            return array_combine($roles, $roles);
+        }
+        $user_roles = $this->model->role->get_cb('roleid', 'roleid');
+        return $user_roles;
+    }
 
+    /**
+     * @return Database_Result
+     */
+    protected function getAllRoles()
+    {
+        $user_roles = ORM::factory('role')->order_by('sequence')->find_all();
+        return $user_roles;
+    }
 
-
-
-
-
+    public function Render($render_style = NULL, $error_messages = NULL)
+    {
+        return parent::Render($render_style, $error_messages)
+            ->set('values', $this->getAllRoles())
+            ->set('value', $this->getCurrentRoles());
+    }
 
 
 }
