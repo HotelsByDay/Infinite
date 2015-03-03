@@ -10,4 +10,19 @@ class Model_emailqueue extends ORM_Authorized
 
     protected $update_on_delete = true;
 
+//    protected function getDefaults()
+//    {
+//        //loads table columns definition into $this->_table_columns
+//        $this->reload_columns();
+//
+//        $data = array();
+//        //ID uzivatele, ktery zaznam vytvari
+//        if (array_key_exists('userid', $this->_table_columns) && $this->_primary_key != 'userid' && Auth::instance()->get_user() != NULL)
+//        {
+//            $data['userid'] = Auth::instance()->get_user()->pk();
+//        }
+//        return $data;
+//    }
+
 }
+

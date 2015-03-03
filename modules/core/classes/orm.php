@@ -1119,15 +1119,15 @@ class ORM extends Kohana_ORM {
 
         $selects = array();
 
-	foreach ($this->_db_pending as $key => $method)
-	{
-            if ($method['name'] == 'select')
-            {
-                // Ignore any selected columns for now
-		$selects[] = $method;
-		unset($this->_db_pending[$key]);
-            }
-	}
+        foreach ($this->_db_pending as $key => $method)
+        {
+                if ($method['name'] == 'select')
+                {
+                    // Ignore any selected columns for now
+            $selects[] = $method;
+            unset($this->_db_pending[$key]);
+                }
+        }
 
 	$this->_build(Database::SELECT);
 
