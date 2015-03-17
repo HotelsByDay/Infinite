@@ -184,6 +184,9 @@ class Kohana_Emailq {
 
                     try
                     {
+                        
+                        $plaintext_body = '';
+                        
                         if (isset($e->plain_body)) {
                             $plaintext_body = $e->plain_body;
                         }
@@ -258,6 +261,8 @@ class Kohana_Emailq {
                         ));
 
                         Kohana::$log->write();
+                        
+                        throw new Exception($e->getMessage());
                     }
 		}
 	}
