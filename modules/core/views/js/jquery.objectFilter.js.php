@@ -217,6 +217,7 @@
                     width:400,
                     height:300,
                     draggable:true,
+                    modal:true,
                     resizable:false,
                     position:'center'
                 });
@@ -305,7 +306,12 @@
                     methods._bindExportControl( $_this , $(".export_control", $_this) );
                 }
 
-                //prvni div uvnitr elementu .filter_actions obsahuje tlacitka pro 
+                // Dialogova okna zobrazena odkazem v table containeru mohou emitovat tuto udalost nad svym odkazem
+                $_this.parents('.tableview:first').on('dialogSuccess', function() {
+                    $_this.objectFilter('refresh');
+                });
+
+                //prvni div uvnitr elementu .filter_actions obsahuje tlacitka pro
                 //standardni funkce filtru (vyhledat, resetovat)
                 //druhy div uvnitr elementu .filter_actions obsahuje tlacitka
                 //pro editaci ulozeneho filtru (ulozit zmeny, zrusit editaci)

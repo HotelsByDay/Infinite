@@ -31,24 +31,8 @@ $.widget("ui._dialog", $.ui.dialog, {
 
         //zavreni formulare
         $content.find('.<?= AppForm::FORM_BUTTON_CLOSE_CSS_CLASS;?>').click(function(){
-            var $b = $(this);
-//            if ($b.attr('data-clicked')) {
-                //dialogove okno zavru
-                _this.close();
-//            }
-            /*
-            $b.attr('data-orig_text', $b.text());
-            $b.text('<?= __('form.close_btn.confirm_label') ?>');
-            $b.attr('disabled', true);
-            setTimeout(function(){
-                $b.attr('data-clicked', '1');
-                $b.attr('disabled', false);
-                setTimeout(function(){
-                    $b.attr('data-clicked', '');
-                    $b.text($b.attr('data-orig_text'));
-                }, 2000);
-            }, 500);
-            */
+            _this.close();
+            return false;
         });
 
         //pokud se vyska formulare nastavuje podle obsahu, chci aby dialog zustaval vycentrovany
@@ -126,30 +110,6 @@ $.widget("ui._dialog", $.ui.dialog, {
                         //odblokuju UI
                         _this.unblockUI();
 
-
-                        /*else {
-
-                            //uzivateli bude zobrazena chybova zprava
-                            $.userDialogMessage(response['action_result'], [
-                                {
-                                    text: "<? __('jquery-ui._dialog.message_window_ok_button_label');?>",
-                                    click: function(){
-                                        //zavru dialog
-                                        $(this).dialog('close');
-
-                                        //vyvolam callback pokud je definovan
-                                        if (typeof action_result_callback !== 'undefined')
-                                        {
-                                            action_result_callback(response);
-                                        }
-
-                                        //odblokuju UI
-                                        _this.unblockUI();
-                                    }
-                                }
-                            ]);
-                        }*/
-
                     } else {
 
                         //vyvolam callback pokud je definovan - predam mu komplet
@@ -193,19 +153,19 @@ $.widget("ui._dialog", $.ui.dialog, {
         var options                = typeof arg1 !== 'undefined' ? arg1 : undefined;
         var action_result_callback = typeof arg2 === 'function'  ? arg2 : undefined;
 
-        //otevru dialog
-        this.open();
         //zablokovani UI
         this.blockUI();
         //zpristupneni uvnitr callbacku ve funkci getJSON
         var _this = this;
+
+        //otevru dialog
+        _this.open();
         //nacteni obsahu
         $._ajax({
             type:'POST',
             url:url,
             data: options,
             success: function(response){
-
                 //na klici 'preview' ocekavam retezec pro title dialogu
                 if (typeof response['headline'] !== 'undefined')
                 {
@@ -238,4 +198,74 @@ $.widget("ui._dialog", $.ui.dialog, {
             dataType: 'json'
         });
     }
+});
+
+
+$(document).ready(function(){
+
+    // Dialogovy formular kdekoli v kodu
+    $(document).on('click', '.popupform', function() {
+
+        var $dialog = $( document.createElement('div') )
+            .addClass('popupform_dialog')
+            .hide()
+            .appendTo('body');
+
+        //inicializace dialogoveho okna
+        $dialog._dialog({
+            modal:true,
+            autoResize: true,
+            width: 'auto',
+            height: 'auto',
+            position: 'center',
+            resizable: true,
+            draggable:true,
+            closeOnEscape:true,
+            close: function () {
+                $dialog.remove();
+            }
+        });
+
+        //url pro nacteni editacniho formulare
+        var edit_url = $(this).attr('href');
+        var $clicked_item = $(this);
+
+
+        $dialog._dialog('loadForm', edit_url, {}, function(response) {
+            if (response['action_status'] == '<?= AppForm::ACTION_RESULT_SUCCESS;?>') {
+                $clicked_item.trigger('dialogSuccess');
+                //zavru dialogove okno
+                $dialog._dialog('close');
+            }
+        });
+
+        return false;
+    });
+
+    $(document).on('click', '.show_dialog', function() {
+        var $dialog = $(document.createElement('div')).appendTo('body');
+        var $link = $(this);
+        $dialog.load($link.attr('href'), function(){
+            $dialog._dialog({
+                modal:true,
+                title: $link.attr('data-dialog_title'),
+                autoResize: true,
+                width: 'auto',
+                height: 'auto',
+                position: 'center',
+                resizable: true,
+                draggable:true,
+                closeOnEscape:true,
+                close: function () {
+                    $(this).dialog('destroy').empty();
+                    $dialog.remove();
+                }
+            });
+        });
+        return false;
+    });
+
+    $(window).resize(function() {
+        $(".popupform_dialog")._dialog("option", "position", "center");
+    });
 });
