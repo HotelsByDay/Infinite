@@ -130,6 +130,8 @@ class Core_AppForm {
 
     protected $_form_data_original = array();
 
+    protected $_form_data_defaults = array();
+
     //Zde budou ulozeny jednotlive formularove prvky ve forme ReflectionClass
     protected $_form_items = array();
 
@@ -138,7 +140,7 @@ class Core_AppForm {
     //slouzi k ulozeni konfigurace pro tento formular - jsou tady fallback hodnoty
     protected $_config = array(
         
-        //Sablona do ktere se vklada vlastni formular. Definuje hlavicku a paticku
+        // Sablona do ktere se vklada vlastni formular. Definuje hlavicku a paticku
         'container_view_name' => 'form_container_standard'
     );
 
