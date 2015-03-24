@@ -279,9 +279,13 @@
                     progress_indicator_cycle();
                 }
 
-
                 // Dialogova okna zobrazena odkazem v table containeru mohou emitovat tuto udalost nad svym odkazem
                 $this.on('dialogSuccess', function() {
+                    methods._updateQuery($this, undefined, true);
+                });
+
+                // data-ajax links in tables
+                $this.on('onSuccess', function() {
                     methods._updateQuery($this, undefined, true);
                 });
             });

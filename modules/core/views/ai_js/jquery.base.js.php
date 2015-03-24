@@ -233,6 +233,48 @@ $._ajax = function(arg1, arg2)
     $.ajax(arg1, arg2);
 }
 
+
+// Zobrazeni confirm hlasky
+$(document).on('click', '*[data-confirm]', function(e) {
+    var $item = $(this);
+    // Container obalujici prvek nad kterym se vyvolava confirm - prida se mu classa
+    var $container = false;
+    var sel = $item.attr('data-container');
+    if ( ! sel && $item.parents('.table_data, .table').length) {
+        sel = 'tr';
+    }
+    if (sel) {
+        $container = $item.parents(sel + ':first');
+        $container.addClass('to-be-confirmed');
+    }
+    var confirmed = confirm($item.attr('data-confirm'));
+    $item.attr('data-confirmed', confirmed);
+    if ( ! confirmed) {
+        e.preventDefault();
+        if ($container) $container.removeClass('to-be-confirmed');
+    }
+    return confirmed;
+});
+
+// Provedeni ajax pozadavku na href odkazu
+$(document).on('click', 'a[data-ajax]', function() {
+    var $item = $(this);
+    if ($item.attr('data-confirmed') == 'false') {
+        return;
+    }
+    $._ajax({
+        url: $item.attr('href'),
+        success: function(r) {
+            $item.trigger('onSuccess', r);
+        },
+        error: function(r) {
+            $item.trigger('onFailure', r);
+        }
+    });
+    return false;
+});
+
+
 // getJSON function overload
 // - redirect support added
 $._getJSON = function(arg0, arg1, arg2)
