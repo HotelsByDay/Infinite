@@ -596,13 +596,21 @@ abstract class Filter_Base
         return $this->results_total_count;
     }
 
+
+    public function getResultsForExport($export_config)
+    {
+        $orm = ORM::factory($this->object_name);
+        $pre_filter = arr::get($export_config, 'pre_filter');
+        return $this->getResults(false, $pre_filter);
+    }
+
     /**
      * Metoda vraci indexovane pole, kde na prvnim indexu je celkovy pocet zaznamu,
      * ktery vyhovuje danemu filtru a na druhem indexu je ORM_Iterator, ktery
      * obsahuje vysledky pro danou stranku.
      * @return <ORM_Iterator> ORM_Iterator, ktery 'obsahuje' vysledky vyhledavani.
      */
-    public function getResults($paginate = TRUE)
+    public function getResults($paginate = TRUE, $export_filter=NULL)
     {
         //podle parametru vyhledavani sesmolim vyhledavaci dotaz pres ORM modely
         //a vracim ORM_Iterator
@@ -684,6 +692,10 @@ abstract class Filter_Base
 
         //aplikuji razeni vysledku
         $this->applyOrderSettings($orm);
+
+        if (is_callable($export_filter)) {
+            $orm = call_user_func($export_filter, $orm);
+        }
 
         //a vytahnu si ORM_Iterator, ktery definuje pozadovane vysledky vyhledavani
         return array(

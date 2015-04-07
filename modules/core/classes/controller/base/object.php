@@ -1854,7 +1854,7 @@ abstract class Controller_Base_Object extends Controller_Layout {
             $filter_instance = $this->loadAndInitFilterClassInstance($table_config);
 
             //Vraci ORM_Iterator predstavici vysledky vyhledavani
-            list($results, $filter_state_id, $filter_state_stat) = $filter_instance->getResults(FALSE);
+            list($results, $filter_state_id, $filter_state_stat) = $filter_instance->getResultsForExport($export_config);
 
             $export_filename = DataExport::Factory($export_config, $results, $filter_instance->getFilterParams())
                 ->generateExport()
