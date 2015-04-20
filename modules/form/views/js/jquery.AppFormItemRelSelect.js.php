@@ -152,8 +152,6 @@
                                 name = name.replace(default_params['attr'], attr_name)
                                            .replace('[name]', '[value]');
 
-                                console.log('looking for name: ' + name);
-
                                 var $item_selector = $('input[name="'+name +'"]');
                                 if ($item_selector.length != 0) {
                                     pom_data[attr_name] = $item_selector.val();
@@ -230,8 +228,6 @@
                                 $('input[type="text"][name="'+k+'"],input[type="hidden"][name="'+k+'"],textarea[name="'+k+'"],select[name="'+k+'"]').each(function(){
                                     // Ulozime si info o tom ze prvek byl automaticky vyplnen
                                     filled_input_names.push(k);
-                                    console.log(ui.item.fill);
-                                    console.log(ui.item);
                                     $(this).val(ui.item.fill[k]);
 
                                     if (typeof ui.item.silent_fill === 'undefined' || ! ui.item.silent_fill) {
