@@ -1,5 +1,5 @@
 
-<div  class="appformitemcontainer appformitemdate form-group <?= $css; ?>" name="<?= $attr ?>_item" id="<?= $uid; ?>">
+<div  class="appformitemcontainer appformitemdate form-group <?= $css; ?> <?= empty($error_message) ? '' : 'has-error' ?>" name="<?= $attr ?>_item" id="<?= $uid; ?>">
 
     <label for="<?= $attr ?>"><?= $label ?></label>
     <input type="text" id="<?= $attr ?>" name="<?= $attr ?>" value="<?= htmlspecialchars($value) ?>" class="form-control date_picker" />

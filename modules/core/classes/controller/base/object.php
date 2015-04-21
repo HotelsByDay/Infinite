@@ -647,7 +647,12 @@ abstract class Controller_Base_Object extends Controller_Layout {
         //vystup bude prazdny
         $this->template = new View('null');
     }
-    
+
+
+    /**
+     * @var null|Filter_Base
+     */
+    protected $filter_instance = NULL;
     /**
      * Metoda vypise na stdout hodnoty pro autocomplete daneho poradace
      *
@@ -664,10 +669,10 @@ abstract class Controller_Base_Object extends Controller_Layout {
         $this->request_params['status'] = '1';
 
         //vytvori instanci tridy, ktera zajistuje logiku filtrovani
-        $filter_instance = $this->loadAndInitFilterClassInstance();
+        $this->filter_instance = $this->loadAndInitFilterClassInstance();
 
         //Vraci ORM_Iterator predstavici vysledky vyhledavani
-        list($results, $filter_state_id, $filter_state_stat) = $filter_instance->getResults();
+        list($results, $filter_state_id, $filter_state_stat) = $this->filter_instance->getResults();
 
         $data = Array();
 

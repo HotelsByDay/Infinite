@@ -714,6 +714,11 @@ abstract class Filter_Base
         return $this->filter_params;
     }
 
+    public function getFilterParam($key, $default=NULL)
+    {
+        return arr::get($this->filter_params, $key, $default);
+    }
+
     /**
      * 
      */

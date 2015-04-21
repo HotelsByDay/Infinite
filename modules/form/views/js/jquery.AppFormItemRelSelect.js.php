@@ -45,6 +45,8 @@
                 // Seznam names prvku ktere byly automaticky vyplneny po zvoleni objektu
                 var filled_input_names = [];
 
+                var local_change = false;
+
                 // Ulozime si aktualni jmeno, abychom mohli detekovat jeho zmenu v inputu
                 $value.data('selected', $name.val());
 
@@ -52,7 +54,11 @@
                 var clear = function(){
                     $name.val('');
                     $value.val('');
+                    console.log('item.change triggered on: ' + $this.attr('name'));
+                    local_change = true;
                     $name.trigger('change');
+                    local_change = false;
+                    console.log('clear called on: ' + $this.attr('name'));
                 }
                 // Inicializace dynamic_filtru - pri zmene hodnoty na kterou se vaze filtr
                 // dojde ke smazani zdejsi hodnoty
@@ -63,12 +69,17 @@
                         var $item = $this.parents('.<?php echo AppForm::FORM_CSS_CLASS; ?>:first').find('*[name="'+f+'"]');
                         // Pokud prvek nebyl nalezen, nic neudelame
                         if (typeof($item) == 'undefined' || ! $item) continue;
+
+                        console.log($this.attr('name') + ' listening to change on: ' + $item.attr('name'));
                         $item.change(clear);
                     }
                 }
 
 
                 $name.change(function() {
+                    if (local_change) {
+                        return;
+                    }
                     //podivam se na hodnotu, ktera byla uzivatelem vybrana
                     var current_ui_item = $value.data('selected');
 
