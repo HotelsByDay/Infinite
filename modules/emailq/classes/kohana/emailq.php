@@ -151,6 +151,8 @@ class Kohana_Emailq {
                 ->setUsername($this->config->mail_options['username'])
                 ->setPassword($this->config->mail_options['password'])
             ;
+        } else if ($this->config->mail_options['driver'] == 'sendmail') {
+            $transport = Swift_SendmailTransport::newInstance($this->config->mail_options['sendmail_cmd']);
         } else {
             $transport = Swift_SendmailTransport::newInstance();
         }
