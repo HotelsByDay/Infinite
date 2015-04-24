@@ -44,7 +44,7 @@ class Kohana_Emailq {
      * @param  $subject
      * @param  $body
      * @param array $attachments
-     * @param null $direct_attachements
+     * @param null $direct_attachements // array(array('filename'=>'file.txt', 'filepath'=>'/tmp/file.txt'))
      * @param null $model_name
      * @param null $model_id
      * @param null $email_type
