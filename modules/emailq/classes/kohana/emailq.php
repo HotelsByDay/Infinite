@@ -44,7 +44,7 @@ class Kohana_Emailq {
      * @param  $subject
      * @param  $body
      * @param array $attachments
-     * @param null $direct_attachements
+     * @param null $direct_attachements // array(array('filename'=>'file.txt', 'filepath'=>'/tmp/file.txt'))
      * @param null $model_name
      * @param null $model_id
      * @param null $email_type
@@ -151,6 +151,8 @@ class Kohana_Emailq {
                 ->setUsername($this->config->mail_options['username'])
                 ->setPassword($this->config->mail_options['password'])
             ;
+        } else if ($this->config->mail_options['driver'] == 'sendmail') {
+            $transport = Swift_SendmailTransport::newInstance($this->config->mail_options['sendmail_cmd']);
         } else {
             $transport = Swift_SendmailTransport::newInstance();
         }
