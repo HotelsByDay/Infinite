@@ -20,6 +20,11 @@ class DataExport_FileStorage
         $this->config = kohana::$config->load('dataexport_filestorage');
     }
 
+    public function getFileHandler()
+    {
+        return $this->file_handler;
+    }
+
     public function Init($requested_filename)
     {
         if ( ! empty($this->file_path))
