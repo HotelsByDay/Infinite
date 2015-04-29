@@ -30,11 +30,14 @@ class DataExport_Driver_CSV implements DataExport_iDriver
     {
         $this->file_storage->fileOpen();
 
-        $this->file_storage->fileAppend($this->getHeaderLine());
+        $handler = $this->file_storage->getFileHandler();
+
+        // Write header line
+        fputcsv($handler, $this->getHeaderLine(), $this->getDelimiter());
 
         foreach ($this->data as $model)
         {
-            $this->file_storage->fileAppend($this->getDataLine($model));
+            fputcsv($handler, $this->getDataLine($model), $this->getDelimiter());
         }
 
         $this->file_storage->fileClose();
@@ -108,12 +111,11 @@ class DataExport_Driver_CSV implements DataExport_iDriver
     /**
      *
      * @param $line_values_array
-     * @return string
+     * @return array
      */
     protected function getDataLineFromArray($line_values_array)
     {
         $csv_delimiter = $this->getDelimiter();
-        $csv_nl        = $this->getNL();
 
         $iconv_setting = arr::get($this->config, 'iconv');
 
@@ -129,7 +131,7 @@ class DataExport_Driver_CSV implements DataExport_iDriver
             $line_values_array[$i] = $value;
         }
 
-        return implode($csv_delimiter, $line_values_array).$csv_nl;
+        return $line_values_array;
     }
 
     /**
