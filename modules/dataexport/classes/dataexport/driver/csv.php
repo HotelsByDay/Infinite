@@ -144,7 +144,7 @@ class DataExport_Driver_CSV implements DataExport_iDriver
      */
     protected function escapeValue($csv_delimiter, $value)
     {
-        return '"'.str_replace('"', '""', $value).'"';
+        return $value;
     }
 
     /**
