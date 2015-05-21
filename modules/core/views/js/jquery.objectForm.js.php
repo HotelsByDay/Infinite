@@ -305,6 +305,8 @@
             // - its global value stored in cookie
             var active_language = $_this.objectForm('getDefaultLocale');
 
+
+
             /**
              * EventHandler called after lang switch button is clicked
              * @param event
@@ -379,7 +381,6 @@
             //    console.log('objectForm saving active locale: '+active_locale);
                 $.cookie('objectForm.active_locale', active_locale);
                 active_language = active_locale;
-
             });
 
             // If enabled locales are changed - we need to regenerate all switches
@@ -742,7 +743,7 @@
 
         _log: function( text ) {
             if ( typeof console !== 'undefined') {
-             //   console.log( text );
+                console.log( text );
             }
         }
 

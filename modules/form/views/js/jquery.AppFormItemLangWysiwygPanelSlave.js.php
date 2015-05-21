@@ -61,7 +61,7 @@
                         autoresize: true,
                         resize: false,
                         // See http://redactorjs.com/docs/toolbar/
-                        buttons: ['formatting', '|', 'bold', 'italic', '|','fontcolor','|',
+                        buttons: ['html', 'formatting', '|', 'bold', 'italic', '|','fontcolor','|',
                             'unorderedlist', 'orderedlist', 'outdent', 'indent', '|', 'link'],
                         focus: false,
                         callback: function() {
@@ -91,9 +91,8 @@
                  * @param no_focus - after formInit we do not want to have a focus in Wysiwyg editor
                  */
                 var onActiveLocaleChanged = function(event, locale) {
-
                     // Bez tohoto hazi redactor chybu, prestoze doslo k volani initWysiwyg funkces
-                 //   $visible_input.redactor();
+                    $visible_input.redactor();
                     if (active_locale) {
                         // Ulozime aktualni text do hidden inputu aktualniho locale
                         var translation = $visible_input.getCode();
@@ -156,8 +155,8 @@
                 // Na udalost activeLocaleChanged budeme menit hodnotu v inputu - hodime tam preklad pro dane locale
                 // - nejprve volame unbind, protoze po ulozeni formulare dochazi k opetovne inicializaci prvku, zatimco form
                 //   je stale stejny
-                $form.unbind('activeLocaleChanged.wysiwygPanelSlave');
-                $form.bind('activeLocaleChanged.wysiwygPanelSlave', onActiveLocaleChanged);
+                var event_name = 'activeLocaleChanged.' + settings.attr;
+                $form.off(event_name).on(event_name, onActiveLocaleChanged);
 
                 onActiveLocaleChanged(null, $form.objectForm('getDefaultLocale'));
 
