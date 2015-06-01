@@ -11,7 +11,7 @@
 
     <?php endif ?>
 
-    <input class="langinput" type="text" id="<?= $uid.'_langinput' ?>" placeholder="" value="" <?= isset($min_length) ? "minlength=\"$min_length\"" : '' ?> <?= isset($max_length) ? "maxlength=\"$max_length\"" : '' ?> />
+    <input class="langinput input-block-level" type="text" id="<?= $uid.'_langinput' ?>" placeholder="" value="" <?= isset($min_length) ? "minlength=\"$min_length\"" : '' ?> <?= isset($max_length) ? "maxlength=\"$max_length\"" : '' ?> />
 
 
         <?php $i=0; foreach ($translates as $locale => $value): $i++; ?>
