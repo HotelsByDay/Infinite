@@ -1007,12 +1007,12 @@ abstract class Controller_Base_Object extends Controller_Layout {
         // inicializace pluginu
         // Pokud model implementuje Slave_Compatible interface pak pluginu formulare predame seznam povolenych jazyku
         $config = (array)arr::get($form_config, 'js_config');
-        if ($this->model instanceof Interface_AppFormItemLang_SlaveCompatible) {
-            // Get languages enabled for current model
-            $enabled_languages = $this->model->getEnabledLanguagesList();
-            // Add languages labels
-            $config['enabled_languages'] = Languages::fillLanguagesLabels($enabled_languages);
-        }
+//        if ($this->model instanceof Interface_AppFormItemLang_SlaveCompatible) {
+//            // Get languages enabled for current model
+//            $enabled_languages = $this->model->getEnabledLanguagesList();
+//            // Add languages labels
+//            $config['enabled_languages'] = Languages::fillLanguagesLabels($enabled_languages);
+//        }
         Web::instance()->addMultipleCustomJSFile(View::factory('js/jquery.objectForm-init.js', array('config' => $config)));
 
         //file set - standardni formularove prvky
