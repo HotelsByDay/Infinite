@@ -260,6 +260,12 @@ class Core_AppForm {
         //detekce pozadovane akce
         $this->requested_action = arr::getifset($this->_form_data, self::ACTION_KEY, NULL);
 
+
+        // Add init javascript
+        if ( ! Request::$is_ajax) {
+            $this->initJs();
+        }
+
         //nactu formularove prvky
         $this->loadFormItems();
 
@@ -271,6 +277,10 @@ class Core_AppForm {
         return $this;
     }
 
+    protected function initJs()
+    {
+        Web::instance()->addMultipleCustomJSFile(View::factory('js/jquery.objectForm-init.js', array('config' => $this->getJsConfig())));
+    }
 
     /**
      * @return Kohana_ORM|null|ORM
@@ -1200,6 +1210,11 @@ class Core_AppForm {
     public function showButtons()
     {
         return arr::get($this->_config, 'show_buttons', true);
+    }
+
+    public function getJsConfig()
+    {
+        return (array)arr::get($this->_config, 'js_config');
     }
 
 

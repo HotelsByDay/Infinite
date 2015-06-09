@@ -997,32 +997,14 @@ abstract class Controller_Base_Object extends Controller_Layout {
             LogAction::runControllerEvent('new', $this->object_name);
         }
 
-        //nactu si konfiguracni soubor pro dany formular
-        $form_config = $this->_config_form();
-
         //pridam JS soubor, ktery zajisti zakladni funkci editacniho formulare
         Web::instance()->addCustomJSFile(View::factory('js/jquery.objectForm.js'));
-
-
-        // inicializace pluginu
-        // Pokud model implementuje Slave_Compatible interface pak pluginu formulare predame seznam povolenych jazyku
-        $config = (array)arr::get($form_config, 'js_config');
-//        if ($this->model instanceof Interface_AppFormItemLang_SlaveCompatible) {
-//            // Get languages enabled for current model
-//            $enabled_languages = $this->model->getEnabledLanguagesList();
-//            // Add languages labels
-//            $config['enabled_languages'] = Languages::fillLanguagesLabels($enabled_languages);
-//        }
-        Web::instance()->addMultipleCustomJSFile(View::factory('js/jquery.objectForm-init.js', array('config' => $config)));
 
         //file set - standardni formularove prvky
         Web::instance()->addJSFileSet('form');
 
-        //do stranky vlozim obsahovou sablonu pro "/edit" vypis
-        $this->template->content = $this->_view_edit_content();
-        
-        //pro stylovani predam nazev kontroleru
-        $this->template->content->controller_name = $this->controller_name;
+        //nactu si konfiguracni soubor pro dany formular
+        $form_config = $this->_config_form();
 
         // --- FORMULAR --- //
 
@@ -1031,6 +1013,13 @@ abstract class Controller_Base_Object extends Controller_Layout {
         $form_class_name = $this->_get_form_class_name($form_config);
 
         $form = FormFactory::Get($form_class_name, $this->model, $form_config, $this->request_params, FALSE);
+
+        //do stranky vlozim obsahovou sablonu pro "/edit" vypis
+        $this->template->content = $this->_view_edit_content();
+        
+        //pro stylovani predam nazev kontroleru
+        $this->template->content->controller_name = $this->controller_name;
+
 
         //vytvorim si novy objekt formulare
 //        $form = new $form_class_name($this->model, $form_config, $this->request_params, FALSE);

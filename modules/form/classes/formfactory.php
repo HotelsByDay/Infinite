@@ -26,6 +26,6 @@ class FormFactory
         //vytvorim si novy objekt formulare
         $instance = new $class_name($model, $form_config, $form_data, $is_ajax);
 
-        return $instance->init();
+        return $instance;
     }
 }

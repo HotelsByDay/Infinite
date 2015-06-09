@@ -14,7 +14,7 @@
     var methods = {
         
         init: function( options ) {
-            
+
             /**
              * Defaultni hodnoty pro parametry a nastaveni pluginu
              */
@@ -136,7 +136,6 @@
                         google.maps.event.addListener(marker, 'dragend', function(event){
                             updateGps(event.latLng);
                         });
-
                     } else {
                         marker.setPosition(latlng);
                     }
@@ -156,7 +155,6 @@
                 if (lat_lng_provided) {
                     updateMarker(new google.maps.LatLng(lat, lng));
                 }
-
 
             });
             

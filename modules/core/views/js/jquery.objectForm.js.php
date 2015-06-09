@@ -361,10 +361,6 @@
             $lang_switch_panels.each(function(){
                 var $switch = $(this);
                 var enabled_languages = $_this.objectForm('_getEnabledLanguages');
-                methods._log('enabled_languages of the form: ');
-                for (var i in enabled_languages) {
-                    methods._log(i + ' -> ' + enabled_languages[i]);
-                }
                 setSwitchLanguages($switch, enabled_languages);
                 setSwitchActiveLanguage($switch, active_language);
             });
