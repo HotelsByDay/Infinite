@@ -12,6 +12,7 @@ class AppFormItem_Time extends AppFormItem_Base {
         'time_end'  => '23:59',
         'time_step' => 15,
         'time_format' => 'g:ia',
+        'options' => array(),
     );
 
     // Local cache
@@ -23,6 +24,10 @@ class AppFormItem_Time extends AppFormItem_Base {
             return $this->times;
         }
         $this->times[''] = '';
+        if ( ! empty($this->config['options'])) {
+            $this->times += $this->config['options'];
+            return $this->times;
+        }
         $time = strtotime("2012-01-01 ".$this->config['time_start']);
         $end_time = strtotime("2012-01-01 ".$this->config['time_end']);
         while ($time <= $end_time) {
