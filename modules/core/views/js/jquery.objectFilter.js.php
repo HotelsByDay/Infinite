@@ -57,6 +57,8 @@
 
                 var $_this = $(this);
 
+                $_this.data('restore_state_enabled', true);
+
                 //vytvorim si kopii defaultnich parametru - ta se pouzije v pripade
                 //ze uzivatel se vrati na stav url kdy je prazdny hash (defaultni stav
                 //po nacteni stranky)
@@ -329,6 +331,11 @@
 
                 //nabinduji udalost hash change aby GUI reagovalo na stisk tlacitka zpet
                 $(window).bind( 'hashchange', function(e) {
+                    if ( ! $_this.data('restore_state_enabled')) {
+                        // This is a one-time switch - if it's disabled and triggered, then do nothing but enable it
+                        $_this.data('restore_state_enabled', true);
+                        return;
+                    }
                     //pokud neni nastaven zadny hash,
                     if (window.location.hash.length == 0 || window.location.hash == emptyLocationHash) {
                         //defaultni parametry posilam do metody v kopii jinak by se mi
@@ -1265,6 +1272,7 @@
                 //metoda zorbazi progress indicator a odesle pozadavek na nactenidat
                 var request_params;
                 if (typeof useCurrentFilterParams !== 'undefined' && useCurrentFilterParams === true) {
+                    $_this.data('restore_state_enabled', false);
                     request_params = methods._getCurrentFilterParams($_this);
                     methods._setState( $_this, request_params );
                 } else {
