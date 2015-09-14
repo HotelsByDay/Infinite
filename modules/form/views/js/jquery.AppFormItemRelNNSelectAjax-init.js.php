@@ -31,9 +31,6 @@ $(document).ready(function() {
                     }
                 }
             }
-        },
-        onItemAdd: function() {
-            this.close();
         }
     });
 
