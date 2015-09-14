@@ -7,7 +7,7 @@
 <div class="appformitemcontainer appformitemrelnnselect <?= $css ?>">
 
     <label for="<?= $uid ?>"><?= $label ?></label>
-    <input type="text" name="<?= $attr ?>" id="<?= $uid ?>" data-selected="<?= htmlentities(json_encode($selected)) ?>" />
+    <input type="text" name="<?= $attr ?>" placeholder="<?= isset($placeholder) ? $placeholder : '' ?>" id="<?= $uid ?>" data-selected="<?= htmlentities(json_encode($selected)) ?>" />
 
     <?php if (!empty($error_message)): ?>
         <span class="validation_error text-error" style="margin-top: 2px;"><?= $error_message ?></span>

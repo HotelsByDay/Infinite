@@ -6,10 +6,9 @@ $(document).ready(function() {
         labelField: 'name',
         searchField: ['name'],
         create: false,
-        openOnFocus: false,
-        preload: false,
+        preload: 'focus',
         load: function(query, callback) {
-            if (!query.length) return callback();
+          //  if (!query.length) return callback();
             $.ajax({
                 url: "<?= appurl::object_cb_data($rel, array('_ob' => 'name', '_obd' => 'asc') + $filter); ?>&_q=" + encodeURIComponent(query),
                 type: 'GET',

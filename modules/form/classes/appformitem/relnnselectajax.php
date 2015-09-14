@@ -102,6 +102,7 @@ class AppFormItem_RelNNSelectAjax extends AppFormItem_Base
     public function Render($render_style = null, $error_message = null)
     {
         return parent::Render($render_style, $error_message)
+            ->set('placeholder', arr::get($this->config, 'placeholder'))
             ->set('selected', $this->getRelItems());
     }
 
