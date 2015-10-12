@@ -2,8 +2,8 @@
 
     <label for="<?= $attr ?>">
         <?= $label ?>
-        <?php if (isset($hint) && !empty($hint)): ?>
-            &nbsp; <i class="icon icon-question-sign" rel="tooltip" title="<?= $hint ?>"></i>
+        <?php if (isset($hint) && ! empty($hint)): ?>
+            &nbsp; <i class="glyphicon glyphicon-question-sign" rel="tooltip" title="<?= $hint ?>"></i>
         <?php endif ?>
     </label>
 
