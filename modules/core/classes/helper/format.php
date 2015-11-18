@@ -254,9 +254,9 @@ class Helper_Format {
      * @param <int> $cb_currency_type mena
      * @return <string>
      */
-    static public function price($price, $currency='USD')
+    static public function price($price, $currency='USD', $separator='&nbsp;')
     {
-        return number_format($price, 2, '.', ' ') . '&nbsp;'.$currency;
+        return number_format($price, 2, '.', ' ') . $separator . $currency;
     }
     
     /**
