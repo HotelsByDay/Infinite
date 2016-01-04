@@ -8,7 +8,7 @@ class Helper_cURL
     /**
      * Timeout interval.
      */
-    const DEFAULT_TIMEOUT = 10;
+    const DEFAULT_TIMEOUT = 1;
 
     /**
      * Stahuje obsah predane URL.

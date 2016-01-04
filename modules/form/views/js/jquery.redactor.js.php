@@ -179,7 +179,7 @@ var RLANG = {
             overlay: true, // modal overlay
 
             allowedTags: ["form", "code", "span", "div", "label", "a", "br", "p", "b", "i", "del", "strike", "u",
-                "img", "video", "audio", "iframe", "object", "embed", "param", "blockquote",
+                "img", "video", "source", "audio", "iframe", "object", "embed", "param", "blockquote",
                 "mark", "cite", "small", "ul", "ol", "li", "hr", "dl", "dt", "dd", "sup", "sub",
                 "big", "pre", "code", "figure", "figcaption", "strong", "em", "table", "tr", "td",
                 "th", "tbody", "thead", "tfoot", "h1", "h2", "h3", "h4", "h5", "h6"],
