@@ -1439,6 +1439,7 @@ abstract class Controller_Base_Object extends Controller_Layout {
 
        $html .= Web::instance()->getJSFiles(TRUE);
 
+        $this->request->headers['Content-Type'] = 'application/json';
         $this->template->content = array(
                                        'html' => $html,
                                    );
