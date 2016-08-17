@@ -10,6 +10,8 @@ class Helper_cURL
      */
     const DEFAULT_TIMEOUT = 1;
 
+    public static $status_code = null;
+
     /**
      * Stahuje obsah predane URL.
      * @param <string> $url URL adresa na kterou ma byt pozadavek odeslan
@@ -58,6 +60,8 @@ class Helper_cURL
 
         //vyvolani pozadavku
         $curl_output = curl_exec($curl_handler);
+
+        static::$status_code = curl_getinfo($curl_handler, CURLINFO_HTTP_CODE);
 
         //uvolneni zdroju
         curl_close($curl_handler);
