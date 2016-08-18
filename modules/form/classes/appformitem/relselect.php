@@ -163,9 +163,10 @@ class AppFormItem_RelSelect extends AppFormItem_Base
         }
         else
         {
-            if ($this->model->{$relobject}->loaded())
+            $model = ORM::factory($relobject, $this->model->{$this->attr});
+            if ($model->loaded())
             {
-                $view->name = $this->model->{$relobject}->preview($preview);
+                $view->name = $model->preview($preview);
             }
             //pokud neni relacni zaznam podle hodnoty PK nalezen, tak uz neexistuje
             //a do prvku se musi propsat prazdna hodnota

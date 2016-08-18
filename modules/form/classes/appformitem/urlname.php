@@ -7,6 +7,7 @@ class AppFormItem_UrlName extends AppFormItem_String
 
     protected $config = array(
         'if_empty_generate_from_attr' => NULL,
+        'callback' => null,
     );
 
     protected $valid = true;
@@ -43,11 +44,11 @@ class AppFormItem_UrlName extends AppFormItem_String
         {
             $value = $this->form_data;
 
-            $name_attr = $this->config['if_empty_generate_from_attr'];
-            if (empty($value) and ! empty($name_attr)) {
+            $url_title = $this->getUrlTitle();
+            if (empty($value) and $url_title) {
                 // User entered empty value and "if_empty_generate_from_attr" is sed
                 // - auto-generate url_name
-                UrlStorage::setObjectUriByTitle($this->model, $this->model->{$name_attr});
+                UrlStorage::setObjectUriByTitle($this->model, $url_title);
             } else {
                 // User input is non-empty
                 $current_uri = UrlStorage::getUri($this->model->object_name(), $this->model->pk());
@@ -57,6 +58,20 @@ class AppFormItem_UrlName extends AppFormItem_String
                 }
             }
         }
+    }
+
+    protected function getUrlTitle()
+    {
+        $name_attr = $this->config['if_empty_generate_from_attr'];
+        if ($name_attr) {
+            return $this->model->{$name_attr};
+        }
+        $callback = $this->config['callback'];
+        if (is_callable($callback)) {
+            return call_user_func($callback, $this->model);
+        }
+
+        return false;
     }
 
 

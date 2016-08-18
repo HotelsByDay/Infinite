@@ -118,7 +118,7 @@ class AppFormItem_Base
         }
 
         $this->assignValue();
-                
+
         return;
     }
 
