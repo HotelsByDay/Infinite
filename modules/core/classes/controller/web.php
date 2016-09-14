@@ -51,7 +51,7 @@ class Controller_Web extends Controller {
             }
 
             // Get resize variant file diskname and send the file as response
-            $filename = $image->getExactVariantDiskName($width, $height);
+            $filename = $image->getExactVariantDiskName($width, $height, $requested_filename);
 
             $this->request->send_file($filename, NULL, array('inline' => true));
 
