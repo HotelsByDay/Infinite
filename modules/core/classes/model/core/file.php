@@ -376,7 +376,7 @@ abstract class Model_Core_File extends ORM
             $image->resize($width, $height, $resize_type);
 
             // Crop exact rectangle from the centre of the image
-            $image->crop($width, $height);
+//            $image->crop($width, $height);
 
             //pred vlastni nazev souboru vlozim prefix - nazev resize varianty
             $image->save($target_filepath, 80);
