@@ -30,7 +30,7 @@ class Controller_Web extends Controller {
             list($_foo, $width, $height) = $matches;
             $resize_type = arr::get($matches, 3, 'auto');
             // Transform string constant to it's internal value
-            $resize_type = constant('Image::' . strtoupper($resize_type));
+            $resize_type_test = constant('Image::' . strtoupper($resize_type));
 
             // Create image instance
             $image = ORM::factory($object_name);
@@ -51,7 +51,7 @@ class Controller_Web extends Controller {
             }
 
             // Get resize variant file diskname and send the file as response
-            $filename = $image->getExactVariantDiskName($width, $height, $requested_filename);
+            $filename = $image->getExactVariantDiskName($width, $height, $resize_type);
 
             $this->request->send_file($filename, NULL, array('inline' => true));
 
