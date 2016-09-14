@@ -373,7 +373,7 @@ abstract class Model_Core_File extends ORM
             $image->background('#fff', 0);
 
             //provede vlastni resize obrazku - pote se jeste vyrizne stred
-            $image->resize($width, $height, Image::INVERSE);
+            $image->resize($width, $height, $resize_type);
 
             // Crop exact rectangle from the centre of the image
             $image->crop($width, $height);
