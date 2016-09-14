@@ -339,9 +339,9 @@ abstract class Model_Core_File extends ORM
     }
 
 
-    public function getExactVariantDiskName($width, $height)
+    public function getExactVariantDiskName($width, $height, $resize_type='auto')
     {
-        return $this->getDirName().'/'.Format::imageExactResizeVariantName($this->filename, $width, $height);
+        return $this->getDirName().'/'.Format::imageExactResizeVariantName($this->filename, $width, $height, $resize_type);
     }
 
 
@@ -355,7 +355,7 @@ abstract class Model_Core_File extends ORM
     {
         // nazev souboru na disku
         $filepath = $this->getFileDiskName();
-        $target_filepath = $this->getExactVariantDiskName($width, $height);
+        $target_filepath = $this->getExactVariantDiskName($width, $height, $resize_type);
 
         //pokud uz varianta existuje, tak ji nebudu znovu vytvaret
         if (file_exists($target_filepath))
