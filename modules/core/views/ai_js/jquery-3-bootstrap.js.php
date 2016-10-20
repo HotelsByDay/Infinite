@@ -773,7 +773,8 @@ if (typeof jQuery === 'undefined') {
     clearMenus()
 
     if (!isActive) {
-      if ('ontouchstart' in document.documentElement && !$parent.closest('.navbar-nav').length) {
+      // !!! modified by Jiri on 2016-10-20 - this piece was making the submenu unclickable for Yannis
+      if (false && 'ontouchstart' in document.documentElement && !$parent.closest('.navbar-nav').length) {
         // if mobile we use a backdrop because click events don't delegate
         $('<div class="dropdown-backdrop"/>').insertAfter($(this)).on('click', clearMenus)
       }
