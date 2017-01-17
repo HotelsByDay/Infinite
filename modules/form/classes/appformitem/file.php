@@ -408,15 +408,16 @@ class AppFormItem_File extends AppFormItem_Base
         // We need to have primary key of models in array which auto-indexes corresponds to $models auto-indexes
         $pks = array();
 
-        $file_models = ORM::factory($this->model_name)
-            ->where($this->getForeignKeyColumn(), '=', $this->getForeignKeyValue())
-            // ->where('deleted', 'IS', DB::Expr('NULL')) // WTF - this is implemented in ORM layer
-            ->find_all();
-
-        foreach ($file_models as $model)
-        {
-            $models[] = $model;
-            $pks[] = $model->pk();
+        if ($this->getForeignKeyValue()) {
+            $file_models = ORM::factory($this->model_name)
+                ->where($this->getForeignKeyColumn(), '=', $this->getForeignKeyValue())
+                // ->where('deleted', 'IS', DB::Expr('NULL')) // WTF - this is implemented in ORM layer
+                ->find_all();
+            foreach ($file_models as $model)
+            {
+                $models[] = $model;
+                $pks[] = $model->pk();
+            }
         }
 
         // Load lang attrs values - if needed
