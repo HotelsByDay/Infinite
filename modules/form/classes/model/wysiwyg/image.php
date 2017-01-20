@@ -34,5 +34,16 @@ class Model_Wysiwyg_Image extends Model_File
     static public $allowed_max_filesize = 10485760; //10*1024*1024 = 10MB
 
 
+    /**
+     * Metoda vraci relativni URL k danemu souboru.
+     * @return <string>
+     */
+    public function getURL($resize_variant=NULL)
+    {
+//        if ( ! $this->loaded()) return '';
+        return DOMAIN_ADMIN . url::base() . $this->getFileDiskName($resize_variant);
+    }
+
+
 }
 
