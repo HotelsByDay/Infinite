@@ -1,9 +1,9 @@
 {
-    "name": "appnostic/infinite",
+    "name": "HotelsByDay/infinite",
     "description": "The best admin engine",
     "license": "proprietary",
     "keywords": ["infinite"],
-    "homepage": "https://github.com/Appnostic/Infinite",
+    "homepage": "https://github.com/HotelsByDay/Infinite",
     "authors": [
         {
             "name": "Jirka Melichar",
