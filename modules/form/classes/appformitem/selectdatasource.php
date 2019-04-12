@@ -63,7 +63,11 @@ class AppFormItem_SelectDataSource extends AppFormItem_Base
             }
             else if (($source_model = arr::get($this->config, 'relobject', FALSE)))
             {
-                $model_list = ORM::factory($source_model)->find_all();
+                $model_list = ORM::factory($source_model);
+                if ($source_model === 'room_type' && !Auth::instance()->get_user()->hasRole('admin')) {
+                    $model_list->where('name', 'NOT LIKE', 'HotelBeds #%');
+                }
+                $model_list = $model_list->find_all();
 
                 $data = array();
 

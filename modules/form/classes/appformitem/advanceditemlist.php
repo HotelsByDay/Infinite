@@ -109,6 +109,14 @@ class AppFormItem_AdvancedItemList extends AppFormItem_Base
         if (empty($this->form_data))
         {
             $model = $this->model->{$this->rel_object_name}; //->where($this->rel_object_name.'.deleted', 'IS', DB::Expr('NULL'));
+            if ($this->rel_object_name === 'room' && !Auth::instance()->get_user()->hasRole('admin')) {
+                $roomTypes = ORM::factory('room_type')->where('name', 'LIKE', 'HotelBeds #%')->find_all();
+                $types = [];
+                foreach ($roomTypes as $type) {
+                    $types[$type->pk()] = $type->pk();
+                }
+                $model->where('room_typeid', 'NOT IN', $types);
+            }
 
             //aplikace razeni (pokud je v konfiguraci definovan atribut, podle ktereho se ma radit)
             if (($sequence_field = arr::get($this->config, 'sortable')))
