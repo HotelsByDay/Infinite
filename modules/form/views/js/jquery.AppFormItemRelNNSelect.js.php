@@ -50,8 +50,12 @@
                         if (patt.test($ch.parents('label:first').text()) && query !== '') {
                             $ch.parents('.item:first').show();
                         } else {
-//                            console.log('*' + $ch.parents('label:first').text() + '*');
-                            $ch.parents('.item:first').hide();
+                            if (query === '' && $ch.is(':checked')) {
+                                $ch.parents('.item:first').show();
+                            } else {
+                                // console.log('*' + $ch.parents('label:first').text() + '*');
+                                $ch.parents('.item:first').hide();
+                            }
                         }
                     });
                 });
