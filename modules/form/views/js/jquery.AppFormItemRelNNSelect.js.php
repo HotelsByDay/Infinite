@@ -44,9 +44,10 @@
                 $search.on('keyup', function() {
                     var query = $search.val().trim();
                     var patt = new RegExp(query, 'gi');
+                    console.log();
                     $this.find(':checkbox').each(function(){
                         var $ch = $(this);
-                        if (patt.test($ch.parents('label:first').text())) {
+                        if (patt.test($ch.parents('label:first').text()) && query !== '') {
                             $ch.parents('.item:first').show();
                         } else {
 //                            console.log('*' + $ch.parents('label:first').text() + '*');
