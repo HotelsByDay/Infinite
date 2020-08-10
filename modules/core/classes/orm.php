@@ -1129,20 +1129,28 @@ class ORM extends Kohana_ORM {
                 }
         }
 
-	$this->_build(Database::SELECT);
+        $this->_build(Database::SELECT);
 
-	$records = (int) $this->_db_builder->from($this->_table_name)
-                ->select(array('COUNT(DISTINCT("'.$this->_table_name.'.'.$this->_primary_key.'"))', 'records_found'))
-		->execute($this->_db)
-		->get('records_found');
+        $records = (int) $this->_db_builder->from($this->_table_name)
+                    ->select(array($this->count_all_select(), 'records_found'))
+            ->execute($this->_db)
+            ->get('records_found');
 
-        // Add back in selected columns
-	$this->_db_pending += $selects;
+            // Add back in selected columns
+        $this->_db_pending += $selects;
 
-	$this->reset();
+        $this->reset();
 
-	// Return the total number of records in a table
-	return $records;
+        // Return the total number of records in a table
+        return $records;
+    }
+
+    /**
+     * @return string - select statement for count_all() query
+     */
+    protected function count_all_select()
+    {
+        return 'COUNT(DISTINCT("'.$this->_table_name.'.'.$this->_primary_key.'"))';
     }
 
     /**

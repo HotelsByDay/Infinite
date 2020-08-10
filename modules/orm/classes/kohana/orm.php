@@ -1164,7 +1164,7 @@ class Kohana_ORM {
 		$this->_build(Database::SELECT);
 
 		$records = (int) $this->_db_builder->from($this->_table_name)
-			->select(array('COUNT(DISTINCT("'.$this->_table_name.'.'.$this->_primary_key.'"))', 'records_found'))
+			->select(array($this->count_all_select(), 'records_found'))
 			->execute($this->_db)
 			->get('records_found');
 
@@ -1176,6 +1176,14 @@ class Kohana_ORM {
 		// Return the total number of records in a table
 		return $records;
 	}
+
+    /**
+     * @return string - select statement for count_all() query
+     */
+	protected function count_all_select()
+    {
+        return 'COUNT(DISTINCT("'.$this->_table_name.'.'.$this->_primary_key.'"))';
+    }
 
 	/**
 	 * Proxy method to Database list_columns.
