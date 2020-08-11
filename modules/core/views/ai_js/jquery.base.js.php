@@ -219,6 +219,11 @@ $._ajax = function(arg1, arg2)
             }
         }
 
+        // If there is a profiler data - append it to the container
+        if (typeof data !== 'undefined' && typeof data._profiler === 'string') {
+            $('#ajax_profiler').append('<hr style="border-color: red;">').append(data._profiler);
+        }
+
         if (typeof originalCallback === 'function') {
             originalCallback(data, status, jqXHR);
         }

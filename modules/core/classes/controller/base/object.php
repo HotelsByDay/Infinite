@@ -486,6 +486,10 @@ abstract class Controller_Base_Object extends Controller_Layout {
         //ID filtru podle ktereho se filtrovalo (pokud bylo filtrovano podle nejakeho)
         $this->template->content['_fs'] = (string)$filter_state_id;
 
+        if (Kohana::$environment !== Kohana::PRODUCTION) {
+            $this->template->content['_profiler'] = (string)View::factory('profiler/stats');
+        }
+
     }
 
     /**
