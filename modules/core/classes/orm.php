@@ -1924,6 +1924,18 @@ class ORM extends Kohana_ORM {
     {
         $this->_explicit_select = TRUE;
     }
+    /**
+     * _load_result extended - we can turn off result casting (for better performance with large result sets)
+     * @var bool
+     */
+    protected $_as_object = true;
+    public function asObject($value=NULL) {
+        if ( ! is_null($value)) {
+            $this->_as_object = $value;
+            return $this;
+        }
+        return $this->_as_object;
+    }
 
 	/**
 	 * Loads a database result, either as a new object for this model, or as
@@ -1966,8 +1978,12 @@ class ORM extends Kohana_ORM {
 
 		if ($multiple === TRUE)
 		{
-			// Return database iterator casting to this object type
-			$result = $this->_db_builder->as_object(get_class($this))->execute($this->_db);
+            // Return database iterator casting to this object type (unless _as_object is set to false)
+            $result = $this->_db_builder;
+            if  ($this->_as_object) {
+                $result->as_object(get_class($this));
+            }
+            $result = $result->execute($this->_db);
 
 			$this->reset();
 
