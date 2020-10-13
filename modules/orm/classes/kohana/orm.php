@@ -1306,7 +1306,7 @@ class Kohana_ORM {
 		}
 
 		// Select all columns by default
-		$this->_db_builder->select($this->_table_name.'.*');
+        $this->applySelect();
 
 		if ( ! isset($this->_db_applied['order_by']) AND ! empty($this->_sorting))
 		{
@@ -1352,6 +1352,25 @@ class Kohana_ORM {
 			return $this;
 		}
 	}
+
+	protected $_select_only = null;
+	protected function applySelect()
+    {
+        if ($this->_select_only) {
+            return call_user_func_array([$this->_db_builder, 'select'], $this->_select_only);
+        }
+        $this->_db_builder->select($this->_table_name.'.*');
+    }
+
+    /**
+     * Call this to avoid "select *" in orm query and only select columns you need
+     * @param $columns
+     */
+    public function selectOnly($columns)
+    {
+        $this->_select_only = $columns;
+        return $this;
+    }
 
 	/**
 	 * Returns the value of the primary key
