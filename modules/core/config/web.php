@@ -16,6 +16,7 @@ return array(
             'list' => array(
                 'js/jquery.objectFilter.js',
                 'js/jquery.objectItemAction.js',
+//                'js/jquery.redactor.js',
             ),
             'filter' => '#AppFormItem[^-]+\.#'
         )
