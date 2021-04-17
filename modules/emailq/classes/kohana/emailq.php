@@ -34,6 +34,16 @@ class Kohana_Emailq {
 		$this->config = Kohana::config('emailq');
 	}
 
+
+    protected function lockEmail($e)
+    {
+        return (bool)DB::update('email_queue')
+            ->set(['locked_at' => DateFormat::now()])
+            ->where('locked_at', 'is', null)
+            ->where('id', '=', $e->id)
+            ->execute();
+    }
+
     /**
      * Add a message to the database;
      *
@@ -133,12 +143,14 @@ class Kohana_Emailq {
         {
             $emails = ORM::factory('emailqueue')
                                     ->where('email_queueid', '=', $queueid)
+                                    ->where('locked_at', 'is', null)
                                     ->find_all();
         }
         else
         {
             $emails = ORM::factory('emailqueue')
                                     ->limit($amount)
+                                    ->where('locked_at', 'is', null)
                                     ->find_all();
         }
 
@@ -159,8 +171,12 @@ class Kohana_Emailq {
                 
 		foreach ($emails as $e)
                 {
-                    //poud je u emailu definovan email odesilatele, tak se bude
-                    //nastavovat custo odesilate (nikoliv podle configu emailq)
+                    // If the email is already locked it was likely sent by another thread
+                    if ( ! $this->lockEmail($e)) {
+                        Kohana::$log->add(Kohana::INFO, 'unable to lock email: ' . $e->id);
+                        continue;
+                    }
+
                     if ( ! empty($e->from_email))
                     {
                         if ( ! empty($e->from_name))
