@@ -40,7 +40,7 @@ class Kohana_Emailq {
         return (bool)DB::update('email_queue')
             ->set(['locked_at' => DateFormat::now()])
             ->where('locked_at', 'is', null)
-            ->where('id', '=', $e->id)
+            ->where('email_queueid', '=', $e->email_queueid)
             ->execute();
     }
 
