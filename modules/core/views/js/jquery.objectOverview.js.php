@@ -64,11 +64,8 @@
 
                 // On overview_header_refresh event reload overview header
                 $_this.on('overview_header_refresh', function() {
-                    return; // @todo - not supported in ForzaTheme
                     // Keep active item active
                     var active_item_id = $_this.find('ul>li.active a.submenu_item').attr('id');
-//                    var $res = $.get(settings.overview_header_refresh_url);
-//                    console.log($res);
                     $_this.find('.overview_header').load(settings.overview_header_refresh_url, function(){
                         $_this.find('#' + active_item_id).parents('li:first').addClass('active');
                     });
