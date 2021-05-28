@@ -639,6 +639,7 @@ class Core_AppForm {
             
             //nastavim vysledek akce
             $this->requested_action_result = self::ACTION_RESULT_FAILED;
+            $special_message = $e->getMessage();
         }
 
         if ($show_action_result)
