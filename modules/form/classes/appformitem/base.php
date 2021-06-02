@@ -69,6 +69,12 @@ class AppFormItem_Base
         //podle konfigurace (['default_value']) muze nastavit defaultni hodnotu
         $this->clear();
 
+        if (arr::get($this->config, 'nullable', false)) {
+            if ($form_data === '' || $form_data === []) {
+                $form_data = null;
+            }
+        }
+
         //formularova data pro tento prvek - v $this->form_data mohou byt default hodnoty
         $this->form_data = is_array($this->form_data)
                             ? array_merge($this->form_data, (array)$form_data)
@@ -80,7 +86,6 @@ class AppFormItem_Base
         //vygeneruju nahodny identifikator - spoleham se na nahodnost hodnot,
         //protoze se takto generuje identifikator pro vsechny prvky na formulari
         $this->uid = 'i'.mt_rand();
-
     }
 
     /**
@@ -161,7 +166,7 @@ class AppFormItem_Base
      */
     protected function assignValue()
     {
-        if ($this->form_data !== NULL)
+        if ($this->form_data !== NULL || $this->getConfigValue('nullable', false))
         {
             $this->setValue($this->form_data);
         }
