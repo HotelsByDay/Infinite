@@ -54,8 +54,7 @@ class Controller_ResetPassword extends Controller_Template {
 
             //pokud je email prazdny nebo nevalidni tak bude uzivateli zobrazena
             //validacni hlaska
-            if ( ! validate::email($email))
-            {
+            if (! validate::email($email)) {
                 //do sablony se vlozi validacni hlaska
                 $this->template->validation_error = __('resetpassword.validation.email');
                 
@@ -68,8 +67,7 @@ class Controller_ResetPassword extends Controller_Template {
 
             //pokud byl uzivatelsky ucet nalezen, tak bude vygenerovano nove
             //heslo a bude odeslan e-mail
-            if ($user->loaded() == 1)
-            {
+            if ($user && $user->loaded() == 1) {
                 //vygeneruje se nove heslo
                 $plaintext_password = text::random('@#$%^&*0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ', 12);
 
@@ -83,12 +81,15 @@ class Controller_ResetPassword extends Controller_Template {
                 } catch (Exception $e) {
                     Kohana::$log->add(Kohana::ERROR, $e->getMessage());
                 }
+            } else {
+                $this->template->validation_error = __('resetpassword.validation.user');
+                return;
             }
 
             //do sablony predam priznak, ktery rika ze doslo k uspesnemu
             //vyresetovani hesla - nezavysle na tom jestli byl uzivatel
             //s danou emailovou adresou nalezen
-            $this->template->processed = TRUE;
+            $this->template->processed = true;
         } 
     }
 
