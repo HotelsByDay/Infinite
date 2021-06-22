@@ -68,13 +68,6 @@ class AppFormItem_Base
         //provede reset hodnoty prvku - vymaze obsah $this->form_data a
         //podle konfigurace (['default_value']) muze nastavit defaultni hodnotu
         $this->clear();
-
-        if (arr::get($this->config, 'nullable', false)) {
-            if ($form_data === '' || $form_data === []) {
-                $form_data = null;
-            }
-        }
-
         //formularova data pro tento prvek - v $this->form_data mohou byt default hodnoty
         $this->form_data = is_array($this->form_data)
                             ? array_merge($this->form_data, (array)$form_data)
@@ -166,7 +159,7 @@ class AppFormItem_Base
      */
     protected function assignValue()
     {
-        if ($this->form_data !== NULL || $this->getConfigValue('nullable', false))
+        if ($this->form_data !== NULL)
         {
             $this->setValue($this->form_data);
         }
@@ -183,7 +176,7 @@ class AppFormItem_Base
         if ( ! $this->virtual)
         {
             // If item is nullable then convert empty values to NULL
-            if (arr::get($this->config, 'nullable', false) and empty($value)) {
+            if (arr::get($this->config, 'nullable', false) and ($value === '' || $value === [])) {
                 $value = NULL;
             }
             $this->model->{$this->attr} = $value;

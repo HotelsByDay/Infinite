@@ -14,7 +14,7 @@
     "type": "kohana-module",
     "require": {
         "php": ">=5.3.3",
-	"composer/installers": "dev-master"
+	    "composer/installers": "dev-master"
     }
 }
 
