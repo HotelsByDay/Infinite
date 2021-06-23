@@ -2,6 +2,8 @@
 
 class Model_emailqueue extends ORM_Authorized
 {
+    const ONE_HOUR_CHECKOUT = 'one_hour_checkout';
+
     protected $_table_name = 'email_queue';
 
     protected $_has_many = array(

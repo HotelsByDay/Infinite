@@ -60,8 +60,7 @@ class Kohana_Emailq {
      * @param null $email_type
      * @return boolean - returns whether the message was added to the database.
      */
-	public function add_email($to, $cc, $bcc, $from, $subject, $body, $attachments = array(),
-                              $direct_attachements = NULL, $model_name = NULL, $model_id = NULL, $email_type = NULL
+	public function add_email($to, $cc, $bcc, $from, $subject, $body, $attachments = [], $direct_attachements = null, $model_name = null, $model_id = null, $email_type = null, $send_at = null
     ) {
 		$queue = ORM::factory('emailqueue');
 		$queue->to      = implode(',', (array)$to);
@@ -74,7 +73,9 @@ class Kohana_Emailq {
             $queue->model_name = $model_name;
             $queue->model_id = $model_id;
         }
-
+        if ($send_at) {
+            $queue->send_at = $send_at;
+        }
         if ($email_type) {
             $queue->email_type = $email_type;
         }
@@ -144,6 +145,10 @@ class Kohana_Emailq {
             $emails = ORM::factory('emailqueue')
                                     ->where('email_queueid', '=', $queueid)
                                     ->where('locked_at', 'is', null)
+                                    ->where_open()
+                                    ->where('send_at', '<=', DateFormat::now())
+                                    ->or_where('send_at', 'is', null)
+                                    ->where_close()
                                     ->find_all();
         }
         else
@@ -151,9 +156,12 @@ class Kohana_Emailq {
             $emails = ORM::factory('emailqueue')
                                     ->limit($amount)
                                     ->where('locked_at', 'is', null)
+                                    ->where_open()
+                                    ->where('send_at', '<=', DateFormat::now())
+                                    ->or_where('send_at', 'is', null)
+                                    ->where_close()
                                     ->find_all();
         }
-
         if ($this->config->mail_options['driver'] == 'smtp') {
             $transport = Swift_SmtpTransport::newInstance(
                 $this->config->mail_options['host'],
