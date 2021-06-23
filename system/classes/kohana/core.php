@@ -1032,7 +1032,7 @@ class Kohana_Core {
 	 * @param   object   exception object
 	 * @return  boolean
 	 */
-	public static function exception_handler(Exception $e)
+	public static function exception_handler(Throwable $e)
 	{
 		try
 		{
@@ -1184,7 +1184,7 @@ class Kohana_Core {
 	 * @param   object  Exception
 	 * @return  string
 	 */
-	public static function exception_text(Exception $e)
+	public static function exception_text(Throwable $e)
 	{
 		return sprintf('%s [ %s ] [ %s , %s ] [ %s -> %s ]: %s ~ %s [ %d ] (Callstack: %s)',
 			get_class($e), 
