@@ -175,6 +175,11 @@ class Model_Core_User extends Model_Auth_User {
 
             $this->permission_list = $this->getUserPermissionList($this->roles, $roles_definition);
 
+            //trick for not logged-in users
+            if(!$this->permission_list) {
+                $this->permission_list = $this->getUserPermissionList('public', $roles_definition);
+            }
+
             Profiler::stop($profiler_token);
         }
 
