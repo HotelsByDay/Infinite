@@ -28,7 +28,7 @@ class ORM extends Kohana_ORM {
      * @var <bool>
      */
     protected $update_on_delete = FALSE;
-        
+
     /**
      * Originalni data se plni postupne pri volani __set()
      * pokud se MENI hodnota atributu a atribut se ma logovat.
@@ -36,21 +36,21 @@ class ORM extends Kohana_ORM {
      * @var <array> klicem nazev sloupce, hodnotou je originalni hodnota
      */
     protected $log_original_data = Array();
-    
+
     /**
      * V jazykovem souboru se pod timto klicem nachazi format nahledu
-     * pro dany objekt. Viz metoda preview v bazovem ORM.       
+     * pro dany objekt. Viz metoda preview v bazovem ORM.
      * @var <string> klic do jazykoveho souboru
      */
     protected $_preview = '';
-    
+
     /**
-     * Definice ciselniku daneho modelu 
+     * Definice ciselniku daneho modelu
      * - seznam modelu s relacnimi ciselniky
      * Pro ziskani kompletniho ciselniku slouzi metoda get_rel_cb(ciselnik, filter_params).
-     * 
+     *
      * Uzivatelska hodnota je dostupna pres virtualni atribut (codebook s prefixem '_').
-     * 
+     *
      * V konstruktoru modelu jsou na zaklade tohoto pole generovany vazby na
      * relacni modely. Jako foreign_key se pouziva hodnota codebook se suffixem id.
      * @var <array> seznam ciselniku daneho modelu
@@ -108,7 +108,7 @@ class ORM extends Kohana_ORM {
 
     protected $_save_performed = FALSE;
 
-    
+
     public static function factory($model, $id = NULL)
     {
         if (is_numeric($model))
@@ -137,7 +137,7 @@ class ORM extends Kohana_ORM {
      * @param type $key nastavovany klic
      * @param type $value nastavovana hodnota klice
      */
-    public function __set($column, $value) 
+    public function __set($column, $value)
     {
         if ( ! isset($this->_object_name)) {
             return parent::__set($column, $value);
@@ -170,7 +170,7 @@ class ORM extends Kohana_ORM {
              * Dojde ke zmene aktualni hodnoty FK aniz bychom meli ulozenu puvodni hodnotu
              * sloupce, ktery se ma logovat?
              */
-            if ( ! isset($this->log_original_data[$column]) 
+            if ( ! isset($this->log_original_data[$column])
                  and $this->_object[$fk] != $value->pk()
             //     and LogAction::logCol($this->_table_name, $fk) // aktualne ukladame vsechny zmeny
             ) {
@@ -181,10 +181,10 @@ class ORM extends Kohana_ORM {
         /**
          * Pokud klic odpovida nazvu databazoveho sloupce a nastavuje se stejna
          * hodnota, ktera uz je ulozena, pak toto nastaveni chceme ignorovat
-         * aby se pro sloupec neukladal logovaci zaznam 
+         * aby se pro sloupec neukladal logovaci zaznam
          */
         /// Tohle nepropousti zapisy, ktere nemeni hodnotu atributu
-        // Nastavuje se DB sloupec? 
+        // Nastavuje se DB sloupec?
         if (isset($this->_table_columns[$column])) {
             // Pokud je puvodni hodnota shodna s nastavovanou
             if ($this->{$column} === $value) {
@@ -239,7 +239,7 @@ class ORM extends Kohana_ORM {
             array_key_exists($column, $this->_has_many)
         );
     }
-    
+
     public function obj()
     {
         return $this->_object;
@@ -305,11 +305,11 @@ class ORM extends Kohana_ORM {
                 return parent::__get($column);
         }
     }
-    
-    
-    
+
+
+
     /**
-     * Pridani funkcionality pri ukladani zaznamu 
+     * Pridani funkcionality pri ukladani zaznamu
      *  - Generovani cisel ze serie, pokud je to v modelu aktivovano
      *  - Logovani zmen, pokud je v modelu aktivovano
      * --- mozna by bylo vhodne jednotlive pridane akce provadet v samostatnych
@@ -319,7 +319,7 @@ class ORM extends Kohana_ORM {
      * @throws SerieException V pripade ze nebylo mozne ziskat nove cislo
      * pozadovane ciselne rady.
      */
-    public function save() 
+    public function save()
     {
         //metoda nastavuje defaultni hodnoty nekterych systemovych sloupecku
         //jako napriklad 'userid' nebo 'created', ktere byvaji ve vsech standardnich
@@ -353,7 +353,7 @@ class ORM extends Kohana_ORM {
         // Rika zda doslo k volani parent::save()
         // nebo zda nemu ma dojit na konci metody
         $this->_save_performed = FALSE;
-        
+
         // Logovani zmen - historie
         // Pokud dochazi k editaci a zmenily se nejake hodnoty
         // (druha cast podminky z parent ORM::save metody)
@@ -373,7 +373,7 @@ class ORM extends Kohana_ORM {
         else
         {
             // Pokud se ma generovat cislo v ramci serie
-            // Pokud se ukladala historie, tak probihal update a serie se 
+            // Pokud se ukladala historie, tak probihal update a serie se
             // generuje jen pri INSERT, proto jsem pro prehlednost zmenil if za elseif
             // ikdyz to na funkci nema vliv
             if (($serie_config = kohana::config('_serie.objects.'.$this->_object_name)) != NULL)//$this->serie_column !== FALSE)
@@ -400,7 +400,7 @@ class ORM extends Kohana_ORM {
                     {
                         parent::save();
                         $this->_save_performed = TRUE;
-                    } 
+                    }
                     catch (Exception $e)
                     {
                         $serie->unlock();
@@ -421,7 +421,7 @@ class ORM extends Kohana_ORM {
                 parent::save();
                 $this->_save_performed = TRUE;
             }
-            
+
             // Zalogovani akce
             LogAction::instance()->runEvent($this, 'insert');
         }
@@ -446,7 +446,7 @@ class ORM extends Kohana_ORM {
     {
         return $this->_save_performed;
     }
-    
+
     /**
      * Tato metoda obnovuje minulou ulozenou hodnotu daneho atributu.
      *
@@ -496,22 +496,22 @@ class ORM extends Kohana_ORM {
         //vracim uspech
         return TRUE;
     }
-    
-    /** 
+
+    /**
      * Formatuje cislo z ciselne rady
-     *  - zde tato metoda slouzi predevdim k tomu, aby ji nemuseli 
+     *  - zde tato metoda slouzi predevdim k tomu, aby ji nemuseli
      *    implementovat vsichni potomci pouzivajici pocitadla Serie
      * @param <string> castecne formatovane cislo z ciselne rady
      * @return <string> dalsi "cislo" z ciselne rady
      * @author Jiri Dajc
      */
-    protected function formatSerie($partially_formatted) 
+    protected function formatSerie($partially_formatted)
     {
         // Zde se vraci jiz kompletne zformatovana hodnota
         return $partially_formatted;
     }
 
-   
+
     /**
      * V konstruktoru nastavim nazev primarniho klice -> nazev objektu a suffix 'id'.
      * Dale se vytvori has_one vztahy pro ciselniky definovane v $this->_rel_cb seznamu.
@@ -520,11 +520,15 @@ class ORM extends Kohana_ORM {
     public function __construct($id = NULL)
     {
         // Nastaveni nazvu primarniho klice - pouzivame "neKohani" konvenci
-        $this->_primary_key = ! empty($this->_table_name)
-                                ? $this->_table_name.'id'
-                                : strtolower(substr(get_class($this), 6)).'id';
-        
-        
+        if(!empty($this->_primary_key_overwrite)) {
+            $this->_primary_key = $this->_primary_key_overwrite;
+        }else {
+            $this->_primary_key = !empty($this->_table_name)
+                ? $this->_table_name . 'id'
+                : strtolower(substr(get_class($this), 6)) . 'id';
+        }
+
+
         // Automaticka definice belongs_to vztahu pro ciselniky daneho modelu
         foreach ($this->_rel_cb as $cb) {
             $fk = NULL;
@@ -532,7 +536,7 @@ class ORM extends Kohana_ORM {
             if (is_string($cb)) {
                 $model = $cb;
                 $fk = $cb.'id';
-            } 
+            }
             // Pokud definice byla validni
             if ($fk != NULL) {
                 // Vazbu MUSI identifikovat puvodni klic (bez prefixu '_')
@@ -558,7 +562,7 @@ class ORM extends Kohana_ORM {
     /**
      * Provadi nastaveni defaultnich hodnot modelu, ktere vraci metoda
      * $this->getDefaults().
-     * 
+     *
      * @chainable
      * @return ORM
      */
@@ -604,7 +608,7 @@ class ORM extends Kohana_ORM {
      *
      * Pokud je metoda zavolana pouze s jednim parametrem, je povazovan za $value
      * a jako $key se dosadi primarni klic tabulky.
-     * 
+     *
      * @param <string> $key
      * @param <string> $value
      * @return <array>
@@ -629,23 +633,23 @@ class ORM extends Kohana_ORM {
         }
         return $codebook;
     }
-    
-    
-    /** 
-     * Metoda pro ziskani hodnot relacniho ciselniku. Je volana 
+
+
+    /**
+     * Metoda pro ziskani hodnot relacniho ciselniku. Je volana
      * v kontextu modelu, ke kteremu ciselnik patri. To umoznuje sestavit filtr
      * pro ziskani ciselniku na zaklade atributu "nadrazeneho" modelu.
      * @param type $codebook
      * @param type $filter
-     * @return type 
+     * @return type
      */
     /*
-    public function get_rel_cb($codebook, $filter=Array()) 
+    public function get_rel_cb($codebook, $filter=Array())
     {
-        // Nacteme codebook, ten je definovan jako _belongs_to vztah 
+        // Nacteme codebook, ten je definovan jako _belongs_to vztah
         // v konstruktoru bazoveho ORM
-        
-        
+
+
         // $codebook = $this->{$codebook}; // Tohle zpusobi 1 SQL dotaz navic - pro nacteni relacniho zaznamu
         $codebook = ORM::factory($codebook); // Tohle nic nacitat nebude a pri dodrzovani konvenci to nicemu nevadi
         // Doplnime NULL hodnoty ve filtru za prislusne hodnoty v aktualnim modelu
@@ -655,14 +659,14 @@ class ORM extends Kohana_ORM {
         }
         return $codebook->get_cb($filter);
     } */
-    
+
     /**
      * Pouze zapouzdreni volani where()
      * pravdepodobne to bylo ve starsi Kohane
      * @param type $column nazev sloupce
      * @param type $value hledana hodnota
      */
-    public function like($column, $value) 
+    public function like($column, $value)
     {
         return $this->where($column, 'LIKE', "%$value%");
     }
@@ -672,7 +676,7 @@ class ORM extends Kohana_ORM {
      * @param <string> $value hledana hodnota
      * @return <ORM> $this
      */
-    public function or_like($column, $value) 
+    public function or_like($column, $value)
     {
         return $this->or_where($column, 'LIKE', "%$value%");
     }
@@ -706,18 +710,18 @@ class ORM extends Kohana_ORM {
         }
         return $this->where($column, 'IN', $values);
     }
-     
-    
-    
+
+
+
     /**
      * Generuje textovy nahled daneho objektu. Format nahledu je zadan jednim retezcem ($preview),
-     * ve kterem vystupuji znaky "@" nasledovane klicem (napr. @firstname), 
+     * ve kterem vystupuji znaky "@" nasledovane klicem (napr. @firstname),
      * ktery muze nabyvat nasledujich hodnot:
-     * 
+     *
      *  1. atribut modelu - pak je klic nahrazen hodnotou daneho atributu
      *  2. virtualni atribut modelu - stejne jako 1.
      *  3. nazev relacniho modelu - klic je nahrazen preview() relacniho objektu
-     * 
+     *
      * Několik příkladů formátu:
      * FORMAT NAHLEDU                    VYSLEDNY RETEZEC
      * --------------------------------------------------------------
@@ -730,7 +734,7 @@ class ORM extends Kohana_ORM {
 
         // Pokud neni nacten zaznam, nemuzeme delat nahled
         if ( ! $this->loaded()) return NULL;
-        
+
         // Pokud nebyl zadan format nahledu, vezme se z jazykoveho souboru
         if ( ! is_string($preview) or empty($preview))
         {
@@ -742,14 +746,14 @@ class ORM extends Kohana_ORM {
 
         // Projdeme vsechny klice
         foreach ($matched[1] as $i => $key) {
-            
+
             // Pokud se jedna o belongs_to relaci, tak nahradim preview daneho zaznamu
             if (isset($this->_belongs_to[$key]))
             {
                 // Klic v preview nahradim Preview daneho relacniho zaznamu
                 $replace_with = $this->{$key}->preview();
-            } 
-            
+            }
+
             // Pokud se jedna o atribut/virtualni atribut
             else {
                 // Dostupnost virtualniho atributu nelze overit
@@ -765,10 +769,10 @@ class ORM extends Kohana_ORM {
                     //v dedici tride
                     continue;
                 }
-            } 
+            }
             $preview = str_replace($matched[0][$i], $replace_with, $preview);
         }
-        
+
         return trim($preview);
     }
 
@@ -812,7 +816,7 @@ class ORM extends Kohana_ORM {
         {
             $rule = array($rule => NULL);
         }
-        
+
         //priavidlo pro atribut bud nastavim nebo pripojim k tem co jiz existuji
         if (isset($this->_rules[$attr]))
         {
@@ -873,7 +877,7 @@ class ORM extends Kohana_ORM {
      * Metoda kontroluje hodnotu atributu $this->update_on_delete <bool> ktera
      * rozhoduje zda maji byt zaznamy fyzicky z tabulky odstraneny anebo pouze
      * aktualizovany (standardne se atribut 'deleted' nastavuje na hodnotu '1').
-     * 
+     *
      * @param <type> $id
      * @param <array> $plan Definuje strukturu relacnich zaznamu, ktere
      * maji byt take rekurzivne odstraneny.
@@ -997,7 +1001,7 @@ class ORM extends Kohana_ORM {
 
     /**
      * Vraci celociselny identifikator DB tabulky. V databazi se tato hodnota
-     * pouziva ve sloupecku 'reltype'. 
+     * pouziva ve sloupecku 'reltype'.
      * @return <int>
      */
     public function reltype()
@@ -1057,7 +1061,7 @@ class ORM extends Kohana_ORM {
      * Pretezuje bazovou metodu 'find'. Zajistuje aplikaci opravneni
      * 'db_select' nad danym modelem.
      * @param <type> $id
-     * @return <type> 
+     * @return <type>
      */
     public function find($id = NULL, $deleted_too = FALSE)
     {
@@ -1158,8 +1162,8 @@ class ORM extends Kohana_ORM {
      * Vraci tedy skutecny nazeb objektu anebo v pripade ze objekt dedi opravneni
      * od jineho objektu tak vraci nazev prave onoho jineho objektu a proti
      * tomu jsou provedeny kontroly opravneni.
-     * 
-     * @return <type> 
+     *
+     * @return <type>
      */
     protected function permissionObjectName()
     {
@@ -1234,7 +1238,7 @@ class ORM extends Kohana_ORM {
             // Zapise obsah logu na disk
             Kohana::$log->write();
         }
-        
+
         return TRUE;
     }
 
