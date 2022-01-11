@@ -103,6 +103,15 @@ class Upload_FileUploader
         //pokus o zapis na disk
         if ($this->file->save($filepath))
         {
+            // trick for saving webp images, remove after php upgrate
+            if($file_ext == 'webp') {
+                $im = imagecreatefromwebp($filepath);
+                imagejpeg($im, $temp_dir . '/' . $file_name . '.jpg', 100);
+                imagedestroy($im);
+                unlink($filepath);
+                $filepath = $temp_dir . '/' . $file_name . '.jpg';
+                $file_ext = 'jpg';
+            }
             //soubor sem zapsal do temp adresare - zkontroluju mime typ
             $finfo = finfo_open(FILEINFO_MIME_TYPE);
 
