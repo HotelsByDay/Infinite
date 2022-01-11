@@ -67,6 +67,7 @@ $swift_mime_types = array(
   'txt'  => 'text/plain',
   'vcf'  => 'text/x-vcard',
   'wav'  => 'audio/wav',
+  'webp' => 'image/webp',
   'wma'  => 'audio/x-ms-wma',
   'wmv'  => 'audio/x-ms-wmv',
   'xls'  => 'application/excel',
