@@ -27,6 +27,10 @@ class Kohana_Image_GD extends Image {
 			throw new Kohana_Exception('GD is either not installed or not enabled, check your configuration');
 		}
 
+        if(!defined('IMAGETYPE_WEBP')){
+            define('IMAGETYPE_WEBP', 18);
+        }
+
 		if (defined('GD_BUNDLED'))
 		{
 			// Get the version via a constant, available in PHP 5.
@@ -101,6 +105,9 @@ class Kohana_Image_GD extends Image {
 			case IMAGETYPE_PNG:
 				$create = 'imagecreatefrompng';
 			break;
+            case IMAGETYPE_WEBP:
+                $create = 'imagecreatefromwebp';
+            break;
 		}
 
 		if ( ! isset($create) OR ! function_exists($create))
