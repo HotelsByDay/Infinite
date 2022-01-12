@@ -1,5 +1,9 @@
 <?php defined('SYSPATH') OR die('No direct access allowed.');
 
+use \Convertio\Convertio;
+use \Convertio\Exceptions\APIException;
+use \Convertio\Exceptions\CURLException;
+
 /**
  * Tato trida zajistuje zapisu uploadovanych souboru do adresare pro docasne soubory
  * a pro kazdy takovy souboru vytvori prislusny TempFile model.
@@ -105,12 +109,20 @@ class Upload_FileUploader
         {
             // trick for saving webp images, remove after php upgrate
             if($file_ext == 'webp') {
-                $im = imagecreatefromwebp($filepath);
-                imagejpeg($im, $temp_dir . '/' . $file_name . '.jpg', 100);
-                imagedestroy($im);
-                unlink($filepath);
-                $filepath = $temp_dir . '/' . $file_name . '.jpg';
-                $file_ext = 'jpg';
+                try {
+                    $new_filepath = $temp_dir . '/' . $file_name . '.jpg';
+                    $API = new Convertio(CONVERTIO_API_KEY);
+                    $API->start($filepath, 'jpg')->wait()->download($new_filepath)->delete();
+                    unlink($filepath);
+                    $filepath = $new_filepath;
+                    $file_ext = 'jpg';
+                } catch (APIException $e) {
+                    throw new Upload_Exception_UserError("API Exception: " . $e->getMessage() . " [Code: ".$e->getCode()."]" . "\n");
+                } catch (CURLException $e) {
+                    throw new Upload_Exception_UserError("HTTP Connection Exception: " . $e->getMessage() . " [CURL Code: ".$e->getCode()."]" . "\n");
+                } catch (Exception $e) {
+                    throw new Upload_Exception_UserError("Miscellaneous Exception occurred: " . $e->getMessage() . "\n");
+                }
             }
             //soubor sem zapsal do temp adresare - zkontroluju mime typ
             $finfo = finfo_open(FILEINFO_MIME_TYPE);
