@@ -47,13 +47,13 @@ class AppFormItem_UrlName extends AppFormItem_String
             if (empty($value) and ! empty($name_attr)) {
                 // User entered empty value and "if_empty_generate_from_attr" is sed
                 // - auto-generate url_name
-                UrlStorage::setObjectUriByTitle($this->model, $this->model->{$name_attr});
+                UrlStorage::setObjectUriByTitle($this->model, $this->config['language'], $this->model->{$name_attr});
             } else {
                 // User input is non-empty
-                $current_uri = UrlStorage::getUri($this->model->object_name(), $this->model->pk());
+                $current_uri = UrlStorage::getUri($this->model->object_name(), $this->model->pk(), $this->config['language']);
                 if (trim($value) != $current_uri) {
                     // And it differs from current object url_name - set new url_name
-                    UrlStorage::setUri($this->model->object_name(), $this->model->pk(), $value);
+                    UrlStorage::setUri($this->model->object_name(), $this->model->pk(), $this->config['language'], $value);
                 }
             }
         }
@@ -92,7 +92,7 @@ class AppFormItem_UrlName extends AppFormItem_String
         if ( ! empty($this->form_data) and ! $this->valid) {
             return $this->form_data;
         }
-        return UrlStorage::getUri($this->model->object_name(), $this->model->pk());
+        return UrlStorage::getUri($this->model->object_name(), $this->model->pk(), $this->config['language'], true);
     }
 
 

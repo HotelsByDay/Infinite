@@ -11,6 +11,8 @@ class Helper_UrlStorage
 
     protected static $url_name_column = 'url_name';
 
+    protected static $language_column = 'language';
+
     protected static $latest_column = 'latest';
 
     // Local cache
@@ -19,7 +21,7 @@ class Helper_UrlStorage
 
     public static function getUriForObject(Kohana_ORM $object)
     {
-        return static::getUri($object->object_name(), $object->pk());
+        return static::getUri($object->object_name(), $object->pk(), Lang::getCurrentLanguageCode());
     }
 
     /**
@@ -40,6 +42,7 @@ class Helper_UrlStorage
             $data = array(
                 'object_name' => $url_name->{static::$object_name_column},
                 'object_id'   => $url_name->{static::$object_id_column},
+                'language'   => $url_name->{static::$language_column},
                 'latest'      => $url_name->{static::$latest_column},
             );
             return static::$_cache[$uri] = $data;
@@ -77,6 +80,17 @@ class Helper_UrlStorage
         return arr::get(static::getObjectArrayForUri($uri), 'object_id', false);
     }
 
+    /**
+     * Returns object language for given URI
+     * @static
+     * @param $uri
+     * @return mixed false if URI not found
+     */
+    public static function getObjectLanguageForUri($uri)
+    {
+        return arr::get(static::getObjectArrayForUri($uri), 'language', false);
+    }
+
     public static function getLatestUri($uri)
     {
         $uri_data = static::getObjectArrayForUri($uri);
@@ -93,14 +107,14 @@ class Helper_UrlStorage
      * @param $title
      * @param $make_unique - whether to make non-unique value unique - by appending number
      */
-    public static function setObjectUriByTitle(Kohana_ORM $model, $title, $make_unique=true)
+    public static function setObjectUriByTitle(Kohana_ORM $model, $language = 'en', $title, $make_unique=true)
     {
         if ( ! $model->loaded()) {
             throw new AppException('Trying to set uri for non-loaded object.');
         }
         $object_name = $model->object_name();
         $object_id = $model->pk();
-        static::setUri($object_name, $object_id, $title, $make_unique);
+        static::setUri($object_name, $object_id, $language, $title, $make_unique);
     }
 
     /**
@@ -128,10 +142,14 @@ class Helper_UrlStorage
     }
 
 
-    public static function setUri($object_name, $object_id, $title, $make_unique=true, $params=array())
+    public static function setUri($object_name, $object_id, $language = 'en', $title, $make_unique=true, $params=array())
     {
         if (empty($title)) {
-            throw new AppException('Trying to set empty uri for object '.$object_name.':'.$object_id.'.');
+            if($language == Lang::getDefaultLanguage()) {
+                throw new AppException('Trying to set empty uri for object '.$object_name.':'.$object_id.'.');
+            }else{
+                return;
+            }
         }
 
         $title = $final_title = url::title($title, '-', true);
@@ -155,10 +173,12 @@ class Helper_UrlStorage
                         ->where_open()
                             ->where(static::$object_name_column, '=', $object_name)
                             ->where(static::$object_id_column, '=', $object_id)
+                            ->where(static::$language_column, '=', $language)
                             ->where(static::$url_name_column, '=', $final_title)
                         ->where_close()
                         // #5486 - we can re-assign archived url to a different object
                         ->or_where_open()
+                            ->where(static::$language_column, '=', $language)
                             ->where(static::$url_name_column, '=', $final_title)
                             ->where(static::$latest_column, '=', '0')
                         ->or_where_close()
@@ -167,6 +187,7 @@ class Helper_UrlStorage
                 ;
                 // Load additional params
                 $url_name->values($params);
+                $url_name->{static::$language_column} = $language;
                 $url_name->{static::$url_name_column} = $final_title;
                 $url_name->{static::$object_name_column} = $object_name;
                 $url_name->{static::$object_id_column} = $object_id;
@@ -176,10 +197,11 @@ class Helper_UrlStorage
                 $url_name->disablePermissions()->save();
 
                 // Other sotered url names for current object are not the latest
-                DB::query(Database::UPDATE, "UPDATE ".static::$storrage_model." SET ".static::$latest_column."=0 WHERE ".static::$object_id_column."=:object_id AND ".static::$object_name_column."=:object_name AND ".static::$url_name_column." <> :url_name")
+                DB::query(Database::UPDATE, "UPDATE ".static::$storrage_model." SET ".static::$latest_column."=0 WHERE ".static::$object_id_column."=:object_id AND ".static::$object_name_column."=:object_name AND ".static::$language_column."=:language AND ".static::$url_name_column." <> :url_name")
                     ->parameters(array(
                     ':object_id' => $object_id,
                     ':object_name' => $object_name,
+                    ':language' => $language,
                     ':url_name' => $final_title,
                 ))->execute();
 
@@ -205,13 +227,19 @@ class Helper_UrlStorage
     }
 
 
-    public static function getUri($object_name, $object_id)
+    public static function getUri($object_name, $object_id, $language = 'en', $strict_language = false)
     {
         $uri = ORM::factory(static::$storrage_model)
             ->where(static::$object_name_column, '=', $object_name)
             ->where(static::$object_id_column, '=', $object_id)
+            ->where(static::$language_column, '=', $language)
             ->where(static::$latest_column, '=', 1)
             ->find();
+
+        if(!$uri->loaded() && !$strict_language) {
+            return self::getUri($object_name, $object_id, Lang::getDefaultLanguage(), true);
+        }
+
         return $uri->url_name;
     }
 
