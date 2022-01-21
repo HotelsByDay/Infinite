@@ -50,7 +50,7 @@ class AppFormItem_UrlName extends AppFormItem_String
                 UrlStorage::setObjectUriByTitle($this->model, $this->config['language'], $this->model->{$name_attr});
             } else {
                 // User input is non-empty
-                $current_uri = UrlStorage::getUri($this->model->object_name(), $this->model->pk(), $this->config['language']);
+                $current_uri = UrlStorage::getUri($this->model->object_name(), $this->model->pk(), $this->config['language'], true);
                 if (trim($value) != $current_uri) {
                     // And it differs from current object url_name - set new url_name
                     UrlStorage::setUri($this->model->object_name(), $this->model->pk(), $this->config['language'], $value);
