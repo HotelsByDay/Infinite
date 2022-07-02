@@ -11,13 +11,11 @@
 
     <?php endif ?>
 
-    <textarea class="langinput" id="<?= $uid.'_langinput' ?>" placeholder="" <?= isset($min_length) ? "minlength=\"$min_length\"" : '' ?> <?= isset($max_length) ? "maxlength=\"$max_length\"" : '' ?>></textarea>
+    <?php foreach ($translates as $locale => $value): ?>
+        <div>
+            <textarea name="<?= $attr;?>[<?= $locale ?>]" id="<?= $uid . '_' . $locale .'_' . $attr ?>" data-locale="<?= $locale; ?>"><?= $value ?></textarea>
+        </div>
 
-
-        <?php foreach ($translates as $locale => $value): ?>
-
-            <textarea class="hidden" name="<?= $attr;?>[<?= $locale ?>]" data-locale="<?= $locale; ?>" style="display: none;"><?= $value ?></textarea>
-
-        <?php endforeach; ?>
+    <?php endforeach; ?>
 
 </div>

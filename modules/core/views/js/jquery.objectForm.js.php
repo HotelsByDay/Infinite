@@ -58,6 +58,7 @@
                 if (typeof settings['autosave'] !== 'undefined' && settings['autosave'] !== false) {
                     $_this.change(function() {
                         //prectu aktualni formularova data
+                        tinyMCE.triggerSave();
                         var form_data = $_this.find('form').serialize();
 
                         //pripojim identifikaci stisknuteho formularoveho tlacitka
@@ -73,6 +74,7 @@
                 if (typeof settings['autosave_delay'] !== 'undefined' && settings['autosave_delay'] !== false) {
                     var processAutosave = function() {
                         //prectu aktualni formularova data
+                        tinyMCE.triggerSave();
                         var form_data = $_this.find('form').serialize();
 
                         //pripojim identifikaci stisknuteho formularoveho tlacitka
@@ -184,7 +186,7 @@
                 $(this).parents('.banner:first').remove();
                 //hned na to bude zobrazen vlastni formular
                 $_this.find('form').show();
-                
+
                 return false;
             });
 
@@ -201,6 +203,7 @@
                     }
 
                     //prectu aktualni formularova data
+                    tinyMCE.triggerSave();
                     var form_data = $_this.find('form').serialize();
 
                     //pripojim identifikaci stisknuteho formularoveho tlacitka
@@ -468,7 +471,7 @@
 
             //pokud nebyl jeste zpracovan minuly pozadavek, tak dalsi nebude odeslan
             var previous_request = methods._getData( $_this, 'request' );
-            
+
             if ( typeof previous_request !== 'undefined' && previous_request.readyState != 4) {
                 return;
             }
@@ -549,7 +552,7 @@
 
                     //odblokuju UI
                     $_this.unblock();
-                    
+
                 },
                 error: function(){
                     //funkce isValidXHRError slouzi predevsim k detekci
