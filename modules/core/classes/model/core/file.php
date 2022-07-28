@@ -308,7 +308,7 @@ abstract class Model_Core_File extends ORM
             $filename = Format::imageExactResizeVariantName($filename, $size[0], $size[1], $resize_type);
         }
 
-        if(isset($_SERVER['HTTP_ACCEPT']) && strpos( $_SERVER['HTTP_ACCEPT'], 'image/webp' ) !== false) {
+        if($resize_variant && isset($_SERVER['HTTP_ACCEPT']) && strpos( $_SERVER['HTTP_ACCEPT'], 'image/webp' ) !== false) {
             $f_path = $this->getDirName() . '/' . $filename;
             $path_info = pathinfo(DOCROOT . $f_path);
 
