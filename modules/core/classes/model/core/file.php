@@ -1,9 +1,5 @@
 <?php defined('SYSPATH') or die('No direct access allowed.');
 
-use \Convertio\Convertio;
-use \Convertio\Exceptions\APIException;
-use \Convertio\Exceptions\CURLException;
-
 
 /**
  * @TODO: Pridat hromadne mazani souboru pri pouziti metody delete_all()
@@ -105,7 +101,7 @@ abstract class Model_Core_File extends ORM
      * Tato metoda slouzi k rozliseni jiz radne ulozeneho souboru a docasneho
      * souboru, ktery se nachazi v temp adresari a nebyl jeste prirazen konkretnimu
      * modelu v DB.
-     *
+     * 
      * @return <bool> Vraci TRUE pokud se jedna o docasny soubor. V opavnem pripade
      * vraci FALSE.
      */
@@ -307,35 +303,6 @@ abstract class Model_Core_File extends ORM
             $resize_type = arr::get($size, 2, 'auto');
             $filename = Format::imageExactResizeVariantName($filename, $size[0], $size[1], $resize_type);
         }
-
-        if(Kohana::$environment === Kohana::PRODUCTION && $resize_variant && isset($_SERVER['HTTP_ACCEPT']) && strpos( $_SERVER['HTTP_ACCEPT'], 'image/webp' ) !== false) {
-            $f_path = $this->getDirName() . '/' . $filename;
-            $path_info = pathinfo(DOCROOT . $f_path);
-
-            if(file_exists(DOCROOT . $f_path) && in_array($path_info['extension'], ['jpg', 'png'])) {
-                $n_path = str_replace(['_data', '.png', '.jpg'], ['_data/_webp', '.webp', '.webp'], $f_path);
-                if ( ! file_exists(DOCROOT . $n_path)){
-                    if ( ! file_exists(dirname(DOCROOT . $n_path))){
-                        mkdir(dirname(DOCROOT . $n_path), 0777, TRUE);
-                    }
-
-                    try {
-                        $API = new Convertio(CONVERTIO_API_KEY);
-                        $API->start(DOCROOT . $f_path, 'webp')->wait()->download(DOCROOT . $n_path)->delete();
-                        return $n_path;
-                    } catch (APIException $e) {
-                        //throw new Upload_Exception_UserError("API Exception: " . $e->getMessage() . " [Code: ".$e->getCode()."]" . "\n");
-                    } catch (CURLException $e) {
-                        //throw new Upload_Exception_UserError("HTTP Connection Exception: " . $e->getMessage() . " [CURL Code: ".$e->getCode()."]" . "\n");
-                    } catch (Exception $e) {
-                        //throw new Upload_Exception_UserError("Miscellaneous Exception occurred: " . $e->getMessage() . "\n");
-                    }
-                }else{
-                    return $n_path;
-                }
-            }
-        }
-
         // Return final path
         return $this->getDirName().'/'.$filename;
     }
@@ -502,7 +469,7 @@ abstract class Model_Core_File extends ORM
      */
     protected function resizeVariant($variant_name, Image $image)
     {
-
+        
     }
 
     /**
@@ -583,8 +550,8 @@ abstract class Model_Core_File extends ORM
      * prislusneho adresare na disk musi byt ORM model ulozen (protoze v ceste
      * k obrazku je hodnota PK) a pak je nutne resize varianty vytvorit az po
      * ulozeni souboru na disk (coz je po ulozeni ORM).
-     *
-     * @return Model_File
+     * 
+     * @return Model_File 
      */
     public function save()
     {
@@ -639,10 +606,10 @@ abstract class Model_Core_File extends ORM
      * Pretezuje standardni metodu copy - pridava jen zapis do atributu
      * $this->_copy_source_filepath - zapisuje tam cestu k souboru, ktery
      * bude patrit nove vytvorene kopii zaznamu.
-     *
+     * 
      * @param array $plan
      * @param array $overwrite
-     * @return <type>
+     * @return <type> 
      */
     public function copy(array $plan, array $overwrite = array())
     {
