@@ -109,7 +109,7 @@ class Helper_Format {
     {
         //uschovam si original abych ho mohl vratit pokud nebudu formatovat
         $orig_number = $number;
-        
+
         $number = str_replace(' ', '', $number);
 
         //osetrim znak '+' na zacatku
@@ -135,16 +135,16 @@ class Helper_Format {
         $number = preg_replace('/^(.*?)(.{1,3})(.{3})(.{4})$/', '$1 ($2) $3-$4', $number);
         return $number;
     }
-    
-    
+
+
     /**
      * Vraci naformatovany seznam cisel jako jeden retezec
      * na kazde cislo je volana funkce phone()
      * cisla jsou ve vyslednem retezci oddelena carkou
      * @param <array> $numbers seznam cisel
-     * @return <string> formatovany retezec vsech cisel 
+     * @return <string> formatovany retezec vsech cisel
      */
-    static public function phoneNumbers($numbers) 
+    static public function phoneNumbers($numbers)
     {
         foreach ($numbers as $i => $number)
         {
@@ -154,7 +154,7 @@ class Helper_Format {
         return implode(", ", $numbers);
     }
 
-    
+
     /**
      * Formatuje zip kod podle formatu, ktery je platny pro CR.
      * @param <string> $zip
@@ -165,7 +165,7 @@ class Helper_Format {
     {
         //originalni hodnotu si necham pro pripat ze nebudu formatovat
         $orig_zip = $zip;
-        
+
         $zip = str_replace(' ', '', $zip);
         //podle delky cisla zvolim formatovani
         if (strlen($zip) == 5)
@@ -193,8 +193,8 @@ class Helper_Format {
         //vracim v puvodnim tvaru
         return $date;
     }
-    
-    
+
+
     /**
      * Metoda bere datum v ceskem formatu a vraci v MySQL formatu.
      * @param <string> $date
@@ -237,7 +237,7 @@ class Helper_Format {
         {
            return date($strip_time, strtotime($date));
         }
-        
+
         if (preg_match('/^([0-9]{4})-([0-9]{2})-([0-9]{2})(.*)?/', $date, $match)) {
             if (count($match) == 5) {
                 return date('j.n.Y', strtotime($match[3].'-'.$match[2].'-'.$match[1])). ($strip_time ? '' : $match[4]);
@@ -256,21 +256,21 @@ class Helper_Format {
      */
     static public function price($price, $currency='USD', $separator='&nbsp;')
     {
-        return number_format($price, 2, '.', ' ') . $separator . $currency;
+        return number_format($price, 2, '.', $separator) . $separator . $currency;
     }
-    
+
     /**
      * Metoda slouzi k naformatovani intervalu ceny (od - do)
      * @param type $price_from
      * @param type $price_to
      * @param type $cb_currency_type
-     * @return type 
+     * @return type
      */
     static public function priceInterval($price_from, $price_to, $cb_currency_type)
     {
         return number_format($price_from, 2, '.', ' ').' - '.number_format($price_to, 2, '.', ' ').__('cb_currency_type_'.$cb_currency_type);
     }
-    
+
     /**
      * Zkrati zadany retezec na zadanou delku a pokud doslo ke zkraceni
      * doplni ho na konci znakem '…' (v metode limit_chars)
@@ -281,14 +281,14 @@ class Helper_Format {
     static public function short($string, $max_length=50) {
         return text::limit_chars($string, $max_length);
     }
-    
+
     /**
      * Vraci typ a subtyp nabidky, ke ktere se vaze poptavka.
-     * 
+     *
      * @param type $type
-     * @param type $subtypes 
+     * @param type $subtypes
      */
-    static public function demandAdvertType($type, $subtypes) 
+    static public function demandAdvertType($type, $subtypes)
     {
         if (empty($subtypes) or ! is_array($subtypes)) return $type;
         else return "$type / ".implode(', ', $subtypes);
@@ -320,7 +320,7 @@ class Helper_Format {
 
     /**
      * Metoda pro výepočet IP adresy z binárního čísla
-     * 
+     *
      * @param <type> $bin
      * @return <type>
      */
@@ -349,7 +349,7 @@ class Helper_Format {
     /**
      * Predany argument pretypuje na bool hodnotu a tu pak vraci ve forme
      * retezce - 'ano' nebo 'ne'.
-     * 
+     *
      * @param <type> $value
      * @return <string>
      */
@@ -377,10 +377,10 @@ class Helper_Format {
     }
 
     /**
-     * 
+     *
      * @param <type> $date
      * @param <type> $locale
-     * @return <type> 
+     * @return <type>
      */
     static public function datetimeToLocalDate($date, $locale)
     {
