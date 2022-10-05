@@ -53,7 +53,7 @@ return array(
     'error.unexpected_error.title' => 'Unexpected error',
     'error.unexpected_error.message' => 'Unexpected error occurred.',
     'error.500.title' => 'Unexpected error occured.',
-    'error.500.message' => 'Pleaase contact our support at <a href="mailto:support@infinite.cz">support@infinite.cz</a>.',
+    'error.500.message' => 'Please contact our support at <a href="mailto:support@infinite.cz">support@infinite.cz</a>.',
 
     'system.automatic_logout' => 'You have been automatically logged out due to being inactive.',
 
