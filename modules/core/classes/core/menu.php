@@ -226,7 +226,7 @@ class Core_Menu {
      */
     protected function createItemByType($item, $active_submenu_item = NULL)
     {
-        $label = $item['label'];
+        $label = isset($item['label']) ? $item['label'] : '';
         switch ($label)
         {
             case Menu::ITEM_HR: return '<hr />';
