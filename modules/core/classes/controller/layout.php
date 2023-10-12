@@ -119,15 +119,8 @@ abstract class Controller_Layout extends Controller_AuthTemplate {
         }
 
         // vlozeni souboru
-        require_once MODPATH . '../mpdf/mpdf.php';
-
-        if ( ! $this->mpdf instanceof mPDF) {
-            // Vytvoreni instance tridy a nastaveni
-            $this->mpdf = new mPDF('utf-8','A4');
-            $this->mpdf->useOnlyCoreFonts = true;
-            $this->mpdf->SetDisplayMode('fullpage');
-            $this->mpdf->SetAutoFont(0);
-        }
+        $this->mpdf = new \Mpdf\Mpdf(['mode' => 'utf-8']);
+        $this->mpdf->SetDisplayMode('fullpage');
 
         // Zapiseme pripadne CSS
         if ( ! empty($css)) {
