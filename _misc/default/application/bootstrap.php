@@ -96,7 +96,6 @@ Kohana::modules(array(
     'orm'           => MODPATH.'orm',        // Object Relationship Mapping
     'emailq'        => MODPATH.'emailq',     //emaily
     'comment'       => MODPATH.'comment',
-    'userguide'     => MODPATH.'userguide',  // User guide and API documentation
 
 ));
 

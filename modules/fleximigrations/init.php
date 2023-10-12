@@ -3,8 +3,6 @@
 // FlexibleMigrations Model (change if neccesary)
 // define('FLEXMIGRATION_MODEL', 'migration');
 
-// Enabling the Userguide module from my Module
-// Kohana::modules(Kohana::modules() + array('userguide' => MODPATH.'userguide'));
 
 
 Route::set('migrations_route', 'migrations')
