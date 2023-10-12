@@ -8,13 +8,6 @@ It differs from the K2 Event class in a number of ways:
 * It's not a singleton, which makes it a lot easier to test the system and create multiple dispatchers
 * Event data is encapsulated, allowing you can trigger events within events
 
-## Unit Testing
-
-At time of writing this module has 95.65% code coverage, ensuring the reliability of the API through development.
-
-To run the tests yourself you should install the official [unittest](http://github.com/kohana/unittest) module and 
-run the `modules.dispatcher` group.
-
 ## Examples
 
 If you look in the unit tests you'll find lots of examples on how it works, but here are a quick few:
