@@ -76,12 +76,10 @@ class AppFormItem_LangString extends AppFormItem_String
 
         // Pokud je default_locale prazdne, pak tam nastavime prvni ze seznamu
         if (empty($this->default_locale)) {
-            // Precteme prvni locale
-            list($first_locale) = each($this->locales);
             // Resetujeme pointer (volani each ho posunulo)
             reset($this->locales);
             // Nastavime default_locale
-            $this->default_locale = $first_locale;
+            $this->default_locale = key($this->locales);
         }
 
 
