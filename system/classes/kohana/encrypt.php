@@ -25,6 +25,10 @@
  * @copyright  (c) 2023 HotelsByDay
  * @license    http://kohanaframework.org/license
  */
+
+/**
+ * Note! Those php7.4 updates never tested since this class not used in App
+ */
 class Kohana_Encrypt {
 
 	/**
