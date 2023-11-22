@@ -27,7 +27,7 @@ class Kohana_Emailq {
 	 *
 	 * @return void
 	 */
-	public function Kohana_Emailq()
+	public function __construct()
 	{
 		require_once dirname(__FILE__) . '/../../swiftmailer/swift_required.php';
 

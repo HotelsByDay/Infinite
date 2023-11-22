@@ -92,11 +92,9 @@ Kohana::modules(array(
     'image'         => MODPATH.'image',      // Image manipulation
     'emailq'        => MODPATH.'emailq',     // E-mail queue - odesila emaily, ktere jsou ve fronte
     'comment'       => MODPATH.'comment',
-    'multilang'     => MODPATH.'multilang', //prepinani jazyku
     'orm'           => MODPATH.'orm',        // Object Relationship Mapping
     'emailq'        => MODPATH.'emailq',     //emaily
     'comment'       => MODPATH.'comment',
-    'userguide'     => MODPATH.'userguide',  // User guide and API documentation
 
 ));
 

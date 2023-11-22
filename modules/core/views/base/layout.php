@@ -65,9 +65,5 @@
 
 <?=$js_files_include;?>
 
-
-<?php if (Kohana::$environment !== Kohana::PRODUCTION): ?>
-<!--    --><?php // ProfilerToolbar::render(true);  ?>
-<?php endif; ?>
 </body>
 </html>
