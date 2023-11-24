@@ -632,4 +632,28 @@ abstract class Model_Core_File extends ORM
 
         return parent::copyFrom($source, $overwrite);
     }
+
+    public function checkNeedsWebP($fileDiskName) {
+        $gd = gd_info();
+        if(isset($_SERVER['HTTP_ACCEPT']) && strpos( $_SERVER['HTTP_ACCEPT'], 'image/webp' ) !== false && isset($gd['WebP Support']) && $gd['WebP Support']) {
+            $extension = pathinfo(DOCROOT . $fileDiskName, PATHINFO_EXTENSION);
+
+            if(file_exists(DOCROOT . $fileDiskName) && in_array($extension, ['jpg', 'jpeg', 'png'])) {
+                $webpFileDiskName = str_replace(['_data', '.' . $extension], ['_data/_webp', '.webp'], $fileDiskName);
+                if ( ! file_exists(DOCROOT . $webpFileDiskName) || (filemtime(DOCROOT . $fileDiskName) > filemtime(DOCROOT . $webpFileDiskName))){
+                    if ( ! file_exists(dirname(DOCROOT . $webpFileDiskName))){
+                        @mkdir(dirname(DOCROOT . $webpFileDiskName), 0770, true);
+                    }
+
+                    $image_webp = new ImageTool(DOCROOT . $fileDiskName);
+                    $image_webp->save(DOCROOT . $webpFileDiskName, 100, 'webp');
+                    $fileDiskName = $webpFileDiskName;
+                }else{
+                    $fileDiskName = $webpFileDiskName;
+                }
+            }
+        }
+
+        return $fileDiskName;
+    }
 }
