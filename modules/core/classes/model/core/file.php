@@ -642,7 +642,7 @@ abstract class Model_Core_File extends ORM
                 $webpFileDiskName = str_replace(['_data', '.' . $extension], ['_data/_webp', '.webp'], $fileDiskName);
                 if ( ! file_exists(DOCROOT . $webpFileDiskName) || (filemtime(DOCROOT . $fileDiskName) > filemtime(DOCROOT . $webpFileDiskName))){
                     if ( ! file_exists(dirname(DOCROOT . $webpFileDiskName))){
-                        @mkdir(dirname(DOCROOT . $webpFileDiskName), 0777, true);
+                        @mkdir(dirname(DOCROOT . $webpFileDiskName), 0770, true);
                     }
 
                     $image_webp = new ImageTool(DOCROOT . $fileDiskName);
