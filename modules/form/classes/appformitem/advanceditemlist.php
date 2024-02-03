@@ -110,7 +110,7 @@ class AppFormItem_AdvancedItemList extends AppFormItem_Base
         {
             $model = $this->model->{$this->rel_object_name}; //->where($this->rel_object_name.'.deleted', 'IS', DB::Expr('NULL'));
             if ($this->rel_object_name === 'room' && !Auth::instance()->get_user()->hasRole('admin')) {
-                $roomTypes = ORM::factory('room_type')->where('name', 'LIKE', 'HotelBeds #%')->find_all();
+                $roomTypes = ORM::factory('room_type')->where('name', 'LIKE', 'Direct HB#%')->find_all();
                 $types = [];
                 foreach ($roomTypes as $type) {
                     $types[$type->pk()] = $type->pk();

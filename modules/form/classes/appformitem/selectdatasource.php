@@ -65,7 +65,7 @@ class AppFormItem_SelectDataSource extends AppFormItem_Base
             {
                 $model_list = ORM::factory($source_model);
                 if ($source_model === 'room_type' && !Auth::instance()->get_user()->hasRole('admin')) {
-                    $model_list->where('name', 'NOT LIKE', 'HotelBeds #%');
+                    $model_list->where('name', 'NOT LIKE', 'Direct HB#%');
                 }
                 $model_list = $model_list->find_all();
 
