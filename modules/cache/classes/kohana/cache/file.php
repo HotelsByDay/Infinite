@@ -167,7 +167,7 @@ class Kohana_Cache_File extends Cache implements Kohana_Cache_GarbageCollect {
 			// Handle ErrorException caused by failed unserialization
 			if ($e->getCode() === E_NOTICE)
 			{
-				throw new Kohana_Cache_Exception(__METHOD__.' failed to unserialize cached object "'.$directory.$filename.'" with message ['.json_last_error().']: '.$e->getMessage());
+				throw new Kohana_Cache_Exception(__METHOD__.' failed to unserialize cached object "'.$directory.$filename.'" contents "'.$json.'" with message ['.json_last_error().']: '.$e->getMessage());
 			}
 
 			// Otherwise throw the exception
@@ -219,8 +219,11 @@ class Kohana_Cache_File extends Cache implements Kohana_Cache_GarbageCollect {
 			chmod($directory, 0777);
 		}
 
+		// filenames: $tmp_name for temp writeable file, $final_name for final file name
+		$tmp_name = $directory.'.tmp.'.$filename;
+		$final_name = $directory.$filename;
 		// Open file to inspect
-		$resouce = new SplFileInfo($directory.$filename);
+		$resouce = new SplFileInfo($tmp_name);
 		$file = $resouce->openFile('w');
 
 		try
@@ -252,7 +255,18 @@ class Kohana_Cache_File extends Cache implements Kohana_Cache_GarbageCollect {
 		try
 		{
 			$file->fwrite($data, $size);
-			return (bool) $file->fflush();
+			if(!$file->fflush())
+			{
+				$file = null;
+				unlink($tmp_name);
+				return(false);
+			}
+			// release file handle
+			$file = null;
+			// move cache file to final destination filename
+			rename($tmp_name,$final_name);
+
+			return(true);
 		}
 		catch (Exception $e)
 		{
