@@ -22,6 +22,9 @@ return array
 			'username'   => DB_USERNAME,
 			'password'   => DB_PASSWORD,
 			'persistent' => FALSE,
+            'variables' => [
+                'sql_mode' => ''
+            ]
 		),
 		'table_prefix' => '',
 		'charset'      => 'utf8',
