@@ -22,6 +22,9 @@ return array
 			'username'   => DB_USERNAME,
 			'password'   => DB_PASSWORD,
 			'persistent' => FALSE,
+            'variables' => [
+                'sql_mode' => 'ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION'
+            ]
 		),
 		'table_prefix' => '',
 		'charset'      => 'utf8',
