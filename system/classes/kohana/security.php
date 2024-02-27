@@ -164,6 +164,26 @@ class Kohana_Security {
 		return Security::token() === $token;
 	}
 
+    public static function checkRecaptchaV2($recaptcha_response)
+    {
+        $context = stream_context_create([
+            'http' => [
+                'header' => "Content-type: application/x-www-form-urlencoded\r\n",
+                'method' => 'POST',
+                'content' => http_build_query([
+                    'secret' => GOOGLE_CAPTCHA_SECRET_KEY_v2,
+                    'response' => $recaptcha_response,
+                    'remoteip' => $_SERVER['REMOTE_ADDR']
+                ])
+            ]
+        ]);
+
+        $response = file_get_contents('https://www.google.com/recaptcha/api/siteverify', false, $context);
+        $response = json_decode($response, true);
+
+        return isset($response['success']) ? $response['success'] : false;
+    }
+
 	/**
 	 * Remove image tags from a string.
 	 *
