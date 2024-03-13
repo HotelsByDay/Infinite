@@ -199,7 +199,7 @@ class Kohana_Auth_ORM extends Auth {
 					$token->save();
 
 					// Set the new token
-					Cookie::set($this->_config['autologin_key'], $token->token, $token->expires - time());
+					Cookie::set($this->_config['autologin_key'], $token->token, (!is_numeric($token->expires) ? strtotime($token->expires) : $token->expires) - time());
 
 					// Complete the login with the found data
 					$this->complete_login($token->user);
